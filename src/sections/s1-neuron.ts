@@ -1,7 +1,7 @@
 import { detectionRadius, twoMonopole } from '../physics/dipole';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { linePlot, type Series } from '../ui/plot';
-import { glow, drawNeuron, scaleBar, glowLegend } from '../ui/field';
+import { glow, drawNeuron, glowLegend, CANVAS_FONT } from '../ui/field';
 import { P, claimCite as c } from '../data/params';
 import { section, figure, prose, readouts } from '../ui/layout';
 
@@ -39,8 +39,8 @@ times below anything a scalp amplifier can separate from noise. One cell is invi
   const right = document.createElement('div');
   row.append(left, right);
   fig.viz.append(row);
-  const span = 1.15e-3;
-  const g = glow(left, { width: 340, height: 420, xRange: [-span, span], yRange: [-span * 1.25, span * 1.25], floor: 3e-8, ceiling: 3e-5, gamma: 1 });
+  const span = 0.8e-3; // ±0.8 mm
+  const g = glow(left, { width: 340, height: 420, xRange: [-span, span], yRange: [-span * 1.25, span * 1.25], floor: 3e-8, ceiling: 3e-5, gamma: 1, grid: { step: 0.25e-3, factor: 1e3, unit: 'mm' } });
   glowLegend(left, '0.03 µV', '30 µV', 'dashed circles = the detection threshold (detectable inside)');
   const plot = linePlot(right, {
     x: { label: 'Distance from the nearer pole (m)', scale: 'log', domain: [1e-5, 0.1] },
@@ -86,13 +86,12 @@ times below anything a scalp amplifier can separate from noise. One cell is invi
         ctx.restore();
       }
       drawNeuron(ctx, toPx, { x: 0, soma: -d / 2, tuft: d / 2 });
-      scaleBar(ctx, toPx, -span * 0.9, -span * 1.15, 0.5e-3, '0.5 mm');
       ctx.save();
-      ctx.font = '12px system-ui';
+      ctx.font = CANVAS_FONT;
       ctx.fillStyle = '#1a1a1a';
       const [tx, ty] = toPx(0, d / 2), [sx, sy] = toPx(0, -d / 2);
-      ctx.fillText('synapse (current in)', tx + 10, ty - 8);
-      ctx.fillText('cell body (current out)', sx + 14, sy + 4);
+      ctx.fillText('synapse (current in)', tx + 38, ty - 10);
+      ctx.fillText('cell body (current out)', sx + 30, sy + 5);
       ctx.restore();
     });
   }

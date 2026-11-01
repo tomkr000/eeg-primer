@@ -20,6 +20,8 @@ export interface GlowCfg {
   scale?: number;
   /** exponent applied to the normalised log magnitude before it becomes opacity (default 1.4; 1 is linear) */
   gamma?: number;
+  /** grid lines every `step` world units, numbered along the bottom and left edges as value × factor + unit */
+  grid?: { step: number; factor: number; unit: string; xTitle?: string; yTitle?: string };
 }
 
 export interface Glow {
@@ -91,9 +93,60 @@ export function glow(container: HTMLElement, cfg: GlowCfg): Glow {
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
       ctx.drawImage(off, 0, 0, cfg.width, cfg.height);
+      if (cfg.grid) drawGrid(ctx, toPx, cfg);
       if (overlay) overlay(ctx, toPx);
     },
   };
+}
+
+export const CANVAS_FONT = '14px system-ui, sans-serif';
+
+/** Faint grid with numbered ticks so the scale of a field drawing is explicit. */
+function drawGrid(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], cfg: GlowCfg): void {
+  const g = cfg.grid!;
+  const fmtTick = (v: number) => {
+    const t = v * g.factor;
+    const r = Math.round(t * 1000) / 1000;
+    return (Object.is(r, -0) ? 0 : r).toString().replace('-', '−');
+  };
+  ctx.save();
+  ctx.font = CANVAS_FONT;
+  ctx.strokeStyle = 'rgba(26,26,26,0.16)';
+  ctx.lineWidth = 1;
+  const x0 = Math.ceil(cfg.xRange[0] / g.step) * g.step, x1 = cfg.xRange[1];
+  const y0 = Math.ceil(cfg.yRange[0] / g.step) * g.step, y1 = cfg.yRange[1];
+  for (let x = x0; x <= x1 + 1e-12; x += g.step) {
+    const [px] = toPx(x, 0);
+    ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, cfg.height); ctx.stroke();
+  }
+  for (let y = y0; y <= y1 + 1e-12; y += g.step) {
+    const [, py] = toPx(0, y);
+    ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(cfg.width, py); ctx.stroke();
+  }
+  // tick numbers: bottom edge for x, left edge for y, with a pale backing so they read over the glow
+  ctx.fillStyle = '#52514e';
+  const label = (text: string, px: number, py: number, align: CanvasTextAlign) => {
+    ctx.textAlign = align;
+    const w = ctx.measureText(text).width;
+    const lx = align === 'center' ? px - w / 2 : align === 'right' ? px - w : px;
+    ctx.fillStyle = 'rgba(252,252,251,0.75)';
+    ctx.fillRect(lx - 2, py - 11, w + 4, 14);
+    ctx.fillStyle = '#52514e';
+    ctx.fillText(text, px, py);
+  };
+  for (let x = x0; x <= x1 + 1e-12; x += g.step) {
+    const [px] = toPx(x, 0);
+    if (px < 24 || px > cfg.width - 24) continue;
+    label(fmtTick(x), px, cfg.height - 5, 'center');
+  }
+  for (let y = y0; y <= y1 + 1e-12; y += g.step) {
+    const [, py] = toPx(0, y);
+    if (py < 14 || py > cfg.height - 22) continue;
+    label(fmtTick(y), 4, py + 5, 'left');
+  }
+  label(g.xTitle ?? g.unit, cfg.width - 4, cfg.height - 5, 'right');
+  if (g.yTitle) label(g.yTitle, 4, 16, 'left');
+  ctx.restore();
 }
 
 export interface NeuronGlyphOpts {
@@ -109,34 +162,36 @@ export interface NeuronGlyphOpts {
   full?: boolean;
 }
 
-/** Schematic layer-5 pyramidal cell: apical tuft, apical trunk, triangular soma, basal dendrites and an axon. */
+/**
+ * Schematic layer-5 pyramidal cell: apical tuft, apical trunk, triangular soma, basal dendrites and an axon,
+ * drawn in white over a dark halo so it stands out on the glow and on the bare background alike.
+ */
 export function drawNeuron(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], o: NeuronGlyphOpts): void {
   const [sx, sy] = toPx(o.x, o.soma);
   const [tx, ty] = toPx(o.x, o.tuft);
   const L = Math.abs(sy - ty); // apical length in px
-  const w = Math.max(5, L * 0.16); // soma half-width
-  ctx.save();
-  ctx.strokeStyle = o.color ?? '#1a1a1a';
-  ctx.fillStyle = 'rgba(252,252,251,0.85)';
-  ctx.lineWidth = o.lineWidth ?? 1.6;
-  ctx.lineJoin = 'round';
-  // apical trunk
-  ctx.beginPath(); ctx.moveTo(sx, sy - w); ctx.lineTo(tx, ty); ctx.stroke();
-  // tuft: five branches fanning upward
-  for (const [dx, dy] of [[-0.55, -0.55], [-0.25, -0.75], [0.05, -0.8], [0.35, -0.65], [0.6, -0.3]]) {
-    ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(tx + dx * L * 0.45, ty + dy * L * 0.45); ctx.stroke();
-  }
-  // soma
-  ctx.beginPath(); ctx.moveTo(sx, sy - w); ctx.lineTo(sx - w, sy + w * 0.9); ctx.lineTo(sx + w, sy + w * 0.9); ctx.closePath();
-  ctx.fill(); ctx.stroke();
+  const w = Math.max(6, L * 0.18); // soma half-width
+  const lw = o.lineWidth ?? 2.4;
+  const segments: [number, number, number, number][] = [
+    [sx, sy - w, tx, ty], // apical trunk
+    ...[[-0.55, -0.55], [-0.25, -0.75], [0.05, -0.8], [0.35, -0.65], [0.6, -0.3]].map(([dx, dy]) => [tx, ty, tx + dx * L * 0.45, ty + dy * L * 0.45] as [number, number, number, number]),
+  ];
   if (o.full ?? true) {
-    // basal dendrites and axon
-    ctx.beginPath(); ctx.moveTo(sx - w * 0.5, sy + w * 0.9); ctx.lineTo(sx - w * 1.8, sy + w * 2.6); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(sx + w * 0.5, sy + w * 0.9); ctx.lineTo(sx + w * 1.8, sy + w * 2.6); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(sx, sy + w * 0.9); ctx.lineTo(sx, sy + L * 0.55); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(sx, sy + L * 0.55); ctx.lineTo(sx - w * 1.2, sy + L * 0.55 + w * 1.6); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(sx, sy + L * 0.55); ctx.lineTo(sx + w * 1.2, sy + L * 0.55 + w * 1.6); ctx.stroke();
+    segments.push(
+      [sx - w * 0.5, sy + w * 0.9, sx - w * 1.8, sy + w * 2.6], [sx + w * 0.5, sy + w * 0.9, sx + w * 1.8, sy + w * 2.6], // basal dendrites
+      [sx, sy + w * 0.9, sx, sy + L * 0.55], [sx, sy + L * 0.55, sx - w * 1.2, sy + L * 0.55 + w * 1.6], [sx, sy + L * 0.55, sx + w * 1.2, sy + L * 0.55 + w * 1.6], // axon
+    );
   }
+  const soma = () => { ctx.beginPath(); ctx.moveTo(sx, sy - w); ctx.lineTo(sx - w, sy + w * 0.9); ctx.lineTo(sx + w, sy + w * 0.9); ctx.closePath(); };
+  ctx.save();
+  ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  for (const [stroke, width] of [['rgba(26,26,26,0.6)', lw + 2.2], [o.color ?? '#ffffff', lw]] as [string, number][]) {
+    ctx.strokeStyle = stroke; ctx.lineWidth = width;
+    for (const [ax, ay, bx, by] of segments) { ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke(); }
+    soma(); ctx.stroke();
+  }
+  ctx.fillStyle = o.color ?? '#ffffff';
+  soma(); ctx.fill();
   ctx.restore();
 }
 
@@ -146,7 +201,7 @@ export function scaleBar(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], x0: 
   ctx.save();
   ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 2;
   ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, ay); ctx.stroke();
-  ctx.fillStyle = '#1a1a1a'; ctx.font = '12px system-ui';
+  ctx.fillStyle = '#1a1a1a'; ctx.font = CANVAS_FONT;
   ctx.fillText(label, ax, ay - 6);
   ctx.restore();
 }

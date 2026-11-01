@@ -19,4 +19,4 @@ Vite + vanilla TypeScript + D3; no framework. `npm run dev` for hot reload, `npm
 ## Layout and copy
 - Every section is prose in two columns followed by one figure sized to a laptop screen (visuals left, sliders and readouts right, caption below). Keep figure heights under about 650 px at 1366 × 768; `node /home/claude/shoot2.mjs` style Playwright screenshots are the check.
 - No em dashes in page copy, captions, labels or docs (real paper titles excepted). Use a colon, a comma or a new sentence instead.
-- Fields are drawn as red/blue glows (`src/ui/field.ts`), detection limits as dashed circles or a dark contour, always named in the legend under the canvas.
+- Fields are drawn as red/blue glows (`src/ui/field.ts`) over a numbered grid (`grid` option) so the scale is explicit; detection limits are dashed circles or a dark contour, always named in the legend under the canvas. Neuron glyphs are white with a dark halo. On-canvas text uses `CANVAS_FONT` (14 px); figure chrome (sliders, captions, axes) is 13 to 14.5 px.

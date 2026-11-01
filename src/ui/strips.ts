@@ -13,7 +13,7 @@ export interface StripPlot {
   update(strips: Strip[]): void;
 }
 
-const M = { top: 6, right: 14, bottom: 34, left: 150 };
+const M = { top: 6, right: 14, bottom: 36, left: 190 };
 
 /**
  * Small multiples sharing one time axis. Every strip is scaled to its own peak so the shape of each trace is

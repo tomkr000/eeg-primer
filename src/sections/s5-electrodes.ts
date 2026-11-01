@@ -64,13 +64,13 @@ per finger ${c('fingered')}.</p>`);
   const sArea = slider({ label: 'Electrode area', unit: 'cm²', min: 0.05, max: 5, value: 1, log: true, note: c('area-scaling') });
   const sGap = slider({ label: 'Hair / air gap thickness', unit: 'mm', min: 0.05, max: 3, value: 0.5, log: true, note: c('hair') });
   const sContact = slider({ label: 'Area touching skin through the hair', unit: '%', min: 0, max: 100, step: 1, value: 0 });
-  const sRin = slider({ label: 'Amplifier input resistance', unit: 'Ω', min: 1e6, max: 1e13, value: 1e9, log: true, note: c('ads1299') });
+  const sRin = slider({ label: 'Amplifier input resistance', min: 1e6, max: 1e13, value: 1e9, log: true, format: (v) => fmtSI(v, 'Ω', 2), note: c('ads1299') });
   const sCin = slider({ label: 'Amplifier input capacitance', unit: 'pF', min: 0.1, max: 50, value: 20, log: true, note: c('ads1299') });
   const sCm = slider({ label: 'Common-mode mains voltage', unit: 'mV', min: 0.1, max: 200, value: 10, log: true, note: c('common-mode') });
   const sIn = slider({ label: 'Amplifier current noise', unit: 'fA/√Hz', min: 0.05, max: 100, value: 1, log: true, note: c('amp-current-noise') });
 
-  const fig = figure(sec.fig, 'Two seconds of the raw scalp signal of section 4, in a stretch without a blink (top strip), and what reaches the amplifier through each electrode type: the signal after the impedance divider, plus the contact’s own skin noise, mains pickup from a 50% mismatch between the two electrodes, and the amplifier’s current noise flowing through the contact impedance. Each strip is drawn to its own scale (written at the left) so the shape stays visible; the table gives the numbers.');
-  const plot = stripPlot(fig.viz, { xLabel: 'Time (s)', xDomain: [0, 2], stripHeight: 66 });
+  const fig = figure(sec.fig, 'Two seconds of the raw scalp signal of section 4, in a stretch without a blink (top strip), and what reaches the amplifier through each electrode type: the signal after the impedance divider, plus the contact’s own skin noise, mains pickup from a 50% mismatch between the two electrodes, and the amplifier’s current noise flowing through the contact impedance. Each strip is drawn to its own scale (written at the left) so the shape stays visible; the table gives the contact impedance, the fraction of the signal kept, the noise added and the resulting signal-to-noise ratio (SNR).', { panelWidth: '410px' });
+  const plot = stripPlot(fig.viz, { xLabel: 'Time (s)', xDomain: [0, 2], stripHeight: 62 });
   const table = document.createElement('table');
   table.className = 'mini-table';
   fig.panel.append(controls(sArea.el, sGap.el, sContact.el, sRin.el, sCin.el, sCm.el, sIn.el), table);
@@ -133,7 +133,7 @@ per finger ${c('fingered')}.</p>`);
       rows.push(`<tr><td><i style="background:${COLOURS[k]}"></i>${NAMES[k]}</td><td>${fmtSI(cabs(Ze(k, 10)), 'Ω', 2)}</td><td>${fmt(100 * h10, 3)}%</td><td>${fmt(Math.sqrt(pn / n), 2)} µV</td><td>${fmt(snr, 2)} dB</td></tr>`);
     });
     plot.update(strips);
-    table.innerHTML = `<thead><tr><th>Electrode</th><th>|Z<sub>e</sub>| at 10 Hz</th><th>Signal kept</th><th>Noise added</th><th>Signal / added noise</th></tr></thead><tbody>${rows.join('')}</tbody>`;
+    table.innerHTML = `<thead><tr><th>Electrode</th><th>|Z<sub>e</sub>| at 10 Hz</th><th>Kept</th><th>Noise</th><th>SNR</th></tr></thead><tbody>${rows.join('')}</tbody>`;
     sGap.el.title = `gap capacitance ${fmt(gapCapacitance(sArea.value * (1 - sContact.value / 100), sGap.value * 1e-3, 1) * 1e12, 3)} pF`;
   }
   [sArea, sGap, sContact, sRin, sCin, sCm, sIn].forEach((s) => s.onChange(update));

@@ -2,6 +2,7 @@ import { singularValues, symmetricEigenvalues } from '../physics/linalg';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { claimCite as c } from '../data/params';
 import { section, figure, prose, assumptions, readouts } from '../ui/layout';
+import { CANVAS_FONT } from '../ui/field';
 import head from '../data/head-leadfield.json';
 import svd from '../data/leadfield-svd.json';
 
@@ -55,7 +56,7 @@ arrays, for comparison, decode handwriting at 90 characters/min and speech at 62
   const xs = visEl.map((p) => p[0]), ys = visEl.map((p) => p[1]);
   const x0 = (Math.min(...xs) + Math.max(...xs)) / 2, y0 = (Math.min(...ys) + Math.max(...ys)) / 2;
   const ax = 1.03 * (Math.max(...xs) - Math.min(...xs)) / 2, by = 1.03 * (Math.max(...ys) - Math.min(...ys)) / 2; // mm
-  const W = 360, H = 380, cx = W / 2, cy = H / 2 + 4;
+  const W = 360, H = 356, cx = W / 2, cy = H / 2 + 4;
   const s = Math.min((W / 2 - 16) / ax, (H / 2 - 24) / by); // px per mm
   /** orthographic view from above: x right, y (nose) up; z is height above the sphere centre (mm) */
   const project = (p: number[]): [number, number, number] => [cx + (p[0] - x0) * s, cy - (p[1] - y0) * s, p[2] - centre[2]];
@@ -71,11 +72,11 @@ arrays, for comparison, decode handwriting at 90 characters/min and speech at 62
   const sQ = slider({ label: 'Patch strength (total dipole moment)', unit: 'nA·m', min: 1, max: 100, value: 10, log: true, note: c('cells-for-10nam') });
   const sNoise = slider({ label: 'Noise per electrode', unit: 'µV rms', min: 0.1, max: 10, value: 1, log: true, note: c('skin-noise') });
   const rK = readout('Patches placed');
-  const rD = readout('Distinguishable dimensions at this noise');
-  const rCeil = readout('Ceiling if every cortical point were a source');
-  const rVar = readout('Components carrying 99% of variance (128 electrodes)', c('svd-counts'));
+  const rD = readout('Distinguishable dimensions');
+  const rCeil = readout('Ceiling, every cortical point a source');
+  const rVar = readout('Components for 99% of the variance', c('svd-counts'));
 
-  const fig = figure(sec.fig, 'A real head (the fsaverage template) from above, nose up. Left: the cortex, each synchronous patch a coloured disc; a third population can live where two discs overlap. Click to add a patch, click a patch to remove it. Right: the scalp potential of all patches together (red positive, blue negative; dots are the electrodes seen from above). The bars rank the independent scalp patterns; each one above the noise line is a dimension a decoder could recover.');
+  const fig = figure(sec.fig, 'A real head (the fsaverage template) from above, nose up. Left: the cortex, each synchronous patch a coloured disc; a third population can live where two discs overlap. Click to add a patch, click a patch to remove it. Right: the scalp potential of all patches together (red positive, blue negative; dots are the electrodes seen from above). The bars rank the independent scalp patterns; each one above the noise line is a dimension a decoder could recover. The ceiling repeats the count with every cortical point as its own source.');
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
@@ -109,7 +110,8 @@ arrays, for comparison, decode handwriting at 90 characters/min and speech at 62
   mk('Two + their overlap', () => { patches = VENN(); });
   mk('Ring of eight', () => { patches = [at(-45, 40, 85), at(45, 40, 85), at(-55, -10, 90), at(55, -10, 90), at(-35, -55, 75), at(35, -55, 75), at(-25, 70, 70), at(25, 70, 70)]; });
   mk('Clear', () => { patches = []; });
-  fig.panel.append(presets, controls(sRadius.el, sQ.el, sNoise.el), readouts(rK.el, rD.el, rCeil.el, rVar.el));
+  fig.panel.append(presets, controls(sRadius.el, sQ.el, sNoise.el));
+  fig.viz.append(readouts(rK.el, rD.el, rCeil.el, rVar.el));
   const bars = mkCanvas(fig.panel, '', 380, 100);
   bars.style.width = '100%';
   const barsCap = bars.nextElementSibling as HTMLElement;
@@ -119,6 +121,7 @@ arrays, for comparison, decode handwriting at 90 characters/min and speech at 62
     { what: 'A patch', value: 'all cortical sources within the radius of a centre point, sharing the total moment equally; overlapping patches are separate sources', cite: '<span class="assumption-tag">model assumption</span>' },
     { what: 'Distinguishable', value: 'singular values of the patches’ scalp patterns divided by the per-electrode noise; those above 1 count', cite: c('svd-method') },
     { what: 'Ceiling', value: 'the same count for the full lead field, each cortical point carrying the moment of one patch', cite: c('svd-method') },
+    { what: 'Components for 99% of the variance', value: 'lead-field components that carry 99% of the scalp variance of independent, identically distributed sources with 128 electrodes (scripts/leadfield_svd.py)', cite: c('svd-counts') },
     { what: 'Drawing', value: `view from above; only cortex and electrodes above the centre of a sphere fitted to the electrodes (radius ${fmt(R / 10, 3)} cm) are drawn, and the outline is the widest extent of those electrodes; the scalp map is a Gaussian-weighted average of all ${nCh} electrode values (width ${fmt(sigmaMm, 2)} mm) evaluated on that sphere; patch discs are drawn at the patch radius`, cite: '<span class="assumption-tag">display only</span>' },
   ]);
 
@@ -144,6 +147,25 @@ arrays, for comparison, decode handwriting at 90 characters/min and speech at 62
   const PATCH_COLOURS = ['#2a78d6', '#eb6834', '#1baf7a', '#6250d6', '#eda100', '#e34948', '#008383', '#8a6d3b'];
 
   const headPath = (ctx: CanvasRenderingContext2D) => { ctx.beginPath(); ctx.ellipse(cx, cy, ax * s, by * s, 0, 0, 2 * Math.PI); };
+  /** faint 5 cm grid with numbered ticks, in head coordinates about the outline centre */
+  function drawGridHead(ctx: CanvasRenderingContext2D) {
+    ctx.save();
+    ctx.font = CANVAS_FONT; ctx.strokeStyle = 'rgba(26,26,26,0.16)'; ctx.lineWidth = 1;
+    const fmtTick = (mm: number) => String(mm / 10).replace('-', '−');
+    for (let mm = -100; mm <= 100; mm += 50) {
+      const px = cx + mm * s, py = cy - mm * s;
+      ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, H); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(W, py); ctx.stroke();
+    }
+    ctx.fillStyle = '#52514e';
+    for (let mm = -100; mm <= 100; mm += 50) {
+      const px = cx + mm * s, py = cy - mm * s;
+      ctx.textAlign = 'center'; ctx.fillText(fmtTick(mm), px, H - 5);
+      if (mm !== 0) { ctx.textAlign = 'left'; ctx.fillText(fmtTick(mm), 4, py + 5); }
+    }
+    ctx.textAlign = 'left'; ctx.fillText('cm', 4, 16);
+    ctx.restore();
+  }
   function headOutline(ctx: CanvasRenderingContext2D) {
     ctx.save();
     ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 1.5;
@@ -152,13 +174,14 @@ arrays, for comparison, decode handwriting at 90 characters/min and speech at 62
     ctx.beginPath(); ctx.moveTo(cx - 10, top + 1); ctx.lineTo(cx, top - 12); ctx.lineTo(cx + 10, top + 1); ctx.stroke();
     ctx.beginPath(); ctx.ellipse(cx - side - 5, cy, 5, 15, 0, 0, 2 * Math.PI); ctx.stroke();
     ctx.beginPath(); ctx.ellipse(cx + side + 5, cy, 5, 15, 0, 0, 2 * Math.PI); ctx.stroke();
-    ctx.font = '12px system-ui'; ctx.fillStyle = '#52514e'; ctx.textAlign = 'center';
-    ctx.fillText('front', cx, top - 16); ctx.fillText('back', cx, cy + by * s + 16);
+    ctx.font = CANVAS_FONT; ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'center';
+    ctx.fillText('front', cx, top - 17); ctx.fillText('back', cx, cy + by * s - 8);
     ctx.restore();
   }
 
   function drawCortex() {
     cctx.clearRect(0, 0, W, H);
+    drawGridHead(cctx);
     // the cortex as a stipple of its source points (only the surface seen from above)
     cctx.fillStyle = 'rgba(26,26,26,0.22)';
     for (const [x, y, z] of srcXY) { if (!visible(z)) continue; cctx.beginPath(); cctx.arc(x, y, 1.3, 0, 2 * Math.PI); cctx.fill(); }
@@ -176,8 +199,8 @@ arrays, for comparison, decode handwriting at 90 characters/min and speech at 62
     cctx.restore();
     patches.forEach((p, idx) => {
       const [x0, y0] = srcXY[p.center];
-      cctx.font = 'bold 11px system-ui'; cctx.fillStyle = '#1a1a1a'; cctx.textAlign = 'center';
-      cctx.fillText(String(idx + 1), x0, y0 + 4);
+      cctx.font = 'bold 14px system-ui, sans-serif'; cctx.fillStyle = '#1a1a1a'; cctx.textAlign = 'center';
+      cctx.fillText(String(idx + 1), x0, y0 + 5);
     });
     headOutline(cctx);
   }
@@ -210,11 +233,12 @@ arrays, for comparison, decode handwriting at 90 characters/min and speech at 62
     sctx.imageSmoothingEnabled = true;
     sctx.drawImage(half, 0, 0, W, H);
     sctx.restore();
+    drawGridHead(sctx);
     sctx.fillStyle = 'rgba(26,26,26,0.7)';
     for (const [x, y, z] of elXY) { if (!visible(z)) continue; sctx.beginPath(); sctx.arc(x, y, 2, 0, 2 * Math.PI); sctx.fill(); }
     headOutline(sctx);
-    sctx.font = '11px system-ui'; sctx.fillStyle = '#52514e'; sctx.textAlign = 'left';
-    sctx.fillText(`peak ${fmt(vmax, 2)} µV`, 6, H - 6);
+    sctx.font = CANVAS_FONT; sctx.fillStyle = '#1a1a1a'; sctx.textAlign = 'right';
+    sctx.fillText(`peak ${fmt(vmax, 2)} µV`, W - 6, 18);
   }
 
   function drawBars(sv: number[], noise: number) {
@@ -227,7 +251,7 @@ arrays, for comparison, decode handwriting at 90 characters/min and speech at 62
     const y = (v: number) => mt + (H - mt - mb) * (1 - (Math.log10(Math.max(v, Math.pow(10, lo))) - lo) / (hi - lo));
     bctx.strokeStyle = '#c3c2b7'; bctx.lineWidth = 1;
     bctx.beginPath(); bctx.moveTo(ml, mt); bctx.lineTo(ml, H - mb); bctx.lineTo(W - 8, H - mb); bctx.stroke();
-    bctx.fillStyle = '#898781'; bctx.font = '11px system-ui'; bctx.textAlign = 'right';
+    bctx.fillStyle = '#898781'; bctx.font = '13px system-ui, sans-serif'; bctx.textAlign = 'right';
     for (const tick of [0.1, 1, 10]) { const v = noise * tick; if (v < Math.pow(10, lo) || v > Math.pow(10, hi)) continue; bctx.fillText(`${fmt(v, 2)} µV`, ml - 4, y(v) + 4); }
     bctx.strokeStyle = '#898781'; bctx.setLineDash([4, 3]);
     bctx.beginPath(); bctx.moveTo(ml, y(noise)); bctx.lineTo(W - 8, y(noise)); bctx.stroke();

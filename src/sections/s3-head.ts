@@ -1,7 +1,7 @@
 import { exteriorPotential, potential, solveShells, surfacePotential, stackShells, type Shell } from '../physics/sphere';
 import { controls, readout, slider, fmt, choice } from '../ui/slider';
 import { linePlot } from '../ui/plot';
-import { glow, glowLegend } from '../ui/field';
+import { glow, glowLegend, CANVAS_FONT } from '../ui/field';
 import { P, claimCite as c } from '../data/params';
 import { section, figure, prose, assumptions, readouts } from '../ui/layout';
 
@@ -26,8 +26,8 @@ microvolts ${c('eeg-amplitude')}. Nothing special happens at the skin: the poten
 air, halving about a centimetre above it ${c('exterior-potential')}, which is what an electrode held off
 the scalp has to work with (section 5).</p>`);
 
-  const sDepth = slider({ label: 'Source depth below cortex', unit: 'mm', min: 0.5, max: 25, value: 2, step: 0.5 });
-  const sMoment = slider({ label: 'Source dipole moment', unit: 'nA·m', min: 1, max: 500, value: 10, log: true, note: c('cells-for-10nam') });
+  const sDepth = slider({ label: 'Source depth', unit: 'mm', min: 0.5, max: 25, value: 2, step: 0.5 });
+  const sMoment = slider({ label: 'Source moment', unit: 'nA·m', min: 1, max: 500, value: 10, log: true, note: c('cells-for-10nam') });
   const sTh = slider({ label: 'Threshold (dark line)', unit: 'µV', min: 0.1, max: 100, value: 1, log: true });
   const sCsf = slider({ label: 'CSF thickness', unit: 'mm', min: 0, max: 5, value: P.thicknessCsfMm, step: 0.1, note: c('thickness-csf') });
   const sDura = slider({ label: 'Dura thickness', unit: 'mm', min: 0, max: 2, value: P.thicknessDuraMm, step: 0.05, note: c('thickness-dura') });
@@ -37,13 +37,13 @@ the scalp has to work with (section 5).</p>`);
   const sSigCsf = slider({ label: 'CSF conductivity', unit: 'S/m', min: 0.3, max: 2.5, value: P.sigmaCsf, step: 0.01, note: c('sigma-csf') });
   const sSigDura = slider({ label: 'Dura conductivity', unit: 'S/m', min: 0.01, max: 1, value: P.sigmaDura, log: true, note: c('sigma-dura') });
   let orientation: 'radial' | 'tangential' = 'radial';
-  const orient = choice('Dipole orientation', [{ value: 'radial', label: 'Radial (gyral crown)' }, { value: 'tangential', label: 'Tangential (sulcal wall)' }], 'radial', (v) => { orientation = v; update(); });
+  const orient = choice('Orientation', [{ value: 'radial', label: 'Radial' }, { value: 'tangential', label: 'Tangential' }], 'radial', (v) => { orientation = v; update(); });
   const rScalp = readout('Peak scalp potential');
   const rCortex = readout('Peak at the cortical surface');
   const rRatio = readout('Cortex-to-scalp attenuation');
   const rWidth = readout('Scalp half-width of the pattern');
 
-  const fig = figure(sec.fig, 'Left: the top of the head in cross-section. Red is positive, blue negative, fading with the logarithm of the potential; the dark line is the threshold. The arcs, from the inside out, are the boundaries of grey matter, cerebrospinal fluid (CSF), dura, skull and scalp, and the field continues into the air above the scalp, where a non-contact electrode would sense it. Right: the potential along the line from the source straight out through the layers.', { panelWidth: '400px' });
+  const fig = figure(sec.fig, 'Left: the top of the head in cross-section. Red is positive, blue negative, fading with the logarithm of the potential; the dark line is the threshold. The arcs, from the inside out, are the boundaries of grey matter, cerebrospinal fluid (CSF), dura, skull and scalp, and the field continues into the air above the scalp, where a non-contact electrode would sense it. Right: the potential along the line from the source straight out through the layers. Grid numbers are centimetres from the centre of the head; a radial source sits on a gyral crown, a tangential one on a sulcal wall.', { panelWidth: '400px' });
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
@@ -52,18 +52,18 @@ the scalp has to work with (section 5).</p>`);
   row.append(left, right);
   fig.viz.append(row);
   const AIR = 0.02; // metres of air drawn above the scalp
-  const hm = glow(left, { width: 390, height: 300, scale: 2, xRange: [-0.06, 0.06], yRange: [0.02, 0.02 + 0.12 * 300 / 390], floor: 1e-7, ceiling: 1e-4, threshold: 1e-6 });
+  const hm = glow(left, { width: 390, height: 300, scale: 2, xRange: [-0.06, 0.06], yRange: [0.02, 0.02 + 0.12 * 300 / 390], floor: 1e-7, ceiling: 1e-4, threshold: 1e-6, grid: { step: 0.02, factor: 100, unit: 'cm' } });
   glowLegend(left, '0.1 µV', '100 µV', 'dark line = threshold');
   const radial = linePlot(right, {
-    x: { label: 'Distance from the source along its axis (mm)' },
+    x: { label: 'Distance along the source axis (mm)' },
     y: { label: 'Potential (µV)', scale: 'log', domain: [1, 1e4] },
     height: 300,
   });
   fig.panel.append(
     controls(sDepth.el, sMoment.el, sTh.el, orient.el),
     controls(sCsf.el, sDura.el, sSkull.el, sScalp.el, sSigCsf.el, sSigDura.el, sSigSkull.el),
-    readouts(rScalp.el, rCortex.el, rRatio.el, rWidth.el),
   );
+  fig.viz.append(readouts(rScalp.el, rCortex.el, rRatio.el, rWidth.el));
   assumptions(fig.el, [
     { what: 'Head geometry', value: 'concentric spheres, brain radius 8.0 cm; layer thicknesses from the sliders', cite: c('brain-radius') + c('sphere-model') },
     { what: 'Grey matter', value: `${P.sigmaGray} S/m (classical value; meta-analysis 0.38–0.47 S/m)`, cite: c('sigma-gray') },
@@ -127,14 +127,14 @@ the scalp has to work with (section 5).</p>`);
         ctx.beginPath(); ctx.arc(cx, cy, rx - cx, Math.PI, 2 * Math.PI); ctx.stroke();
       });
       ctx.fillStyle = '#1a1a1a';
-      ctx.font = '11px system-ui';
-      const [ax, ay] = toPx(-0.057, R + 0.012);
+      ctx.font = CANVAS_FONT;
+      const [ax, ay] = toPx(-0.052, R + 0.016);
       ctx.fillText('air', ax, ay);
-      const [bx, by] = toPx(-0.057, 0.026);
+      const [bx, by] = toPx(-0.052, 0.034);
       ctx.fillText('brain', bx, by);
       const [sx, sy] = toPx(0, b);
-      ctx.beginPath(); ctx.arc(sx, sy, 3, 0, 2 * Math.PI); ctx.fill();
-      ctx.fillText('source', sx + 7, sy + 4);
+      ctx.beginPath(); ctx.arc(sx, sy, 3.5, 0, 2 * Math.PI); ctx.fill();
+      ctx.fillText('source', sx + 8, sy + 5);
       ctx.restore();
     });
   }

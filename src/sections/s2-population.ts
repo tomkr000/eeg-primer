@@ -1,7 +1,7 @@
 import { netDipole, mulberry32 } from '../physics/population';
 import { solveShells, surfacePotential } from '../physics/sphere';
 import { controls, readout, slider, fmt } from '../ui/slider';
-import { glow, drawNeuron, scaleBar, glowLegend } from '../ui/field';
+import { glow, drawNeuron, glowLegend, CANVAS_FONT } from '../ui/field';
 import { P, claimCite as c, defaultHead } from '../data/params';
 import { section, figure, prose, readouts } from '../ui/layout';
 
@@ -48,11 +48,11 @@ hide much. Only coherent, aligned current counts.</p>`);
   fig.viz.append(row);
   const zoomSpan = 1.6e-3; // ±1.6 mm
   const wideSpan = 30e-3; // ±30 mm
-  const gz = glow(left, { width: 340, height: 400, scale: 2, xRange: [-zoomSpan, zoomSpan], yRange: [-zoomSpan * 1.18, zoomSpan * 1.18], floor: 1e-6, ceiling: 3e-2 });
+  const gz = glow(left, { width: 340, height: 400, scale: 2, xRange: [-zoomSpan, zoomSpan], yRange: [-zoomSpan * 1.18, zoomSpan * 1.18], floor: 1e-6, ceiling: 3e-2, grid: { step: 0.5e-3, factor: 1e3, unit: 'mm' } });
   const cap1 = document.createElement('div'); cap1.className = 'viz-caption'; cap1.textContent = 'Zoomed in: 3 mm of cortex';
   left.append(cap1);
   glowLegend(left, '1 µV', '30 mV');
-  const gw = glow(right, { width: 340, height: 400, scale: 2, xRange: [-wideSpan, wideSpan], yRange: [-wideSpan * 1.18, wideSpan * 1.18], floor: 1e-7, ceiling: 1e-3 });
+  const gw = glow(right, { width: 340, height: 400, scale: 2, xRange: [-wideSpan, wideSpan], yRange: [-wideSpan * 1.18, wideSpan * 1.18], floor: 1e-7, ceiling: 1e-3, grid: { step: 1e-2, factor: 100, unit: 'cm' } });
   const cap2 = document.createElement('div'); cap2.className = 'viz-caption'; cap2.textContent = 'Zoomed out: 6 cm of cortex';
   right.append(cap2);
   glowLegend(right, '0.1 µV', '1 mV', 'dashed circle = reach of the field above the threshold');
@@ -98,17 +98,16 @@ hide much. Only coherent, aligned current counts.</p>`);
       const count = N === 1 ? 1 : Math.max(1, Math.floor((2 * half) / spacing));
       for (let i = 0; i < count; i++) {
         const x = N === 1 ? 0 : -half + ((i + 0.5) / count) * 2 * half;
-        drawNeuron(ctx, toPx, { x, soma: -d / 2, tuft: d / 2, lineWidth: 0.9, color: 'rgba(26,26,26,0.7)', full: false });
+        drawNeuron(ctx, toPx, { x, soma: -d / 2, tuft: d / 2, lineWidth: 1.8, full: false });
       }
-      scaleBar(ctx, toPx, -zoomSpan * 0.9, -zoomSpan * 1.1, 0.5e-3, '0.5 mm');
     });
     gw.draw(field, (ctx, toPx) => {
       // the patch as a bar at the cortex, and the cortical surface
       const [x0, y0] = toPx(-W / 2, d / 2), [x1, y1] = toPx(W / 2, -d / 2);
       ctx.fillStyle = 'rgba(26,26,26,0.85)';
       ctx.fillRect(Math.min(x0, x1), Math.min(y0, y1), Math.max(2, Math.abs(x1 - x0)), Math.max(2, Math.abs(y1 - y0)));
-      ctx.fillStyle = '#1a1a1a'; ctx.font = '11px system-ui';
-      ctx.fillText('patch', Math.max(x0, x1) + 4, (y0 + y1) / 2 + 4);
+      ctx.fillStyle = '#1a1a1a'; ctx.font = CANVAS_FONT;
+      ctx.fillText('patch', Math.max(x0, x1) + 5, (y0 + y1) / 2 + 5);
       // reach of the field: dashed circle of the on-axis detection distance
       const [cx, cy] = toPx(0, 0), [rx] = toPx(reach, 0);
       const rp = rx - cx;
@@ -119,9 +118,8 @@ hide much. Only coherent, aligned current counts.</p>`);
         ctx.restore();
         const label = reach < 1e-3 ? `${fmt(reach * 1e6, 2)} µm` : reach < 1 ? `${fmt(reach * 1e3, 2)} mm` : `${fmt(reach, 2)} m`;
         const [lx, ly] = toPx(reach * 0.72, reach * 0.72);
-        if (ly > 14 && lx < ctx.canvas.width - 60) ctx.fillText(`reach ${label}`, lx + 4, ly - 4);
+        if (ly > 18 && lx < ctx.canvas.width - 90) ctx.fillText(`reach ${label}`, lx + 4, ly - 4);
       }
-      scaleBar(ctx, toPx, -wideSpan * 0.9, -wideSpan * 1.1, 10e-3, '1 cm');
     });
     rMoment.set(`${fmt(m * 1e9, 3)} nA·m`);
     rReach.set(reach < 1e-3 ? `${fmt(reach * 1e6, 3)} µm` : reach < 1 ? `${fmt(reach * 1e3, 3)} mm` : `${fmt(reach, 3)} m`);

@@ -1,7 +1,8 @@
 import { synthesize, type NoiseParams } from '../physics/noise';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { linePlot } from '../ui/plot';
-import { claimCite as c } from '../data/params';
+import { P, claimCite as c, defaultHead } from '../data/params';
+import { solveShells, surfacePotential } from '../physics/sphere';
 import { section, figure, prose, readouts } from '../ui/layout';
 
 /** Shared defaults so section 5 can reuse the same raw scalp signal. */
@@ -13,8 +14,10 @@ export const RAW_DEFAULTS: NoiseParams = {
 export function mountNoise(root: HTMLElement) {
   const sec = section(root, 'noise', '4', 'Noise from outside the skull');
   prose(sec.text, `
-<p>What arrives at the scalp is tens of microvolts ${c('eeg-amplitude')}. Almost everything else in the
-recording is bigger. Scalp and neck muscles produce electromyographic (EMG) activity across roughly
+<p>What arrives at the scalp is tens of microvolts ${c('eeg-amplitude')}. The alpha rhythm in the figure
+is set at 20 µV, and that number is the end of the chain so far: in the head of section 3 it takes a source
+of about 40 nA·m, which section 2 puts at roughly 10⁵ synchronous cells ${c('alpha-source-chain')} (the
+readouts track it as you move the slider). Almost everything else in the recording is bigger. Scalp and neck muscles produce electromyographic (EMG) activity across roughly
 20–300 Hz that can reach ~100 µV, against gamma-band brain signals under a microvolt
 ${c('emg-band')}${c('emg-topography')}. Eye blinks give frontal deflections of 100–200 µV
 ${c('blink-amplitude')}, a dozen or more times a minute ${c('blink-rate')}. The body also carries a
@@ -37,16 +40,22 @@ spends waiting.</p>`);
   const sBlinkRate = slider({ label: 'Blink rate', unit: '/min', min: 0, max: 30, value: RAW_DEFAULTS.blinksPerMinute, step: 1, note: c('blink-rate') });
   const sCm = slider({ label: 'Common-mode mains voltage', unit: 'mV', min: 0.1, max: 200, value: 10, log: true, note: c('common-mode') });
   const sCmrr = slider({ label: 'Amplifier common-mode rejection', unit: 'dB', min: 60, max: 120, value: RAW_DEFAULTS.cmrrDb, step: 1, note: c('cmrr-customary') });
-  const sImb = slider({ label: 'Impedance imbalance ΔZ / Z<sub>in</sub>', min: 1e-6, max: 1e-2, value: RAW_DEFAULTS.imbalanceRatio, log: true, note: c('potential-divider') });
+  const sImb = slider({ label: 'Impedance imbalance ΔZ / Z<sub>in</sub>', min: 1e-6, max: 1e-2, value: RAW_DEFAULTS.imbalanceRatio, log: true, format: (v) => `1 in ${fmt(1 / v, 2)}`, note: c('potential-divider') });
   const sAmp = slider({ label: 'Amplifier input noise', unit: 'µV rms', min: 0.1, max: 5, value: RAW_DEFAULTS.ampUvRms, log: true, note: c('ads1299') });
   const sSkin = slider({ label: 'Electrode–skin noise (1/f)', unit: 'µV rms', min: 0, max: 20, value: RAW_DEFAULTS.skinUvRms, step: 0.5, note: c('skin-noise') });
   const rSnr = readout('Signal-to-noise ratio (alpha vs the rest)');
   const rMains = readout('Mains residual after rejection and divider');
   const rRms = readout('Total rms of the recording');
+  const rSource = readout('Equivalent cortical source (section 3 head)', c('alpha-source-chain'));
+  const rCells = readout('Perfectly synchronous cells for that source (section 2)', c('alpha-source-chain'));
+  // scalp potential per unit dipole moment for the default head of section 3 (radial source 2 mm below the cortex)
+  const head = defaultHead();
+  const scalpUvPerNam = surfacePotential(solveShells(head.shells, head.sourceRadius, 1, 'radial', 120), 0) * 1e6 * 1e-9;
 
   const fig = figure(sec.fig, 'Four seconds of a synthetic scalp channel: the 10 Hz alpha rhythm alone (blue) and the same rhythm buried in muscle, mains, skin and amplifier noise (orange). The large deflections marked are eye blinks. This is the raw signal at the scalp: whatever the electrode type, this is what it is trying to pick up.');
   const plot = linePlot(fig.viz, { x: { label: 'Time (s)', domain: [0, 4] }, y: { label: 'Potential (µV)' }, height: 360 });
-  fig.panel.append(controls(sSig.el, sEmg.el, sBlink.el, sBlinkRate.el, sCm.el, sCmrr.el, sImb.el, sAmp.el, sSkin.el), readouts(rSnr.el, rMains.el, rRms.el));
+  fig.panel.append(controls(sSig.el, sEmg.el, sBlink.el, sBlinkRate.el, sCm.el, sCmrr.el, sImb.el, sAmp.el, sSkin.el));
+  fig.viz.append(readouts(rSnr.el, rMains.el, rRms.el, rSource.el, rCells.el));
 
   function update() {
     const s = synthesize({
@@ -59,6 +68,9 @@ spends waiting.</p>`);
       { name: 'Raw scalp signal (alpha + everything else)', points: toPts(s.total), color: '#eb6834', width: 1 },
     ], s.blinkTimes.map((t) => ({ axis: 'x' as const, value: t, label: 'eye blink' })));
     rSnr.set(`${fmt(s.snrDb, 3)} dB`);
+    const moment = sSig.value / scalpUvPerNam; // nA·m
+    rSource.set(`${fmt(moment, 3)} nA·m`);
+    rCells.set(`${fmt(moment / (P.singleCellMomentPAm * 1e-3), 2)}`);
     rMains.set(`${fmt(sCm.value * 1e3 * (Math.pow(10, -sCmrr.value / 20) + sImb.value), 3)} µV`);
     rRms.set(`${fmt(Math.sqrt(s.total.reduce((a, v) => a + v * v, 0) / s.total.length), 3)} µV`);
   }

@@ -15,16 +15,15 @@ hero.className = 'hero';
 hero.innerHTML = `
   <p class="kicker">An interactive, cited walk through the physics</p>
   <h1>Through the skull, dimly</h1>
-  <p class="standfirst">Scalp electroencephalography (EEG) records the brain from the far side of a
-  resistive bone, through fluid that shorts the signal sideways and skin that adds its own noise.
-  Six models with sliders show, number by number, why a single neuron is invisible from outside, what it
-  takes for a population to be seen, how much the head attenuates and blurs, how noise and electrodes
-  intervene, and how many independent signals a brain–machine interface (BMI) can hope to extract
-  even with unlimited electrodes. Every assumption carries a citation; every citation was checked by an
-  independent auditor (see the verification log).</p>
+  <p class="standfirst">Scalp electroencephalography (EEG) listens to the brain from the far side of a
+  resistive bone, through fluid that shorts the signal sideways and skin that adds noise of its own. Six
+  models with sliders show why one neuron is invisible from outside, what it takes for a population to be
+  seen, how much the head attenuates and blurs, how noise and electrodes intervene, and how many independent
+  signals a brain\u2013machine interface (BMI) can hope to extract. Every number carries a citation, and every
+  citation was checked by an independent auditor (see the verification log).</p>
   <nav class="toc" aria-label="Sections">
-    <a href="#neuron"><b>1</b> How far does one neuron’s signal reach?</a>
-    <a href="#population"><b>2</b> Strength in numbers — but only in step</a>
+    <a href="#neuron"><b>1</b> How far does one neuron\u2019s signal reach?</a>
+    <a href="#population"><b>2</b> Strength in numbers, but only in step</a>
     <a href="#head"><b>3</b> Out through CSF, dura, skull and scalp</a>
     <a href="#noise"><b>4</b> Noise from outside the skull</a>
     <a href="#electrodes"><b>5</b> What the electrode actually touches</a>

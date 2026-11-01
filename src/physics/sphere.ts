@@ -199,6 +199,22 @@ export function potential(sol: ShellSolution, r: number, theta: number, phi = 0)
   return v;
 }
 
+/**
+ * Potential (volts) in the air outside the head at spherical point (r > R, θ, φ). Air is treated as a perfect
+ * insulator, so no current leaves the head and the interior solution is unchanged; the exterior potential
+ * is the solution of Laplace's equation that matches the scalp potential at r = R and vanishes at infinity,
+ * which per degree is the scalp coefficient times (R/r)^(l+1) (Jackson 1999, sect. 3.3). Returns NaN inside.
+ */
+export function exteriorPotential(sol: ShellSolution, r: number, theta: number, phi = 0): number {
+  const n = sol.shells.length - 1;
+  const R = sol.shells[n].outerRadius;
+  if (r < R) return NaN;
+  const Y = angular(sol, Math.cos(theta), phi);
+  let v = 0;
+  for (let l = 1; l <= sol.L; l++) v += (sol.A[n][l] + sol.B[n][l]) * Math.pow(R / r, l + 1) * Y[l];
+  return v;
+}
+
 /** Potential on the outer surface as a function of polar angle (and φ for tangential dipoles). */
 export function surfacePotential(sol: ShellSolution, theta: number, phi = 0): number {
   const N = sol.shells.length;

@@ -1,0 +1,28 @@
+[
+  {
+    "id": "exterior-potential",
+    "statement": "With air treated as a perfect insulator, no current leaves the head and the interior solution is unchanged; the potential in the air is the solution of Laplace’s equation that equals the scalp potential on the surface and vanishes at infinity, so each spherical-harmonic term of degree l continues outward as (R/r)^(l+1), the finer the pattern the faster. For the default source of section 3 (scalp half-width 2.2 cm) the potential on the axis falls to 70% of its scalp value 0.5 cm above the skin, to half at about 1 cm and to a quarter at 3 cm.",
+    "sources": [
+      "Jackson JD (1999). Classical Electrodynamics, 3rd edition, Wiley. Sect. 3.3 (boundary-value problems with azimuthal symmetry: exterior solutions r^-(l+1))",
+      "Nunez PL, Nunez MD, Srinivasan R (2019). Multi-scale neural sources of EEG: genuine, equivalent, and representative. A tutorial review. Brain Topography 32(2):193–214 doi:10.1007/s10548-019-00701-3"
+    ],
+    "note_for_auditor": "This is a derived (textbook-physics) claim. Check (a) that the exterior solution of Laplace's equation regular at infinity is a sum of r^-(l+1) P_l terms (any electrodynamics text), (b) that treating air as an insulator / zero normal current at the scalp is the standard EEG boundary condition (Nunez & Srinivasan or any EEG forward-modelling source), and (c) that the percentages are plausible for a pattern of that width (they are computed by the site's own solver; no source states them)."
+  },
+  {
+    "id": "electrode-noise-levels",
+    "statement": "Modelling choice for the traces: electrode–skin noise of 1.5 µV rms (abraded, gelled skin), 4 µV (gel on unprepared skin), 8 µV (dry plate) and 8 µV (plate over hair), with a 1/f spectrum and 1/√area scaling, placed within the measured 1–20 µV rms range that depends on skin treatment and is lower for prepared skin.",
+    "sources": [
+      "Huigen E, Peper A, Grimbergen CA (2002). Investigation into the origin of the noise of surface electrodes. Medical & Biological Engineering & Computing 40(3):332–338 doi:10.1007/BF02344216",
+      "Kappenman ES, Luck SJ (2010). The effects of electrode impedance on data quality and statistical significance in ERP recordings. Psychophysiology 47(5):888–904 doi:10.1111/j.1469-8986.2010.01009.x"
+    ],
+    "note_for_auditor": "The specific values are declared assumptions. Check the parts attributed to sources: that Huigen et al. report surface-electrode noise in roughly the 1–20 µV rms range (what bandwidth?), that the noise depends on skin treatment and is lower for prepared/stripped skin, and that its spectrum is 1/f-like; and that Kappenman & Luck found higher low-frequency noise (below ~5 Hz) at high-impedance (unabraded) sites."
+  },
+  {
+    "id": "amp-current-noise",
+    "statement": "An amplifier’s input current noise flows through the electrode impedance and appears as voltage noise iₙ·|Zₑ|; a research non-contact amplifier reached 0.05 fA/√Hz current noise (with 200 nV/√Hz voltage noise at 1 Hz), and the slider default of 1 fA/√Hz is a modelling choice for an ordinary high-impedance front end.",
+    "sources": [
+      "Chi YM, Maier C, Cauwenberghs G (2011). Ultra-high input impedance, low noise integrated amplifier for noncontact biopotential sensing. IEEE Journal on Emerging and Selected Topics in Circuits and Systems 1(4):526–535 doi:10.1109/JETCAS.2011.2179419"
+    ],
+    "note_for_auditor": "Check the 0.05 fA/√Hz and 200 nV/√Hz at 1 Hz figures and the journal/volume/pages/DOI. The 1 fA/√Hz default is a declared assumption; if you can find a typical input current noise figure for a commercial EEG front end (e.g. the TI ADS1299 datasheet) report it as context."
+  }
+]

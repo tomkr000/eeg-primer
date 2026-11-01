@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  exteriorPotential,
   freeSpaceDipole,
   legendreP,
   legendreP1,
@@ -144,5 +145,32 @@ describe('multi-shell solver', () => {
     const sol = solveShells(fourShell(), 0.077, 1, 'radial', 80);
     const T = modalTransfer(sol);
     for (let l = 2; l <= 80; l++) expect(Math.abs(T[l])).toBeLessThan(Math.abs(T[l - 1]));
+  });
+});
+
+describe('exterior (air) potential', () => {
+  const shells: Shell[] = stackShells(0.08, [
+    { name: 'CSF', thickness: 0.001, sigma: 1.79 },
+    { name: 'skull', thickness: 0.0063, sigma: 0.015 },
+    { name: 'scalp', thickness: 0.0055, sigma: 0.41 },
+  ], sigma);
+  const Rout = shells[shells.length - 1].outerRadius;
+  it.each(['radial', 'tangential'] as const)('%s dipole: matches the scalp potential at the surface and decays outward', (orientation) => {
+    const sol = solveShells(shells, 0.078, 1e-8, orientation, 300);
+    for (const theta of [0.05, 0.3, 1.0]) {
+      const inside = potential(sol, Rout - 1e-9, theta, 0.2);
+      const outside = exteriorPotential(sol, Rout, theta, 0.2);
+      expect(outside).toBeCloseTo(inside, 12);
+    }
+    // the peak over angle falls off with height above the scalp (a single angle can sit at a zero crossing)
+    const peak = (r: number) => Math.max(...Array.from({ length: 180 }, (_, k) => Math.abs(exteriorPotential(sol, r, (k * Math.PI) / 180, 0.2))));
+    expect(peak(Rout + 0.01)).toBeLessThan(peak(Rout));
+    expect(peak(Rout + 0.03)).toBeLessThan(peak(Rout + 0.01));
+    expect(exteriorPotential(sol, Rout - 0.001, 0.3)).toBeNaN();
+  });
+  it('an l = 1 scalp pattern decays exactly as (R/r)^2', () => {
+    const sol = solveShells(shells, 0.078, 1e-8, 'radial', 1);
+    const v0 = exteriorPotential(sol, Rout, 0.4), v1 = exteriorPotential(sol, 2 * Rout, 0.4);
+    expect(v1 / v0).toBeCloseTo(0.25, 10);
   });
 });

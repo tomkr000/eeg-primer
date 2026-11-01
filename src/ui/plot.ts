@@ -73,6 +73,14 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
     const y = mkScale(cfg.y).domain(yd).range([MARGIN.top + ih, MARGIN.top]);
     const xAxis = d3.axisBottom(x).ticks(6);
     const yAxis = d3.axisLeft(y).ticks(5);
+    // log axes: plain numbers in the readable range, short scientific notation outside it
+    const logFmt = (v: number) => {
+      const e = Math.log10(v);
+      if (Math.abs(e - Math.round(e)) > 1e-9) return ''; // label the powers of ten only
+      return v >= 1e-3 && v < 1e6 ? d3.format(',~g')(v) : d3.format('.0~e')(v).replace('e-', 'e−');
+    };
+    if (cfg.x.scale === 'log') xAxis.tickFormat((v) => logFmt(+v));
+    if (cfg.y.scale === 'log') yAxis.tickFormat((v) => logFmt(+v));
     if (cfg.x.format) xAxis.tickFormat((v) => cfg.x.format!(+v));
     else if (cfg.x.scale === 'log') xAxis.ticks(6, (v: number) => fmt(v, 2));
     if (cfg.y.format) yAxis.tickFormat((v) => cfg.y.format!(+v));
@@ -114,7 +122,8 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
       } else {
         if (m.value < xd[0] || m.value > xd[1]) continue;
         gMarkers.append('line').attr('y1', MARGIN.top).attr('y2', MARGIN.top + ih).attr('x1', x(m.value)).attr('x2', x(m.value)).attr('stroke', col).attr('stroke-dasharray', '2 3');
-        gMarkers.append('text').attr('class', 'marker-label').attr('x', x(m.value) + 4).attr('y', MARGIN.top + ih - 6).attr('fill', col).text(m.label);
+        const nearRight = x(m.value) > MARGIN.left + iw * 0.8;
+        gMarkers.append('text').attr('class', 'marker-label').attr('x', x(m.value) + (nearRight ? -4 : 4)).attr('y', MARGIN.top + ih - 6).attr('text-anchor', nearRight ? 'end' : 'start').attr('fill', col).text(m.label);
       }
     }
     // legend (only for ≥ 2 series)

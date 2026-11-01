@@ -18,34 +18,26 @@ function plainSection(root: HTMLElement, id: string, title: string): HTMLElement
 export function mountMethod(root: HTMLElement) {
   const body = plainSection(root, 'method', 'Method and caveats');
   prose(body, `
-<p><strong>What the models are.</strong> Sections 1 and 2 use the quasi-static point-source and dipole
-formulas in an infinite homogeneous conductor ${cite('malmivuo1995')}. Sections 3 and 6 solve the
-concentric-sphere head model analytically: the potential in each shell is expanded in Legendre functions
-and the coefficients are found per degree from continuity of potential and radial current at every
-interface, the standard approach ${cite('demunck1993', 'zhang1995', 'nunez2019')}. The solver is
-unit-tested against the closed-form homogeneous sphere (including the factor-of-3 enhancement for a central
-dipole) and checked numerically for interface continuity. Section 4 synthesises a scalp channel from
-published noise magnitudes and spectra; Section 5 uses lumped RC electrode–skin circuits scaled by
-area. The realistic-head check in Section 6 is precomputed offline (<code>scripts/leadfield_svd.py</code>)
-with MNE-Python’s boundary-element solver on the public fsaverage head ${cite('gramfort2013', 'mnefsaverage')};
-the page ships only the resulting singular values, and a unit test pins the quoted counts to that data.</p>
-<p><strong>What they are not.</strong> Real heads are not spheres: skull thickness and conductivity vary
-by site and age ${cite('mccann2019', 'tang2008')}, cortex is folded, and sources are extended sheets rather
-than points — which is why the cortex-to-scalp ratio ranges from 50–100 for a point dipole to
-2–5 for a large synchronous sheet ${cite('nunez2019')}. The dimensionality count in section 6 assumes
-a flat source spectrum and treats “above the noise floor” as the resolvability criterion; it is a
-model-derived upper bound, offered next to the published estimates it agrees with
-${cite('iivanainen2021')}. Numbers measured on the forearm (electrode impedances) are used as stand-ins
-for the scalp ${cite('chi2010')}, and some thicknesses rest on thin evidence (the scalp value comes from a
-clinical case report; the dura value from skull-base, not convexity, dura). Each such weakness is recorded
-against its claim in the verification log.</p>
-<p><strong>How the citations were checked.</strong> Claims were first gathered by research agents that had
-to open each source and record the supporting sentence. The site’s final claims were then handed,
-without the research notes, to separate auditing agents instructed to find errors: open the cited source,
-locate the statement, and report <em>supported</em>, <em>partially supported</em> (with the discrepancy),
-<em>not supported</em>, or <em>could not access</em>. Their findings are the status badges on every claim.
-Paywalled sources were checked against their abstracts where the number appears there; a few could only be
-confirmed through a secondary source and are marked accordingly.</p>`);
+<p><strong>The models.</strong> Sections 1 and 2 use the quasi-static point-source and dipole formulas in a
+uniform conductor ${cite('malmivuo1995')}. Section 3 solves the concentric-sphere head analytically
+${cite('demunck1993', 'nunez2019')}; the solver is unit-tested against the closed-form homogeneous sphere
+and checked for continuity of potential and current at every interface. Section 4 synthesises a scalp
+channel from published noise magnitudes; section 5 passes that channel through lumped electrode–skin
+circuits. Section 6 uses a lead field computed offline with MNE-Python’s boundary-element solver on the
+public fsaverage head ${cite('gramfort2013', 'mnefsaverage')} (<code>scripts/</code>); the page ships only the
+resulting matrices, and a unit test pins the quoted counts to that data.</p>
+<p><strong>What they are not.</strong> Real heads are not spheres and skull properties vary by site and age
+${cite('mccann2019', 'tang2008')}; sources are sheets, not points, which is why the cortex-to-scalp ratio
+ranges from 50–100 for a point dipole to 2–5 for a large synchronous sheet ${cite('nunez2019')}. The
+dimension counts in section 6 depend on the noise and source strength you choose. Some inputs rest on thin
+evidence: electrode impedances were measured on the forearm ${cite('chi2010')}, the scalp thickness comes
+from a case report, and the noise levels per electrode type are assumptions guided by the measured
+1–20 µV range. Each weakness is recorded against its claim in the verification log.</p>
+<p><strong>How the citations were checked.</strong> Research agents gathered each fact and had to open the
+source. The final claims were then handed, without those notes, to separate auditing agents told to find
+errors by opening the cited source and reporting supported, partially supported, not supported, or could
+not access. Corrections were applied and are noted on the claims; the status badges reflect the corrected
+statement.</p>`);
 }
 
 export function mountVerification(root: HTMLElement) {
@@ -63,7 +55,7 @@ export function mountVerification(root: HTMLElement) {
   for (const c of CLAIMS) {
     const tr = document.createElement('tr');
     tr.id = `claim-${c.id}`;
-    tr.innerHTML = `<td class="claim-sec">${sectionNames[c.section]}</td><td>${c.statement}${c.note ? `<div class="claim-note">${c.note}</div>` : ''}</td><td>${c.refs.length ? cite(...c.refs) : '—'}</td><td><span class="status status-${c.status}">${c.status}</span></td>`;
+    tr.innerHTML = `<td class="claim-sec">${sectionNames[c.section]}</td><td>${c.statement}${c.note ? `<div class="claim-note">${c.note}</div>` : ''}</td><td>${c.refs.length ? cite(...c.refs) : 'none'}</td><td><span class="status status-${c.status}">${c.status}</span></td>`;
     tb.append(tr);
   }
   table.append(tb);
@@ -83,6 +75,6 @@ export function mountReferences(root: HTMLElement) {
   body.append(ol);
   const foot = document.createElement('footer');
   foot.className = 'site-foot';
-  foot.innerHTML = `Built with Vite and D3. Source and verification notes live in this repository; edit <code>src/data/claims.ts</code> to change a number and the citation travels with it.`;
+  foot.innerHTML = `Built with Vite and D3. Edit <code>src/data/claims.ts</code> to change a number; the citation, hover card and log entry follow.`;
   body.append(foot);
 }

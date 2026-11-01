@@ -7,11 +7,11 @@ import { stackShells, type Shell } from '../physics/sphere';
  * where the source and verification status live. Cite with claimCite('<claim id>').
  */
 export const P = {
-  sigmaGray: 0.33, // S/m — claim 'sigma-gray'
-  sigmaCsf: 1.79, // S/m — 'sigma-csf'
-  sigmaSkull: 0.015, // S/m — 'sigma-skull'
-  sigmaScalp: 0.41, // S/m — 'sigma-scalp'
-  sigmaDura: 0.06, // S/m — 'sigma-dura'
+  sigmaGray: 0.33, // S/m, claim 'sigma-gray'
+  sigmaCsf: 1.79, // S/m, 'sigma-csf'
+  sigmaSkull: 0.015, // S/m, 'sigma-skull'
+  sigmaScalp: 0.41, // S/m, 'sigma-scalp'
+  sigmaDura: 0.06, // S/m, 'sigma-dura'
   thicknessSkullMm: 6.3, // 'thickness-skull'
   thicknessScalpMm: 5.5, // 'thickness-scalp'
   thicknessCsfMm: 1.0, // 'thickness-csf'

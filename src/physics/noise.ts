@@ -48,6 +48,8 @@ export interface Synth {
   noise: Float64Array;
   total: Float64Array;
   snrDb: number;
+  /** times (s) of the blink deflections */
+  blinkTimes: number[];
 }
 
 export function synthesize(p: NoiseParams): Synth {
@@ -75,7 +77,8 @@ export function synthesize(p: NoiseParams): Synth {
   // Blinks: positive-going deflections ~0.3 s wide at random times
   const blinkTimes: number[] = [];
   const expected = (p.blinksPerMinute * p.seconds) / 60;
-  for (let k = 0; k < Math.ceil(expected); k++) if (rng() < expected - k) blinkTimes.push(rng() * p.seconds);
+  // blinks are spread through the middle 80% of the window so a whole deflection is visible
+  for (let k = 0; k < Math.ceil(expected); k++) if (rng() < expected - k) blinkTimes.push(p.seconds * (0.1 + 0.8 * rng()));
   // Mains: residual after CMRR, plus the common-mode→differential conversion from impedance imbalance
   const mainsUv = p.mainsUvcm * (Math.pow(10, -p.cmrrDb / 20) + p.imbalanceRatio);
   const mainsHz = 60;
@@ -92,7 +95,7 @@ export function synthesize(p: NoiseParams): Synth {
   }
   const ps = signal.reduce((s, v) => s + v * v, 0) / n;
   const pn = noise.reduce((s, v) => s + v * v, 0) / n;
-  return { t, signal, noise, total, snrDb: 10 * Math.log10(ps / Math.max(pn, 1e-30)) };
+  return { t, signal, noise, total, snrDb: 10 * Math.log10(ps / Math.max(pn, 1e-30)), blinkTimes };
 }
 
 /**

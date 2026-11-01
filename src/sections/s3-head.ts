@@ -1,85 +1,74 @@
-import { potential, solveShells, surfacePotential, stackShells, type Shell } from '../physics/sphere';
+import { exteriorPotential, potential, solveShells, surfacePotential, stackShells, type Shell } from '../physics/sphere';
 import { controls, readout, slider, fmt, choice } from '../ui/slider';
-import { linePlot, type Series } from '../ui/plot';
-import { heatmap, diverging, colorbar } from '../ui/heatmap';
+import { linePlot } from '../ui/plot';
+import { glow, glowLegend } from '../ui/field';
 import { P, claimCite as c } from '../data/params';
-import { section, figure, prose, assumptions } from '../ui/layout';
+import { section, figure, prose, assumptions, readouts } from '../ui/layout';
 
 export function mountHead(root: HTMLElement) {
   const sec = section(root, 'head', '3', 'Out through cerebrospinal fluid, dura, skull and scalp');
   prose(sec.text, `
-<p>Between a cortical source and a scalp electrode lie, in order: the remaining grey matter, a thin film of
-cerebrospinal fluid (CSF) in the subarachnoid space, the dura mater, the skull, and the scalp. Each has
-its own conductivity ${c('mccann-meta')}. CSF is the best conductor in the head
-(≈${P.sigmaCsf} S/m) ${c('sigma-csf')}; the skull is by far the worst, with a whole-skull
-conductivity around ${P.sigmaSkull} S/m — some 15 to 80 times lower than brain depending on the
-measurement ${c('sigma-skull')}${c('skull-brain-ratio')}. Scalp conducts about as well as brain
-${c('sigma-scalp')}.</p>
-<p>Two things happen to the current loop. First, the highly conductive CSF offers an easy sideways path, so
-a good share of the return current never approaches the skull at all; it is shunted along the CSF
-layer, and the potential just outside the cortex is spread out and weakened before the skull is even
-reached ${c('csf-shunt')}. Second, the skull is a resistive shell: current crossing it meets a large
-resistance, so most of the current that reaches it spreads tangentially instead and crosses wherever it
-can over a wide area. The scalp potential becomes a blurred, low-amplitude image of the cortical pattern.
-The skull is a spatial low-pass filter; features finer than a few centimetres are lost
+<p>Between a cortical source and a scalp electrode lie grey matter, a film of cerebrospinal fluid (CSF),
+the dura, the skull and the scalp, each with its own conductivity ${c('mccann-meta')}. CSF is the best
+conductor in the head (≈${P.sigmaCsf} S/m ${c('sigma-csf')}); the skull is by far the worst, around
+${P.sigmaSkull} S/m, some 15 to 80 times lower than brain depending on the measurement
+${c('sigma-skull')}${c('skull-brain-ratio')}. Scalp conducts about as well as brain ${c('sigma-scalp')}.</p>
+<p>Two things happen on the way out. The CSF offers an easy sideways path, so much of the return current is
+shunted along it before reaching the skull ${c('csf-shunt')}. The skull then resists the rest, so the
+current that does cross spreads tangentially first and emerges over a wide area. The scalp potential is a
+blurred, weakened image of the cortical one: features finer than a few centimetres are lost
 ${c('spatial-lowpass')}.</p>
-<p>The model below is the classical concentric-sphere head ${c('sphere-model')}: five shells with
-measured conductivities and thicknesses ${c('thickness-skull')}${c('thickness-scalp')}${c('thickness-csf')}${c('thickness-dura')},
-a radial or tangential dipole at an adjustable depth below the cortical surface, and an analytic
-solution that satisfies the boundary conditions exactly (the code is unit-tested against the
-closed-form homogeneous sphere and checked for continuity of potential and current at every interface).
-It reproduces the familiar numbers: a 10 nA·m source gives microvolts at the scalp, while an electrode on
-the cortex itself sees tens of times more for a focal source (far less for a broad synchronous sheet)
-${c('ecog-vs-eeg')} — consistent with scalp EEG being tens of microvolts ${c('eeg-amplitude')} and
-intracranial recordings hundreds.</p>`);
+<p>The figure solves the classical concentric-sphere head exactly ${c('sphere-model')}, with measured
+thicknesses ${c('thickness-skull')}${c('thickness-scalp')}${c('thickness-csf')}${c('thickness-dura')} and a
+dipole at an adjustable depth. A 10 nA·m source gives a few microvolts at the scalp, tens of times less
+than at the cortical surface for a focal source ${c('ecog-vs-eeg')}, consistent with scalp EEG at tens of
+microvolts ${c('eeg-amplitude')}. Nothing special happens at the skin: the potential continues into the
+air, halving about a centimetre above it ${c('exterior-potential')}, which is what an electrode held off
+the scalp has to work with (section 5).</p>`);
 
-  const sDepth = slider({ label: 'Source depth below cortical surface', unit: 'mm', min: 0.5, max: 25, value: 2, step: 0.5 });
-  const sCsf = slider({ label: 'CSF layer thickness', unit: 'mm', min: 0, max: 5, value: P.thicknessCsfMm, step: 0.1, note: c('thickness-csf') });
+  const sDepth = slider({ label: 'Source depth below cortex', unit: 'mm', min: 0.5, max: 25, value: 2, step: 0.5 });
+  const sMoment = slider({ label: 'Source dipole moment', unit: 'nA·m', min: 1, max: 500, value: 10, log: true, note: c('cells-for-10nam') });
+  const sTh = slider({ label: 'Threshold (dark line)', unit: 'µV', min: 0.1, max: 100, value: 1, log: true });
+  const sCsf = slider({ label: 'CSF thickness', unit: 'mm', min: 0, max: 5, value: P.thicknessCsfMm, step: 0.1, note: c('thickness-csf') });
   const sDura = slider({ label: 'Dura thickness', unit: 'mm', min: 0, max: 2, value: P.thicknessDuraMm, step: 0.05, note: c('thickness-dura') });
   const sSkull = slider({ label: 'Skull thickness', unit: 'mm', min: 1, max: 12, value: P.thicknessSkullMm, step: 0.5, note: c('thickness-skull') });
   const sScalp = slider({ label: 'Scalp thickness', unit: 'mm', min: 1, max: 10, value: P.thicknessScalpMm, step: 0.5, note: c('thickness-scalp') });
   const sSigSkull = slider({ label: 'Skull conductivity', unit: 'S/m', min: 0.002, max: 0.1, value: P.sigmaSkull, log: true, note: c('sigma-skull') });
   const sSigCsf = slider({ label: 'CSF conductivity', unit: 'S/m', min: 0.3, max: 2.5, value: P.sigmaCsf, step: 0.01, note: c('sigma-csf') });
   const sSigDura = slider({ label: 'Dura conductivity', unit: 'S/m', min: 0.01, max: 1, value: P.sigmaDura, log: true, note: c('sigma-dura') });
-  const sMoment = slider({ label: 'Source dipole moment', unit: 'nA·m', min: 1, max: 500, value: 10, log: true, note: c('cells-for-10nam') });
   let orientation: 'radial' | 'tangential' = 'radial';
   const orient = choice('Dipole orientation', [{ value: 'radial', label: 'Radial (gyral crown)' }, { value: 'tangential', label: 'Tangential (sulcal wall)' }], 'radial', (v) => { orientation = v; update(); });
-
   const rScalp = readout('Peak scalp potential');
-  const rCortex = readout('Peak potential at the cortical surface');
+  const rCortex = readout('Peak at the cortical surface');
   const rRatio = readout('Cortex-to-scalp attenuation');
-  const rWidth = readout('Scalp half-width (distance to half the peak)');
+  const rWidth = readout('Scalp half-width of the pattern');
 
-  const fig = figure(sec.fig, 'Top: potential in a cross-section of the layered head (blue negative, red positive; the colour scale saturates at ±1 µV). Middle: potential along the straight line from the source out to the scalp, with the layers shaded. Bottom: potential along the surface at three depths — cortex, top of the skull, scalp — versus distance from the point above the source.');
-  const mapWrap = document.createElement('div');
-  mapWrap.className = 'map-wrap';
-  fig.plotArea.append(mapWrap);
-  const W = 420, H = 300;
-  const divergingUnit = (v: number) => diverging(2 * v - 1); // heat map feeds values in [0, 1]
-  const hm = heatmap(mapWrap, { width: W, height: H, xRange: [-0.07, 0.07], yRange: [0.0, 0.10], color: divergingUnit });
-  colorbar(mapWrap, divergingUnit, ['−1 µV', 'potential', '+1 µV']);
-  const radial = linePlot(fig.plotArea, {
+  const fig = figure(sec.fig, 'Left: the top of the head in cross-section. Red is positive, blue negative, fading with the logarithm of the potential; the dark line is the threshold. The arcs, from the inside out, are the boundaries of grey matter, cerebrospinal fluid (CSF), dura, skull and scalp, and the field continues into the air above the scalp, where a non-contact electrode would sense it. Right: the potential along the line from the source straight out through the layers.', { panelWidth: '400px' });
+  const row = document.createElement('div');
+  row.className = 'viz-row';
+  row.style.flexWrap = 'nowrap';
+  const left = document.createElement('div'), right = document.createElement('div');
+  left.style.flex = '0 0 390px';
+  row.append(left, right);
+  fig.viz.append(row);
+  const AIR = 0.02; // metres of air drawn above the scalp
+  const hm = glow(left, { width: 390, height: 300, scale: 2, xRange: [-0.06, 0.06], yRange: [0.02, 0.02 + 0.12 * 300 / 390], floor: 1e-7, ceiling: 1e-4, threshold: 1e-6 });
+  glowLegend(left, '0.1 µV', '100 µV', 'dark line = threshold');
+  const radial = linePlot(right, {
     x: { label: 'Distance from the source along its axis (mm)' },
-    y: { label: 'Potential (\u00b5V)', scale: 'log', domain: [1, 1e4] },
-    height: 240,
-  });
-  const plot = linePlot(fig.plotArea, {
-    x: { label: 'Distance along the surface from the source axis (cm)', domain: [-8, 8] },
-    y: { label: 'Potential (µV)', scale: 'log', domain: [1e-2, 1e3] },
+    y: { label: 'Potential (µV)', scale: 'log', domain: [1, 1e4] },
     height: 300,
   });
-  fig.controls.append(
-    controls(sDepth.el, sMoment.el, orient.el),
-    controls(sCsf.el, sDura.el, sSkull.el, sScalp.el),
-    controls(sSigCsf.el, sSigDura.el, sSigSkull.el),
-    rScalp.el, rCortex.el, rRatio.el, rWidth.el,
+  fig.panel.append(
+    controls(sDepth.el, sMoment.el, sTh.el, orient.el),
+    controls(sCsf.el, sDura.el, sSkull.el, sScalp.el, sSigCsf.el, sSigDura.el, sSigSkull.el),
+    readouts(rScalp.el, rCortex.el, rRatio.el, rWidth.el),
   );
-
   assumptions(fig.el, [
     { what: 'Head geometry', value: 'concentric spheres, brain radius 8.0 cm; layer thicknesses from the sliders', cite: c('brain-radius') + c('sphere-model') },
     { what: 'Grey matter', value: `${P.sigmaGray} S/m (classical value; meta-analysis 0.38–0.47 S/m)`, cite: c('sigma-gray') },
     { what: 'Scalp', value: `${P.sigmaScalp} S/m`, cite: c('sigma-scalp') },
-    { what: 'Source', value: 'a single current dipole at the chosen depth; a real source is a sheet of many such dipoles', cite: c('cells-for-10nam') },
+    { what: 'Source', value: 'a single current dipole at the chosen depth; a real source is a sheet of many', cite: c('cells-for-10nam') },
     { what: 'Solution', value: 'Legendre series per degree with continuity of potential and radial current at each interface, 600 terms', cite: c('sphere-model') },
   ]);
 
@@ -96,40 +85,23 @@ intracranial recordings hundreds.</p>`);
   function update() {
     const { shells, b } = build();
     const p = sMoment.value * 1e-9;
-    const sol = solveShells(shells, b, p, orientation, 600); // long series: the cortical-surface curve sits 2 mm from the source
+    const sol = solveShells(shells, b, p, orientation, 600);
     const solMap = solveShells(shells, b, p, orientation, 120);
     const R = shells[shells.length - 1].outerRadius;
     const rCortexSurf = P.brainRadiusM;
-    const skullTop = shells.find((s) => s.name === 'skull')?.outerRadius ?? R;
-    const mk = (r: number): [number, number][] => {
-      const pts: [number, number][] = [];
-      for (let k = -100; k <= 100; k++) {
-        const s = (k / 100) * 0.08; // arc length, m
-        const theta = s / r;
-        const v = Math.abs(potential(sol, r - 1e-9, Math.abs(theta))) * 1e6;
-        pts.push([s * 100, v]);
-      }
-      return pts;
-    };
-    const series: Series[] = [
-      { name: 'Cortical surface', points: mk(rCortexSurf), color: '#2a78d6', width: 2.5 },
-      { name: 'Top of skull', points: mk(skullTop), color: '#eb6834', width: 2 },
-      { name: 'Scalp', points: mk(R), color: '#1baf7a', width: 2.5 },
-    ];
-    plot.update(series);
-    // radial profile along the dipole axis (θ = 0 for radial; for a tangential dipole use the direction of its maximum, θ = 0 still passes through the layers)
+    // radial profile along the dipole axis
     const prof: [number, number][] = [];
-    for (let k = 0; k <= 240; k++) {
-      const r = b + ((R - b) * k) / 240;
-      const v = Math.abs(potential(sol, Math.min(r, R - 1e-9), orientation === 'radial' ? 0 : 0.02, 0)) * 1e6;
-      prof.push([(r - b) * 1e3, v]);
+    const thAxis = orientation === 'radial' ? 0 : 0.02;
+    for (let k = 0; k <= 300; k++) {
+      const r = b + ((R + AIR - b) * k) / 300;
+      const v = r <= R ? potential(sol, Math.min(r, R - 1e-9), thAxis, 0) : exteriorPotential(sol, r, thAxis, 0);
+      prof.push([(r - b) * 1e3, Math.abs(v) * 1e6]);
     }
     const layerColours = ['#2a78d6', '#1baf7a', '#eda100', '#898781', '#eb6834'];
     const bands = shells.map((sh, i) => ({ from: ((i === 0 ? b : shells[i - 1].outerRadius) - b) * 1e3, to: (sh.outerRadius - b) * 1e3, label: i === 0 ? 'grey matter' : sh.name, color: layerColours[i % layerColours.length] }));
-    radial.update([{ name: 'Potential along the axis', points: prof, color: '#2a78d6', width: 2.5 }], [], bands);
-    const vScalp = Math.abs(surfacePotential(sol, orientation === 'radial' ? 0 : Math.PI / 2, 0));
-    // for a tangential dipole the scalp maximum is off-axis; scan for it
-    let peakScalp = vScalp, peakCortex = Math.abs(potential(sol, rCortexSurf - 1e-9, 0));
+    bands.push({ from: (R - b) * 1e3, to: (R + AIR - b) * 1e3, label: 'air', color: '#f4f1ea' });
+    radial.update([{ name: 'Potential along the axis', points: prof, color: '#2a78d6', width: 2.5 }], [{ axis: 'y', value: sTh.value, label: 'threshold' }], bands);
+    let peakScalp = 0, peakCortex = 0;
     for (let th = 0; th < Math.PI / 2; th += 0.005) {
       peakScalp = Math.max(peakScalp, Math.abs(surfacePotential(sol, th, 0)));
       peakCortex = Math.max(peakCortex, Math.abs(potential(sol, rCortexSurf - 1e-9, th)));
@@ -137,52 +109,35 @@ intracranial recordings hundreds.</p>`);
     rScalp.set(`${fmt(peakScalp * 1e6, 3)} µV`);
     rCortex.set(`${fmt(peakCortex * 1e6, 3)} µV`);
     rRatio.set(`${fmt(peakCortex / peakScalp, 3)}×`);
-    // half width on the scalp (radial case: from the axis)
     let hw = NaN;
-    if (orientation === 'radial') {
-      for (let th = 0; th < Math.PI; th += 0.002) if (Math.abs(surfacePotential(sol, th)) < peakScalp / 2) { hw = th * R; break; }
-    }
-    rWidth.set(isNaN(hw) ? '—' : `${fmt(hw * 100, 3)} cm`);
-    const lim = 1e-6;
+    if (orientation === 'radial') for (let th = 0; th < Math.PI; th += 0.002) if (Math.abs(surfacePotential(sol, th)) < peakScalp / 2) { hw = th * R; break; }
+    rWidth.set(isNaN(hw) ? 'n/a (off-axis)' : `${fmt(hw * 100, 3)} cm`);
+    hm.setThreshold(sTh.value * 1e-6);
     hm.draw((x, y) => {
       const r = Math.hypot(x, y);
-      if (r > R) return NaN;
-      const theta = Math.atan2(Math.abs(x), y);
-      const v = potential(solMap, r, theta, x < 0 ? Math.PI : 0);
-      return 0.5 + 0.5 * Math.max(-1, Math.min(1, v / lim));
-    });
-    hm.overlay((ctx, toPx) => {
+      const th = Math.atan2(Math.abs(x), y), ph = x < 0 ? Math.PI : 0;
+      return r > R ? exteriorPotential(solMap, r, th, ph) : potential(solMap, r, th, ph);
+    }, (ctx, toPx) => {
       ctx.save();
-      ctx.strokeStyle = 'rgba(11,11,11,0.45)';
       ctx.lineWidth = 1;
-      for (const s of shells) {
-        ctx.beginPath();
-        const [cx, cy] = toPx(0, 0);
+      const [cx, cy] = toPx(0, 0);
+      shells.forEach((s, i) => {
         const [rx] = toPx(s.outerRadius, 0);
-        ctx.arc(cx, cy, rx - cx, Math.PI, 2 * Math.PI);
-        ctx.stroke();
-      }
-      ctx.fillStyle = '#0b0b0b';
-      ctx.font = '11px system-ui';
-      // layer labels with leader lines, fanned out on the left
-      const ang = -0.35;
-      const mids = [P.brainRadiusM - 0.006, ...shells.slice(1).map((sh, i) => (shells[i].outerRadius + sh.outerRadius) / 2)];
-      const names = ['grey matter', ...shells.slice(1).map((sh) => sh.name)];
-      mids.forEach((r, i) => {
-        const [x0, y0] = toPx(r * Math.sin(ang), r * Math.cos(ang));
-        const [x1, y1] = toPx(-0.045, 0.097 - i * 0.0075);
-        ctx.strokeStyle = 'rgba(11,11,11,0.5)';
-        ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1 + 2, y1 - 3); ctx.stroke();
-        ctx.textAlign = 'right';
-        ctx.fillText(names[i], x1, y1);
-        ctx.textAlign = 'left';
+        ctx.strokeStyle = i === shells.length - 1 ? 'rgba(26,26,26,0.9)' : 'rgba(26,26,26,0.55)';
+        ctx.beginPath(); ctx.arc(cx, cy, rx - cx, Math.PI, 2 * Math.PI); ctx.stroke();
       });
+      ctx.fillStyle = '#1a1a1a';
+      ctx.font = '11px system-ui';
+      const [ax, ay] = toPx(-0.057, R + 0.012);
+      ctx.fillText('air', ax, ay);
+      const [bx, by] = toPx(-0.057, 0.026);
+      ctx.fillText('brain', bx, by);
       const [sx, sy] = toPx(0, b);
-      ctx.fillStyle = '#eb6834';
       ctx.beginPath(); ctx.arc(sx, sy, 3, 0, 2 * Math.PI); ctx.fill();
+      ctx.fillText('source', sx + 7, sy + 4);
       ctx.restore();
     });
   }
-  [sDepth, sCsf, sDura, sSkull, sScalp, sSigSkull, sSigCsf, sSigDura, sMoment].forEach((s) => s.onChange(update));
+  [sDepth, sMoment, sTh, sCsf, sDura, sSkull, sScalp, sSigSkull, sSigCsf, sSigDura].forEach((s) => s.onChange(update));
   update();
 }

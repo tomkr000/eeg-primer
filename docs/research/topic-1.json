@@ -1,0 +1,494 @@
+[
+  {
+    "id": "t1-01",
+    "claim": "Meta-analysis of 56 studies: human grey-matter electrical conductivity has a weighted mean of 0.47 S/m (raw mean 0.5981 S/m, SD 0.2392, min 0.06, max 2.47; 66 values from 16 studies, 153 participants), measured at 0-1005 Hz.",
+    "value": 0.47,
+    "units": "S/m",
+    "range": [
+      0.06,
+      2.47
+    ],
+    "source": {
+      "authors": "McCann H, Pisano G, Beltrachini L",
+      "year": 2019,
+      "title": "Variation in Reported Human Head Tissue Electrical Conductivity Values",
+      "journal": "Brain Topography",
+      "volume_pages": "32:825-858",
+      "doi": "10.1007/s10548-019-00710-2",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6708046/"
+    },
+    "evidence_location": "Abstract (weighted means) and Table 3 'Descriptive statistics for each tissue type', row GM",
+    "quote": "GM 0.06 2.47 0.5981 0.4660 0.2392 66 16 153",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text retrieved from PMC6708046 via the NCBI BioC API. Table 3 weighted mean for GM is 0.4660 S/m, rounded to 0.47 S/m in the abstract. Note: this is NOT the ~0.33 S/m often quoted; frequency range 0-1005 Hz per Results 3.2 (bioRxiv version)."
+  },
+  {
+    "id": "t1-02",
+    "claim": "Recommended weighted-average head-tissue conductivities from the same meta-analysis: scalp 0.41 S/m, whole skull 0.02 S/m, CSF 1.71 S/m, grey matter 0.47 S/m, white matter 0.22 S/m, brain-to-skull conductivity ratio 50.4.",
+    "value": null,
+    "units": "S/m",
+    "range": null,
+    "source": {
+      "authors": "McCann H, Pisano G, Beltrachini L",
+      "year": 2019,
+      "title": "Variation in Reported Human Head Tissue Electrical Conductivity Values",
+      "journal": "Brain Topography",
+      "volume_pages": "32:825-858",
+      "doi": "10.1007/s10548-019-00710-2",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6708046/"
+    },
+    "evidence_location": "Abstract, final sentence",
+    "quote": "0.41 S/m for the scalp, 0.02 S/m for the whole skull ... 0.47 S/m for the grey matter",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Abstract text seen via Europe PMC API (PMID 31054104). Table 3 gives whole-skull weighted mean 0.0160 S/m (abstract rounds to 0.02)."
+  },
+  {
+    "id": "t1-03",
+    "claim": "In vivo measurements in monkey primary visual cortex show the cortical impedance spectrum is independent of frequency, homogeneous and tangentially isotropic within grey matter, and is predicted by assuming a purely resistive conductor (i.e., ohmic, no capacitive filtering at LFP/EEG frequencies).",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Logothetis NK, Kayser C, Oeltermann A",
+      "year": 2007,
+      "title": "In vivo measurement of cortical impedance spectrum in monkeys: implications for signal propagation",
+      "journal": "Neuron",
+      "volume_pages": "55(5):809-823",
+      "doi": "10.1016/j.neuron.2007.07.027",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17785187/"
+    },
+    "evidence_location": "Abstract (PubMed)",
+    "quote": "impedance is independent of frequency, is homogeneous and tangentially isotropic within gray matter",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Only the abstract was readable (Cell Press full text could not be fetched). The numeric conductivity/resistivity values and the measured frequency range reported in the full text were NOT verified."
+  },
+  {
+    "id": "t1-04",
+    "claim": "Quasistatic approximation is valid for brain signals: with conductivity 0.3 S/m (value for brain tissue), permittivity 1e5 eps0 and f = 100 Hz, the ratio of capacitive to ohmic current 2*pi*f*eps/sigma = 2e-3 << 1, so dE/dt and dB/dt source terms can be ignored.",
+    "value": 0.002,
+    "units": "dimensionless (2*pi*f*eps/sigma at 100 Hz)",
+    "range": null,
+    "source": {
+      "authors": "Hämäläinen M, Hari R, Ilmoniemi RJ, Knuutila J, Lounasmaa OV",
+      "year": 1993,
+      "title": "Magnetoencephalography—theory, instrumentation, and applications to noninvasive studies of the working human brain",
+      "journal": "Reviews of Modern Physics",
+      "volume_pages": "65(2):413-497",
+      "doi": "10.1103/RevModPhys.65.413",
+      "url": "https://acris.aalto.fi/ws/portalfiles/portal/14383291/RevModPhys.65.413.pdf"
+    },
+    "evidence_location": "Section III.A 'Quasistatic approximation', p. 426 (section starts p. 425)",
+    "quote": "f = 100 Hz, we find 2 pi f eps/sigma = 2 x 10^-3 << 1",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full-text PDF (Aalto University open repository copy) read with pdftotext. Also supplies the textbook-style sigma = 0.3 S/m figure for brain tissue that Nunez & Srinivasan use (Nunez & Srinivasan itself was not fetched)."
+  },
+  {
+    "id": "t1-05",
+    "claim": "Plonsey & Heppner (1967) set out the conditions under which the time-varying electromagnetic field problem in electrophysiological systems reduces to the conventional quasistatic problem, evaluated for typical physiological parameters.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Plonsey R, Heppner DB",
+      "year": 1967,
+      "title": "Considerations of quasi-stationarity in electrophysiological systems",
+      "journal": "Bulletin of Mathematical Biophysics",
+      "volume_pages": "29(4):657-664",
+      "doi": "10.1007/BF02476917",
+      "url": "https://doi.org/10.1007/BF02476917"
+    },
+    "evidence_location": "Abstract (Springer landing page)",
+    "quote": "can be reduced to the conventional quasistatic problem are summarized. These conditions are discussed for typical physiological parameters.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only; the paper's numeric thresholds (frequency, sigma, eps, wavelength) are paywalled and were not seen. Use t1-04 (Hämäläinen) and t1-03 (Logothetis) for the numbers."
+  },
+  {
+    "id": "t1-06",
+    "claim": "Potential of a point current source (monopole) of magnitude I0 in an infinite homogeneous conductor of conductivity sigma: Phi = I0 / (4 pi sigma r); potential falls as 1/r.",
+    "value": null,
+    "units": "V (formula)",
+    "range": null,
+    "source": {
+      "authors": "Malmivuo J, Plonsey R",
+      "year": 1995,
+      "title": "Bioelectromagnetism: Principles and Applications of Bioelectric and Biomagnetic Fields",
+      "journal": "Oxford University Press (book), Chapter 8 'Source-Field Models'",
+      "volume_pages": "Section 8.2.1, Equation 8.7",
+      "doi": "",
+      "url": "https://www.bem.fi/book/08/08.htm"
+    },
+    "evidence_location": "Chapter 8, Section 8.2.1 'Monopole', Equation 8.7 (image eq/e0807.gif) and following text",
+    "quote": "the potential magnitude is inversely proportional to the radius (with the origin at the monopole source)",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Equation image e0807.gif downloaded from bem.fi and read visually: Phi = I0/(4 pi sigma r)."
+  },
+  {
+    "id": "t1-07",
+    "claim": "Potential of a current dipole of moment p in an infinite homogeneous conductor: Phi_d = p cos(theta) / (4 pi sigma r^2); the dipole field varies as 1/r^2 whereas the monopole field varies as 1/r.",
+    "value": null,
+    "units": "V (formula)",
+    "range": null,
+    "source": {
+      "authors": "Malmivuo J, Plonsey R",
+      "year": 1995,
+      "title": "Bioelectromagnetism: Principles and Applications of Bioelectric and Biomagnetic Fields",
+      "journal": "Oxford University Press (book), Chapter 8 'Source-Field Models'",
+      "volume_pages": "Section 8.2.2, Equation 8.15",
+      "doi": "",
+      "url": "https://www.bem.fi/book/08/08.htm"
+    },
+    "evidence_location": "Chapter 8, Section 8.2.2 'Dipole', Equation 8.15 (image eq/e0815.gif) and the comparison sentence that follows it",
+    "quote": "the dipole field varies as (1/r)^2 whereas the monopole field varies as (1/r)",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Equation image e0815.gif read visually: Phi_d = p cos(theta)/(4 pi sigma r^2), theta = polar (colatitude) angle; p = I0*d."
+  },
+  {
+    "id": "t1-08",
+    "claim": "In rat hippocampal CA1 in vivo, extracellular spikes recorded within 50 um of the soma are >= 60 uV (the largest observed units were ~600 uV), and at distances > 140 um no spike could be distinguished from background noise even with spike-triggered averaging.",
+    "value": 60,
+    "units": "uV (minimum amplitude within 50 um)",
+    "range": [
+      60,
+      600
+    ],
+    "source": {
+      "authors": "Henze DA, Borhegyi Z, Csicsvari J, Mamiya A, Harris KD, Buzsáki G",
+      "year": 2000,
+      "title": "Intracellular features predicted by extracellular recordings in the hippocampus in vivo",
+      "journal": "Journal of Neurophysiology",
+      "volume_pages": "84(1):390-400",
+      "doi": "10.1152/jn.2000.84.1.390",
+      "url": "https://doi.org/10.1152/jn.2000.84.1.390"
+    },
+    "evidence_location": "Results (Fig. 6A, 6C) and Discussion, pp. 397-398",
+    "quote": "the amplitude of the spikes <50 um from the tetrode is >=60 uV and is therefore detectable",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full-text PDF copy (typeset.io mirror of the J Neurophysiol article) read with pdftotext. Second supporting sentence: 'At extracellular distances >140 um from the soma (Fig. 6C), no extracellular spike activity could be distinguished from the background noise'."
+  },
+  {
+    "id": "t1-09",
+    "claim": "A single tetrode in CA1 is within 140 um of ~1,000 (calculated 1,108) neurons; 60-100 of these should produce spikes large enough (>60 uV, i.e. within ~50 um) to be detected and sorted, versus ~6 units typically detected per tetrode.",
+    "value": 140,
+    "units": "um (detection radius)",
+    "range": null,
+    "source": {
+      "authors": "Henze DA, Borhegyi Z, Csicsvari J, Mamiya A, Harris KD, Buzsáki G",
+      "year": 2000,
+      "title": "Intracellular features predicted by extracellular recordings in the hippocampus in vivo",
+      "journal": "Journal of Neurophysiology",
+      "volume_pages": "84(1):390-400",
+      "doi": "10.1152/jn.2000.84.1.390",
+      "url": "https://doi.org/10.1152/jn.2000.84.1.390"
+    },
+    "evidence_location": "Abstract and Discussion",
+    "quote": "extracellular spikes can be revealed as far as 140 um from the cell body",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Abstract: 'a tetrode in hippocampal area CA1 theoretically should be able to record electrical signals from approximately 1,000 neurons. Of these, 60-100 neurons should generate spikes of sufficient amplitude'."
+  },
+  {
+    "id": "t1-10",
+    "claim": "Modeled extracellular spike amplitude decays with distance r from the soma as 1/r^n with 1 <= n <= 2 close to the soma and n >= 2 far away, and spikes are low-pass filtered (spike width increases) with increasing distance.",
+    "value": 2,
+    "units": "power-law exponent n (far field)",
+    "range": [
+      1,
+      2
+    ],
+    "source": {
+      "authors": "Pettersen KH, Einevoll GT",
+      "year": 2008,
+      "title": "Amplitude variability and extracellular low-pass filtering of neuronal spikes",
+      "journal": "Biophysical Journal",
+      "volume_pages": "94(3):784-802",
+      "doi": "10.1529/biophysj.107.111179",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2186261/"
+    },
+    "evidence_location": "Abstract, result items 1 and 4",
+    "quote": "decaying as 1/r(n) with 1 <= n <= 2 close to soma and n >= 2 far away",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Abstract obtained via Europe PMC REST API (PMC2186261). Amplitude is 'approximately proportional to the sum of the dendritic cross-sectional areas of all dendritic branches connected to the soma'. DOI not displayed in the API record; taken from the article's standard citation."
+  },
+  {
+    "id": "t1-11",
+    "claim": "Modeled spatial reach of the LFP: for uncorrelated synaptic activity the LFP represents cells within a radius of a few hundred micrometres; for correlated activity the generating region is set by the spatial extent of the correlated activity (reach can be much larger).",
+    "value": null,
+    "units": "um",
+    "range": null,
+    "source": {
+      "authors": "Lindén H, Tetzlaff T, Potjans TC, Pettersen KH, Grün S, Diesmann M, Einevoll GT",
+      "year": 2011,
+      "title": "Modeling the spatial reach of the LFP",
+      "journal": "Neuron",
+      "volume_pages": "72(5):859-872",
+      "doi": "10.1016/j.neuron.2011.11.006",
+      "url": "https://test01.ku.dk/:obvius/pureproxy/3974268/en/publications/modeling-the-spatial-reach-of-the-lfp"
+    },
+    "evidence_location": "Abstract (University of Copenhagen research-portal record)",
+    "quote": "For uncorrelated activity, the LFP represents cells in a small region (within a radius of a few hundred micrometers)",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract verified; the specific figure (~200 um) given in the full text was not seen (Cell Press full text not fetchable). DOI not displayed on fetched page (from memory). Companion CNS*2011 abstract (PMC3240187) states for correlated input 'the LFP reach is only limited by the size of the region of correlated sources'."
+  },
+  {
+    "id": "t1-12",
+    "claim": "Current dipole moment of single neocortical neurons (realistic 3-D models): layer V pyramidal spikes -0.78 to 2.97 pA·m (burst envelope -0.41 to -0.90 pA·m); layer II/III pyramidal spike 0.47 and envelope -0.29 pA·m; layer IV spiny stellate 0.27 pA·m; layer III aspiny stellate 0.06 pA·m.",
+    "value": 2.97,
+    "units": "pA·m (max layer V pyramidal spike)",
+    "range": [
+      -0.78,
+      2.97
+    ],
+    "source": {
+      "authors": "Murakami S, Okada Y",
+      "year": 2006,
+      "title": "Contributions of principal neocortical neurons to magnetoencephalography and electroencephalography signals",
+      "journal": "Journal of Physiology",
+      "volume_pages": "575(3):925-936",
+      "doi": "10.1113/jphysiol.2006.105379",
+      "url": "https://doi.org/10.1113/jphysiol.2006.105379"
+    },
+    "evidence_location": "Abstract",
+    "quote": "spikes produced by the layer V pyramidal cells (n = 4) varied between -0.78 and 2.97 pA m",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Abstract via Europe PMC API (PMID 16613883). Positive = current toward the pia."
+  },
+  {
+    "id": "t1-13",
+    "claim": "Burst discharges of pyramidal cells may become detectable with MEG and EEG when 10,000-50,000 cells are synchronously active (i.e., roughly 0.3-1 pA·m per cell summing to ~10 nA·m).",
+    "value": 10000,
+    "units": "cells",
+    "range": [
+      10000,
+      50000
+    ],
+    "source": {
+      "authors": "Murakami S, Okada Y",
+      "year": 2006,
+      "title": "Contributions of principal neocortical neurons to magnetoencephalography and electroencephalography signals",
+      "journal": "Journal of Physiology",
+      "volume_pages": "575(3):925-936",
+      "doi": "10.1113/jphysiol.2006.105379",
+      "url": "https://doi.org/10.1113/jphysiol.2006.105379"
+    },
+    "evidence_location": "Abstract, final sentence",
+    "quote": "may be detectable with MEG and EEG when 10 000-50 000 cells are synchronously active",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "The parenthetical per-cell arithmetic is mine, not the paper's. The 10 nA·m detectability criterion is from Hämäläinen 1993 (t1-14)."
+  },
+  {
+    "id": "t1-14",
+    "claim": "A typical current-dipole strength explaining measured MEG fields, caused by the synchronous activity of probably tens of thousands of neurons, is 10 nA·m.",
+    "value": 10,
+    "units": "nA·m",
+    "range": null,
+    "source": {
+      "authors": "Hämäläinen M, Hari R, Ilmoniemi RJ, Knuutila J, Lounasmaa OV",
+      "year": 1993,
+      "title": "Magnetoencephalography—theory, instrumentation, and applications to noninvasive studies of the working human brain",
+      "journal": "Reviews of Modern Physics",
+      "volume_pages": "65(2):413-497",
+      "doi": "10.1103/RevModPhys.65.413",
+      "url": "https://acris.aalto.fi/ws/portalfiles/portal/14383291/RevModPhys.65.413.pdf"
+    },
+    "evidence_location": "Section I.C (current dipole model), p. 418; repeated p. 424",
+    "quote": "caused by the synchronous activity of probably tens of thousands of neurons, is 10 nA m",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full-text PDF (Aalto open repository). p. 424 adds: 'current-dipole moments required to explain the measured magnetic-field strengths outside the head are on the order of 10 nAm'."
+  },
+  {
+    "id": "t1-15",
+    "claim": "A single postsynaptic potential (PSP) produces a current dipole of about 20 fA·m, so roughly a million synapses must be simultaneously active to produce a typical 10 nA·m evoked-response dipole.",
+    "value": 20,
+    "units": "fA·m per PSP",
+    "range": null,
+    "source": {
+      "authors": "Hämäläinen M, Hari R, Ilmoniemi RJ, Knuutila J, Lounasmaa OV",
+      "year": 1993,
+      "title": "Magnetoencephalography—theory, instrumentation, and applications to noninvasive studies of the working human brain",
+      "journal": "Reviews of Modern Physics",
+      "volume_pages": "65(2):413-497",
+      "doi": "10.1103/RevModPhys.65.413",
+      "url": "https://acris.aalto.fi/ws/portalfiles/portal/14383291/RevModPhys.65.413.pdf"
+    },
+    "evidence_location": "Section II.D 'Postsynaptic potentials', p. 424",
+    "quote": "Q = 20 fA m for a single PSP ... about a million synapses must be simultaneously active",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Computed in the paper from intracellular conductivity, dendrite diameter and a 25 mV PSP. Same page: ~10^5 pyramidal cells per mm^2 of cortex and thousands of synapses per neuron."
+  },
+  {
+    "id": "t1-16",
+    "claim": "An action potential in an unmyelinated cortical axon (v = 1 m/s) is approximated by two opposite current dipoles of ~100 fA·m separated by ~1 mm, i.e. a quadrupole whose field falls off as 1/r^3, faster than the 1/r^2 dipolar field of synaptic currents.",
+    "value": 100,
+    "units": "fA·m (each dipole of the AP quadrupole)",
+    "range": null,
+    "source": {
+      "authors": "Hämäläinen M, Hari R, Ilmoniemi RJ, Knuutila J, Lounasmaa OV",
+      "year": 1993,
+      "title": "Magnetoencephalography—theory, instrumentation, and applications to noninvasive studies of the working human brain",
+      "journal": "Reviews of Modern Physics",
+      "volume_pages": "65(2):413-497",
+      "doi": "10.1103/RevModPhys.65.413",
+      "url": "https://acris.aalto.fi/ws/portalfiles/portal/14383291/RevModPhys.65.413.pdf"
+    },
+    "evidence_location": "Section II.E 'Action potentials', p. 425",
+    "quote": "in an unmyelinated cortical axon where v = 1 m/s; the magnitude of each dipole is about 100 fAm",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Explains why synaptic (dipolar) currents, not spikes, dominate EEG/MEG at a distance."
+  },
+  {
+    "id": "t1-17",
+    "claim": "Unitary EPSPs between thick-tufted layer 5 pyramidal neurons (young rat somatosensory cortex) have mean peak amplitude 1.3 +/- 1.1 mV (range 0.15-5.5 mV) with an inferred quantal peak conductance of 1.5-5.5 nS (mean 3 nS); a direct unitary EPSC in pA is not reported.",
+    "value": 1.3,
+    "units": "mV (unitary EPSP)",
+    "range": [
+      0.15,
+      5.5
+    ],
+    "source": {
+      "authors": "Markram H, Lübke J, Frotscher M, Roth A, Sakmann B",
+      "year": 1997,
+      "title": "Physiology and anatomy of synaptic connections between thick tufted pyramidal neurones in the developing rat neocortex",
+      "journal": "Journal of Physiology",
+      "volume_pages": "500(Pt 2):409-440",
+      "doi": "10.1113/jphysiol.1997.sp022031",
+      "url": "https://doi.org/10.1113/jphysiol.1997.sp022031"
+    },
+    "evidence_location": "Abstract, points 2 and 7",
+    "quote": "mean peak amplitude ranging from 0.15 to 5.5 mV in different connections with a mean of 1.3 +/- 1.1 mV",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Abstract via Europe PMC API. Derived (NOT from the paper): 3 nS x ~60 mV driving force ~ 180 pA per quantal event; 4-8 contacts per connection. A primary pA-scale EPSC measurement was not located within budget."
+  },
+  {
+    "id": "t1-18",
+    "claim": "Neuropixels probes achieve an action-potential-band noise floor of ~5 uV rms (Extended Data Table 1: 5.5-6.6 uV rms depending on configuration) and ~9 uV rms in the LFP band, with low-impedance TiN sites.",
+    "value": 5,
+    "units": "uV rms (AP band, 0.3-10 kHz)",
+    "range": [
+      5.5,
+      6.6
+    ],
+    "source": {
+      "authors": "Jun JJ, Steinmetz NA, Siegle JH, et al.",
+      "year": 2017,
+      "title": "Fully integrated silicon probes for high-density recording of neural activity",
+      "journal": "Nature",
+      "volume_pages": "551(7679):232-236",
+      "doi": "10.1038/nature24636",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5955206/"
+    },
+    "evidence_location": "Main text (Figure 1d) and Extended Data Table 1",
+    "quote": "uniform low noise (AP band ~5 uV root-mean-squared (RMS) Figure 1d; LFP band ~9 uV RMS",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text from PMC5955206 via NCBI BioC API. Extended Data Table 1 AP-band noise values (mean +/- SD): 5.7+/-0.8, 6.6+/-0.8, 5.5+/-0.7, 6.6+/-2.5 uV rms. Units with waveform peak >20 uV were counted as present on a site."
+  },
+  {
+    "id": "t1-19",
+    "claim": "In rat cortical slices, extracellular fields as small as 0.74 mV/mm (Ve amplitude 0.07 mV) significantly entrained spike timing at 1 Hz, whereas ~5.58 mV/mm was needed at 30 Hz; the minimal causally effective field is ~1 mV/mm and subthreshold somatic polarization stayed below 0.5 mV.",
+    "value": 0.74,
+    "units": "mV/mm",
+    "range": [
+      0.74,
+      5.58
+    ],
+    "source": {
+      "authors": "Anastassiou CA, Perin R, Markram H, Koch C",
+      "year": 2011,
+      "title": "Ephaptic coupling of cortical neurons",
+      "journal": "Nature Neuroscience",
+      "volume_pages": "14(2):217-223",
+      "doi": "10.1038/nn.2727",
+      "url": "https://www.nature.com/articles/nn.2727"
+    },
+    "evidence_location": "Abstract; Results (entrainment vs frequency); Discussion",
+    "quote": "an external field as small as 0.74 mV mm-1 (Ve amplitude of 0.07 mV)",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read from a PDF copy hosted at gwern.net (search-result URL), not the Nature site. Introduction states endogenous fields are 'under 5 mV mm-1'; Discussion: minimal effective fields 'approximately 1 mV mm-1'."
+  },
+  {
+    "id": "t1-20",
+    "claim": "In ferret neocortical slices, applied electric fields modulate the slow oscillation with a threshold of <= 0.5 mV/mm (between 0.25 and 0.5 mV/mm); endogenous in vivo fields peak at 2-4 mV/mm (median peak 2.36 mV/mm, max 3.89 mV/mm), and 2 and 4 mV/mm fields depolarize the soma by only 0.49 and 1.29 mV.",
+    "value": 0.5,
+    "units": "mV/mm (threshold)",
+    "range": [
+      0.25,
+      0.5
+    ],
+    "source": {
+      "authors": "Fröhlich F, McCormick DA",
+      "year": 2010,
+      "title": "Endogenous electric fields may guide neocortical network activity",
+      "journal": "Neuron",
+      "volume_pages": "67(1):129-143",
+      "doi": "10.1016/j.neuron.2010.06.005",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3139922/"
+    },
+    "evidence_location": "Results (endogenous field measurements; constant-field intracellular recordings) and Discussion",
+    "quote": "fields modulate neocortical network activity with a threshold of <= 0.5 mV/mm",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text from PMC3139922 via NCBI BioC API. Also: 'the threshold level for EF effects in vitro is between 0.25 and 0.5 mV/mm'; 'ΔVm = 0.49 +/- 0.12 mV and ΔVm = 1.29 +/- 0.20 mV, for 2 and 4 mV/mm'."
+  },
+  {
+    "id": "t1-21",
+    "claim": "Apical trunk length (soma to main bifurcation) of mouse layer 5 pyramidal neurons is 409 +/- 64 um in V1 and 313 +/- 65 um in V2m; in the 'long' (rat-derived) thick-tufted L5 model morphology the apical branch point lies 685-885 um from the soma.",
+    "value": 409,
+    "units": "um (apical trunk, mouse V1)",
+    "range": [
+      313,
+      885
+    ],
+    "source": {
+      "authors": "Galloni AR, Laffere A, Rancz E",
+      "year": 2020,
+      "title": "Apical length governs computational diversity of layer 5 pyramidal neurons",
+      "journal": "eLife",
+      "volume_pages": "9:e55761",
+      "doi": "10.7554/eLife.55761",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7334021/"
+    },
+    "evidence_location": "Results (Figure 2C) and Methods (model morphologies)",
+    "quote": "V1 mean = 409 +/- 64 um, SD, n = 22 vs V2m mean = 313 +/- 65 um",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Full text via NCBI BioC API (PMC7334021). These are trunk lengths, not full soma-to-tuft-tip distances; the ~1 mm soma-to-tuft figure for rat/human L5 cells (Spruston 2008) was NOT verified (see t1-22). DOI inferred from the eLife article number."
+  },
+  {
+    "id": "t1-22",
+    "claim": "Spruston (2008) review of pyramidal-neuron dendritic structure: cited as source for the ~1 mm soma-to-apical-tuft length of layer 5 pyramidal neurons, but no length figure was visible in the abstract.",
+    "value": null,
+    "units": "mm",
+    "range": null,
+    "source": {
+      "authors": "Spruston N",
+      "year": 2008,
+      "title": "Pyramidal neurons: dendritic structure and synaptic integration",
+      "journal": "Nature Reviews Neuroscience",
+      "volume_pages": "9(3):206-221",
+      "doi": "10.1038/nrn2286",
+      "url": "https://doi.org/10.1038/nrn2286"
+    },
+    "evidence_location": "Abstract only (Europe PMC API)",
+    "quote": "Pyramidal neurons are characterized by their distinct apical and basal dendritic trees",
+    "verified_in_source": false,
+    "confidence": "low",
+    "notes": "Paywalled full text not opened; abstract contains no numeric dendrite length. Ramaswamy & Markram 2015 (Front Cell Neurosci 9:233, open access) was also checked and gives no apical length, only basal contacts 80-120 um from soma."
+  }
+]

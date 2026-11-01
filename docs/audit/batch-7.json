@@ -1,0 +1,82 @@
+[
+  {
+    "id": "dipole-length",
+    "statement": "The apical trunk of layer-5 pyramidal neurons runs 313–409 µm from soma to main bifurcation in mouse visual cortex, and 685–885 µm in a rat-derived thick-tufted model morphology; the sink–source separation slider default of 500 µm lies in this range.",
+    "sources": [
+      "Galloni AR, Laffere A, Rancz E (2020). Apical length governs computational diversity of layer 5 pyramidal neurons. eLife 9:e55761 doi:10.7554/eLife.55761"
+    ]
+  },
+  {
+    "id": "psp-moment",
+    "statement": "A single postsynaptic potential produces a current dipole of about 20 fA·m, so about a million simultaneously active synapses are needed for a typical 10 nA·m evoked-response dipole.",
+    "sources": [
+      "Hämäläinen M, Hari R, Ilmoniemi RJ, Knuutila J, Lounasmaa OV (1993). Magnetoencephalography—theory, instrumentation, and applications to noninvasive studies of the working human brain. Reviews of Modern Physics 65(2):413–497 doi:10.1103/RevModPhys.65.413"
+    ]
+  },
+  {
+    "id": "neuron-density",
+    "statement": "Rockel, Hiorns & Powell counted ~110 neurons in a 30-µm-wide strip through the cortical depth (750 µm² of surface), i.e. about 147,000 neurons under 1 mm² of cortical surface; a 2013 stereological replication confirmed the uniformity, while Herculano-Houzel et al. report up to three-fold variation across primate species.",
+    "sources": [
+      "Rockel AJ, Hiorns RW, Powell TPS (1980). The basic uniformity in structure of the neocortex. Brain 103(2):221–244 doi:10.1093/brain/103.2.221",
+      "Herculano-Houzel S, Collins CE, Wong P, Kaas JH, Lent R (2008). The basic nonuniformity of the cerebral cortex. Proceedings of the National Academy of Sciences USA 105(34):12593–12598 doi:10.1073/pnas.0805417105",
+      "Carlo CN, Stevens CF (2013). Structural uniformity of neocortex, revisited. Proceedings of the National Academy of Sciences USA 110(4):1488–1493 doi:10.1073/pnas.1221398110"
+    ]
+  },
+  {
+    "id": "orientation",
+    "statement": "EEG sensitivity depends only weakly on source orientation (median ratio of weakest to strongest orientation 0.63; 95% of cortical locations above 0.42), whereas MEG is nearly blind to one orientation (median 0.06) and to radial sources.",
+    "sources": [
+      "Ahlfors SP, Han J, Belliveau JW, Hämäläinen MS (2010). Sensitivity of MEG and EEG to source orientation. Brain Topography 23(3):227–232 doi:10.1007/s10548-010-0154-x"
+    ]
+  },
+  {
+    "id": "thickness-skull",
+    "statement": "Mean adult calvarial thickness across 40 sites in 281 dry skulls is 6.32 mm (site means 5.3–7.5 mm); age was not a significant predictor.",
+    "sources": [
+      "Moreira-Gonzalez A, Papay FE, Zins JE (2006). Calvarial thickness and its relation to cranial bone harvest. Plastic and Reconstructive Surgery 117(6):1964–1971 doi:10.1097/01.prs.0000209933.78532.a7"
+    ]
+  },
+  {
+    "id": "brain-radius",
+    "statement": "The four-sphere model’s brain radius is 8.0 cm.",
+    "sources": [
+      "Nunez PL, Nunez MD, Srinivasan R (2019). Multi-scale neural sources of EEG: genuine, equivalent, and representative. A tutorial review. Brain Topography 32(2):193–214 doi:10.1007/s10548-019-00701-3"
+    ]
+  },
+  {
+    "id": "common-mode",
+    "statement": "The 50/60 Hz common-mode voltage on the body is about 1 mV peak-to-peak with a small isolated battery-powered amplifier, about 10 mV in a typical non-isolated set-up, and up to ~200 mV in a multichannel system with large isolation capacitance; the interference current through the body is typically ~0.5 µA.",
+    "sources": [
+      "Metting van Rijn AC, Peper A, Grimbergen CA (1990). High-quality recording of bioelectric events. Part 1: Interference reduction, theory and practice. Medical & Biological Engineering & Computing 28(5):389–397 doi:10.1007/BF02441961"
+    ]
+  },
+  {
+    "id": "motion-artifact",
+    "statement": "No satisfying general quantitative model exists for motion and friction (triboelectric) artefacts at the electrode–skin interface; capacitive non-contact electrodes can take 10–15 s to recover after a motion-induced saturation; mains current coupled into cables (10 nA with 20 kΩ electrodes and 50% mismatch) can produce ~200 µV of interference.",
+    "sources": [
+      "Chi YM, Jung T-P, Cauwenberghs G (2010). Dry-contact and noncontact biopotential electrodes: methodological review. IEEE Reviews in Biomedical Engineering 3:106–119 doi:10.1109/RBME.2010.2084078",
+      "Metting van Rijn AC, Peper A, Grimbergen CA (1990). High-quality recording of bioelectric events. Part 1: Interference reduction, theory and practice. Medical & Biological Engineering & Computing 28(5):389–397 doi:10.1007/BF02441961"
+    ]
+  },
+  {
+    "id": "haired-scalp-wet",
+    "statement": "Raising electrode coupling resistance lowers noise only when R exceeds 1/(ωC); for the low coupling capacitance of a gapped electrode this threshold becomes enormous, which is why the review concludes that research EEG over haired scalp still requires wet electrodes.",
+    "sources": [
+      "Chi YM, Jung T-P, Cauwenberghs G (2010). Dry-contact and noncontact biopotential electrodes: methodological review. IEEE Reviews in Biomedical Engineering 3:106–119 doi:10.1109/RBME.2010.2084078"
+    ]
+  },
+  {
+    "id": "iivanainen-eigen",
+    "statement": "For independent, identically distributed cortical sources only 25 eigencomponents are needed to explain 99% of scalp-EEG variance (maximum 62 across source sets), versus 88 for on-scalp MEG; with noise, about 20 EEG samples suffice for 90% of the variance at low noise, while at high noise even 400 samples explain only 80%; for a motor-cortex region of interest only 8 EEG components had SNR above 1.",
+    "sources": [
+      "Iivanainen J, Mäkinen AJ, Zetter R, Stenroos M, Ilmoniemi RJ, Parkkonen L (2021). Spatial sampling of MEG and EEG based on generalized spatial-frequency analysis and optimal design. NeuroImage 245:118747 (preprint arXiv:1912.05401) doi:10.1016/j.neuroimage.2021.118747"
+    ]
+  },
+  {
+    "id": "itr-2002",
+    "statement": "As of 2002 the best brain–computer interfaces (essentially all EEG-based) had maximum information transfer rates of 10–25 bits per minute.",
+    "sources": [
+      "Wolpaw JR, Birbaumer N, McFarland DJ, Pfurtscheller G, Vaughan TM (2002). Brain–computer interfaces for communication and control. Clinical Neurophysiology 113(6):767–791 doi:10.1016/S1388-2457(02)00057-3"
+    ]
+  }
+]

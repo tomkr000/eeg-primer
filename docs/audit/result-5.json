@@ -1,0 +1,112 @@
+[
+  {
+    "id": "epsc",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Markram et al. 1997 J Physiol 500(Pt 2):409-440 — abstract via Europe PMC (PMID 9147328); full text not open access"],
+    "evidence_location": "Abstract, points 2 and 7",
+    "quote": "mean of 1.3 +/- 1.1 mV ... varied between 1.5 and 5.5 nS (mean, 3 nS)",
+    "discrepancy": "",
+    "suggested_fix": "Optional context: values are from paired recordings in P14-16 rat somatosensory slices at -60 mV; the 1.5-5.5 nS figure is the simulation-inferred quantal (per-release-site) conductance, mean 3 nS. The 100 pA slider rationale is the site's own arithmetic (1.5-5.5 nS x 60 mV = 90-330 pA) and is consistent.",
+    "bibliographic_issues": "None; authors, journal, volume 500 (Pt 2), pages 409-440, year and DOI all match Europe PMC."
+  },
+  {
+    "id": "lfp-reach",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Lindén et al. 2011 Neuron 72(5):859-872 — abstract via Europe PMC (PMID 22153380)"],
+    "evidence_location": "Abstract, last two sentences",
+    "quote": "within a radius of a few hundred micrometers ... determined by the spatial extent of the correlated activity",
+    "discrepancy": "",
+    "suggested_fix": "",
+    "bibliographic_issues": "None; all details match."
+  },
+  {
+    "id": "psp-dominate",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Buzsáki, Anastassiou & Koch 2012 Nat Rev Neurosci 13(6):407-420 — full author manuscript (PMC4907333 via NCBI BioC)", "Hämäläinen et al. 1993 Rev Mod Phys 65(2):413-497 — full PDF (Aalto repository)"],
+    "evidence_location": "Buzsáki 2012: sections 'Synaptic activity' and 'Spike contribution to the LFP' (Na+ spikes paragraph). Hämäläinen 1993: Sec. II.E 'Action potentials' (around p. 425-426, text accompanying Figs 16-17)",
+    "quote": "strongest fields they generate are of short duration (<2 ms) and nearby neurons rarely fire synchronously",
+    "discrepancy": "Split of support: 'tens of milliseconds' and the quadrupole/faster fall-off come only from Hämäläinen ('synaptic currents, which last tens of milliseconds ... action potentials ... 1 ms'; quadrupolar field 1/r^3 vs dipolar 1/r^2). Buzsáki says synaptic activity 'is often the most important source', not that it always dominates, and frames the <2 ms argument as why spikes 'were thought' not to contribute, adding that synchronous spikes can contribute substantially to high-frequency LFP components — a caveat the claim drops.",
+    "suggested_fix": "Add '... although synchronous spiking can still contribute to high-frequency (>100 Hz) components' and attribute the duration/quadrupole statements to Hämäläinen et al. 1993.",
+    "bibliographic_issues": "None; both citations match (RMP PDF header confirms Vol. 65, No. 2, April 1993)."
+  },
+  {
+    "id": "oscillations-synchrony",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Buzsáki & Draguhn 2004 Science 304(5679):1926-1929 — full PDF (thebrain.mcgill.ca mirror)"],
+    "evidence_location": "p. 1926, first column and Fig. 1 legend paragraph",
+    "quote": "the period of oscillation is constrained by the size of the neuronal pool engaged in a given cycle",
+    "discrepancy": "Minor: source says 'Neuronal networks in the mammalian forebrain demonstrate several oscillatory bands covering frequencies from approximately 0.05 Hz to 500 Hz' (forebrain, not 'cortical'); 'very large networks are recruited during slow oscillations' is verbatim.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None; all details match."
+  },
+  {
+    "id": "sigma-scalp",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["McCann, Pisano & Beltrachini 2019 Brain Topogr 32(5):825-858 — full text (PMC6708046)", "Ramon, Schimpf & Haueisen 2006 Biomed Eng Online 5:10 — full text (PMC1389789)", "Nunez, Nunez & Srinivasan 2019 Brain Topogr 32(2):193-214 — journal full text paywalled; checked bioRxiv v2 preprint 10.1101/391318 full text"],
+    "evidence_location": "McCann: Abstract and Conclusions (scalp = 0.41 +/- 0.18 S/m), Table 3 (weighted mean 0.4137), Discussion sect. 4.1 ('Realistic measurements ... ranged between 0.25 and 0.435 S/m'). Ramon: Table 1 (Scalp 230 ohm-cm, 4.3478E-3 S/cm = 0.435 S/m). Nunez: Section 6.4 'Modeling scalp potential magnitudes with head models'",
+    "quote": "Realistic measurements (excluding outliers and deviations, as discussed) of scalp conductivity, for example, ranged between 0.25 and 0.435 S/m",
+    "discrepancy": "None substantive. Ramon's table is in S/cm (4.3478E-3), i.e. 0.435 S/m after conversion. Nunez 2019 states 'Brain and scalp are assumed to have equal conductivities' for its own n-sphere (four-sphere) model; 'classical models' is a fair paraphrase but the source speaks of its model, and the published version was not accessible (preprint checked).",
+    "suggested_fix": "",
+    "bibliographic_issues": "None; all three citations match Europe PMC/Springer metadata."
+  },
+  {
+    "id": "spatial-lowpass",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Srinivasan, Nunez & Silberstein 1998 IEEE Trans Biomed Eng 45(7):814-826 — abstract via Europe PMC (PMID 9644890)", "Freeman et al. 2003 Clin Neurophysiol 114(6):1053-1068 — abstract via Europe PMC (PMID 12804674)"],
+    "evidence_location": "Srinivasan 1998: Abstract. Freeman 2003: Abstract (Results and Conclusions)",
+    "quote": "spatially low-pass filtered by the poorly conducting skull ... predicting that electrodes within 10-12 cm can appear correlated",
+    "discrepancy": "",
+    "suggested_fix": "",
+    "bibliographic_issues": "None; all details match."
+  },
+  {
+    "id": "blink-amplitude",
+    "verdict": "PARTIAL",
+    "checked_sources": ["Luck 2022, Applied ERP Data Analysis (LibreTexts), Chapter 8 landing page and sections 8.3, 8.5, 8.6, 8.9, 8.12", "Jiang, Bian & Tian 2019 Sensors 19(5):987 — full text (PMC6427454)", "Ronca et al. 2024 Bioengineering 11(10):1018 — full text (PMC11505294)"],
+    "evidence_location": "Luck ch. 8 intro ('large (often 200 µV)'); 8.3 ('uncorrected blinks are typically 100-200 µV in these [frontal] channels'); 8.5/8.6 (blink detection ±100 µV on VEOG-bipolar); 8.9 (step function, 50 µV); 8.12 (C.R.A.P.: ±200 µV absolute, 100-150 µV moving window). Jiang: sect. 2.2.1. Ronca: Introduction and Fig. 1",
+    "quote": "a threshold of ±200 µV works well for most participants ... In most participants, we used a threshold between 100 and 150 µV.",
+    "discrepancy": "Misattributed purpose: in Luck's chapter the ±200 µV absolute threshold and the 100-150 µV moving-window thresholds (sect. 8.12) are applied to all EEG channels to catch 'Commonly Recorded Artifactual Potentials' (large drifts, muscle bursts) after blinks were already rejected; blink detection itself used ±100 µV (then ±50 µV) on the bipolar VEOG channel (8.5-8.6) or a 50 µV step function (8.9). The conclusion about frontal blink size is supported directly (8.3: 'typically 100-200 µV'). 'Many times greater than EEG' is from Jiang 2019 ('The amplitude of EOG is generally many times greater than EEG'); Ronca 2024 says only 'much larger amplitudes'. Neither Jiang nor Ronca gives any µV figure.",
+    "suggested_fix": "Rewrite as: 'Ocular artefact amplitude is many times greater than the EEG (Jiang 2019; Ronca 2024); uncorrected blinks are typically 100-200 µV at frontal channels, and practical ERP pipelines use blink thresholds of ±50-100 µV on bipolar VEOG, plus ±200 µV absolute and 100-150 µV moving-window thresholds for other large artefacts (Luck 2022, ch. 8).'",
+    "bibliographic_issues": "None; LibreTexts URL resolves and Chapter 8 is 'Artifact Detection and Rejection'; Sensors and Bioengineering details match."
+  },
+  {
+    "id": "skin-noise",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Huigen, Peper & Grimbergen 2002 Med Biol Eng Comput 40(3):332-338 — abstract via Europe PMC (PMID 12195981)", "Chi, Jung & Cauwenberghs 2010 IEEE Rev Biomed Eng 3:106-119 — full PDF (isn.ucsd.edu)"],
+    "evidence_location": "Huigen 2002: Abstract (all five statements). Chi 2010: sect. II.B/C only cites Huigen for Ag/AgCl low-frequency drift; it does not restate these numbers",
+    "quote": "Depending on skin treatment, magnitudes between 1 and 20 microVrms were measured among subjects",
+    "discrepancy": "None in content. Note Huigen's '< 1 µVrms' face-to-face result holds 'when the metal-electrolyte interface was allowed time to stabilise'. Chi 2010 adds no support for the specific figures.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None; both citations match."
+  },
+  {
+    "id": "hair",
+    "verdict": "PARTIAL",
+    "checked_sources": ["Jimenez & Ruifernández 1999 Dermatol Surg 25(4):294-298 — abstract via Europe PMC (PMID 10417585)", "Van Neste 2004 Eur J Dermatol 14(1):28-32 — abstract via Europe PMC/PubMed (PMID 14965792)"],
+    "evidence_location": "Jimenez: Abstract, Results (65-85 FU/cm2, 124-200 hairs/cm2, 1.0-1.4 mm). Van Neste: Abstract, Results",
+    "quote": "the average diameter of W hair (67.68 microm) exceeded that of P hair (57.41 microm)",
+    "discrepancy": "Jimenez numbers all verbatim. The '57-68 µm' range is not a general female average: 57.41 µm is the mean for pigmented hairs and 67.68 µm for white (non-pigmented) hairs, pooled over top and occipital sites, in 24 Caucasian women (12 menopausal women complaining of hair loss/diffuse alopecia plus 12 controls). Jimenez's values are from 50 hair-transplant patients' occipital donor scalp.",
+    "suggested_fix": "'...and in Caucasian women pigmented scalp hairs averaged ~57 µm and white hairs ~68 µm in diameter (Van Neste 2004).'",
+    "bibliographic_issues": "Van Neste title is misquoted: PubMed gives '...according to pigmentation and scalp location during ageing', not '...in Caucasians'. Journal, year, volume 14(1) and pages 28-32 are correct; no DOI is listed in PubMed."
+  },
+  {
+    "id": "fingered",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Chi, Jung & Cauwenberghs 2010 IEEE Rev Biomed Eng 3:106-119 — full PDF (isn.ucsd.edu), page image checked for units"],
+    "evidence_location": "p. 113, Section III (dry-contact electrodes, fingered-electrode paragraph)",
+    "quote": "the high skin-contact impedance results in a much larger motion artifact with the dry sensors",
+    "discrepancy": "None: 'Fiedler et al. published a TiN-based fingered dry electrode that reported an impedance of 14-55 kΩ/finger versus around 10 MΩ/finger [15]' (ref. 15 = Matthews et al. dry sensor).",
+    "suggested_fix": "",
+    "bibliographic_issues": "None; all details match."
+  },
+  {
+    "id": "inverse-illposed",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Grech et al. 2008 J NeuroEng Rehabil 5:25 — full text (PMC2605581)"],
+    "evidence_location": "Introduction ('(usually less than 100) electrodes'); Section 3 'Inverse solutions' opening paragraph; Section 3.1 non-parametric methods",
+    "quote": "non-unique (since p >> N) ... yielding large p >> N which makes the problem underdetermined",
+    "discrepancy": "Minor nuance: in Grech p is the number of candidate dipole locations (3p parameters) and the 'underdetermined' statement applies to the distributed (non-parametric) formulation; Grech describes the inverse problem overall as ill-posed (non-unique and unstable), and notes parametric few-dipole fits are instead non-linear.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None; all details match (Europe PMC lists Camilleri KP twice as an authorship quirk; citation's 'et al.' is fine)."
+  }
+]

@@ -1,0 +1,87 @@
+[
+  {
+    "id": "epsc",
+    "statement": "A unitary connection between thick-tufted layer-5 pyramidal cells produces an excitatory postsynaptic potential of 1.3 ± 1.1 mV (range 0.15–5.5 mV) with a quantal peak conductance of 1.5–5.5 nS; the slider’s default of 100 pA is a modelling choice of the same order as such a conductance times a ~60 mV driving force.",
+    "sources": [
+      "Markram H, Lübke J, Frotscher M, Roth A, Sakmann B (1997). Physiology and anatomy of synaptic connections between thick tufted pyramidal neurones in the developing rat neocortex. Journal of Physiology 500(Pt 2):409–440 doi:10.1113/jphysiol.1997.sp022031"
+    ]
+  },
+  {
+    "id": "lfp-reach",
+    "statement": "For uncorrelated synaptic activity the local field potential represents cells within a radius of a few hundred micrometres; with correlated activity the generating region grows to the extent of the correlation.",
+    "sources": [
+      "Lindén H, Tetzlaff T, Potjans TC, Pettersen KH, Grün S, Diesmann M, Einevoll GT (2011). Modeling the spatial reach of the LFP. Neuron 72(5):859–872 doi:10.1016/j.neuron.2011.11.006"
+    ]
+  },
+  {
+    "id": "psp-dominate",
+    "statement": "Synaptic currents lasting tens of milliseconds overlap in time and dominate extracellular fields; the strongest action-potential fields last under 2 ms, nearby neurons rarely spike synchronously within such windows, and a propagating action potential is a current quadrupole whose field falls off faster than a dipole’s.",
+    "sources": [
+      "Buzsáki G, Anastassiou CA, Koch C (2012). The origin of extracellular fields and currents — EEG, ECoG, LFP and spikes. Nature Reviews Neuroscience 13(6):407–420 doi:10.1038/nrn3241",
+      "Hämäläinen M, Hari R, Ilmoniemi RJ, Knuutila J, Lounasmaa OV (1993). Magnetoencephalography—theory, instrumentation, and applications to noninvasive studies of the working human brain. Reviews of Modern Physics 65(2):413–497 doi:10.1103/RevModPhys.65.413"
+    ]
+  },
+  {
+    "id": "oscillations-synchrony",
+    "statement": "Cortical oscillations span about 0.05–500 Hz and the period of an oscillation is constrained by the size of the neuronal pool engaged in each cycle, with very large networks recruited during slow oscillations.",
+    "sources": [
+      "Buzsáki G, Draguhn A (2004). Neuronal oscillations in cortical networks. Science 304(5679):1926–1929 doi:10.1126/science.1099745"
+    ]
+  },
+  {
+    "id": "sigma-scalp",
+    "statement": "Scalp conductivity: meta-analytic weighted mean 0.41 S/m (realistic values 0.25–0.435 S/m after excluding outliers); 0.435 S/m in the Ramon et al. finite-element table; classical models set scalp equal to brain.",
+    "sources": [
+      "McCann H, Pisano G, Beltrachini L (2019). Variation in reported human head tissue electrical conductivity values. Brain Topography 32(5):825–858 doi:10.1007/s10548-019-00710-2",
+      "Ramon C, Schimpf PH, Haueisen J (2006). Influence of head models on EEG simulations and inverse source localizations. BioMedical Engineering OnLine 5:10 doi:10.1186/1475-925X-5-10",
+      "Nunez PL, Nunez MD, Srinivasan R (2019). Multi-scale neural sources of EEG: genuine, equivalent, and representative. A tutorial review. Brain Topography 32(2):193–214 doi:10.1007/s10548-019-00701-3"
+    ]
+  },
+  {
+    "id": "spatial-lowpass",
+    "statement": "The scalp EEG is spatially low-pass filtered by the poorly conducting skull: a four-sphere model predicts that electrodes within 10–12 cm can appear correlated purely through volume conduction, and measured scalp spatial spectra fall off faster than at the pia because of smearing by dura, skull and scalp.",
+    "sources": [
+      "Srinivasan R, Nunez PL, Silberstein RB (1998). Spatial filtering and neocortical dynamics: estimates of EEG coherence. IEEE Transactions on Biomedical Engineering 45(7):814–826 doi:10.1109/10.686789",
+      "Freeman WJ, Holmes MD, Burke BC, Vanhatalo S (2003). Spatial spectra of scalp EEG and EMG from awake humans. Clinical Neurophysiology 114(6):1053–1068 doi:10.1016/S1388-2457(03)00045-2"
+    ]
+  },
+  {
+    "id": "blink-amplitude",
+    "statement": "Ocular artefact amplitude is many times greater than the EEG; practical ERP artefact rejection uses absolute thresholds of ±200 µV and moving-window peak-to-peak thresholds of 100–150 µV to catch blinks, which implies blink deflections of that order at frontal sites.",
+    "sources": [
+      "Luck SJ (2022). Applied Event-Related Potential Data Analysis (open textbook), Chapter 8. LibreTexts  https://socialsci.libretexts.org/Bookshelves/Psychology/Biological_Psychology/Applied_Event-Related_Potential_Data_Analysis_(Luck)",
+      "Jiang X, Bian G-B, Tian Z (2019). Removal of artifacts from EEG signals: a review. Sensors 19(5):987 doi:10.3390/s19050987",
+      "Ronca V, Capotorto R, Di Flumeri G, et al. (2024). Optimizing EEG signal integrity: a comprehensive guide to ocular artifact correction. Bioengineering 11(10):1018 doi:10.3390/bioengineering11101018"
+    ]
+  },
+  {
+    "id": "skin-noise",
+    "statement": "Surface-electrode noise on skin is 1–20 µV rms depending on skin treatment and subject, originates mainly at the electrolyte–skin interface (electrodes face-to-face in gel give < 1 µV rms), is considerably higher than the thermal noise of the electrode impedance, and scales inversely with the square root of electrode area.",
+    "sources": [
+      "Huigen E, Peper A, Grimbergen CA (2002). Investigation into the origin of the noise of surface electrodes. Medical & Biological Engineering & Computing 40(3):332–338 doi:10.1007/BF02344216",
+      "Chi YM, Jung T-P, Cauwenberghs G (2010). Dry-contact and noncontact biopotential electrodes: methodological review. IEEE Reviews in Biomedical Engineering 3:106–119 doi:10.1109/RBME.2010.2084078"
+    ]
+  },
+  {
+    "id": "hair",
+    "statement": "Occipital scalp hair density is 124–200 hairs/cm² (65–85 follicular units/cm², 1.0–1.4 mm apart) and female scalp hair shafts average 57–68 µm in diameter.",
+    "sources": [
+      "Jimenez F, Ruifernández JM (1999). Distribution of human hair in follicular units. A mathematical model for estimating the donor size in follicular unit transplantation. Dermatologic Surgery 25(4):294–298 doi:10.1046/j.1524-4725.1999.08114.x",
+      "Van Neste D (2004). Thickness, medullation and growth rate of female scalp hair are subject to significant variation according to pigmentation and scalp location in Caucasians. European Journal of Dermatology 14(1):28–32"
+    ]
+  },
+  {
+    "id": "fingered",
+    "statement": "Hair-penetrating fingered dry electrodes have been reported at 14–55 kΩ per finger (TiN) versus ~10 MΩ per finger for another dry sensor, and high skin-contact impedance results in much larger motion artefacts with dry sensors.",
+    "sources": [
+      "Chi YM, Jung T-P, Cauwenberghs G (2010). Dry-contact and noncontact biopotential electrodes: methodological review. IEEE Reviews in Biomedical Engineering 3:106–119 doi:10.1109/RBME.2010.2084078"
+    ]
+  },
+  {
+    "id": "inverse-illposed",
+    "statement": "The EEG inverse problem is underdetermined: the number of candidate source parameters is far larger than the number of electrodes (p ≫ N), with electrode counts usually below 100.",
+    "sources": [
+      "Grech R, Cassar T, Muscat J, et al. (2008). Review on solving the inverse problem in EEG source analysis. Journal of NeuroEngineering and Rehabilitation 5:25 doi:10.1186/1743-0003-5-25"
+    ]
+  }
+]

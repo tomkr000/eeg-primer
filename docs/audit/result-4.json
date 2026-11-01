@@ -1,0 +1,158 @@
+[
+  {
+    "id": "sigma-gray",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "McCann 2019 full text (Europe PMC XML, PMC6708046)",
+      "Ramon 2006 full text (Europe PMC XML, PMC1389789)",
+      "Hämäläinen 1993 full PDF (Aalto University repository copy of Rev Mod Phys 65:413)"
+    ],
+    "evidence_location": "McCann: Abstract and Results text (GM = 0.47 ± 0.24) and Table 3 'Descriptive statistics for each tissue type', row GM (min 0.06, max 2.47, weighted mean 0.4660, n. values 66, n. studies 16, n. participants 153). Ramon: Table 1 'Head tissue resistivity and conductivity values' (Brain Gray Matter 300 Ohm·cm = 3.334E-3 S/cm). Hämäläinen: p. 426, Sec. II.A (quasistatic approximation).",
+    "quote": "With σ = 0.3 Ω⁻¹ m⁻¹ (value for brain tissue), ε = 10⁵ε₀, and f = 100 Hz",
+    "discrepancy": "All numbers check out (0.3; 0.3334 S/m in Ramon's FEM table; 0.47 weighted mean; 0.06–2.47 range; 16 GM studies). Two wording nuances: (1) Hämäläinen's 0.3 S/m is given as a value for 'brain tissue' in a validity estimate for the quasistatic approximation, not as a grey-matter modelling value; (2) '16 studies' is the number of studies reporting grey-matter values (66 values, 153 participants), not the size of the whole meta-analysis, which covered many more papers and 17 tissue types.",
+    "suggested_fix": "…(0.3 S/m for brain tissue in Hämäläinen et al.; 0.333 S/m for grey matter in the Ramon et al. finite-element table); the 2019 meta-analysis gives a weighted mean of 0.47 ± 0.24 S/m across 16 grey-matter studies (66 values), with reported values from 0.06 to 2.47 S/m.",
+    "bibliographic_issues": "None. Crossref confirms Hämäläinen et al. Rev Mod Phys 65(2):413–497, 1993; Europe PMC confirms McCann Brain Topogr 32(5):825–858 and Ramon Biomed Eng Online 5:10."
+  },
+  {
+    "id": "spike-decay",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Pettersen & Einevoll 2008 abstract (Europe PMC; full-text XML returned server error 500)"
+    ],
+    "evidence_location": "Abstract, main results (1) and (4).",
+    "quote": "decaying as 1/r(n) with 1 <or= n <or= 2 close to soma and n >or= 2 far away",
+    "discrepancy": "",
+    "suggested_fix": "",
+    "bibliographic_issues": "None (Biophys J 94(3):784–802, 2008; PMC2186261)."
+  },
+  {
+    "id": "open-closed",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Buzsáki 2012 full text (PMC4907333 via WebFetch)",
+      "Murakami & Okada 2006 abstract (Europe PMC; full text paywalled)",
+      "Kirschstein & Köhling 2009 abstract (Europe PMC; full text paywalled)"
+    ],
+    "evidence_location": "Buzsáki: section 'Neuronal geometry and architecture' (determinants; open vs closed field; pyramidal vs thalamocortical cells) and Glossary. Murakami & Okada: Abstract, penultimate sentences. Kirschstein: Abstract, sentence 2 (apical dendrites perpendicular to cortical surface).",
+    "quote": "The Q for a population of stellate cells may be weaker than a linear sum of their individual Q values",
+    "discrepancy": "Minor hedging dropped: Murakami & Okada say the population Q 'may be weaker' (attributed to variable dendritic geometry), the claim states it as fact; Buzsáki adds that 'a strictly closed field only occurs when several dendrites are simultaneously activated'. 'Long parallel apical dendrites' combines Buzsáki ('long, thick apical dendrites') with Kirschstein ('apical dendrites perpendicular to the cortical surface').",
+    "suggested_fix": "…and populations of stellate cells may sum to less than the linear sum of their individual dipoles because of their variable dendritic geometry.",
+    "bibliographic_issues": "None."
+  },
+  {
+    "id": "ca-spike-moment",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Buzsáki 2012 full text (PMC4907333 via WebFetch)",
+      "Murakami & Okada 2006 abstract (Europe PMC)"
+    ],
+    "evidence_location": "Buzsáki: section 'Contributors to extracellular fields', subsection 'Calcium spikes'. Murakami & Okada: Abstract (spike range −0.78 to 2.97 pA·m; envelope −0.41 to −0.90 pA·m; spikes produced by transient Na+ and delayed-rectifier K+ conductances).",
+    "quote": "their share in the measured extracellular events can be substantial under certain circumstances",
+    "discrepancy": "Numbers are correct, but the 2.97 pA·m 'spike component' in Murakami & Okada is a sodium action potential evoked by somatic stimulation (Na+/K+ conductances), not a dendritic Ca2+ spike, so the sentence misleadingly presents it as support for the Ca2+-spike point. 2.97 is the maximum of a range (−0.78 to 2.97 pA·m across four layer V cells). Buzsáki's qualifier 'under certain circumstances' is dropped.",
+    "suggested_fix": "Dendritic Ca²⁺ spikes are large (10–50 mV) and long-lasting (10–100 ms), so under some circumstances their share of extracellular events can be substantial. Separately, in single-cell models the Na⁺ action-potential component of a layer-5 pyramidal cell's dipole ranges from −0.78 to 2.97 pA·m across cells, versus 0.41–0.90 pA·m for the slow burst envelope.",
+    "bibliographic_issues": "None (J Physiol 575(Pt 3):925–936; Nat Rev Neurosci 13(6):407–420)."
+  },
+  {
+    "id": "skull-brain-ratio",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Lai 2005 abstract (Europe PMC; ScienceDirect full text blocked)",
+      "Gonçalves 2003 abstract (Europe PMC)",
+      "Oostendorp 2000 abstract (Europe PMC)",
+      "McCann 2019 full text (PMC6708046)"
+    ],
+    "evidence_location": "Lai: Abstract Results/Conclusions ('ranged from 18 to 34 in the 5 epilepsy patients'; '25+/-7'). Gonçalves: Abstract ('within 20 and 50 rather than equal to the commonly accepted value of 80', 6 subjects). Oostendorp: Abstract ('ratio 1:1/80:1 commonly used in neural source localization'). McCann: Abstract and Table 3, row BSCR (weighted mean 50.4, SD 38.93, range 17.9–290, 10 studies).",
+    "quote": "differs considerably from the ratio 1:1/80:1 commonly used in neural source localization",
+    "discrepancy": "All numbers verified. Two caveats: (1) the parenthetical attribution of 80 to Rush & Driscoll 1968 is conventional but does not appear in any accessible text of the cited sources (abstracts only say 'commonly used/accepted'); (2) the cited Oostendorp 2000 paper's own finding (brain:skull:scalp = 1:1/15:1, i.e. a ratio of 15, from in vivo and in vitro measurements) is omitted, although it is the lowest in vivo estimate and the paper is cited.",
+    "suggested_fix": "Consider adding: 'in vivo current-injection measurements by Oostendorp et al. gave a ratio of about 15' and giving the McCann value as 50.4 ± 39 (10 studies, range 17.9–290); verify the Rush & Driscoll 1968 attribution against the full text of Lai 2005 or Gonçalves 2003.",
+    "bibliographic_issues": "None found; all four DOIs resolve to the stated journals/volumes/pages."
+  },
+  {
+    "id": "csf-shunt",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Wendel 2008 abstract (Europe PMC; full text paywalled)",
+      "Ramon 2006 full text (PMC1389789)"
+    ],
+    "evidence_location": "Wendel: Abstract, last two sentences. Ramon: Abstract Results/Conclusion and Discussion (CSF layer 'plays an important role in modifying the scalp potentials'; Model 3 without CSF performed worst).",
+    "quote": "the highly conductive CSF channels the current, thus decreasing the maximum cortical current density",
+    "discrepancy": "All of the claim comes from Wendel. Precision: the 20%/45% figures are for the half-sensitivity volume (HSV), which was 'too small' (underestimated) in MRI-based (20%) and CT-based (45%) models lacking CSF, respectively. Ramon 2006 contains no shunting or sensitivity-volume statements; it supports only the general importance of the CSF layer for scalp potentials and source localisation.",
+    "suggested_fix": "…head models that omit the CSF layer underestimate the half-sensitivity volume by 20% (MRI-based) to 45% (CT-based models).",
+    "bibliographic_issues": "None (IEEE Trans Biomed Eng 55(4):1454–1456, 2008)."
+  },
+  {
+    "id": "emg-topography",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Goncharova 2003 abstract (Europe PMC; full text paywalled)"
+    ],
+    "evidence_location": "Abstract: Results and Significance.",
+    "quote": "EMG was detectable (P<0.001) near the vertex at frequencies >12 Hz in the average data and >8 Hz",
+    "discrepancy": "Minor: source says 'near the vertex' and '>12 Hz in the average data', adding '>8 Hz in some individuals'; the claim says 'at the vertex above 12 Hz' and drops the individual-subject figure. The temporalis spectra also showed a smaller peak near 20 Hz (not mentioned).",
+    "suggested_fix": "…even a 15%-of-maximum contraction produces EMG detectable near the vertex above 12 Hz in averaged data (above 8 Hz in some individuals)…",
+    "bibliographic_issues": "None (Clin Neurophysiol 114(9):1580–1593)."
+  },
+  {
+    "id": "thermal-noise",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Nyquist 1928 APS abstract page (journals.aps.org) and Crossref record; full text paywalled (a third-party PDF copy was not opened)"
+    ],
+    "evidence_location": "Bibliographic data from Crossref/APS: Phys. Rev. 32(1):110–113, July 1928, H. Nyquist (AT&T). The formula itself was not visible in the accessible abstract; it is the paper's central result (spectral form E² dν = 4RkT dν). Numeric example verified independently: sqrt(4 × 1.380649e-23 × 310 × 1e4 × 100) = 1.31e-7 V = 0.131 µV rms.",
+    "quote": "The electromotive force due to thermal agitation in conductors is calculated by means of principles in thermodynamics",
+    "discrepancy": "None. Note that Nyquist states the result as a noise spectral density (mean-square EMF per unit bandwidth = 4RkT); the rms form v_rms = sqrt(4kTRΔf) is the integrated textbook form. The 0.13 µV example is the site's own computation (correct).",
+    "suggested_fix": "",
+    "bibliographic_issues": "None. Crossref: Phys. Rev. 32, 110–113 (1928), DOI 10.1103/PhysRev.32.110 resolves."
+  },
+  {
+    "id": "area-scaling",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Cardu 2012 full text (publisher PDF hosted at cel.eng.sydney.edu.au, Physiol Meas 33:817–830)",
+      "Huigen 2002 abstract (Europe PMC; full text paywalled)"
+    ],
+    "evidence_location": "Cardu: Sec. 3.2 (1 cm × 1 cm electrodes; 'only dry electrodes are considered' p. 825; pores and hair), Table 1 and Table 2 (3D single-square-electrode expanded geometry |Z| = 17 598 Ω at 20 Hz), Fig. 7 top panel (20 Hz: ≈6 × 10⁴ Ω at 25% effective area; ≈1.8 × 10⁴ Ω at 100%). Huigen: Abstract, last sentence.",
+    "quote": "This is caused by multiple factors, such as skin pores and hair obstructing the electrode–skin interface.",
+    "discrepancy": "None of substance. The ~60 kΩ value is read off the FEM data point in Fig. 7 (no numeric value is printed); the authors' fitted regression gives ≈51 kΩ at 25%. The simulation is a 2D/3D FEM of a flat square electrode on a two-layer skin model without gel.",
+    "suggested_fix": "Optionally: 'about 60 kΩ (FEM data point, Fig. 7) when only 25% of the area makes contact'.",
+    "bibliographic_issues": "None (Physiol Meas 33(5):817–830, 2012; DOI resolves). Europe PMC lists author 'McEwan A' (initials AL fine)."
+  },
+  {
+    "id": "searle",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Searle & Kirkup 2000 abstract (Europe PMC; full text paywalled)"
+    ],
+    "evidence_location": "Abstract, sentences 5–9.",
+    "quote": "interference experienced by dry and insulating electrode types was 40 dB and 34 dB less than that experienced by wet",
+    "discrepancy": "None. (Abstract specifies 'shielded' dry and insulating electrodes for the interference test and 'on average' for the 8.2/6.8 dB end-of-trial figures, both consistent with the claim.)",
+    "suggested_fix": "",
+    "bibliographic_issues": "None. DOI 10.1088/0967-3334/21/2/307 is indexed for this article (Physiol Meas 21(2):271–283, 2000)."
+  },
+  {
+    "id": "ica-dipolar",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Delorme 2012 full text (Europe PMC XML, PMC3280242)"
+    ],
+    "evidence_location": "Abstract ('thirteen 71-channel human scalp EEG datasets'); Results paragraph before Table 1; Table 1 (AMICA ND10% = 48.6); Methods ('14 out of 23 participants', one dataset excluded).",
+    "quote": "the most near-dipolar components (on average 34/71 or 48%) with less than 10% residual scalp map variance",
+    "discrepancy": "None of substance. 'Near-dipolar' is defined at an arbitrary <10% residual-variance threshold (Table 1 gives 48.6%); 13 datasets came from 14 selected participants after one was excluded.",
+    "suggested_fix": "Optionally add 'at a 10% residual-variance threshold'.",
+    "bibliographic_issues": "None (PLoS ONE 7(2):e30135)."
+  },
+  {
+    "id": "intracortical",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Willett 2021 abstract (Europe PMC, PMC8163299)",
+      "Willett 2023 abstract (Europe PMC, PMC10468393)",
+      "Pandarinath 2017 full text (Europe PMC XML, PMC5319839)"
+    ],
+    "evidence_location": "Willett 2021: Abstract ('90 characters per minute with 94.1% raw accuracy online'). Willett 2023: Abstract ('9.1% word error rate on a 50-word vocabulary'; '62 words per minute'). Pandarinath: Results 'Information throughput in the grid task' and Fig. 3 (T6 2.2 ± 0.4, T5 3.7 ± 0.4, T7 1.4 ± 0.1 bps on 6 × 6 grid; T5 4.16 ± 0.39 bps on 9 × 9 grid) and Table 1.",
+    "quote": "average performance was 2.2 ± 0.4 bits per second (bps; mean ± s.d.), 3.7 ± 0.4 bps, and 1.4",
+    "discrepancy": "Minor: the 4.2 bits/s upper figure is T5's result on a denser 9 × 9 grid (4.16 ± 0.39 bps); on the standard 6 × 6 grid the three participants achieved 1.4, 2.2 and 3.7 bits/s. The 1.4–4.2 range coincidentally equals the abstract's typing-rate improvement factor over previous iBCIs, which is a different quantity. Willett 2023 also reports 23.8% word error on a 125,000-word vocabulary (omitted, but not contradicted).",
+    "suggested_fix": "…grid-task throughputs of 1.4–3.7 bits/s across three participants on a 6 × 6 grid (4.2 bits/s for one participant on a 9 × 9 grid).",
+    "bibliographic_issues": "None (Nature 593(7858):249–254; Nature 620(7976):1031–1036; eLife 6:e18554)."
+  }
+]

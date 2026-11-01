@@ -1,0 +1,156 @@
+[
+  {
+    "id": "quasistatic",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Hämäläinen et al. 1993 — full text PDF (Aalto repository copy of Rev Mod Phys 65:413)",
+      "Logothetis, Kayser, Oeltermann 2007 — abstract (Europe PMC)",
+      "Malmivuo & Plonsey 1995 — bem.fi Ch. 7 (Sect. 7.2.4), Ch. 8 (eqs 8.7, 8.15), Ch. 13",
+      "Plonsey & Heppner 1967 — Crossref metadata only (Springer page blocked; no abstract seen)"
+    ],
+    "evidence_location": "Hämäläinen Sec. II.A 'Quasistatic approximation', p. 425 (σ, ε=10^5 ε0, f=100 Hz, 2πfε/σ=2×10^-3; also skin-depth λ=65 m argument). Logothetis abstract: impedance 'independent of frequency', predicted assuming a 'pure-resistive conductor'. Malmivuo & Plonsey Sect. 7.2.4 'Quasistatic Conditions' (cites Schwan & Kay 1957 and Plonsey & Heppner 1967); eq. 8.7 = point-source field, eq. 8.15 = dipole field.",
+    "quote": "σ = 0.3 Ω⁻¹m⁻¹ (value for brain tissue), ε = 10⁵ε₀, and f = 100 Hz ... 2πfε/σ = 2×10⁻³",
+    "discrepancy": "",
+    "suggested_fix": "",
+    "bibliographic_issues": "All details match: Rev Mod Phys 65(2):413–497, April 1993; Neuron 55(5):809–823; Bull Math Biophys 29(4):657–664 (Dec 1967, confirmed via Crossref); all DOIs resolve. Plonsey & Heppner abstract itself could not be opened, but Malmivuo & Plonsey 7.2.4 cites it for exactly this point."
+  },
+  {
+    "id": "spike-noise-floor",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Jun et al. 2017 — author manuscript full text (PMC5955206 via NCBI BioC API), incl. probe-specification table (Extended Data Table 1) and Extended Data Fig. 1 caption"
+    ],
+    "evidence_location": "Probe-specification table: AP-band noise 5.7±0.8 / 6.6±0.8 / 5.5±0.7 / 6.6±2.5 µV rms for Options 1–4; LFP-band noise 9.6±5.8 / 13.0±2.8 / 8.0±2.5 / 10.2±1.9 µV rms. Extended Data Fig. 1d caption: AP-band RMS noise in saline, 384 sites, 5.1 ± 0.6 µV.",
+    "quote": "AP band noise (µV r.m.s. ± S.D.) 5.7±0.8 6.6±0.8 5.5±0.7 6.6±2.5",
+    "discrepancy": "AP-band figures are correct (5.5–6.6 µV across configurations; 'about 5 µV' corresponds to the 5.1 ± 0.6 µV saline measurement). LFP-band noise is 8.0–13.0 µV rms across the four configurations (9.6 for Option 1, 13.0 for Option 2), so 'about 9 µV rms' understates the range and is not a single reported value.",
+    "suggested_fix": "'...about 5 µV rms in saline (5.1 ± 0.6 µV; 5.5–6.6 µV rms across the four probe configurations) in the action-potential band and roughly 8–13 µV rms in the LFP band (9.6 µV for the standard Option 1 probe).'",
+    "bibliographic_issues": "None: Nature 551(7679):232–236, 2017; DOI correct."
+  },
+  {
+    "id": "ephaptic",
+    "verdict": "NO_ACCESS",
+    "checked_sources": [
+      "Anastassiou et al. 2011 — abstract only (Europe PMC; nature.com page shows abstract + figure captions behind paywall; Unpaywall's only OA location, EPFL Infoscience, holds no file)",
+      "Fröhlich & McCormick 2010 — author manuscript full text (PMC3139922 via NCBI BioC API)"
+    ],
+    "evidence_location": "Fröhlich: Results (naturalistic in-vivo waveform experiment, Fig. 6D): 'The EF had a significant effect at 0.5 mV/mm (p < 0.005, n = 7)'; Discussion para 1 gives threshold ≤ 0.5 mV/mm; Fig. 4C caption: sine-wave effects significant for 1.0–4.0 mV/mm. Anastassiou: abstract only — somatic changes < 0.5 mV; entrainment 'particularly for slow (<8 Hz)' fields; Fig. 3 caption 'Weak electric fields entrain spiking activity of individual neurons'. No mV/mm value visible.",
+    "quote": "fields modulate neocortical network activity with a threshold of ≤ 0.5 mV/mm",
+    "discrepancy": "The Fröhlich half ('≤ 0.5 mV/mm modulates slow-oscillation activity') is verified verbatim. The Anastassiou-specific numbers (0.74 mV/mm, 'minimal causally effective field ~1 mV/mm', 1 Hz) could not be checked: full text is paywalled and no legitimate open copy was found; the visible abstract gives only '< 0.5 mV' somatic polarization and '< 8 Hz', not 1 Hz or any mV/mm value. Nuance for Fröhlich: the ≤0.5 mV/mm threshold came from the naturalistic in-vivo waveform; sine-wave fields were significant at 1.0–4.0 mV/mm and constant fields were reported at 2 and 4 mV/mm.",
+    "suggested_fix": "Verify 0.74 mV/mm, ~1 mV/mm and '1 Hz' against the Anastassiou full text (Results/Fig. 3) before publishing; otherwise cite only the abstract-level statement (sub-0.5 mV somatic polarization, entrainment strongest below 8 Hz).",
+    "bibliographic_issues": "None: Nat Neurosci 14(2):217–223, 2011; Neuron 67(1):129–143, 2010; DOIs correct."
+  },
+  {
+    "id": "pyramidal-fraction",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Sahara et al. 2012 — abstract (Europe PMC); full text request rate-limited"
+    ],
+    "evidence_location": "Abstract, first sentence (and results: fraction 'close to 1/5' from E14.5 to P28 in mouse).",
+    "quote": "Approximately one in five neurons is GABAergic in many neocortical areas and species",
+    "discrepancy": "None for the 1-in-5 figure. 'Mostly pyramidal cells' is not stated in the abstract (the paper speaks of 'excitatory glutamatergic neurons'); the measured constancy is in mouse (E10.5–P28), the 'many areas and species' statement is the paper's background generalisation.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None: J Neurosci 32(14):4755–4761, 2012 (PMC3325497); DOI correct."
+  },
+  {
+    "id": "mccann-meta",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "McCann, Pisano, Beltrachini 2019 — full text XML (Europe PMC PMC6708046): abstract, Results, Table 3",
+      "McCann et al. 2021 Correction, Brain Topogr 34:110–115, doi:10.1007/s10548-020-00807-z — Springer page"
+    ],
+    "evidence_location": "Table 3 'Descriptive statistics for each tissue type', weighted-mean column: scalp 0.4137, whole skull 0.0160, spongy 0.0497, compact 0.0046, CSF 1.71, GM 0.4660, WM 0.2167, BSCR 50.4 (min 17.9, max 290). Results para. and abstract: whole skull 0.02, spongiform 0.048.",
+    "quote": "scalp = 0.41 ± 0.18, whole skull = 0.02 ± 0.02, spongiform skull layer = 0.048 ± 0.07",
+    "discrepancy": "Every number matches the original 2019 paper (Table 3 vs abstract rounding correctly noted). However, a 2021 Correction revised the brain values after excluding studies mis-classified as MREIT (actually MREPT at >1 kHz; included papers 56→41): CSF 1.736 ± 0.17, GM 0.3787 ± 0.16, WM 0.1462 ± 0.11 S/m; 'Results for other tissues remain unchanged'. The claim's CSF 1.71, GM 0.47 and WM 0.22 are therefore superseded values.",
+    "suggested_fix": "Cite the 2021 correction and use CSF 1.74, grey matter 0.38, white matter 0.15 S/m (or state explicitly that the 2019 brain-tissue values were later corrected).",
+    "bibliographic_issues": "2019 details correct (Brain Topogr 32(5):825–858). Missing citation of the correction: McCann H, Pisano G, Beltrachini L (2021) Brain Topogr 34:110–115, doi:10.1007/s10548-020-00807-z."
+  },
+  {
+    "id": "thickness-scalp",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Khalil et al. 2024 — abstract (Europe PMC, PMC10838527)",
+      "Nunez, Nunez, Srinivasan 2019 — bioRxiv v2 full text (10.1101/391318), Sects. 6.4 and 8.2"
+    ],
+    "evidence_location": "Khalil abstract, Case presentation: vertex ultrasound 12 mm and 11 mm skin-to-periosteum, 'normal range: 5-6 mm'. Nunez Sect. 6.4: four-sphere radii (brain, CSF, skull, scalp) = (8.0, 8.1, 8.6, 9.2 cm) ⇒ scalp shell 0.6 cm; Sect. 8.2: skull and scalp thicknesses 'each roughly in the range 0.5 to 1 cm'.",
+    "quote": "12 mm and 11 mm from skin to periosteum, respectively (normal range: 5-6 mm)",
+    "discrepancy": "Minor: Nunez never writes '6 mm'; it is implied by 9.2 − 8.6 cm. The 5–6 mm 'normal range' is asserted in a two-patient case report, not derived from a normative study (the claim already flags this).",
+    "suggested_fix": "",
+    "bibliographic_issues": "Khalil title is 'Lipedematous Scalp Occurring in Two Female Siblings: Further Evidence for a Genetic Role' (not 'genetic basis'); authors Khalil N, Carton J, Fernandez CP, Patel NP; journal/volume/pages/DOI correct. Nunez published version not opened (checked bioRxiv preprint); journal details per Europe PMC match."
+  },
+  {
+    "id": "ecog-vs-eeg",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Nunez, Nunez, Srinivasan 2019 — bioRxiv v2 full text, Sects. 6.3, 8.2, 8.4",
+      "Malmivuo & Plonsey 1995 — bem.fi Ch. 13 (introductory section)",
+      "Ball et al. 2009 — abstract (Europe PMC)",
+      "Ramon et al. 2014 — full text XML (Europe PMC PMC4122221), Results"
+    ],
+    "evidence_location": "Nunez 6.3: single macrocolumn dipole ratio 'perhaps something like 50 to 100 or more'; experimental ratios 'typically in the 2 to 5 range'; 8.4: 'For very large dipole sheets, VC may be only 2 to 5 times as large as VK'. Malmivuo Ch. 13: EEG 'about 100 µV when measured on the scalp, and about 1-2 mV ... on the surface of the brain'. Ball abstract: 'signal quality of invasive EEG is 20 to above 100 times better'. Ramon Results (histogram paragraph, Fig. 5): cortex 0.0 ± 22.8, outer dura 0.0 ± 7.71, outer skull 0.0 ± 5.16, scalp 0.0 ± 4.47 µV.",
+    "quote": "for the cortex: 0.0 ± 22.8 μV; (2) for the outer dura surface: 0.0 ± 7.71 μV",
+    "discrepancy": "Numbers all match (7.71→7.7, 5.16→5.2, 4.47→4.5 are rounding). Dropped nuances: Nunez's 50–100 is a theoretical expectation for an isolated macrocolumn-scale dipole, the 2–5 is an empirical spontaneous EEG/ECoG range; Ball's 20–>100× is a ratio of blink-artifact amplitude to ongoing-activity amplitude (prefrontal/motor ECoG vs scalp), not a general SNR; Ramon's model used dura 0.001 S/m and an unusually low CSF conductivity (0.06 S/m), and 20% scalp attenuation from dura.",
+    "suggested_fix": "Optional: qualify Ball's figure as 'artifact-to-signal ratio for blinks' and note Ramon's model assumptions.",
+    "bibliographic_issues": "None: Brain Topogr 32(2):193–214; NeuroImage 46(3):708–716; Front Neuroeng 7:32 (PMC4122221); Malmivuo & Plonsey OUP 1995 at bem.fi."
+  },
+  {
+    "id": "potential-divider",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Metting van Rijn, Peper, Grimbergen 1990 Part 1 — full text (scanned PDF on biosemi.com, OCR), pp. 390–391"
+    ],
+    "evidence_location": "Section on common-mode voltage / 'the potential divider effect' (eqns 2–3, Fig. 1), p. 390: usual electrodes 20 kΩ at 50 Hz with c. 50% differences; p. 391 worked example: Cpow = 3 pF, Zrl = 20 kΩ gives 10 mV p-p common mode; mean Zi = 20 MΩ, mean Ze = 20 kΩ, 50% relative differences in Ze and Zi → 10 µV p-p interference.",
+    "quote": "mean impedance of 20kΩ at 50 Hz and impedance differences of c. 50 per cent",
+    "discrepancy": "None material. Nuances: the 10 mV and 10 µV are peak-to-peak values; the 50% relative difference is assumed for both electrode and input impedances; the paper says 'the usual electrodes' (citing Almasi & Schmitt 1970, Grimnes 1983, Geddes 1972) rather than 'wet electrodes'.",
+    "suggested_fix": "Optionally add 'peak-to-peak' and 'with 50% differences in both electrode and input impedances'.",
+    "bibliographic_issues": "None: Med Biol Eng Comput 28(5):389–397, 1990; DOI resolves."
+  },
+  {
+    "id": "chi-table",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Chi, Jung, Cauwenberghs 2010 — full text PDF (isn.ucsd.edu copy), Table I (p. 110, read from rendered page image) and Sect. II.B text"
+    ],
+    "evidence_location": "Table I 'Measured electrode impedances': Wet Ag/AgCl 350k ∥ 25nF; Metal Plate 1.3M ∥ 12nF; Thin Film 550M ∥ 220pF; Cotton 305M ∥ 34pF (plus a MEMS row). Text p. 110: noise 'obtained from the differential signal between two closely spaced electrodes on the forearm at rest'.",
+    "quote": "Wet Ag/AgCl 350k ∥ 25nF; Metal Plate 1.3M ∥ 12nF; Thin Film 550M ∥ 220pF; Cotton 305M ∥ 34pF",
+    "discrepancy": "All four impedance pairs match. 'Unabraded skin' is not stated by the paper (no skin-preparation detail is given for the Table I measurements; abrasion is only discussed generically elsewhere).",
+    "suggested_fix": "Replace 'unabraded skin' with 'no skin preparation reported' or drop it.",
+    "bibliographic_issues": "None: IEEE Rev Biomed Eng 3:106–119, 2010; DOI correct."
+  },
+  {
+    "id": "ferree",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Ferree, Luu, Russell, Tucker 2001 — full-text manuscript PDF (eeginfo.com copy) and the published abstract (Europe PMC/PubMed)"
+    ],
+    "evidence_location": "Manuscript: 'Signal loss' section p. 6: input impedance 'on the order of 200 MΩ in parallel with ... 10 pF'; Methods p. 13: impedances 'from < 5 kΩ to 40 kΩ'; Results pp. 15–16: no significant amplitude change in delta/theta/alpha/beta; 60 Hz 'did increase as a function of impedance ... did not reach statistical significance'; mismatch increase 'modest (≈8%)'; Discussion p. 18: up to 200 kΩ '< 0.1% error'. Published abstract: 'less than 10 kOmega (abraded skin) to 40 kOmega'; '60 Hz was nearly independent of impedance mismatch'.",
+    "quote": "scalp-electrode impedances up to 200 kΩ still allow for accurate (< 0.1% error) signal acquisition",
+    "discrepancy": "200 MΩ ∥ 10 pF, no significant band-amplitude change, and the 200 kΩ / <0.1% analysis are verified. But the published abstract gives the abraded condition as '< 10 kΩ' (the experimental bins were <10, 11–20, 21–30, 31–40 kΩ), whereas '< 5 kΩ' appears only in the manuscript/preprint copy; and the published abstract describes 60 Hz noise as 'nearly independent of impedance mismatch' (the observed mismatch effect was ≈8%, non-significant), which the claim's 'rose with impedance and mismatch' phrasing softens.",
+    "suggested_fix": "'...from < 10 kΩ (abraded skin) to 40 kΩ (intact skin) produced no significant amplitude change in any band; 60 Hz noise was nearly independent of impedance and mismatch (≈8% non-significant increase)...'",
+    "bibliographic_issues": "None: Clin Neurophysiol 112(3):536–544, 2001; DOI correct. Note the freely available PDF is a pre-publication manuscript whose abstract differs from the journal version."
+  },
+  {
+    "id": "spatial-nyquist",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Srinivasan, Tucker, Murias 1998 — Springer abstract page and full-text PDF (link.springer.com), pp. 8, 10–11, 16–17"
+    ],
+    "evidence_location": "Abstract p. 8: 'requires a minimum of 128 sensors'. p. 10: head radius 'typically ~9 cm'; 128-sensor spacing 'slightly less than 3 cm'. p. 11: spherical harmonics up to n = 7 sampled without aliasing by the 128-channel array (n = 6, 4, 3 for 64, 32, 19 channels). p. 17 Conclusions: labs 'sampling the full head surface with 32 and fewer channels' should use waveform plots; 'a sparse montage'.",
+    "quote": "Spherical harmonics up to degree n = 7 can be sampled with this array of electrodes without aliasing",
+    "discrepancy": "None material. Nuance: the authors call the results preliminary and say 128 cannot be confirmed as an asymptote without 256-channel data; a 32-channel array gave acceptable accuracy for some maps (Fig. 2) and could resolve features ≥7 cm.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None: Behav Res Methods Instrum Comput 30(1):8–19, 1998; DOI resolves."
+  },
+  {
+    "id": "itr-ssvep",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Chen et al. 2015 — abstract (Europe PMC, PMC4640776)",
+      "Nakanishi et al. 2018 — abstract (Europe PMC, PMC5783827)"
+    ],
+    "evidence_location": "Chen abstract: 'ITRs up to 5.32 bits per second', 40 characters tagged with 0.5-s flickers. Nakanishi abstract: 40-class dataset; online speller ITRs 325.33 ± 38.17 bits/min (cue-guided, 20 subjects) and 198.67 ± 50.48 bits/min (free spelling, 10 subjects).",
+    "quote": "averaged information transfer rates (ITRs) of 325.33 ± 38.17 bits/min with the cue-guided task and 198.67 ± 50.48 bits/min",
+    "discrepancy": "Numbers match (319 bits/min is the site's own 5.32×60 conversion). The sentence 'these rates come from stimulus-driven visual responses, not volitional control' is the website's interpretation, not a statement in either source (users volitionally select targets by gaze/attention; the decoded signal is the flicker-evoked SSVEP). Nakanishi's abstract calls the dataset '40-class'; the online task's target count is not restated there.",
+    "suggested_fix": "Present the 'not volitional control' sentence as the site's interpretation, e.g. 'the decoded signal is a flicker-evoked response selected by gaze rather than an internally generated command'.",
+    "bibliographic_issues": "None: PNAS 112(44):E6058–E6067, 2015; IEEE Trans Biomed Eng 65(1):104–112, 2018; DOIs correct."
+  }
+]

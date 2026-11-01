@@ -1,0 +1,144 @@
+[
+  {
+    "id": "cell-current",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Murakami & Okada 2006 (abstract via Europe PMC REST; full text not accessible: PMC CAPTCHA, Wiley client error)",
+      "Galloni et al. 2020 (full text XML, Europe PMC PMC7334021)",
+      "Markram et al. 1997 (abstract via Europe PMC REST; full text not in PMC)"
+    ],
+    "evidence_location": "Murakami abstract (envelope -0.41 to -0.90 pA m); Galloni Results/Fig. 3-4 legends (apical trunk 600 vs 200 um reduced models; main bifurcation 620 vs 370 um from soma); Markram abstract item 7 (quantal conductance)",
+    "quote": "The inferred quantal peak conductance increase varied between 1.5 and 5.5 nS (mean, 3 nS).",
+    "discrepancy": "Arithmetic (0.5 pA m / 0.5 mm = 1 nA) is correct and the inputs are order-of-magnitude consistent, but: (1) Markram 1997 nowhere states '~100 pA per synapse'; its abstract gives a quantal peak conductance of 1.5-5.5 nS (mean 3 nS) at -60 mV, which implies roughly 90-330 pA per contact (mean ~180 pA) only after assuming a ~60 mV driving force; (2) Murakami's envelope is -0.41 to -0.90 pA m, so 0.5 pA m sits at the low end (range implies 0.8-1.8 nA), and the envelope arises from a somatically stimulated intracellular burst discharge, not a 'synaptic burst'; (3) Galloni gives mouse L5 apical trunk lengths (~370-620 um to the main bifurcation) but never discusses sink-source separation; 0.5 mm is the website's own rounding.",
+    "suggested_fix": "Say the 1 nA is an order-of-magnitude estimate: 'dipole moment ~0.4-0.9 pA m (Murakami & Okada 2006, burst envelope) over an apical trunk of ~0.4-0.6 mm (Galloni et al. 2020) gives ~1-2 nA; for comparison a single synaptic contact with a quantal conductance of 1.5-5.5 nS (Markram et al. 1997) passes on the order of 100-300 pA.'",
+    "bibliographic_issues": "None found (J Physiol 575(Pt 3):925-936; eLife 9:e55761; J Physiol 500(Pt 2):409-440 all match Europe PMC)."
+  },
+  {
+    "id": "single-cell-moment",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Murakami & Okada 2006 (abstract via Europe PMC REST; full text inaccessible)"
+    ],
+    "evidence_location": "Abstract",
+    "quote": "The envelope was similar in magnitude (-0.41 to -0.90 pA m) across the four layer V pyramidal cells.",
+    "discrepancy": "All numbers match (L5 spikes -0.78 to 2.97 pA m, n = 4; L5 envelope -0.41 to -0.90; L2/3 spike 0.47 and envelope -0.29 pA m). Minor nuance: the envelope values are negative in the source (current directed away from the pia, opposite to most spikes), and the claim quotes them unsigned while giving signs for the spikes.",
+    "suggested_fix": "Optionally: 'envelope -0.41 to -0.90 pA m (i.e. 0.41-0.90 pA m directed away from the pia)' and 'L2/3: envelope -0.29 pA m, spike +0.47 pA m'.",
+    "bibliographic_issues": "None (J Physiol 575(Pt 3):925-936, DOI resolves in Europe PMC)."
+  },
+  {
+    "id": "cells-for-10nam",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Hämäläinen et al. 1993 (full PDF from Aalto repository acris.aalto.fi, RevModPhys.65.413.pdf)",
+      "Murakami & Okada 2006 (abstract via Europe PMC REST)"
+    ],
+    "evidence_location": "Hämäläinen Sec. I.B (The human brain) and Sec. II.C (Postsynaptic potentials); Murakami abstract, final sentence",
+    "quote": "strength of a dipole, caused by the synchronous activity of probably tens of thousands of neurons, is 10 nA m",
+    "discrepancy": "None of substance. Hämäläinen hedges ('probably tens of thousands') and the 10 nAm statements refer to dipoles explaining measured magnetic fields (MEG); 'routinely measured' paraphrases the source's 'typical' / 'Usually ... on the order of 10 nAm'. Hämäläinen also adds 'about a million synapses must be simultaneously active'. Murakami: 'may be detectable with MEG and EEG when 10 000-50 000 cells are synchronously active.'",
+    "suggested_fix": "",
+    "bibliographic_issues": "None (Rev Mod Phys 65(2):413-497 confirmed on the PDF)."
+  },
+  {
+    "id": "inhibitory-contrib",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Buzsáki, Anastassiou & Koch 2012 (NIH author-manuscript PDF mirrored at bio.fsu.edu; Europe PMC XML returned HTTP 500)",
+      "Teleńczuk et al. 2017 (full text XML, Europe PMC PMC5225490)"
+    ],
+    "evidence_location": "Buzsáki: section 'Synaptic activity' (p. 2-3 of manuscript, refs 26-30, Fig. 2b,c); Teleńczuk: Results (Fig. 3D-F) and Discussion",
+    "quote": "in actively spiking neurons the membrane is depolarized, and therefore inhibitory (and often hyperpolarizing) currents can generate substantial transmembrane currents",
+    "discrepancy": "Minor condition dropped: Buzsáki says GABA-A currents are 'typically assumed to add very little' and that they 'can generate substantial transmembrane currents' specifically when the membrane is depolarized in actively spiking neurons; the claim states it unconditionally. Teleńczuk part is supported: inhibitory dominance is inferred from latency (FS-triggered wst-LFP peaks before RS) and identical polarity; 'both the RS and FS neurons produced negative-going wst-LFPs of similar amplitudes' and st-LFP amplitudes at 0.4-2 mm showed no significant differences 'except the second night of the first human subject' (where inhibitory wst-LFPs were larger, Suppl. Fig. 7B). In monkey premotor cortex the latency difference was not significant.",
+    "suggested_fix": "'Inhibitory (GABA-A) currents, often assumed negligible, can generate substantial transmembrane currents when the membrane is depolarized in actively spiking neurons (Buzsáki et al. 2012); ... (inferred from timing and polarity; amplitudes of inhibitory and excitatory unitary fields were similar, with one recording as exception).'",
+    "bibliographic_issues": "None (Nat Rev Neurosci 13(6):407-420; Sci Rep 7:40211 both confirmed)."
+  },
+  {
+    "id": "sigma-dura",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Ramon et al. 2014 (full text XML, Europe PMC PMC4122221)",
+      "McCann, Pisano & Beltrachini 2019 (full text XML, Europe PMC PMC6708046)"
+    ],
+    "evidence_location": "Ramon: Introduction (0.04x CSF), Methods (0.02-0.1 S/m, midrange 0.06 S/m), Table 1 (Dura 1,667 (1,000-5,000) ohm cm = 6E-4 S/cm), Abstract (about 20%), Results/Fig. 3 (40%); McCann: Results text and Table (Dura: single value 0.461 S/m, 1 paper)",
+    "quote": "range from 0.02 to 0.1 S/m (Oozeer et al., 2005). For our work, we used a midrange value of 0.06",
+    "discrepancy": "All numbers found. Ramon: 'The conductivity of the dura layer is approximately 0.04 times the conductivity of the CSF'; 'scalp potentials decrease by about 20%'; at the peak location 12.5 uV -> 7.5 uV, 'reduced the amplitude of the scalp potential by 40%'. McCann: 'Insufficient data was available to calculate regression statistics for muscle, fat, blood, the epileptogenic zone, the dura layer and the cerebellum.' Two nuances not in the claim: McCann's sole tabulated dura value is 0.461 S/m (about 8x Ramon's 0.06 S/m); and Ramon's own abstract misstates the values ('conductivities of dura and CSF were 0.001 S/m and 0.06 S/m'), inconsistent with its Methods/Table 1 (0.06 and 1.54 S/m) - the website follows the Methods/Table values, which is correct.",
+    "suggested_fix": "Optionally add: 'the only value McCann et al. tabulate for dura is 0.461 S/m from a single study'.",
+    "bibliographic_issues": "None (Front Neuroeng 7:32; Brain Topogr 32(5):825-858 confirmed)."
+  },
+  {
+    "id": "sphere-model",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Nunez, Nunez & Srinivasan 2019 (bioRxiv v2 full text 10.1101/391318 via WebFetch; Springer page abstract/references only)",
+      "de Munck & Peters 1993 (abstract via Europe PMC REST)",
+      "Zhang 1995 (abstract via Europe PMC REST)",
+      "Berg & Scherg 1994 (abstract via Europe PMC REST)"
+    ],
+    "evidence_location": "Nunez Sec. 6.4 (Modeling scalp potential magnitudes with head models); the three method papers' abstracts",
+    "quote": "Berg and Scherg's fast computation method is extended to multilayer anisotropic spheres.",
+    "discrepancy": "Zhang (1995) is mischaracterised: its abstract describes it as an extension of Berg & Scherg's fast approximation (fitting 'Berg parameters') to multilayer anisotropic spheres, not an exact series solution. de Munck & Peters 1993 is correctly an exact series expansion ('A series expansion is derived for the potential distribution, caused by a dipole source in a multilayered sphere with piecewise constant conductivity', with addition-subtraction acceleration); Berg & Scherg 1994 is correctly a fast approximation ('3 suitably located dipoles in a homogeneous sphere ... more than 30-fold increase in computing speed'). Radii supported: Nunez 'In our simulations, sphere radii are (brain, CSF, skull, scalp) = (8.0, 8.1, 8.6, 9.2 cm)' and 'The standard head model employed here consists of four concentric spherical shells' - but Nunez also calls it 'only a very approximate head model'; 'the standard analytic EEG forward model' is the website's framing, not Nunez's wording. Nunez's reference list does not cite de Munck, Zhang or Berg & Scherg.",
+    "suggested_fix": "'...exact series solutions for multilayer (isotropic) spheres are given by de Munck & Peters (1993); Berg & Scherg (1994) give a fast three-dipole approximation, which Zhang (1995) extended to multilayer anisotropic spheres.' Consider 'a standard' rather than 'the standard analytic'.",
+    "bibliographic_issues": "None: Brain Topogr 32(2):193-214; IEEE TBME 40(11):1166-1174; Phys Med Biol 40(3):335-349; EEG Clin Neurophysiol 90(1):58-64 all match Europe PMC. Could not verify Zhang's full text, so whether it also reproduces the exact anisotropic series is unconfirmed."
+  },
+  {
+    "id": "blink-rate",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Ronca et al. 2024 (full text XML, Europe PMC PMC11505294)"
+    ],
+    "evidence_location": "Introduction (blink rate, 3-15 Hz bandwidth); Sec. 3 regression-method description (15 Hz, Fig. 3); Sec. 3 formula (2) discussion (frontal electrodes); Fig. 1 legend",
+    "quote": "occurrences ranging from 12 to 18 blinks per minute",
+    "discrepancy": "None. Also: 'the main spectral content of ocular blinks is up to 15 Hz (Figure 3)'; 'their bandwidth (3-15 Hz) overlaps with ... theta and alpha bands'; 'electrodes closer to the eye location, such as the frontal ones, will be more affected'. Note the review gives 12-18/min without citing a primary source for it.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None (Bioengineering 11(10):1018 confirmed)."
+  },
+  {
+    "id": "averaging",
+    "verdict": "NO_ACCESS",
+    "checked_sources": [
+      "Boudewyn et al. 2018 (abstract only, via Europe PMC REST). Full text attempts failed: Wiley full/pdf (client error/403), PMC5940511 (CAPTCHA), Europe PMC fullTextXML (HTTP 500) and render PDF (403), eScholarship qt5qk50168 PDF (HTTP 202, empty body), CORE API (429). The UC Davis/owlstown PDFs found by search were a different 2023 paper (psyp.14363)."
+    ],
+    "evidence_location": "Abstract only",
+    "quote": "Each of these issues was examined in the context of the error-related negativity and the lateralized readiness potential.",
+    "discrepancy": "Could not verify. The abstract confirms the paper concerns ERN and LRP and 'the noise level', but contains no sqrt(N) statement, no amplitude ranges (5-15 uV ERN, 1-4 uV LRP) and no statement that single-trial noise is much larger than the signal. The sqrt(N) rule is textbook signal averaging and the amplitude ranges are plausible, but neither was seen in this source.",
+    "suggested_fix": "Verify against the full text (Introduction) or cite a textbook (e.g. Luck, An Introduction to the ERP Technique) for sqrt(N) and the component amplitudes.",
+    "bibliographic_issues": "None (Psychophysiology 55(6):e13049 confirmed)."
+  },
+  {
+    "id": "noncontact-cap",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Chi, Jung & Cauwenberghs 2010 (full PDF from isn.ucsd.edu/pub/papers/rbme10.pdf)",
+      "Chi, Maier & Cauwenberghs 2011 (abstract via OpenAlex; IEEE Xplore page returned nothing)",
+      "Taheri, Knight & Smith 1994 (abstract via Europe PMC REST; full text not accessible)"
+    ],
+    "evidence_location": "Chi 2010 Sec. II (Electrode model, Fig. 2: LMP7702 with 5 pF input capacitance; active shielding), Sec. III.B/C (insulated: '300 pF [26] to several nanofarads'; noncontact: '10's pF'); Chi 2011 abstract; Chi 2010 reference list ([9] = Taheri 1994, [26] = Alizadeh-Taheri 1996)",
+    "quote": "the coupling capacitance for insulated electrodes is relatively large, from 300 pF [26] to several nanofarads",
+    "discrepancy": "All numbers are in the sources, but the ~300 pF figure is misattributed: Chi 2010 cites it to its reference [26] = B. Alizadeh-Taheri, R. L. Smith, R. T. Knight, 'An active, microfabricated, scalp electrode array for EEG recording', Sensors and Actuators A 54(1-3):606-611, 1996 - not to Taheri et al. 1994 (Chi's [9]), which is cited only for the original insulated-electrode design. Taheri 1994's abstract gives a 3 mm steel disk with a 200 nm nitride coating (which implies ~2 nF) but I could not see a stated capacitance. Nuance dropped: Chi 2010 says noncontact electrodes 'have been typically described simply as coupling signals through a small capacitance (10's pF)' but 'In reality, however, there is typically an important' resistive component as well. Chi 2011 abstract supports exactly: 'input impedance of 60 fF || 50 TOhm' and 'electrode coupling capacitances as low as 0.5 pF'; Chi 2010: 'unity gain connected LMP7702 with 5 pF input capacitance' plus active-shield discussion.",
+    "suggested_fix": "Cite the 300 pF figure to Alizadeh-Taheri, Smith & Knight (1996) Sens. Actuators A 54:606-611 (via Chi et al. 2010), or drop the Taheri 1994 citation for that number; consider 'nominally tens of picofarads (with a non-negligible resistive component in practice)'.",
+    "bibliographic_issues": "Chi 2011: IEEE JETCAS 1(4):526-535 confirmed via OpenAlex (not indexed in PubMed/Europe PMC). Others match."
+  },
+  {
+    "id": "iivanainen-components",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Iivanainen et al. 2021 (full text XML, Europe PMC PMC8752968); arXiv 1912.05401 metadata via arXiv API"
+    ],
+    "evidence_location": "Abstract; Sec. 3.2 Results (B99% percentiles and sensor spacings); Sec. 4.1 Discussion (~120 sensors); Appendix C / Fig. C.11 (head-model comparison)",
+    "quote": "the 1S model produces essentially larger numbers, the median reaching 291 (vs. 80 in the 4C model)",
+    "discrepancy": "Supported: 'approximately 280, 90 and 110 SF components were needed in on-scalp, off-scalp MEG and EEG'; most superficial bin 97.5th percentiles 276/93/109 with 'corresponding uniform sensor spacings 1.6, 3.3 and 2.6 cm'; 'the sensor count should be at least roughly 120'. Differences: (1) on-scalp MEG is ~280 (276) in the analysis; 'roughly 300' appears only in the Conclusions; (2) 'without a skull the count rises to 300-350' is not stated - the text gives a median of 291 (vs 80 for the 4C model) and the model is a homogeneous single-shell (1S) conductor bounded by the scalp, i.e. no skull AND no CSF; the claim also compares the 4C 97.5th-percentile (110) with what is at best a 1S median/percentile mix; 300-350 may be read off Fig. C.11 but is not in the text.",
+    "suggested_fix": "'...without the skull/CSF layers (a homogeneous single-shell model) the median count for the most superficial sources rises from 80 to about 290' and 'versus ~280 for on-scalp MEG'.",
+    "bibliographic_issues": "NeuroImage 245:118747 confirmed. arXiv 1912.05401 is by the same six authors (Dec 2019) but carries the earlier title 'Sampling theory for spatial field sensing: Application to electro- and magnetoencephalography'."
+  },
+  {
+    "id": "cortical-neurons",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Azevedo et al. 2009 (abstract via Europe PMC REST; full text not in PMC)"
+    ],
+    "evidence_location": "Abstract",
+    "quote": "the adult male human brain contains on average 86.1 +/- 8.1 billion NeuN-positive cells (\"neurons\")",
+    "discrepancy": "Numbers match (86.1 +/- 8.1 billion; 'With only 19% of all neurons located in the cerebral cortex'; 0.19 x 86.1 = 16.4 billion, the 'about 16 billion' is derived). Minor nuance: the sample was adult male brains (n = 4), and 'neurons' means NeuN-positive cells.",
+    "suggested_fix": "Optionally 'adult (male) human brain'.",
+    "bibliographic_issues": "None (J Comp Neurol 513(5):532-541 confirmed)."
+  }
+]

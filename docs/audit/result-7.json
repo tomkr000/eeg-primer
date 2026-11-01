@@ -1,0 +1,139 @@
+[
+  {
+    "id": "dipole-length",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Galloni, Laffere & Rancz 2020 eLife 9:e55761 — full text (Europe PMC PMC7334021)"
+    ],
+    "evidence_location": "Results, text accompanying Fig. 2C (apical trunk lengths); Results text on the shortened Hay-model morphology (Ca2+ hot zone); Fig. 3A legend (recording site at main bifurcation)",
+    "quote": "V1 mean = 409 ± 64 µm ... V2m mean = 313 ± 65 µm ... 685–885 µm in the long morphology",
+    "discrepancy": "313 and 409 µm are the V2m and V1 group MEANS (SD ~65 µm each), not a range of trunk lengths. The 685–885 µm figure is the position of the high-density Ca2+ 'hot zone' in the long (Hay et al. 2011) model, not the soma-to-bifurcation length; the Fig. 3A legend places that model's main bifurcation at 620 µm from the soma (vs 370 µm for the V2m cell). The paper does not itself describe the Hay model as 'rat-derived' (true of Hay 2011, but not stated here). The 500 µm slider default does lie within 313–885 µm either way.",
+    "suggested_fix": "Mean apical trunk length (soma to main bifurcation) is 409 ± 64 µm in mouse V1 and 313 ± 65 µm in V2m (Galloni et al. 2020); in the Hay et al. (2011) thick-tufted model used by the same study the main bifurcation lies ~620 µm from the soma, with the dendritic Ca2+ hot zone at 685–885 µm.",
+    "bibliographic_issues": "None; authors, year, journal, volume, article number and DOI match Europe PMC (PMID 32463356)."
+  },
+  {
+    "id": "psp-moment",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Hämäläinen et al. 1993 Rev Mod Phys 65:413–497 — full text PDF (Aalto University reprint, acris.aalto.fi)"
+    ],
+    "evidence_location": "Sec. II.C–D (ion mechanisms / postsynaptic potentials), journal p. ≈424 (PDF p. 13 of the Aalto reprint), right column",
+    "quote": "20 fA m for a single PSP ... order of 10 nAm. Therefore, about a million synapses",
+    "discrepancy": "",
+    "suggested_fix": "",
+    "bibliographic_issues": "None; reprint footer confirms Rev. Mod. Phys. Vol. 65, No. 2, April 1993; first page 413."
+  },
+  {
+    "id": "neuron-density",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Rockel, Hiorns & Powell 1980 Brain 103:221–244 — abstract (Europe PMC, PMID 6772266)",
+      "Herculano-Houzel et al. 2008 PNAS 105:12593–12598 — abstract (Europe PMC, PMID 18689685)",
+      "Carlo & Stevens 2013 PNAS 110:1488–1493 — abstract (Europe PMC, PMID 23297199)"
+    ],
+    "evidence_location": "Rockel abstract (30 µm strip, ≈110 neurons); Herculano-Houzel abstract (750 µm², 147,000/mm², three-fold variation across nine primate species + Tupaia); Carlo & Stevens abstract (modern stereological replication confirms original report)",
+    "quote": "110 neurons underneath a surface area of 750 microm(2) (147,000 underneath 1 mm(2)) ... varies by three times",
+    "discrepancy": "None of substance. Note the 750 µm² / 147,000 per mm² figures are stated in Herculano-Houzel et al.'s restatement of Rockel (30 µm × 25 µm section), not in Rockel's abstract; Rockel's abstract also notes the exception that primate binocular area 17 has ~2.5× more neurons, which the claim omits. Full texts of all three were paywalled/blocked (PNAS 403), so verification is from abstracts.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None; all three records match Europe PMC (authors, year, journal, volume, issue, pages, DOIs)."
+  },
+  {
+    "id": "orientation",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Ahlfors, Han, Belliveau & Hämäläinen 2010 Brain Topogr 23:227–232 — full text (Europe PMC PMC2914866)"
+    ],
+    "evidence_location": "Results, first paragraph (distribution of R_λ, Fig. 1); Abstract and Introduction for radial insensitivity",
+    "quote": "For MEG, the median value of R λ was 0.06 ... for EEG ... 0.63 and 95% ... above 0.42",
+    "discrepancy": "",
+    "suggested_fix": "",
+    "bibliographic_issues": "None; matches Europe PMC (PMID 20640882)."
+  },
+  {
+    "id": "thickness-skull",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Moreira-Gonzalez, Papay & Zins 2006 Plast Reconstr Surg 117:1964–1971 — abstract (Europe PMC, PMID 16651971)"
+    ],
+    "evidence_location": "Abstract, Method and Result sections",
+    "quote": "281 dry skulls ... 40 points ... 6.32 mm ... 5.3 mm ... 7.5 mm ... Age was not ... significant",
+    "discrepancy": "None in the numbers. The abstract does not use the word 'adult' (Hamann-Todd collection), and the 40 points cover frontal, occipital and parietal bones only (no temporal bone); 5.3–7.5 mm are location means with SEMs, consistent with the claim's 'site means'. Full text not accessible.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None; matches Europe PMC."
+  },
+  {
+    "id": "brain-radius",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Nunez, Nunez & Srinivasan — bioRxiv preprint v2 (doi:10.1101/391318, same title and authors as the Brain Topography 2019 paper) — full text",
+      "Springer landing page for doi:10.1007/s10548-019-00701-3 (abstract only; full text paywalled)"
+    ],
+    "evidence_location": "Preprint v2 full text, 4-sphere head-model simulation section (Figs. 5–6 context)",
+    "quote": "sphere radii are (brain, CSF, skull, scalp) = (8.0, 8.1, 8.6, 9.2 cm)",
+    "discrepancy": "Verified in the preprint of the cited paper, not the paywalled published version; wording is unlikely to have changed.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None; published record matches Europe PMC (PMID 30684161). Preprint bioRxiv 10.1101/391318 could be added as an open-access pointer."
+  },
+  {
+    "id": "common-mode",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Metting van Rijn, Peper & Grimbergen 1990 Med Biol Eng Comput 28:389–397 — full text (author copy hosted at biosemi.com/publications/artikel3.htm)"
+    ],
+    "evidence_location": "Sec. 2.1 (interference current 0.5 µA p-p, C_pow 3 pF); Sec. 3.2 numerical examples (10 mV p-p non-isolated typical; ~1 mV p-p small battery-powered isolated amplifier; ~200 mV p-p multichannel system with C_sup, C_iso ~100 pF); Sec. 4.2",
+    "quote": "ca. 0.5 uA,p-p ... an acceptable 10 mV,p-p ... approx. 1 mV,p-p ... approx. 200 mV,p-p",
+    "discrepancy": "None. All values are peak-to-peak (claim says p-p only for the 1 mV case). The paper adds that interference currents ten times higher are 'found regularly'.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None; matches Europe PMC (PMID 2277538)."
+  },
+  {
+    "id": "motion-artifact",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Chi, Jung & Cauwenberghs 2010 IEEE Rev Biomed Eng 3:106–119 — full text PDF (isn.ucsd.edu/pub/papers/rbme10.pdf)",
+      "Metting van Rijn et al. 1990 Part 1 — full text (biosemi.com author copy)"
+    ],
+    "evidence_location": "Chi: Sec. II.C 'Motion and Friction', p. 111 (triboelectric statement; eqs. 7–10); Sec. on noncontact electrodes, p. 114 and Fig. 7 caption (settling/recovery). Metting van Rijn: Sec. 2.3 (cable interference currents)",
+    "quote": "No satisfying quantitative models exist to generally describe this effect ... Recovery times of upwards of 10 s",
+    "discrepancy": "(1) Chi's 'no satisfying quantitative models' sentence refers specifically to triboelectric charge induced by lateral friction; the same section does give first-order quantitative treatment of transversal motion (coupling-impedance changes, balancing conditions eqs. 7–9) and a first-order triboelectric current term (eq. 10), so 'no model for motion and friction artefacts' overstates it. (2) Recovery: paper says 'upwards of 10 s' in text and 'more than 15 s' in Fig. 7, for a noncontact ECG sensor with 0.05 Hz high-pass after a lead disruption at t = 5 s; '10–15 s' is a reasonable gloss. (3) The 200 µV figure is from Metting van Rijn, not Chi: 10 nA p-p cable current, 20 kΩ mean electrode impedance, and 50% relative differences in BOTH interference current and electrode impedance give 200 µV p-p (the claim's single '50% mismatch' hides that both terms contribute).",
+    "suggested_fix": "No satisfying quantitative model exists for the triboelectric charge generated by friction at the electrode–skin interface (transversal motion is modelled to first order as coupling-impedance change); capacitive non-contact electrodes can need more than 10–15 s to recover after a motion-induced overload; mains current coupled into cables (10 nA p-p, 20 kΩ electrodes, 50% differences in current and impedance) gives ~200 µV p-p of interference (Metting van Rijn et al. 1990).",
+    "bibliographic_issues": "None; Chi journal header confirms IEEE Reviews in Biomedical Engineering vol. 3, 2010, pp. 106–119."
+  },
+  {
+    "id": "haired-scalp-wet",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Chi, Jung & Cauwenberghs 2010 — full text PDF (isn.ucsd.edu), page image checked for the equation"
+    ],
+    "evidence_location": "Sec. II (electrode models/noise), p. 111, right column, final paragraph before 'In summary'",
+    "quote": "only lowers noise for values of resistance R_c larger than 1/ωC_c ... haired skull, still require wet electrodes",
+    "discrepancy": "None (paper says 'haired skull'; 'this value becomes exceedingly large for increasing electrode distances').",
+    "suggested_fix": "",
+    "bibliographic_issues": "None."
+  },
+  {
+    "id": "iivanainen-eigen",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Iivanainen et al. 2021 NeuroImage 245:118747 — published full text (Europe PMC PMC8752968)",
+      "arXiv:1912.05401v1 (2019) — full PDF"
+    ],
+    "evidence_location": "Published: Sec. 3.3 Results ('88, 35 and 26 eigencomponents'), Sec. 3.4.1 Results (400 samples / 60–70–80%; 80–30–20 samples for 90%), Sec. 3.4.2 Results (ROI: TI in bits and max SNR only). Preprint v1: p. 11 ('88, 35 and 25'; 'at maximum 179, 61 and 62'), p. 13 (400 samples / 60, 74, 80%), p. 14 ('Nine and eight components had SNR > 1')",
+    "quote": "To explain 99% of the total variance, 88, 35 and 26 eigencomponents are needed",
+    "discrepancy": "Every number in the claim matches the 2019 arXiv v1 preprint, but the cited published NeuroImage version differs: 26 (not 25) EEG eigencomponents for 99% variance; the 'maximum 62' and the '8 EEG components with SNR > 1' statements are not in the published text (ROI results are reported as total information in bits and max SNR). In the preprint the '8 components' figure applies to the SMALLER motor-cortex ROI with white sensor noise only; with coloured (brain-background) noise it drops to 4. Preprint high-noise figures are 60/74/80% (published: 60/70/80%); the EEG 80% and the 20-samples-for-90% values agree in both.",
+    "suggested_fix": "Either cite the preprint explicitly for the 25 / 62 / 8-component figures, or update to the published values: 26 EEG eigencomponents (88 on-scalp MEG) for 99% variance; ~20 EEG samples for 90% of variance at high SNR, only ~80% with 400 samples at low SNR; and drop or qualify the '8 components with SNR > 1' (preprint, small ROI, white noise; 4 with brain-background noise).",
+    "bibliographic_issues": "Published record matches Europe PMC (PMID 34852277). The arXiv preprint 1912.05401 (v1 only) carries a different title: 'Sampling theory for spatial field sensing: Application to electro- and magnetoencephalography'."
+  },
+  {
+    "id": "itr-2002",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Wolpaw et al. 2002 Clin Neurophysiol 113:767–791 — abstract (Europe PMC, PMID 12048038)"
+    ],
+    "evidence_location": "Abstract",
+    "quote": "Current BCIs have maximum information transfer rates up to 10-25bits/min.",
+    "discrepancy": "Numbers verbatim. The parenthetical 'essentially all EEG-based' is the site's gloss: the abstract lists scalp-recorded signals and also 'cortical neuronal activity recorded by implanted electrodes'. Full text not accessed.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None; matches Europe PMC."
+  }
+]

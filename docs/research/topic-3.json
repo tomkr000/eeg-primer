@@ -1,0 +1,887 @@
+[
+  {
+    "id": "t3-01",
+    "claim": "Meta-analysis weighted mean scalp conductivity is 0.41 S/m (reported values 0.137-2.1 S/m; 44 values from 10 studies).",
+    "value": 0.4137,
+    "units": "S/m",
+    "range": [
+      0.137,
+      2.1
+    ],
+    "source": {
+      "authors": "McCann H, Pisano G, Beltrachini L",
+      "year": 2019,
+      "title": "Variation in Reported Human Head Tissue Electrical Conductivity Values",
+      "journal": "Brain Topography",
+      "volume_pages": "32(5):825-858",
+      "doi": "10.1007/s10548-019-00710-2",
+      "url": "https://iris.uniroma1.it/retrieve/e383532d-bdf5-15e8-e053-a505fe0a3de9/McCann_Variation%20in%20Reported%20Human_2019.pdf"
+    },
+    "evidence_location": "Table 3 row 'Scalp' (min, max, mean, weighted mean, SD, n); abstract",
+    "quote": "Scalp 0.137 2.1 0.5345 0.4137 0.1760 44 10 44",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Table columns: min, max, mean, weighted mean, SD, n values, n studies, n participants. Section 4.2 text: realistic scalp values 'ranged between 0.25 S/m and 0.435 S/m' after excluding outliers."
+  },
+  {
+    "id": "t3-02",
+    "claim": "Meta-analysis weighted mean whole-skull conductivity is 0.016 S/m (abstract rounds to 0.02 S/m; 99 values from 20 studies, 121 participants), with reported values spanning up to 1.718 S/m.",
+    "value": 0.016,
+    "units": "S/m",
+    "range": [
+      0.0182,
+      1.718
+    ],
+    "source": {
+      "authors": "McCann H, Pisano G, Beltrachini L",
+      "year": 2019,
+      "title": "Variation in Reported Human Head Tissue Electrical Conductivity Values",
+      "journal": "Brain Topography",
+      "volume_pages": "32(5):825-858",
+      "doi": "10.1007/s10548-019-00710-2",
+      "url": "https://iris.uniroma1.it/retrieve/e383532d-bdf5-15e8-e053-a505fe0a3de9/McCann_Variation%20in%20Reported%20Human_2019.pdf"
+    },
+    "evidence_location": "Table 3 row 'Whole skull'; abstract ('0.02 S/m for whole skull')",
+    "quote": "Whole skull 0.0182 1.718 0.0708 0.0160 0.019 99 20 121",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Weighted mean (0.0160) is below the tabulated minimum (0.0182) in the PDF extraction, so the minimum may be mis-transcribed (possibly 0.00182); treat range lower bound with caution. Arithmetic mean 0.0708 is inflated by ex vivo/saline-soaked samples (Section 4.3)."
+  },
+  {
+    "id": "t3-03",
+    "claim": "Meta-analysis weighted mean conductivity of the spongy (diploe) skull layer is 0.050 S/m (range 0.0012-0.289 S/m; 18 values, 5 studies).",
+    "value": 0.0497,
+    "units": "S/m",
+    "range": [
+      0.0012,
+      0.289
+    ],
+    "source": {
+      "authors": "McCann H, Pisano G, Beltrachini L",
+      "year": 2019,
+      "title": "Variation in Reported Human Head Tissue Electrical Conductivity Values",
+      "journal": "Brain Topography",
+      "volume_pages": "32(5):825-858",
+      "doi": "10.1007/s10548-019-00710-2",
+      "url": "https://iris.uniroma1.it/retrieve/e383532d-bdf5-15e8-e053-a505fe0a3de9/McCann_Variation%20in%20Reported%20Human_2019.pdf"
+    },
+    "evidence_location": "Table 3 row 'Spongy'",
+    "quote": "Spongy 0.0012 0.2890 0.0559 0.0497 0.0735 18 5 58",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "id": "t3-04",
+    "claim": "Meta-analysis weighted mean conductivity of compact (cortical) skull bone is 0.0046 S/m (range 0.0024-0.0079 S/m; 9 values, 4 studies), about 10x lower than the spongy layer.",
+    "value": 0.0046,
+    "units": "S/m",
+    "range": [
+      0.0024,
+      0.0079
+    ],
+    "source": {
+      "authors": "McCann H, Pisano G, Beltrachini L",
+      "year": 2019,
+      "title": "Variation in Reported Human Head Tissue Electrical Conductivity Values",
+      "journal": "Brain Topography",
+      "volume_pages": "32(5):825-858",
+      "doi": "10.1007/s10548-019-00710-2",
+      "url": "https://iris.uniroma1.it/retrieve/e383532d-bdf5-15e8-e053-a505fe0a3de9/McCann_Variation%20in%20Reported%20Human_2019.pdf"
+    },
+    "evidence_location": "Table 3 row 'Compact' (also 'Outer compact' 0.0049 and 'Inner compact' 0.0068 weighted means)",
+    "quote": "Compact 0.0024 0.0079 0.0045 0.0046 0.0016 9 4 54",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Outer compact: 0.0008-0.0078, weighted mean 0.0049 S/m; inner compact: 0.0028-0.0129, weighted mean 0.0068 S/m."
+  },
+  {
+    "id": "t3-05",
+    "claim": "Meta-analysis weighted mean cerebrospinal fluid (CSF) conductivity is 1.71 S/m (range 1.0-2.51 S/m; 43 values, 14 studies).",
+    "value": 1.71,
+    "units": "S/m",
+    "range": [
+      1.0,
+      2.51
+    ],
+    "source": {
+      "authors": "McCann H, Pisano G, Beltrachini L",
+      "year": 2019,
+      "title": "Variation in Reported Human Head Tissue Electrical Conductivity Values",
+      "journal": "Brain Topography",
+      "volume_pages": "32(5):825-858",
+      "doi": "10.1007/s10548-019-00710-2",
+      "url": "https://iris.uniroma1.it/retrieve/e383532d-bdf5-15e8-e053-a505fe0a3de9/McCann_Variation%20in%20Reported%20Human_2019.pdf"
+    },
+    "evidence_location": "Table 3 row 'CSF'; abstract",
+    "quote": "CSF 1 2.51 1.6922 1.71 0.2981 43 14 37",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "id": "t3-06",
+    "claim": "Meta-analysis weighted mean grey matter conductivity is 0.47 S/m (range 0.06-2.47 S/m; 66 values, 16 studies).",
+    "value": 0.466,
+    "units": "S/m",
+    "range": [
+      0.06,
+      2.47
+    ],
+    "source": {
+      "authors": "McCann H, Pisano G, Beltrachini L",
+      "year": 2019,
+      "title": "Variation in Reported Human Head Tissue Electrical Conductivity Values",
+      "journal": "Brain Topography",
+      "volume_pages": "32(5):825-858",
+      "doi": "10.1007/s10548-019-00710-2",
+      "url": "https://iris.uniroma1.it/retrieve/e383532d-bdf5-15e8-e053-a505fe0a3de9/McCann_Variation%20in%20Reported%20Human_2019.pdf"
+    },
+    "evidence_location": "Table 3 row 'GM'; abstract ('0.47 S/m for the grey matter')",
+    "quote": "GM 0.06 2.47 0.5981 0.4660 0.2392 66 16 153",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "id": "t3-07",
+    "claim": "Meta-analysis weighted mean white matter conductivity is 0.22 S/m (range 0.065-0.81 S/m; 104 values, 15 studies).",
+    "value": 0.2167,
+    "units": "S/m",
+    "range": [
+      0.0646,
+      0.81
+    ],
+    "source": {
+      "authors": "McCann H, Pisano G, Beltrachini L",
+      "year": 2019,
+      "title": "Variation in Reported Human Head Tissue Electrical Conductivity Values",
+      "journal": "Brain Topography",
+      "volume_pages": "32(5):825-858",
+      "doi": "10.1007/s10548-019-00710-2",
+      "url": "https://iris.uniroma1.it/retrieve/e383532d-bdf5-15e8-e053-a505fe0a3de9/McCann_Variation%20in%20Reported%20Human_2019.pdf"
+    },
+    "evidence_location": "Table 3 row 'WM'; abstract ('0.22 S/m for WM')",
+    "quote": "WM 0.0646 0.81 0.24 0.2167 0.1703 104 15 106",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Anisotropy: WM perpendicular weighted mean 0.1175 S/m, parallel 0.1226 S/m (Table 3)."
+  },
+  {
+    "id": "t3-08",
+    "claim": "Meta-analysis weighted mean brain-to-skull conductivity ratio (BSCR) is 50.4 (reported values 17.9-290; 51 values, 10 studies).",
+    "value": 50.4,
+    "units": "ratio (dimensionless)",
+    "range": [
+      17.9,
+      290
+    ],
+    "source": {
+      "authors": "McCann H, Pisano G, Beltrachini L",
+      "year": 2019,
+      "title": "Variation in Reported Human Head Tissue Electrical Conductivity Values",
+      "journal": "Brain Topography",
+      "volume_pages": "32(5):825-858",
+      "doi": "10.1007/s10548-019-00710-2",
+      "url": "https://iris.uniroma1.it/retrieve/e383532d-bdf5-15e8-e053-a505fe0a3de9/McCann_Variation%20in%20Reported%20Human_2019.pdf"
+    },
+    "evidence_location": "Table 3 row 'BSCR'; abstract ('50.4 for the BSCR')",
+    "quote": "BSCR 17.9 290 58.69 50.4 38.93 51 10 47",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "id": "t3-09",
+    "claim": "Across studies, the brain-to-skull conductivity ratio correlates positively with participant age (r = 0.376, p = 0.014), i.e., skulls become relatively less conductive with age.",
+    "value": 0.376,
+    "units": "Pearson r",
+    "range": null,
+    "source": {
+      "authors": "McCann H, Pisano G, Beltrachini L",
+      "year": 2019,
+      "title": "Variation in Reported Human Head Tissue Electrical Conductivity Values",
+      "journal": "Brain Topography",
+      "volume_pages": "32(5):825-858",
+      "doi": "10.1007/s10548-019-00710-2",
+      "url": "https://iris.uniroma1.it/retrieve/e383532d-bdf5-15e8-e053-a505fe0a3de9/McCann_Variation%20in%20Reported%20Human_2019.pdf"
+    },
+    "evidence_location": "Results Section 3.7 (bioRxiv full text, https://www.biorxiv.org/content/10.1101/511006v1.full.txt)",
+    "quote": "BSCR correlated positively with participant age [r(51) = .376, p = .014]",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Verified in the bioRxiv full-text version."
+  },
+  {
+    "id": "t3-10",
+    "claim": "The McCann meta-analysis found insufficient data to compute statistics for dura mater conductivity (Table 3 lists a single dura entry of 0.461 S/m from 1 study).",
+    "value": 0.461,
+    "units": "S/m",
+    "range": null,
+    "source": {
+      "authors": "McCann H, Pisano G, Beltrachini L",
+      "year": 2019,
+      "title": "Variation in Reported Human Head Tissue Electrical Conductivity Values",
+      "journal": "Brain Topography",
+      "volume_pages": "32(5):825-858",
+      "doi": "10.1007/s10548-019-00710-2",
+      "url": "https://iris.uniroma1.it/retrieve/e383532d-bdf5-15e8-e053-a505fe0a3de9/McCann_Variation%20in%20Reported%20Human_2019.pdf"
+    },
+    "evidence_location": "Table 3 row 'Dura'; Section 3.2",
+    "quote": "Insufficient data was available to calculate regression statistics for muscle, fat, blood",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "The dura row ('Dura 0.461 1 1 2') has too few columns to assign unambiguously; the 0.461 S/m single value should not be used as a representative dura conductivity (contrast with Ramon 2014's 0.06 S/m)."
+  },
+  {
+    "id": "t3-11",
+    "claim": "Human CSF conductivity measured in 7 patients is 1.79 S/m at body temperature (37 C) versus 1.45 S/m at 25 C, across 10 Hz-10 kHz.",
+    "value": 1.79,
+    "units": "S/m",
+    "range": [
+      1.45,
+      1.79
+    ],
+    "source": {
+      "authors": "Baumann SB, Wozny DR, Kelly SK, Meno FM",
+      "year": 1997,
+      "title": "The electrical conductivity of human cerebrospinal fluid at body temperature",
+      "journal": "IEEE Transactions on Biomedical Engineering",
+      "volume_pages": "44(3):220-223",
+      "doi": "10.1109/10.554770",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9216137/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "room temperature conductivity was 1.45 S/m, but body temperature conductivity was 1.79 S/m",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Abstract read via Europe PMC record PMID 9216137. Range given = 25 C to 37 C values, not inter-subject spread."
+  },
+  {
+    "id": "t3-12",
+    "claim": "In vivo and in vitro measurements both give a human skull conductivity of about 0.015 S/m, i.e., a brain:skull:scalp ratio of 1:1/15:1 rather than the commonly used 1:1/80:1.",
+    "value": 0.015,
+    "units": "S/m",
+    "range": null,
+    "source": {
+      "authors": "Oostendorp TF, Delbeke J, Stegeman DF",
+      "year": 2000,
+      "title": "The conductivity of the human skull: results of in vivo and in vitro measurements",
+      "journal": "IEEE Transactions on Biomedical Engineering",
+      "volume_pages": "47(11):1487-1492",
+      "doi": "10.1109/tbme.2000.880100",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11077742/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "Both methods revealed a skull conductivity of about 0.015",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Abstract text also: 'differs considerably from the ratio 1:1/80:1 commonly used in neural source localization'. In vivo n = 2 subjects."
+  },
+  {
+    "id": "t3-13",
+    "claim": "Live human skull layers (four-electrode method, room temperature): spongiform 16.2-41.1 mS/m, outer compact 5.4-7.2 mS/m, inner compact 2.8-10.2 mS/m.",
+    "value": null,
+    "units": "mS/m",
+    "range": [
+      2.8,
+      41.1
+    ],
+    "source": {
+      "authors": "Akhtari M, Bryant HC, Mamelak AN, et al.",
+      "year": 2002,
+      "title": "Conductivities of three-layer live human skull",
+      "journal": "Brain Topography",
+      "volume_pages": "14(3):151-167",
+      "doi": "10.1023/a:1014590923185",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12002346/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "spongiform (16.2-41.1 milliS/m), the top compact (5.4-7.2 milliS/m) and lower compact (2.8-10.2 milliS/m)",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Range field spans the lowest compact to highest spongiform value."
+  },
+  {
+    "id": "t3-14",
+    "claim": "Lumped skull conductivity measured on skull pieces temporarily removed during epilepsy surgery (5 patients) ranged from 32 to 80 mS/m, much higher than earlier reports.",
+    "value": null,
+    "units": "mS/m",
+    "range": [
+      32,
+      80
+    ],
+    "source": {
+      "authors": "Hoekema R, Wieneke GH, Leijten FS, et al.",
+      "year": 2003,
+      "title": "Measurement of the conductivity of skull, temporarily removed during epilepsy surgery",
+      "journal": "Brain Topography",
+      "volume_pages": "16(1):29-38",
+      "doi": "10.1023/a:1025606415858",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14587967/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "conductivity values found were ranging from 32 mS/m to 80 mS/m",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "id": "t3-15",
+    "claim": "In vivo effective brain-to-skull conductivity ratio estimated from simultaneous scalp and subdural recordings in 5 epilepsy patients is 25 +/- 7 (range 18-34).",
+    "value": 25,
+    "units": "ratio (dimensionless)",
+    "range": [
+      18,
+      34
+    ],
+    "source": {
+      "authors": "Lai Y, van Drongelen W, Ding L, et al.",
+      "year": 2005,
+      "title": "Estimation of in vivo human brain-to-skull conductivity ratio from simultaneous extra- and intra-cranial electrical potential recordings",
+      "journal": "Clinical Neurophysiology",
+      "volume_pages": "116(2):456-465",
+      "doi": "10.1016/j.clinph.2004.08.017",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15661122/"
+    },
+    "evidence_location": "Abstract (Results, Conclusions)",
+    "quote": "ratio ranged from 18 to 34 in the 5 epilepsy patients",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Abstract: 'averaged value/standard deviation is 25+/-7'."
+  },
+  {
+    "id": "t3-16",
+    "claim": "In vivo EIT-based estimates in 6 subjects give skull resistivity 12,230 ohm-cm (SD 18%; ~0.0082 S/m) and brain 301 ohm-cm (SD 13%; ~0.33 S/m), i.e., a skull/brain resistivity ratio within 20-50 rather than 80.",
+    "value": 12230,
+    "units": "ohm-cm",
+    "range": [
+      20,
+      50
+    ],
+    "source": {
+      "authors": "Goncalves SI, de Munck JC, Verbunt JP, et al.",
+      "year": 2003,
+      "title": "In vivo measurement of the brain and skull resistivities using an EIT-based method and realistic models for the head",
+      "journal": "IEEE Transactions on Biomedical Engineering",
+      "volume_pages": "50(6):754-767",
+      "doi": "10.1109/tbme.2003.812164",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12814242/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "rho(skull)/rho(brain) is more likely to be within 20 and 50 rather than equal to the commonly accepted value of 80",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Value field = skull resistivity; range field = skull/brain ratio. A factor of 2.4 inter-subject variation in the ratio remained."
+  },
+  {
+    "id": "t3-17",
+    "claim": "Live human skull resistivity at 36.5 C depends on local structure: standard trilayer 7,943 ohm-cm (~0.013 S/m), compact (no diploe) 26,546 ohm-cm (~0.0038 S/m), and dentate-suture samples 5,782 ohm-cm (~0.017 S/m); sutures lower resistivity and absent diploe raises it.",
+    "value": 7943,
+    "units": "ohm-cm",
+    "range": [
+      5782,
+      26546
+    ],
+    "source": {
+      "authors": "Tang C, You F, Cheng G, et al.",
+      "year": 2008,
+      "title": "Correlation between structure and resistivity variations of the live human skull",
+      "journal": "IEEE Transactions on Biomedical Engineering",
+      "volume_pages": "55(9):2286-2292",
+      "doi": "10.1109/tbme.2008.923919",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18713698/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "standard trilayer skull (7943 +/- 1752 ohm x cm, 58 samples)",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "388 samples from 48 skull flaps, four-electrode method, 1-4 MHz (note: MHz range, above EEG band). Quasi-trilayer 14,471; quasi-compact 19,824; squamous suture 12,747 ohm-cm."
+  },
+  {
+    "id": "t3-18",
+    "claim": "A widely used finite-element EEG head-model tissue table assigns conductivities (S/m): scalp 0.435, hard (compact) bone 0.00625, soft (spongy) bone 0.0459, CSF 1.538, grey matter 0.333, white matter 0.143.",
+    "value": null,
+    "units": "S/m",
+    "range": [
+      0.00625,
+      1.538
+    ],
+    "source": {
+      "authors": "Ramon C, Schimpf PH, Haueisen J",
+      "year": 2006,
+      "title": "Influence of head models on EEG simulations and inverse source localizations",
+      "journal": "BioMedical Engineering OnLine",
+      "volume_pages": "5:10",
+      "doi": "10.1186/1475-925X-5-10",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC1389789/fullTextXML"
+    },
+    "evidence_location": "Table 1 'Head tissue resistivity and conductivity values' (values given in S/cm)",
+    "quote": "Hard Bone 16000 6.25E-5 ... Cerebrospinal Fluid (CSF) 65 15.38E-3",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Converted from S/cm to S/m (x100). Same table also used in Ramon et al. 2006 Biomed Eng Online 5:55 (MEG)."
+  },
+  {
+    "id": "t3-19",
+    "claim": "Dura mater conductivity used in a dura-inclusive FEM head model is 0.06 S/m (resistivity 1,667 ohm-cm, bounds 1,000-5,000 ohm-cm, i.e., 0.02-0.1 S/m), roughly 0.04 times CSF conductivity.",
+    "value": 0.06,
+    "units": "S/m",
+    "range": [
+      0.02,
+      0.1
+    ],
+    "source": {
+      "authors": "Ramon C, Garguilo P, Fridgeirsson EA, Haueisen J",
+      "year": 2014,
+      "title": "Changes in scalp potentials and spatial smoothing effects of inclusion of dura layer in human head models for EEG simulations",
+      "journal": "Frontiers in Neuroengineering",
+      "volume_pages": "7:32",
+      "doi": "10.3389/fneng.2014.00032",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4122221/fullTextXML"
+    },
+    "evidence_location": "Table 1 row 'Dura' and Introduction/Methods text",
+    "quote": "it was found to have a large range from 0.02 to 0.1 S/m",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Table 1: 'Dura 1,667 (1,000 to 5,000) 6E-4' S/cm. Text: 'approximately 0.04 times the conductivity of the CSF (Oozeer et al., 2005)'. Note the published abstract misprints the dura/CSF values as 0.001 and 0.06 S/m; the table gives dura 0.06 S/m and CSF 1.54 S/m."
+  },
+  {
+    "id": "t3-20",
+    "claim": "Mean adult calvarial thickness across 40 sites in 281 dry skulls is 6.32 mm (SEM 0.07), with site means ranging 5.3-7.5 mm; age was not a significant predictor.",
+    "value": 6.32,
+    "units": "mm",
+    "range": [
+      5.3,
+      7.5
+    ],
+    "source": {
+      "authors": "Moreira-Gonzalez A, Papay FE, Zins JE",
+      "year": 2006,
+      "title": "Calvarial thickness and its relation to cranial bone harvest",
+      "journal": "Plastic and Reconstructive Surgery",
+      "volume_pages": "117(6):1964-1971",
+      "doi": "10.1097/01.prs.0000209933.78532.a7",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16651971/"
+    },
+    "evidence_location": "Abstract (Result)",
+    "quote": "mean thickness of the skull across all locations was 6.32 mm (SEM, 0.07 mm) and ranged from 5.3 mm",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Frontal, parietal and occipital bones only; thickest region posterior parietal."
+  },
+  {
+    "id": "t3-21",
+    "claim": "Cranial dura thickness measured at autopsy (petrous apex, 20 cadavers) averages 0.36 mm (min 0.27, max 0.46 mm) and is thinner in older subjects.",
+    "value": 0.36,
+    "units": "mm",
+    "range": [
+      0.27,
+      0.46
+    ],
+    "source": {
+      "authors": "Fam MD, Potash A, Potash M, et al.",
+      "year": 2018,
+      "title": "Skull Base Dural Thickness and Relationship to Demographic Features: A Postmortem Study and Literature Review",
+      "journal": "Journal of Neurological Surgery Part B: Skull Base",
+      "volume_pages": "79(6):614-620",
+      "doi": "10.1055/s-0038-1651501",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30456033/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "Mean, minimum, and maximum skull base dural thickness in our study was 0.36, 0.27, and 0.46 mm",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Skull-base (not convexity) dura; convexity dura under the EEG cap may differ. Use as order-of-magnitude (~0.3-0.5 mm)."
+  },
+  {
+    "id": "t3-22",
+    "claim": "Normal full scalp thickness (skin to periosteum) at the vertex on ultrasound is about 5-6 mm.",
+    "value": 5.5,
+    "units": "mm",
+    "range": [
+      5,
+      6
+    ],
+    "source": {
+      "authors": "Khalil N, Carton J, Fernandez CP, Patel NP",
+      "year": 2024,
+      "title": "Lipedematous Scalp Occurring in Two Female Siblings: Further Evidence for a Genetic Role",
+      "journal": "Skin Appendage Disorders",
+      "volume_pages": "10(1):78-82",
+      "doi": "10.1159/000534698",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38318429/"
+    },
+    "evidence_location": "Abstract (Case presentation)",
+    "quote": "Scalp thickness on ultrasound of the vertex ... (normal range: 5-6 mm)",
+    "verified_in_source": true,
+    "confidence": "low",
+    "notes": "Peer-reviewed but a case report stating the normal range, not a normative study. Scalp SKIN alone (epidermis+dermis) is ~1.7-1.9 mm (Sung et al. 2025, Facial Plast Surg, PMID 40979905). Consistent with the 6 mm scalp shell in the Nunez 4-sphere model (t3-23)."
+  },
+  {
+    "id": "t3-23",
+    "claim": "The standard Nunez/Srinivasan four-sphere head model uses radii brain 8.0, CSF 8.1, skull 8.6 and scalp 9.2 cm (layer thicknesses CSF 1 mm, skull 5 mm, scalp 6 mm), CSF conductivity 5x brain, brain = scalp, and a brain-to-skull ratio of 20-40 (historically up to 80-160).",
+    "value": null,
+    "units": "cm",
+    "range": [
+      8.0,
+      9.2
+    ],
+    "source": {
+      "authors": "Nunez PL, Nunez MD, Srinivasan R",
+      "year": 2019,
+      "title": "Multi-Scale Neural Sources of EEG: Genuine, Equivalent, and Representative. A Tutorial Review",
+      "journal": "Brain Topography",
+      "volume_pages": "32(2):193-214",
+      "doi": "10.1007/s10548-019-00701-3",
+      "url": "https://www.biorxiv.org/content/10.1101/391318v2.full-text"
+    },
+    "evidence_location": "Section 6.4 (bioRxiv v2 full text); Fig. 5 caption; Section 8.2",
+    "quote": "sphere radii are (brain, CSF, skull, scalp) = (8.0, 8.1, 8.6, 9.2 cm)",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Text: 'CSF conductivity is assumed to be five times larger than brain conductivity'; brain-to-skull ratios 20-40 'now considered more realistic'; scalp-to-skull ratio 'typically in the 20 to 80 range' and uncertain 'by a factor of three or more' (Section 8.2). Confirms the radii listed in the task brief."
+  },
+  {
+    "id": "t3-24",
+    "claim": "For a single cortical dipole the cortical-to-scalp potential ratio is about 50-100 (inner-skull potential 50-100x the outer-skull potential), whereas for large synchronous dipole sheets the ratio falls to only 2-5, matching ECoG-vs-EEG amplitude comparisons.",
+    "value": null,
+    "units": "ratio (dimensionless)",
+    "range": [
+      2,
+      100
+    ],
+    "source": {
+      "authors": "Nunez PL, Nunez MD, Srinivasan R",
+      "year": 2019,
+      "title": "Multi-Scale Neural Sources of EEG: Genuine, Equivalent, and Representative. A Tutorial Review",
+      "journal": "Brain Topography",
+      "volume_pages": "32(2):193-214",
+      "doi": "10.1007/s10548-019-00701-3",
+      "url": "https://www.biorxiv.org/content/10.1101/391318v2.full-text"
+    },
+    "evidence_location": "Sections 6.3, 8.2 and 8.4 (bioRxiv v2 full text)",
+    "quote": "something like fifty to a hundred times larger",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Section 6.3: cortical-to-scalp ratio 50-100 for a single dipole versus 2-5 in spontaneous EEG/ECoG comparisons. Section 8.4: for very large dipole sheets V_cortex may be 2-5 x V_scalp. Attenuation thus depends strongly on source extent, not only on tissue conductivity."
+  },
+  {
+    "id": "t3-25",
+    "claim": "Rule of thumb: roughly 6-10 cm^2 of contiguous, synchronously active cortex (about 300 macrocolumns) is required to produce a potential recognisable at the scalp (citing Cooper et al. 1965).",
+    "value": null,
+    "units": "cm^2",
+    "range": [
+      6,
+      10
+    ],
+    "source": {
+      "authors": "Nunez PL, Nunez MD, Srinivasan R",
+      "year": 2019,
+      "title": "Multi-Scale Neural Sources of EEG: Genuine, Equivalent, and Representative. A Tutorial Review",
+      "journal": "Brain Topography",
+      "volume_pages": "32(2):193-214",
+      "doi": "10.1007/s10548-019-00701-3",
+      "url": "https://www.biorxiv.org/content/10.1101/391318v2.full-text"
+    },
+    "evidence_location": "Section 6.2 (bioRxiv v2 full text)",
+    "quote": "about 6 to 10 cm2 of contiguous, synchronously active tissue",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Section 6.4 also estimates maximum human scalp potentials from large synchronous dipole layers at roughly 100 microvolts, and mm-scale dipole layers producing below a few microvolts."
+  },
+  {
+    "id": "t3-26",
+    "claim": "Cooper, Winter, Crow and Walter (1965) recorded simultaneously from subcortical, cortical and scalp electrodes in humans and are the original source of the ~6 cm^2 synchronous-cortex estimate and of the cortex-to-scalp attenuation observation.",
+    "value": 6,
+    "units": "cm^2",
+    "range": null,
+    "source": {
+      "authors": "Cooper R, Winter AL, Crow HJ, Walter WG",
+      "year": 1965,
+      "title": "Comparison of subcortical, cortical and scalp activity using chronically indwelling electrodes in man",
+      "journal": "Electroencephalography and Clinical Neurophysiology",
+      "volume_pages": "18:217-228",
+      "doi": "10.1016/0013-4694(65)90088-x",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14255050/"
+    },
+    "evidence_location": "Full text not accessible (PubMed record has no abstract; PMC1736410 scan blocked by browser check)",
+    "quote": "",
+    "verified_in_source": false,
+    "confidence": "medium",
+    "notes": "Bibliographic record verified (PMID 14255050). The 6 cm^2 figure and attenuation ratio could NOT be seen in the paper itself; it is attributed to Cooper 1965 by Nunez, Nunez & Srinivasan 2019 (t3-25). Cite via t3-25 or Tao 2005 (t3-27)."
+  },
+  {
+    "id": "t3-27",
+    "claim": "With simultaneous scalp and intracranial EEG in 16 temporal-lobe-epilepsy patients, 90% of cortical spikes with source area >10 cm^2 produced scalp spikes, only 10% of those <10 cm^2 did, and spikes <6 cm^2 were never seen at the scalp.",
+    "value": 10,
+    "units": "cm^2",
+    "range": [
+      6,
+      20
+    ],
+    "source": {
+      "authors": "Tao JX, Ray A, Hawes-Ebersole S, Ebersole JS",
+      "year": 2005,
+      "title": "Intracranial EEG substrates of scalp EEG interictal spikes",
+      "journal": "Epilepsia",
+      "volume_pages": "46(5):669-676",
+      "doi": "10.1111/j.1528-1167.2005.11404.x",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15857432/"
+    },
+    "evidence_location": "Abstract (Results, Conclusions)",
+    "quote": "Intracranial spikes with <6 cm(2) of area were never associated with scalp EEG spikes",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Abstract: 'Synchronous or at least temporally overlapping activation of 10-20 cm(2) of gyral cortex is common.' About 600 intracranial spikes reviewed."
+  },
+  {
+    "id": "t3-28",
+    "claim": "Comparing the amplitude of ongoing brain activity to blink-artifact amplitude in simultaneous recordings, invasive EEG (ECoG) signal quality is 20 to more than 100 times better than scalp EEG.",
+    "value": null,
+    "units": "ratio (dimensionless)",
+    "range": [
+      20,
+      100
+    ],
+    "source": {
+      "authors": "Ball T, Kern M, Mutschler I, Aertsen A, Schulze-Bonhage A",
+      "year": 2009,
+      "title": "Signal quality of simultaneously recorded invasive and non-invasive EEG",
+      "journal": "NeuroImage",
+      "volume_pages": "46(3):708-716",
+      "doi": "10.1016/j.neuroimage.2009.02.028",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19264143/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "signal quality of invasive EEG is 20 to above 100 times better than that of simultaneously obtained non-invasive EEG",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Metric is artifact-to-brain-signal ratio (blink artifacts), recorded over prefrontal and motor regions; the paper's raw amplitude figures were not accessible (paywalled full text)."
+  },
+  {
+    "id": "t3-29",
+    "claim": "Including a dura layer in a 1-mm FEM head model (vs replacing it with CSF) reduces simulated scalp potentials by about 20% overall (29% in an earlier 19-tissue model; up to 40% at a given location).",
+    "value": 20,
+    "units": "% reduction",
+    "range": [
+      20,
+      40
+    ],
+    "source": {
+      "authors": "Ramon C, Garguilo P, Fridgeirsson EA, Haueisen J",
+      "year": 2014,
+      "title": "Changes in scalp potentials and spatial smoothing effects of inclusion of dura layer in human head models for EEG simulations",
+      "journal": "Frontiers in Neuroengineering",
+      "volume_pages": "7:32",
+      "doi": "10.3389/fneng.2014.00032",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4122221/fullTextXML"
+    },
+    "evidence_location": "Abstract; Introduction (Ramon 2012 result); Results Fig. 3 text",
+    "quote": "With the inclusion of the dura layer, scalp potentials decrease by about 20%",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Text: 'inclusion of the dura layer reduced the scalp potentials by 29%' (Ramon 2012); 'the inclusion of the dura layer has reduced the amplitude of the scalp potential by 40%' at the peak location (12.5 -> 7.5 microvolts)."
+  },
+  {
+    "id": "t3-30",
+    "claim": "In the same simulation (144,000 cortical dipoles), the standard deviation of potentials falls from 22.8 microvolts on the cortex to 7.71 on the outer dura, 5.16 on the outer skull and 4.47 on the scalp (about 5x cortex-to-scalp), with gyral/sulcal detail already smoothed out at the dura.",
+    "value": 5.1,
+    "units": "ratio (cortex SD / scalp SD)",
+    "range": null,
+    "source": {
+      "authors": "Ramon C, Garguilo P, Fridgeirsson EA, Haueisen J",
+      "year": 2014,
+      "title": "Changes in scalp potentials and spatial smoothing effects of inclusion of dura layer in human head models for EEG simulations",
+      "journal": "Frontiers in Neuroengineering",
+      "volume_pages": "7:32",
+      "doi": "10.3389/fneng.2014.00032",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4122221/fullTextXML"
+    },
+    "evidence_location": "Results, 'Spatial profiles on different tissue surfaces' (Fig. 5 discussion)",
+    "quote": "for the cortex: 0.0 +/- 22.8 microvolts; (2) for the outer dura surface: 0.0 +/- 7.71 microvolts",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full quote continues: 'outer skull surface: 0.0 +/- 5.16 microvolts; and (4) for the scalp: 0.0 +/- 4.47 microvolts'. Histogram ranges: cortex +/-100 microvolts, dura +/-50, outer skull +10 to -20, scalp +8 to -15 microvolts. Simulation, not measurement; dipole intensities 0-0.4 mA-m uniform random."
+  },
+  {
+    "id": "t3-31",
+    "claim": "Textbook values: EEG amplitude is about 100 microvolts measured on the scalp versus about 1-2 mV measured on the surface of the brain (i.e., a 10-20x drop).",
+    "value": 100,
+    "units": "microvolts",
+    "range": [
+      1000,
+      2000
+    ],
+    "source": {
+      "authors": "Malmivuo J, Plonsey R",
+      "year": 1995,
+      "title": "Bioelectromagnetism: Principles and Applications of Bioelectric and Biomagnetic Fields, Chapter 13 (Electroencephalography)",
+      "journal": "Oxford University Press (free online at bem.fi)",
+      "volume_pages": "Ch. 13",
+      "doi": "",
+      "url": "https://www.bem.fi/book/13/13.htm"
+    },
+    "evidence_location": "Section 13.1 (Introduction), paragraph on EEG amplitude",
+    "quote": "about 100 microvolts when measured on the scalp, and about 1-2 mV when measured on the surface of the brain",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Range field gives the brain-surface amplitude in microvolts (1-2 mV). Original wording uses the Greek mu symbol."
+  },
+  {
+    "id": "t3-32",
+    "claim": "The scalp EEG is spatially low-pass filtered by the poorly conducting skull; a four-sphere model predicts that electrodes within 10-12 cm can appear correlated purely through volume conduction of uncorrelated sources.",
+    "value": null,
+    "units": "cm",
+    "range": [
+      10,
+      12
+    ],
+    "source": {
+      "authors": "Srinivasan R, Nunez PL, Silberstein RB",
+      "year": 1998,
+      "title": "Spatial filtering and neocortical dynamics: estimates of EEG coherence",
+      "journal": "IEEE Transactions on Biomedical Engineering",
+      "volume_pages": "45(7):814-826",
+      "doi": "10.1109/10.686789",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9644890/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "predicting that electrodes within 10-12 cm can appear correlated",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Abstract: 'The scalp EEG is spatially low-pass filtered by the poorly conducting skull, introducing artificial correlation between the electrodes.' Substitutes for Srinivasan, Tucker & Murias 1998 (Behav Res Methods), which is not indexed in Europe PMC."
+  },
+  {
+    "id": "t3-33",
+    "claim": "With a 64-channel linear scalp array (3 mm pitch), scalp spatial power spectra fall off faster than at the pia because of smearing by dura-skull-scalp; spatial spectral peaks at 0.1-0.4 cycles/cm suggest an optimal scalp electrode spacing of about 1 cm.",
+    "value": 1,
+    "units": "cm",
+    "range": [
+      0.1,
+      0.4
+    ],
+    "source": {
+      "authors": "Freeman WJ, Holmes MD, Burke BC, Vanhatalo S",
+      "year": 2003,
+      "title": "Spatial spectra of scalp EEG and EMG from awake humans",
+      "journal": "Clinical Neurophysiology",
+      "volume_pages": "114(6):1053-1068",
+      "doi": "10.1016/s1388-2457(03)00045-2",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12804674/"
+    },
+    "evidence_location": "Abstract (Results, Conclusions)",
+    "quote": "Smearing by dura-skull-scalp distorts PSD(x) more than PSD(t) of scalp EEG",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Range field = spatial-frequency peak band in cycles/cm; value = suggested electrode spacing (cm)."
+  },
+  {
+    "id": "t3-34",
+    "claim": "Moving from prone to supine thins the occipital CSF layer by about 30% (MRI) and raises occipital EEG power for spatially incoherent high-frequency activity by about 80% on average (several-fold in some subjects).",
+    "value": 80,
+    "units": "% power increase",
+    "range": null,
+    "source": {
+      "authors": "Rice JK, Rorden C, Little JS, Parra LC",
+      "year": 2013,
+      "title": "Subject position affects EEG magnitudes",
+      "journal": "NeuroImage",
+      "volume_pages": "64:476-484",
+      "doi": "10.1016/j.neuroimage.2012.09.041",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23006805/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "occipital CSF layer between the brain and skull decreases by approximately 30% in thickness",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Abstract: 'increasing occipital signal power by several times for some subjects (on average 80%)'. Absolute CSF thickness in mm is in the paywalled full text (not seen)."
+  },
+  {
+    "id": "t3-35",
+    "claim": "The highly conductive CSF channels (shunts) current, lowering peak cortical current density; MRI- and CT-based head models that omit the CSF layer give half-sensitivity volumes 20% and 45% too small, respectively.",
+    "value": null,
+    "units": "% error",
+    "range": [
+      20,
+      45
+    ],
+    "source": {
+      "authors": "Wendel K, Narra NG, Hannula M, Kauppinen P, Malmivuo J",
+      "year": 2008,
+      "title": "The influence of CSF on EEG sensitivity distributions of multilayered head models",
+      "journal": "IEEE Transactions on Biomedical Engineering",
+      "volume_pages": "55(4):1454-1456",
+      "doi": "10.1109/tbme.2007.912427",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18390339/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "the highly conductive CSF channels the current, thus decreasing the maximum cortical current density",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "HSV = half-sensitivity volume. Supports treating CSF as a shunt layer in the attenuation story; also Ramon 2006 (t3-18 source) found the model without CSF 'performed the worst' for source localization."
+  },
+  {
+    "id": "t3-36",
+    "claim": "The brain:skull:scalp conductivity ratio of 1:1/80:1 (skull 80x less conductive than brain), originating from Rush & Driscoll (1968), was the commonly used value in EEG source localization until in vivo studies revised it to roughly 1/15-1/50.",
+    "value": 80,
+    "units": "ratio (dimensionless)",
+    "range": null,
+    "source": {
+      "authors": "Rush S, Driscoll DA",
+      "year": 1968,
+      "title": "Current distribution in the brain from surface electrodes",
+      "journal": "Anesthesia & Analgesia",
+      "volume_pages": "47(6):717-723",
+      "doi": "10.1213/00000539-196811000-00016",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/4972743/"
+    },
+    "evidence_location": "Rush & Driscoll 1968 itself: bibliographic record only (no abstract/full text accessible). The '80 commonly used' statement verified in Oostendorp 2000 and Goncalves 2003 abstracts.",
+    "quote": "differs considerably from the ratio 1:1/80:1 commonly used in neural source localization",
+    "verified_in_source": false,
+    "confidence": "medium",
+    "notes": "Quote is from Oostendorp et al. 2000 abstract (t3-12); Goncalves 2003 abstract calls 80 'the commonly accepted value'. Attribution of the number to Rush & Driscoll 1968 is standard but was not seen in the original."
+  },
+  {
+    "id": "t3-37",
+    "claim": "Rush & Driscoll (1969) computed EEG electrode sensitivity (lead fields) for bipolar scalp electrodes using a concentric three-sphere (scalp, skull, brain) head model; in this model the low-conductivity skull spreads sensitivity so that a 180-degree lead pair samples the brain almost homogeneously.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Rush S, Driscoll DA",
+      "year": 1969,
+      "title": "EEG electrode sensitivity--an application of reciprocity",
+      "journal": "IEEE Transactions on Biomedical Engineering",
+      "volume_pages": "16(1):15-22",
+      "doi": "10.1109/tbme.1969.4502598",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/5775600/"
+    },
+    "evidence_location": "Described in Malmivuo & Plonsey 1995, Section 13.4 (bem.fi/book/13/13.htm); Rush & Driscoll 1969 has no online abstract",
+    "quote": "in the 180 degree case the skull allows the sensitivity to be very homogeneously distributed throughout the brain region",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Verified in the textbook description, not the original paper. The specific radii used by Rush & Driscoll (often quoted as 8.0/8.5/9.2 cm) were NOT found in the accessible text and should not be cited without checking."
+  },
+  {
+    "id": "t3-38",
+    "claim": "Scalp potentials of a dipole in a 4-shell concentric-sphere head model can be approximated by 3 dipoles in a homogeneous sphere with >30-fold faster computation and localization errors under 0.5 mm in 99% of fits; exact series solutions for arbitrary multilayer (and anisotropic) spheres are given by de Munck & Peters (1993) and Zhang (1995).",
+    "value": 0.5,
+    "units": "mm",
+    "range": null,
+    "source": {
+      "authors": "Berg P, Scherg M",
+      "year": 1994,
+      "title": "A fast method for forward computation of multiple-shell spherical head models",
+      "journal": "Electroencephalography and Clinical Neurophysiology",
+      "volume_pages": "90(1):58-64",
+      "doi": "10.1016/0013-4694(94)90113-9",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7509274/"
+    },
+    "evidence_location": "Abstract (Berg & Scherg); abstracts of de Munck & Peters 1993 (IEEE TBME 40:1166, doi 10.1109/10.245635) and Zhang 1995 (Phys Med Biol 40:335, doi 10.1088/0031-9155/40/3/001)",
+    "quote": "sources were located within 0.5 mm and 0.6 degrees of the original position in 99% of the fits",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Berg & Scherg's abstract does not list the four-shell radii/conductivities they used. de Munck & Peters abstract: 'series expansion ... dipole source in a multilayered sphere with piecewise constant conductivity'. Zhang abstract: extends Berg & Scherg to 'multilayer anisotropic spheres'."
+  }
+]

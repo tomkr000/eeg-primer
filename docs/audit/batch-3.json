@@ -1,0 +1,93 @@
+[
+  {
+    "id": "dipole",
+    "statement": "The potential of a current dipole of moment p is Φ = p cosθ / (4πσr²) (eq. 8.15); the dipole field falls as 1/r² whereas the monopole field falls as 1/r.",
+    "sources": [
+      "Malmivuo J, Plonsey R (1995). Bioelectromagnetism: Principles and Applications of Bioelectric and Biomagnetic Fields. Oxford University Press Ch. 7 (quasistatic conditions), Ch. 8 (source–field models, eqs 8.7 and 8.15), Ch. 13 (EEG) https://www.bem.fi/book/"
+    ]
+  },
+  {
+    "id": "henze-140um",
+    "statement": "Beyond about 140 µm from the soma no extracellular spike could be distinguished from background noise even with spike-triggered averaging.",
+    "sources": [
+      "Henze DA, Borhegyi Z, Csicsvari J, Mamiya A, Harris KD, Buzsáki G (2000). Intracellular features predicted by extracellular recordings in the hippocampus in vivo. Journal of Neurophysiology 84(1):390–400 doi:10.1152/jn.2000.84.1.390"
+    ]
+  },
+  {
+    "id": "variances-add",
+    "statement": "In population models of the local field potential, uncorrelated single-cell contributions add in variance (amplitude ∝ √N) whereas correlated contributions add in amplitude (∝ N); with correlated input the population signal stops saturating with population size.",
+    "sources": [
+      "Łęski S, Lindén H, Tetzlaff T, Pettersen KH, Einevoll GT (2013). Frequency dependence of signal power and spatial reach of the local field potential. PLoS Computational Biology 9(7):e1003137 doi:10.1371/journal.pcbi.1003137",
+      "Lindén H, Tetzlaff T, Potjans TC, Pettersen KH, Grün S, Diesmann M, Einevoll GT (2011). Modeling the spatial reach of the LFP. Neuron 72(5):859–872 doi:10.1016/j.neuron.2011.11.006"
+    ]
+  },
+  {
+    "id": "glia-slow",
+    "statement": "Glial membrane-potential changes can contribute to extracellular potentials, but the glial syncytium is thought to contribute only to slow and infraslow (< 0.1 Hz) field patterns.",
+    "sources": [
+      "Buzsáki G, Anastassiou CA, Koch C (2012). The origin of extracellular fields and currents — EEG, ECoG, LFP and spikes. Nature Reviews Neuroscience 13(6):407–420 doi:10.1038/nrn3241"
+    ]
+  },
+  {
+    "id": "sigma-skull",
+    "statement": "Whole-skull conductivity: about 0.015 S/m from in vivo and in vitro measurements (brain:skull ≈ 15:1); meta-analytic weighted mean 0.016 S/m; live skull layers measured at 16–41 mS/m (spongy) and 3–10 mS/m (compact); skull pieces removed at surgery gave 32–80 mS/m.",
+    "sources": [
+      "Oostendorp TF, Delbeke J, Stegeman DF (2000). The conductivity of the human skull: results of in vivo and in vitro measurements. IEEE Transactions on Biomedical Engineering 47(11):1487–1492 doi:10.1109/TBME.2000.880100",
+      "McCann H, Pisano G, Beltrachini L (2019). Variation in reported human head tissue electrical conductivity values. Brain Topography 32(5):825–858 doi:10.1007/s10548-019-00710-2",
+      "Akhtari M, Bryant HC, Mamelak AN, et al. (2002). Conductivities of three-layer live human skull. Brain Topography 14(3):151–167 doi:10.1023/A:1014590923185",
+      "Hoekema R, Wieneke GH, Leijten FSS, et al. (2003). Measurement of the conductivity of skull, temporarily removed during epilepsy surgery. Brain Topography 16(1):29–38 doi:10.1023/A:1025606415858"
+    ]
+  },
+  {
+    "id": "thickness-dura",
+    "statement": "Cranial dura thickness measured at autopsy (skull base, 20 cadavers) averages 0.36 mm (0.27–0.46 mm); convexity dura under the EEG cap may differ, so the value is an order of magnitude.",
+    "sources": [
+      "Fam MD, Potash A, Potash M, et al. (2018). Skull base dural thickness and relationship to demographic features: a cadaveric study and review of the literature. Journal of Neurological Surgery Part B: Skull Base 79(6):614–620 doi:10.1055/s-0038-1651501"
+    ]
+  },
+  {
+    "id": "emg-band",
+    "statement": "Surface EMG from cranial muscles spans about 20–300 Hz (contamination of resting EEG begins at about 20 Hz); muscle artefact at temporal electrodes can reach ~100 µV whereas genuine high-frequency (gamma) neural activity at the scalp can be under 1 µV.",
+    "sources": [
+      "Muthukumaraswamy SD (2013). High-frequency brain activity and muscle artifacts in MEG/EEG: a review and recommendations. Frontiers in Human Neuroscience 7:138 doi:10.3389/fnhum.2013.00138",
+      "Goncharova II, McFarland DJ, Vaughan TM, Wolpaw JR (2003). EMG contamination of EEG: spectral and topographical characteristics. Clinical Neurophysiology 114(9):1580–1593 doi:10.1016/S1388-2457(03)00093-2"
+    ]
+  },
+  {
+    "id": "ads1299",
+    "statement": "The ADS1299 EEG front end specifies 1 µV peak-to-peak input-referred noise (0.14 µV rms at 250 samples/s, gain 24, 65 Hz bandwidth), CMRR of −110 dB minimum at 50/60 Hz, 1000 MΩ DC input impedance, 20 pF input capacitance and 300 pA input bias current.",
+    "sources": [
+      "Texas Instruments (2017). ADS1299-x Low-Noise, 4-, 6-, 8-Channel, 24-Bit, Analog-to-Digital Converter for EEG and Biopotential Measurements (SBAS499C). Datasheet  https://www.ti.com/lit/ds/symlink/ads1299.pdf"
+    ]
+  },
+  {
+    "id": "rosell",
+    "statement": "For gel-coated but otherwise unprepared skin over 1 cm², the 1 Hz skin impedance ranged from 10 kΩ to 1 MΩ across ten sites on ten subjects, falling to ~220 Ω at 100 kHz and ~120 Ω at 1 MHz.",
+    "sources": [
+      "Rosell J, Colominas J, Riu P, Pallas-Areny R, Webster JG (1988). Skin impedance from 1 Hz to 1 MHz. IEEE Transactions on Biomedical Engineering 35(8):649–651 doi:10.1109/10.4599"
+    ]
+  },
+  {
+    "id": "dry-vs-wet-time",
+    "statement": "Dry electrodes start with higher impedance but can become comparable to wet electrodes after a few minutes as sweat accumulates; wet-electrode impedance deteriorated from 5 to 15 kΩ over 5 hours after gel application while dry-electrode impedance stayed constant.",
+    "sources": [
+      "Chi YM, Jung T-P, Cauwenberghs G (2010). Dry-contact and noncontact biopotential electrodes: methodological review. IEEE Reviews in Biomedical Engineering 3:106–119 doi:10.1109/RBME.2010.2084078",
+      "Lopez-Gordo MA, Sanchez-Morillo D, Pelayo Valle F (2014). Dry EEG electrodes. Sensors 14(7):12847–12870 doi:10.3390/s140712847"
+    ]
+  },
+  {
+    "id": "ryynanen",
+    "statement": "In a three-layer spherical head model, electrode arrays up to 256 channels improved inverse cortical-potential estimates only at low realistic noise; the advantage of dense arrays shrinks as noise grows, though at least 64 electrodes is always beneficial. Clinically, source localisation of interictal spikes improved most from 31 to 63 electrodes (9 of 14 patients closer to the lesion), and reached 11 of 14 with 123.",
+    "sources": [
+      "Ryynänen ORM, Hyttinen JAK, Laarne PH, Malmivuo JA (2004). Effect of electrode density and measurement noise on the spatial resolution of cortical potential distribution. IEEE Transactions on Biomedical Engineering 51(9):1547–1554 doi:10.1109/TBME.2004.828036",
+      "Lantz G, Grave de Peralta R, Spinelli L, Seeck M, Michel CM (2003). Epileptic source localization with high density EEG: how many electrodes are needed?. Clinical Neurophysiology 114(1):63–69 doi:10.1016/S1388-2457(02)00337-1"
+    ]
+  },
+  {
+    "id": "kinematics-chance",
+    "statement": "Linear-regression reconstruction of limb kinematics from low-frequency scalp EEG produced positive correlations that were not above the chance level estimated by randomly pairing velocity profiles with EEG.",
+    "sources": [
+      "Antelis JM, Montesano L, Ramos-Murguialday A, Birbaumer N, Minguez J (2013). On the usage of linear regression models to reconstruct limb kinematics from low frequency EEG signals. PLoS ONE 8(4):e61976 doi:10.1371/journal.pone.0061976"
+    ]
+  }
+]

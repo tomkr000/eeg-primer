@@ -1,0 +1,95 @@
+[
+  {
+    "id": "quasistatic",
+    "statement": "At EEG frequencies the head is a purely resistive (quasi-static) volume conductor: for brain tissue with σ ≈ 0.3 S/m and relative permittivity ~10⁵ the ratio of capacitive to ohmic current at 100 Hz is 2πfε/σ ≈ 2×10⁻³, and in vivo cortical impedance is frequency-independent and ohmic.",
+    "sources": [
+      "Hämäläinen M, Hari R, Ilmoniemi RJ, Knuutila J, Lounasmaa OV (1993). Magnetoencephalography—theory, instrumentation, and applications to noninvasive studies of the working human brain. Reviews of Modern Physics 65(2):413–497 doi:10.1103/RevModPhys.65.413",
+      "Logothetis NK, Kayser C, Oeltermann A (2007). In vivo measurement of cortical impedance spectrum in monkeys: implications for signal propagation. Neuron 55(5):809–823 doi:10.1016/j.neuron.2007.07.027",
+      "Malmivuo J, Plonsey R (1995). Bioelectromagnetism: Principles and Applications of Bioelectric and Biomagnetic Fields. Oxford University Press Ch. 7 (quasistatic conditions), Ch. 8 (source–field models, eqs 8.7 and 8.15), Ch. 13 (EEG) https://www.bem.fi/book/",
+      "Plonsey R, Heppner DB (1967). Considerations of quasi-stationarity in electrophysiological systems. Bulletin of Mathematical Biophysics 29(4):657–664 doi:10.1007/BF02476917"
+    ]
+  },
+  {
+    "id": "spike-noise-floor",
+    "statement": "Modern silicon probes (Neuropixels) have a noise floor of about 5 µV rms in the action-potential band (5.5–6.6 µV rms across configurations) and about 9 µV rms in the LFP band.",
+    "sources": [
+      "Jun JJ, Steinmetz NA, Siegle JH, et al. (2017). Fully integrated silicon probes for high-density recording of neural activity. Nature 551(7679):232–236 doi:10.1038/nature24636"
+    ]
+  },
+  {
+    "id": "ephaptic",
+    "statement": "Extracellular fields as weak as 0.74 mV/mm entrain spike timing of cortical neurons in vitro at 1 Hz (minimal causally effective field ~1 mV/mm), and fields of ≤ 0.5 mV/mm modulate slow-oscillation network activity.",
+    "sources": [
+      "Anastassiou CA, Perin R, Markram H, Koch C (2011). Ephaptic coupling of cortical neurons. Nature Neuroscience 14(2):217–223 doi:10.1038/nn.2727",
+      "Fröhlich F, McCormick DA (2010). Endogenous electric fields may guide neocortical network activity. Neuron 67(1):129–143 doi:10.1016/j.neuron.2010.06.005"
+    ]
+  },
+  {
+    "id": "pyramidal-fraction",
+    "statement": "About one in five neocortical neurons is GABAergic (inhibitory) across many areas and species, so roughly 80% are excitatory, mostly pyramidal cells.",
+    "sources": [
+      "Sahara S, Yanagawa Y, O’Leary DDM, Stevens CF (2012). The fraction of cortical GABAergic neurons is constant from near the start of cortical neurogenesis to adulthood. Journal of Neuroscience 32(14):4755–4761 doi:10.1523/JNEUROSCI.6412-11.2012"
+    ]
+  },
+  {
+    "id": "mccann-meta",
+    "statement": "Meta-analysis of reported human head-tissue conductivities (weighted means): scalp 0.41 S/m, whole skull 0.016 S/m (0.02 in the abstract), spongy bone 0.050, compact bone 0.0046, CSF 1.71, grey matter 0.47, white matter 0.22 S/m, brain-to-skull ratio 50.4 (reported range 17.9–290).",
+    "sources": [
+      "McCann H, Pisano G, Beltrachini L (2019). Variation in reported human head tissue electrical conductivity values. Brain Topography 32(5):825–858 doi:10.1007/s10548-019-00710-2"
+    ]
+  },
+  {
+    "id": "thickness-scalp",
+    "statement": "Normal full scalp thickness at the vertex on ultrasound is about 5–6 mm (reported as the normal range in a clinical case report; the classical four-sphere model uses a 6 mm scalp).",
+    "sources": [
+      "Khalil N, Carton J, Fernandez CP, et al. (2024). Lipedematous scalp occurring in two female siblings: further evidence for a genetic basis. Skin Appendage Disorders 10(1):78–82 doi:10.1159/000534698",
+      "Nunez PL, Nunez MD, Srinivasan R (2019). Multi-scale neural sources of EEG: genuine, equivalent, and representative. A tutorial review. Brain Topography 32(2):193–214 doi:10.1007/s10548-019-00701-3"
+    ]
+  },
+  {
+    "id": "ecog-vs-eeg",
+    "statement": "For a single cortical dipole the cortical-to-scalp potential ratio is about 50–100, falling to 2–5 for large synchronous dipole sheets; a textbook gives ~100 µV on the scalp versus 1–2 mV on the brain surface; simultaneous invasive and scalp recordings show invasive signal quality 20 to more than 100 times better; in a 144,000-dipole simulation the standard deviation of potentials falls from 22.8 µV on the cortex to 7.7 µV at the outer dura, 5.2 µV at the outer skull and 4.5 µV on the scalp.",
+    "sources": [
+      "Nunez PL, Nunez MD, Srinivasan R (2019). Multi-scale neural sources of EEG: genuine, equivalent, and representative. A tutorial review. Brain Topography 32(2):193–214 doi:10.1007/s10548-019-00701-3",
+      "Malmivuo J, Plonsey R (1995). Bioelectromagnetism: Principles and Applications of Bioelectric and Biomagnetic Fields. Oxford University Press Ch. 7 (quasistatic conditions), Ch. 8 (source–field models, eqs 8.7 and 8.15), Ch. 13 (EEG) https://www.bem.fi/book/",
+      "Ball T, Kern M, Mutschler I, Aertsen A, Schulze-Bonhage A (2009). Signal quality of simultaneously recorded invasive and non-invasive EEG. NeuroImage 46(3):708–716 doi:10.1016/j.neuroimage.2009.02.028",
+      "Ramon C, Garguilo P, Fridgeirsson EA, Haueisen J (2014). Changes in scalp potentials and spatial smoothing effects of inclusion of dura layer in human head models for EEG simulations. Frontiers in Neuroengineering 7:32 doi:10.3389/fneng.2014.00032"
+    ]
+  },
+  {
+    "id": "potential-divider",
+    "statement": "Differences in electrode impedance or amplifier input impedance convert common-mode voltage into a differential signal (the potential-divider effect): 10 mV common-mode with 20 MΩ input impedance, 20 kΩ electrodes and 50% mismatches gives ~10 µV of mains interference; typical wet electrodes show ~20 kΩ at 50 Hz with ~50% inter-electrode differences.",
+    "sources": [
+      "Metting van Rijn AC, Peper A, Grimbergen CA (1990). High-quality recording of bioelectric events. Part 1: Interference reduction, theory and practice. Medical & Biological Engineering & Computing 28(5):389–397 doi:10.1007/BF02441961"
+    ]
+  },
+  {
+    "id": "chi-table",
+    "statement": "Measured coupling impedances (differential pair on the resting forearm, unabraded skin): wet Ag/AgCl gel electrode ≈ 350 kΩ ∥ 25 nF; dry metal plate ≈ 1.3 MΩ ∥ 12 nF; thin-film insulated electrode ≈ 550 MΩ ∥ 220 pF; non-contact through a cotton shirt ≈ 305 MΩ ∥ 34 pF.",
+    "sources": [
+      "Chi YM, Jung T-P, Cauwenberghs G (2010). Dry-contact and noncontact biopotential electrodes: methodological review. IEEE Reviews in Biomedical Engineering 3:106–119 doi:10.1109/RBME.2010.2084078"
+    ]
+  },
+  {
+    "id": "ferree",
+    "statement": "Modern EEG amplifiers have input impedances of order 200 MΩ ∥ 10 pF; raising scalp-electrode impedance from < 5 kΩ (abraded) to 40 kΩ (intact skin) produced no significant amplitude change in any EEG band, 60 Hz noise rose with impedance and mismatch (not significantly), and by analysis impedances up to 200 kΩ give < 0.1% amplitude error.",
+    "sources": [
+      "Ferree TC, Luu P, Russell GS, Tucker DM (2001). Scalp electrode impedance, infection risk, and EEG data quality. Clinical Neurophysiology 112(3):536–544 doi:10.1016/S1388-2457(00)00533-2"
+    ]
+  },
+  {
+    "id": "spatial-nyquist",
+    "statement": "Characterising the full range of spatial frequencies in scalp EEG (spherical-harmonic degree up to about 7 on a ~9 cm head) requires a minimum of 128 sensors at ~3 cm spacing; 32 or fewer channels is a sparse montage.",
+    "sources": [
+      "Srinivasan R, Tucker DM, Murias M (1998). Estimating the spatial Nyquist of the human EEG. Behavior Research Methods, Instruments, & Computers 30(1):8–19 doi:10.3758/BF03209412"
+    ]
+  },
+  {
+    "id": "itr-ssvep",
+    "statement": "A 40-target steady-state visual evoked potential (SSVEP) speller reached information transfer rates up to 5.32 bits/s (~319 bits/min); a later 40-target speller averaged 325 bits/min cue-guided and 199 bits/min in free spelling. These rates come from stimulus-driven visual responses, not volitional control.",
+    "sources": [
+      "Chen X, Wang Y, Nakanishi M, Gao X, Jung T-P, Gao S (2015). High-speed spelling with a noninvasive brain–computer interface. Proceedings of the National Academy of Sciences USA 112(44):E6058–E6067 doi:10.1073/pnas.1508080112",
+      "Nakanishi M, Wang Y, Chen X, Wang Y-T, Gao X, Jung T-P (2018). Enhancing detection of SSVEPs for a high-speed brain speller using task-related component analysis. IEEE Transactions on Biomedical Engineering 65(1):104–112 doi:10.1109/TBME.2017.2694818"
+    ]
+  }
+]

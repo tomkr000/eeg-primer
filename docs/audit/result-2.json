@@ -1,0 +1,122 @@
+[
+  {
+    "id": "monopole",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Malmivuo & Plonsey 1995, Ch. 8 full text at bem.fi/book/08/08.htm (equation image eq/e0807.gif read directly)"],
+    "evidence_location": "Ch. 8, Section 8.2.1 'Monopole', Eq. 8.7 (preconditions: monopole in fixed location, infinite homogeneous conductor); also Table 8.1. Eq. 8.7 reads Phi = I0/(4*pi*sigma*r).",
+    "quote": "point current source of magnitude I0 lying in a uniform conducting medium of infinite extent and conductivity σ",
+    "discrepancy": "",
+    "suggested_fix": "",
+    "bibliographic_issues": "None. Book is Oxford University Press 1995; eqs 8.7 (monopole) and 8.15 (dipole) are where the batch says they are. Minor: Ch. 7 is titled 'Volume Source and Volume Conductor'; quasistatic conditions are a subsection of it."
+  },
+  {
+    "id": "henze-50um",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Henze et al. 2000 full-text PDF (author-lab copy, buzsakilab.com/content/PDFs/Henze2000JNeurophys.pdf)"],
+    "evidence_location": "Results, text accompanying Fig. 6A ('Extracellular spike amplitude varies as a function of distance from the cell'); Discussion ('the amplitude of the spikes <50 µm from the tetrode is ≥60 µV') and Discussion paragraph citing Fig. 5A for 600 µV units.",
+    "quote": "amplitudes >60 µV could be recorded from a distance ≤50 µm",
+    "discrepancy": "None in the numbers. Dropped nuances: recordings were in urethane-anaesthetized rats (claim says only 'in vivo'); the source says units 'as large as 600 µV' were observed (an example in Fig. 5A), not that the largest units are typically ~600 µV; at >50 µm smaller (<60 µV) spikes were still recognisable but poorly clusterable, and nothing was distinguishable beyond ~140 µm.",
+    "suggested_fix": "In urethane-anaesthetized rat CA1 in vivo, spikes recorded within 50 µm of the soma are ≥60 µV (units as large as ~600 µV were observed; nothing detectable beyond ~140 µm).",
+    "bibliographic_issues": "None. J Neurophysiol 84(1):390-400, 2000; DOI resolves (Europe PMC PMID 10899213)."
+  },
+  {
+    "id": "superposition",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Buzsáki, Anastassiou & Koch 2012 author manuscript (PMC4907333, read via pmc.ncbi.nlm.nih.gov)", "Malmivuo & Plonsey 1995 Ch. 7 and Ch. 8 full text (bem.fi)"],
+    "evidence_location": "Buzsáki 2012, section 'The role of volume conduction in Ve' (sentence 'Multiple current sinks and sources then combine linearly by the superposition principle'); Malmivuo & Plonsey Ch. 7, Section 7.2.1 'Definition of the Preconditions'.",
+    "quote": "all volume conductors are assumed to be linear (consistent with all experimental evidence)",
+    "discrepancy": "None material. Malmivuo & Plonsey say 'assumed to be linear' (claim: 'treated as linear'). Buzsáki's superposition statement is made for an ohmic, homogeneous, isotropic medium.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None. Nat Rev Neurosci 13(6):407-420, 2012 confirmed (PMID 22595786)."
+  },
+  {
+    "id": "tao-area",
+    "verdict": "PARTIAL",
+    "checked_sources": ["Tao et al. 2005 abstract (Europe PMC; full text paywalled)", "Buzsáki et al. 2012 full text (PMC4907333)", "Nunez, Nunez & Srinivasan 2019 — bioRxiv preprint v2 full text (10.1101/391318); Springer page abstract only"],
+    "evidence_location": "Tao 2005 abstract, Methods/Results/Conclusions: 16 surgery candidates, 26 scalp channels, ~600 intracranial spikes; 90% of spikes >10 cm2 and 10% of spikes <10 cm2 produced scalp spikes; <6 cm2 never. Buzsáki 2012 Box 1 (EEG integrates over 'an area of 10 cm2 or more'). Nunez 2019 preprint, section on volume conduction ('6 to 10 cm2 of contiguous tissue ... must be synchronously active').",
+    "quote": "Synchronous or at least temporally overlapping activation of 10-20 cm2 of gyral cortex is common.",
+    "discrepancy": "All numbers (16 patients, <6 cm2 never, 10% of <10 cm2, 90% of >10 cm2, 10-20 cm2) are in the Tao abstract, but the claim drops the hedge 'or at least temporally overlapping' and the source's framing that source area was estimated from the number of contacts showing concurrent depolarization. The two secondary citations do not contain these figures: Buzsáki 2012 only says scalp EEG integrates over 10 cm2 or more and does not cite Tao; Nunez 2019 gives '6 to 10 cm2' as the synchronously active area needed, and '10 to 50 cm2' elsewhere, without the 10%/90% figures. Tao's results are also specific to temporal lobe epilepsy patients with subtemporal scalp electrodes.",
+    "suggested_fix": "…synchronous (or at least temporally overlapping) activation of 10–20 cm2 of gyral cortex was common. Attribute all percentages to Tao et al. 2005 only; cite Nunez 2019 / Buzsáki 2012 separately for the general '6–10 cm2' / '≥10 cm2' rule of thumb.",
+    "bibliographic_issues": "None. Epilepsia 46(5):669-676, 2005 (PMID 15857432); Brain Topogr 32(2):193-214; Nat Rev Neurosci 13(6):407-420 all confirmed."
+  },
+  {
+    "id": "sigma-csf",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Baumann et al. 1997 abstract (Europe PMC; full text paywalled)", "McCann, Pisano & Beltrachini 2019 full text (Europe PMC XML, PMC6708046)"],
+    "evidence_location": "Baumann 1997 abstract (seven patients; 10 Hz-10 kHz; 1.45 S/m at 25 °C, 1.79 S/m at 37 °C, ~23% higher). McCann 2019 abstract and Table of weighted means (CSF row: weighted mean 1.71 S/m, SD 0.298, 43 values, 14 studies, 37 participants); Results section 'Cerebrospinal Fluid (CSF)' restates Baumann's ~1.79 vs ~1.45 S/m.",
+    "quote": "room temperature conductivity was 1.45 S/m, but body temperature conductivity was 1.79 S/m, approximately 23% higher",
+    "discrepancy": "",
+    "suggested_fix": "",
+    "bibliographic_issues": "None. IEEE Trans Biomed Eng 44(3):220-223, 1997 (PMID 9216137); Brain Topogr 32(5):825-858, 2019 (PMC6708046) confirmed."
+  },
+  {
+    "id": "thickness-csf",
+    "verdict": "PARTIAL",
+    "checked_sources": ["Nunez, Nunez & Srinivasan — bioRxiv preprint v2 of the 2019 Brain Topography paper (10.1101/391318), full text; the Springer version shows only the abstract", "Rice et al. 2013 abstract (Europe PMC; full text paywalled)"],
+    "evidence_location": "Nunez preprint, section on modeling scalp potential magnitudes with head models: 'sphere radii are (brain, CSF, skull, scalp) = (8.0, 8.1, 8.6, 9.2 cm)'. Rice 2013 abstract: occipital CSF layer decreases ~30% prone-to-supine; signal power up 'on average 80%' for spatially incoherent high-frequency activity.",
+    "quote": "occipital CSF layer between the brain and skull decreases by approximately 30% in thickness",
+    "discrepancy": "Rice's 80% average increase is stated for 'spatially incoherent HIGH-FREQUENCY activity' (and 'several times for some subjects'); the claim drops 'high-frequency'. Nunez gives the radii 8.0/8.1 cm but never states '1 mm' explicitly (it is inferred) and describes them as 'our simulations', not a 'classical' model. The radii were verified in the preprint, not in the paywalled published version.",
+    "suggested_fix": "…raising occipital EEG power for spatially incoherent high-frequency activity by about 80% on average (several-fold in some subjects). The four-sphere model in Nunez et al. 2019 uses radii 8.0, 8.1, 8.6, 9.2 cm, i.e. a 1 mm CSF layer.",
+    "bibliographic_issues": "None. NeuroImage 64:476-484, 2013 (PMID 23006805); Brain Topogr 32(2):193-214, 2019 confirmed on Springer."
+  },
+  {
+    "id": "eeg-amplitude",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Chi, Jung & Cauwenberghs 2010 full-text PDF (authors' lab copy, isn.ucsd.edu/pub/papers/rbme10.pdf; page images checked for units)", "Malmivuo & Plonsey 1995 Ch. 13 full text (bem.fi)"],
+    "evidence_location": "Chi 2010, Section II.A (p. 107): 'small signal amplitude of ECG (1 mV) and EEG signals (10–100 µV)'. Malmivuo & Plonsey Ch. 13, Section 13.1 Introduction.",
+    "quote": "The amplitude of the EEG is about 100 µV when measured on the scalp",
+    "discrepancy": "The 10–100 µV range comes from Chi 2010 only; Malmivuo & Plonsey give 'about 100 µV' on the scalp (and 1-2 mV on the brain surface), not a range.",
+    "suggested_fix": "Optional: 'of the order of 10–100 µV (Chi et al. 2010; Malmivuo & Plonsey put it at about 100 µV)'.",
+    "bibliographic_issues": "None. IEEE Rev Biomed Eng 3:106-119, 2010 (PMID 22275204) confirmed."
+  },
+  {
+    "id": "cmrr-customary",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Metting van Rijn, Peper & Grimbergen 1990 Part 1 — author manuscript hosted by BioSemi (biosemi.com/publications/artikel3.htm); Springer version paywalled"],
+    "evidence_location": "Introduction ('interference level of 1 - 10 microV,p-p ... is acceptable'; 10 µV p-p 'upper level'); Section 3.1 'Influence of common mode voltage' ('common mode rejection ratio of 80 - 90 dB is customary' for modern differential amplifiers); driven right leg subsection with Fig. 2 ('a reduction between 10 and 50 dB is usually accomplished').",
+    "quote": "a common mode rejection ratio of 80 - 90 dB is customary",
+    "discrepancy": "None. Context dropped: the 1–10 µV p-p figure is qualified as 'less than 1% of the peak-peak value of an ECG', and the CMRR remark refers to 'modern differential amplifiers' as of 1990.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None. Med Biol Eng Comput 28(5):389-397, 1990 (PMID 2277538); DOI 10.1007/BF02441961 resolves."
+  },
+  {
+    "id": "abrasion",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Chi et al. 2010 full-text PDF (isn.ucsd.edu; page 111 image checked for the kΩ unit)", "Ferree et al. 2001 full text (PDF copy at eeginfo.com/research/ElectrodeImpedance.pdf; Elsevier version paywalled)"],
+    "evidence_location": "Chi 2010 Section II.D 'Practical Design Considerations' (p. 111): 'The traditional solution has been to simply abrade the skin to obtain a very low contact resistance (5–10 kΩ)'. Ferree 2001 Introduction ('required procedure was to abrade the skin to achieve a scalp-electrode impedance of less than 5 kΩ') and Methods ('When the Geodesic Sensor Net was applied with saline-sponge electrodes, the scalp-electrode impedances were approximately 10 kΩ').",
+    "quote": "simply abrade the skin to obtain a very low contact resistance (5–10 kΩ)",
+    "discrepancy": "None material. Nuance: Ferree's ~10 kΩ is the as-applied value for the saline-sponge net; higher values (up to 40 kΩ, 'intact skin' in the abstract) were produced by wicking saline away, and lower ones by abrasion. Ferree's '<5 kΩ' convention is asserted without citation.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None. Clin Neurophysiol 112(3):536-544, 2001 (PMID 11222977) confirmed."
+  },
+  {
+    "id": "kappenman",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Kappenman & Luck 2010 full-text PDF (author copy, erpinfo.org/s/Kappenman-2010-Psychophys-Impedance-p398.pdf)"],
+    "evidence_location": "Methods 'Recording' (one hemisphere lowered to <5 kΩ, other left at 'naturally high levels (ranging from 10–190 KΩ)'; BioSemi ActiveTwo active electrodes); Results, Monte Carlo simulations for P3 and Fig. 6A (≈12 trials for the two low-impedance conditions vs ≈35 for high-impedance); Results FFT/N1 section ('noise in the high-impedance recordings was primarily present in relatively low frequencies (<5 Hz)'); Introduction and Abstract on skin potentials and warm/humid conditions.",
+    "quote": "The 80% point was reached for the two low-impedance conditions in approximately 12 trials",
+    "discrepancy": "None. Nuances: the trial counts are total simulated trials (standards + targets) for the P3 target-vs-standard main effect, and ~35 applied to the high-impedance sites in both the cool/dry and warm/humid environments; low-frequency noise could be partly mitigated by high-pass filtering and artifact rejection.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None. Psychophysiology 47(5):888-904, 2010 (PMID 20374541) confirmed."
+  },
+  {
+    "id": "freeman-spectra",
+    "verdict": "SUPPORTED",
+    "checked_sources": ["Freeman et al. 2003 abstract (Europe PMC; full text paywalled)", "Ramon et al. 2009 full text (Europe PMC XML, PMC2749166)"],
+    "evidence_location": "Freeman 2003 abstract: 9 subjects, 64-channel linear array 3 mm apart; PSD(x) peaks 'especially 0.1-0.4 cycles/cm'; Conclusions: optimal spacing 'approximately 1cm'. Ramon 2009 abstract and Discussion: practical Nyquist 3.0 cycles/cm, optimal spacing 'about 3.3 mm', so 3 mm 'may be a good choice'; FEM head model from 51 MR slices.",
+    "quote": "optimal scalp electrode spacing might be approximately 1cm to capture non-local EEG components having the texture of gyri",
+    "discrepancy": "None in the numbers. The 2.5–10 cm wavelengths are the claim's own conversion (not stated in the abstract). Ramon's body text gives the optimal spacing as 'about 3.3 mm' (abstract: 'about 3 mm'). 'A minority view' is the site's characterisation, not from either source. 'Same group' is partly true: Freeman and Holmes are co-authors of both papers.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None. Clin Neurophysiol 114(6):1053-1068, 2003 (PMID 12804674); Brain Topogr 22(3):191-196, 2009 (PMC2749166) confirmed."
+  },
+  {
+    "id": "dof-control",
+    "verdict": "PARTIAL",
+    "checked_sources": ["Wolpaw & McFarland 2004 full-text PDF (authors' institutional copy, neurotechcenter.org)", "McFarland, Sarnacki & Wolpaw 2010 author manuscript (PMC2907523, read via pmc.ncbi.nlm.nih.gov)"],
+    "evidence_location": "Wolpaw 2004 Methods ('Four people...'), Introduction ('noninvasive BCI, using sensorimotor rhythms recorded from the scalp') and Discussion ('people can learn to use scalp-recorded EEG rhythms to control ... a cursor in two dimensions'). McFarland 2010 Methods Section 2 (four adults aged 29-59; 'three or four electrodes over sensorimotor cortex'), Fig. 1 (virtual 3-D cube, eight corner targets), Results after Fig. 5 (93%, 78%, 76%, 56%), Abstract ('three independent signals (one for each dimension)').",
+    "quote": "Users 1–4 reached the target within the time allowed in 93%, 78%, 76%, and 56% of the trials",
+    "discrepancy": "All numbers are supported. The closing clause 'three is the most independent volitional dimensions demonstrated this way' is not in either source: McFarland 2010 only states that such 3-D control 'has not been reported previously' (as of 2010); neither paper makes a claim about the current maximum. Nuances dropped: each dimension's control signal was built from 1–3 electrode–frequency features (Table 1), and the hit percentages depend on a time limit that the manuscript reports inconsistently (7 s in the text vs 15 s in a figure caption).",
+    "suggested_fix": "Replace the final clause with 'this was the first report of three-dimensional EEG control (McFarland et al. 2010)', or support the 'most dimensions demonstrated' statement with a current review.",
+    "bibliographic_issues": "None. PNAS 101(51):17849-17854, 2004 (PMID 15585584); J Neural Eng 7(3):036007, 2010 (PMID 20460690) confirmed."
+  }
+]

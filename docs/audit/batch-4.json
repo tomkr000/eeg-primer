@@ -1,0 +1,98 @@
+[
+  {
+    "id": "sigma-gray",
+    "statement": "Grey-matter conductivity: 0.33 S/m is the classical modelling value (0.3 S/m in Hämäläinen et al.; 0.333 S/m in the Ramon et al. finite-element table); a 2019 meta-analysis of 16 studies gives a weighted mean of 0.47 S/m with reported values from 0.06 to 2.47 S/m.",
+    "sources": [
+      "McCann H, Pisano G, Beltrachini L (2019). Variation in reported human head tissue electrical conductivity values. Brain Topography 32(5):825–858 doi:10.1007/s10548-019-00710-2",
+      "Ramon C, Schimpf PH, Haueisen J (2006). Influence of head models on EEG simulations and inverse source localizations. BioMedical Engineering OnLine 5:10 doi:10.1186/1475-925X-5-10",
+      "Hämäläinen M, Hari R, Ilmoniemi RJ, Knuutila J, Lounasmaa OV (1993). Magnetoencephalography—theory, instrumentation, and applications to noninvasive studies of the working human brain. Reviews of Modern Physics 65(2):413–497 doi:10.1103/RevModPhys.65.413"
+    ]
+  },
+  {
+    "id": "spike-decay",
+    "statement": "Modelled extracellular spike amplitude decays as 1/rⁿ with 1 ≤ n ≤ 2 close to the soma and n ≥ 2 far away, and spikes are low-pass filtered with distance.",
+    "sources": [
+      "Pettersen KH, Einevoll GT (2008). Amplitude variability and extracellular low-pass filtering of neuronal spikes. Biophysical Journal 94(3):784–802 doi:10.1529/biophysj.107.111179"
+    ]
+  },
+  {
+    "id": "open-closed",
+    "statement": "Spatial alignment of neurons and temporal synchrony of their currents are the two most important determinants of extracellular field strength; pyramidal cells with long parallel apical dendrites generate strong dipoles (open fields) whereas spherically symmetric cells tend toward closed fields that cancel at a distance, and populations of stellate cells sum to less than the linear sum of their dipoles.",
+    "sources": [
+      "Buzsáki G, Anastassiou CA, Koch C (2012). The origin of extracellular fields and currents — EEG, ECoG, LFP and spikes. Nature Reviews Neuroscience 13(6):407–420 doi:10.1038/nrn3241",
+      "Murakami S, Okada Y (2006). Contributions of principal neocortical neurons to magnetoencephalography and electroencephalography signals. Journal of Physiology 575(3):925–936 doi:10.1113/jphysiol.2006.105379",
+      "Kirschstein T, Köhling R (2009). What is the source of the EEG?. Clinical EEG and Neuroscience 40(3):146–149 doi:10.1177/155005940904000305"
+    ]
+  },
+  {
+    "id": "ca-spike-moment",
+    "statement": "Dendritic Ca²⁺ spikes are large (10–50 mV) and long-lasting, so their share of extracellular events can be substantial; in models the spike component of a layer-5 pyramidal cell’s dipole reaches 2.97 pA·m versus 0.4–0.9 pA·m for the slow envelope.",
+    "sources": [
+      "Buzsáki G, Anastassiou CA, Koch C (2012). The origin of extracellular fields and currents — EEG, ECoG, LFP and spikes. Nature Reviews Neuroscience 13(6):407–420 doi:10.1038/nrn3241",
+      "Murakami S, Okada Y (2006). Contributions of principal neocortical neurons to magnetoencephalography and electroencephalography signals. Journal of Physiology 575(3):925–936 doi:10.1113/jphysiol.2006.105379"
+    ]
+  },
+  {
+    "id": "skull-brain-ratio",
+    "statement": "The brain-to-skull conductivity ratio of 80 (from Rush & Driscoll 1968) was the commonly used value in source localisation; in vivo estimates give 25 ± 7 (range 18–34) from simultaneous scalp and subdural recordings and 20–50 from electrical impedance tomography; the meta-analytic weighted mean is 50.4.",
+    "sources": [
+      "Lai Y, van Drongelen W, Ding L, et al. (2005). Estimation of in vivo human brain-to-skull conductivity ratio from simultaneous extra- and intra-cranial electrical potential recordings. Clinical Neurophysiology 116(2):456–465 doi:10.1016/j.clinph.2004.08.017",
+      "Gonçalves SI, de Munck JC, Verbunt JPA, Bijma F, Heethaar RM, Lopes da Silva F (2003). In vivo measurement of the brain and skull resistivities using an EIT-based method and realistic models for the head. IEEE Transactions on Biomedical Engineering 50(6):754–767 doi:10.1109/TBME.2003.812164",
+      "Oostendorp TF, Delbeke J, Stegeman DF (2000). The conductivity of the human skull: results of in vivo and in vitro measurements. IEEE Transactions on Biomedical Engineering 47(11):1487–1492 doi:10.1109/TBME.2000.880100",
+      "McCann H, Pisano G, Beltrachini L (2019). Variation in reported human head tissue electrical conductivity values. Brain Topography 32(5):825–858 doi:10.1007/s10548-019-00710-2"
+    ]
+  },
+  {
+    "id": "csf-shunt",
+    "statement": "The highly conductive CSF channels (shunts) current, lowering peak cortical current density; head models that omit the CSF layer misestimate sensitivity volumes by 20–45%.",
+    "sources": [
+      "Wendel K, Narra NG, Hannula M, Kauppinen P, Malmivuo J (2008). The influence of CSF on EEG sensitivity distributions of multilayered head models. IEEE Transactions on Biomedical Engineering 55(4):1454–1456 doi:10.1109/TBME.2007.912427",
+      "Ramon C, Schimpf PH, Haueisen J (2006). Influence of head models on EEG simulations and inverse source localizations. BioMedical Engineering OnLine 5:10 doi:10.1186/1475-925X-5-10"
+    ]
+  },
+  {
+    "id": "emg-topography",
+    "statement": "Frontalis and temporalis EMG has a broad spectrum from 0 to > 200 Hz, peaking at 20–30 Hz frontally and 40–80 Hz temporally; even a 15%-of-maximum contraction produces EMG detectable at the vertex above 12 Hz; contamination is greatest at the periphery of the scalp.",
+    "sources": [
+      "Goncharova II, McFarland DJ, Vaughan TM, Wolpaw JR (2003). EMG contamination of EEG: spectral and topographical characteristics. Clinical Neurophysiology 114(9):1580–1593 doi:10.1016/S1388-2457(03)00093-2"
+    ]
+  },
+  {
+    "id": "thermal-noise",
+    "statement": "Thermal (Johnson–Nyquist) noise of a resistance R at temperature T over bandwidth Δf is v_rms = √(4kTRΔf); for 10 kΩ, 310 K and 100 Hz this is ≈ 0.13 µV rms.",
+    "sources": [
+      "Nyquist H (1928). Thermal agitation of electric charge in conductors. Physical Review 32:110–113 doi:10.1103/PhysRev.32.110"
+    ]
+  },
+  {
+    "id": "area-scaling",
+    "statement": "Contact impedance falls with effective contact area: in a finite-element model of a 1 cm × 1 cm dry electrode the 20 Hz impedance is 17.6 kΩ at full contact and about 60 kΩ when only 25% of the area makes contact, the authors naming skin pores and hair as the reasons a plate’s whole surface is not in contact; electrode noise scales as 1/√area.",
+    "sources": [
+      "Cardu R, Leong PHW, Jin CT, McEwan AL (2012). Electrode contact impedance sensitivity to variations in geometry. Physiological Measurement 33(5):817–830 doi:10.1088/0967-3334/33/5/817",
+      "Huigen E, Peper A, Grimbergen CA (2002). Investigation into the origin of the noise of surface electrodes. Medical & Biological Engineering & Computing 40(3):332–338 doi:10.1007/BF02344216"
+    ]
+  },
+  {
+    "id": "searle",
+    "statement": "In a direct comparison, shielded dry and insulating electrodes picked up 40 dB and 34 dB less interference from non-stationary electric fields than wet electrodes; their motion artefacts were higher than wet electrodes at the start of trials but lower by 8.2 dB and 6.8 dB by the end.",
+    "sources": [
+      "Searle A, Kirkup L (2000). A direct comparison of wet, dry and insulating bioelectric recording electrodes. Physiological Measurement 21(2):271–283 doi:10.1088/0967-3334/21/2/307"
+    ]
+  },
+  {
+    "id": "ica-dipolar",
+    "statement": "Decomposing 71-channel EEG from 13 subjects, the best independent-component algorithm (AMICA) yielded on average 34 of 71 components (48%) with near-dipolar scalp maps.",
+    "sources": [
+      "Delorme A, Palmer J, Onton J, Oostenveld R, Makeig S (2012). Independent EEG sources are dipolar. PLoS ONE 7(2):e30135 doi:10.1371/journal.pone.0030135"
+    ]
+  },
+  {
+    "id": "intracortical",
+    "statement": "For contrast, intracortical interfaces have reached 90 characters/min (handwriting, 94.1% raw accuracy), 62 words/min (speech, 9.1% word error on a 50-word vocabulary) and grid-task throughputs of 1.4–4.2 bits/s across three participants.",
+    "sources": [
+      "Willett FR, Avansino DT, Hochberg LR, Henderson JM, Shenoy KV (2021). High-performance brain-to-text communication via handwriting. Nature 593(7858):249–254 doi:10.1038/s41586-021-03506-2",
+      "Willett FR, Kunz EM, Fan C, et al. (2023). A high-performance speech neuroprosthesis. Nature 620(7976):1031–1036 doi:10.1038/s41586-023-06377-x",
+      "Pandarinath C, Nuyujukian P, Blabe CH, et al. (2017). High performance communication by people with paralysis using an intracortical brain–computer interface. eLife 6:e18554 doi:10.7554/eLife.18554"
+    ]
+  }
+]

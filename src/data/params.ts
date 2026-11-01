@@ -34,7 +34,7 @@ export const P = {
 export function claimCite(id: string): string {
   const c = claimById.get(id);
   if (!c) { console.warn(`unknown claim id: ${id}`); return `<sup class="cite cite-missing">[?]</sup>`; }
-  const marker = c.refs.length ? cite(...c.refs) : `<sup class="cite"><a href="#claim-${id}">[assumed]</a></sup>`;
+  const marker = c.refs.length ? cite(...c.refs) : `<sup class="cite"><a href="#claim-${id}">[${c.status === 'derived' ? 'computed' : 'assumed'}]</a></sup>`;
   return `<span class="claim" data-claim="${id}" data-status="${c.status}">${marker}</span>`;
 }
 

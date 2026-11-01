@@ -1,0 +1,50 @@
+[
+  {
+    "id": "fsaverage-bem",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "mne.tools/stable/generated/mne.datasets.fetch_fsaverage.html (MNE 1.13.2 page, raw HTML)",
+      "github.com/mne-tools/mne-python main: mne/datasets/_fsaverage/base.py and manifest bem.txt / root.txt",
+      "mne.tools/stable/generated/mne.make_bem_model.html (raw HTML)",
+      "Fischl et al. 1999 abstract via Europe PMC (PMID 10619420, PMC6873338) + Crossref record",
+      "Gramfort et al. 2014 NeuroImage full text (PMC3930851 via PMC OAI) for the triangle count / layer names"
+    ],
+    "evidence_location": "fetch_fsaverage page: Notes list items 1-3. base.py: docstring Notes + comment block 'Code used to create the BEM' (write_bem_solution('fsaverage/bem/fsaverage-5120-5120-5120-bem-sol.fif')); manifest bem.txt lists fsaverage-fiducials.fif, fsaverage-trans.fif, fsaverage-ico-5-src.fif, fsaverage-vol-5-src.fif, inner_skull.surf, outer_skull.surf, outer_skin.surf, fsaverage-5120-5120-5120-bem.fif/-bem-sol.fif, fsaverage-inner_skull-bem.fif. make_bem_model page: signature 'ico=4, conductivity=(0.3, 0.006, 0.3)', ico parameter '5=20484, 4=5120, 3=1280'. Fischl 1999 abstract. Gramfort 2014 Fig. 5 caption: 'By default, MNE employs 5120 triangles (2562 vertices) on each surface'.",
+    "quote": "1- and 3-layer BEMs (and surfaces) ... Defaults to [0.3, 0.006, 0.3]",
+    "discrepancy": "All numbers check out (file name, 5120, 0.3/0.006/0.3, ico-5 source space, fiducials, trans). Nuances: (1) 'bundled with MNE-Python' is loose - the docs say the files are fetched from a remote zip on first call of mne.datasets.fetch_fsaverage ('the zip file is downloaded'); (2) neither cited doc page names the bem-sol file, the triangle count or the layers - the fetch_fsaverage page only says 'head surface, fiducials, head<->MRI trans, 1- and 3-layer BEMs (and surfaces)' and the make_bem_model page says 'shells', '4=5120' without the word 'triangles' and gives no S/m unit (the brain/skull/scalp mapping and '5120 triangles' are stated in Gramfort et al. 2014, cited under the next claim); the file name is only in the GitHub source/manifest; (3) the manifest ships one ico-5 surface source space (both hemispheres in one file) plus a volume source space, so 'icosahedral cortical source spaces' is fine but singular file.",
+    "suggested_fix": "'...available for MNE-Python through mne.datasets.fetch_fsaverage (downloaded on first use), together with a three-layer BEM (inner skull, outer skull, scalp; ico-4 surfaces, 5120 triangles each; fsaverage-5120-5120-5120-bem-sol.fif), fiducials, a head-MRI transform and an ico-5 cortical source space; mne.make_bem_model defaults to conductivity=(0.3, 0.006, 0.3) S/m, i.e. brain/scalp 0.3 and skull 0.006 (Gramfort et al., 2014).' Consider also citing the GitHub file mne/datasets/_fsaverage/base.py for the file list.",
+    "bibliographic_issues": "Fischl et al. 1999 details (Hum Brain Mapp 8(4):272-284, DOI) match Crossref and Europe PMC. MNE doc citations say '2025' but the stable pages are version 1.13.2, 'Last updated 2026-10-28'; add the version number. The parenthetical in the fetch_fsaverage citation ('BEM surfaces, bem-sol, source spaces') is not text found on that page."
+  },
+  {
+    "id": "mne-bem",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Gramfort et al. 2013 Frontiers in Neuroscience full text (Europe PMC PMC3872725 XML)",
+      "Gramfort et al. 2014 NeuroImage author manuscript full text (PMC3930851 via PMC OAI-PMH)",
+      "Hämäläinen & Sarvas 1989 abstract (Europe PMC PMID 2917762) + Crossref",
+      "Mosher, Leahy & Lewis 1999 abstract (Europe PMC PMID 10097460) + Crossref"
+    ],
+    "evidence_location": "Gramfort 2014, Section 3.2 (forward modeling), BEM paragraph and Fig. 5 caption: 'MNE supports single- and three-compartment BEMs; the latter has to be employed when EEG data are present (Hämäläinen and Sarvas, 1989)'; 'MNE implements the BEM using the linear collocation method (Mosher et al., 1999) with the isolated skull approach (Hämäläinen and Sarvas, 1989)'; default conductivities 0.3/0.006/0.3 S/m; 5120 triangles per surface. Gramfort 2013: the only BEM mention is in the Introduction, about other packages depending on OpenMEEG 'for boundary element method (BEM) forward modeling'; no description of MNE's own forward solver. Mosher 1999 abstract: 'unified treatment of analytical and numerical solutions of the forward problem'. H&S 1989 abstract: realistically-shaped multilayer model, novel handling of the poorly conducting skull.",
+    "quote": "MNE implements the BEM using the linear collocation method (Mosher et al., 1999) with the isolated skull approach",
+    "discrepancy": "Attribution nuance: the 2014 paper credits the linear collocation method to Mosher et al. (1999) and credits Hämäläinen & Sarvas (1989) for the isolated-skull approach and for the requirement of a three-compartment model when EEG is present - not for the linear-collocation BEM itself, as 'in the tradition of Hämäläinen & Sarvas (1989)' implies. The 2013 Frontiers paper does not support any part of the statement (it does not describe BEM forward computation in MNE-Python). Minor: the 2014 paper describes 'MNE' (the suite; the Python BEM solver mne.make_bem_model/make_bem_solution arrived in v0.10) and uses 'forward operator/gain matrix' rather than 'lead field'; 'multi-layer' = single- or three-compartment only.",
+    "suggested_fix": "'MNE-Python computes EEG forward solutions for single- or three-compartment boundary-element models using the linear collocation method (Mosher et al., 1999) combined with the isolated-skull approach of Hämäläinen & Sarvas (1989) (Gramfort et al., 2014); Mosher, Leahy & Lewis (1999) give the general EEG/MEG forward formulation.' Drop or demote the 2013 Frontiers citation for this claim.",
+    "bibliographic_issues": "All four references match Crossref/Europe PMC: Front Neurosci 2013;7:267 (article number, no issue); NeuroImage 2014;86:446-460 (8 authors as listed); IEEE TBME 1989;36(2):165-171, DOI 10.1109/10.16463; IEEE TBME 1999;46(3):245-259, DOI 10.1109/10.748978. No mismatches."
+  },
+  {
+    "id": "montages",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Oostenveld & Praamstra 2001 abstract (Europe PMC PMID 11275545) + Crossref",
+      "mne.tools/stable/generated/mne.channels.make_standard_montage.html (MNE 1.13.2, raw HTML) and the 1.12 version of the same page",
+      "mne.tools/stable/generated/mne.channels.get_builtin_montages.html",
+      "mne.tools/stable/changes/v1.13.html (changelog)",
+      "github.com/mne-tools/mne-python mne/channels/montage.py (_BUILTIN_STANDARD_MONTAGES, main and maint/1.13) and mne/channels/_standard_montage_utils.py",
+      "mne.tools/stable/auto_tutorials/intro/40_sensor_locations.html (printed list of built-in montages)"
+    ],
+    "evidence_location": "O&P 2001 abstract: 'based on the extended International 10-20 system which contains 74 electrodes, and extends this system up to 345 electrode locations'; 'Similar to the extension of the 10-20 system to the 10-10 system (\"10% system\"), proposed in 1985, ... this new extension to a 10-5 system'. make_standard_montage page: kind parameter only says 'You can retrieve the names of all built-in montages via mne.channels.get_builtin_montages()'; no montage names on the page (also none on the 1.12 page). MNE 1.13 changelog, 'API changes by deprecation' (#13903) and new features (#13936). montage.py _BUILTIN_STANDARD_MONTAGES: fsaverage_1005/1010/1020, colin27_1005/1020/..., biosemi16/32/64/128/160/256, spherical_1005/1010/1020; make_standard_montage validates kind against this list (no standard_* alias). Tutorial output lists 'biosemi64: BioSemi cap with 64 electrodes (64+3 locations)' etc.",
+    "quote": "Rename standard_1005 and standard_1020 montages to colin27_1005 and colin27_1020, respectively ... extends this system up to 345 electrode locations",
+    "discrepancy": "(1) Attribution: Oostenveld & Praamstra define only the 10-5 ('five percent') system, as an extension of the pre-existing 10-20 and 10-10 (1985) systems; they did not define the 10-20 or 10-10 positions. (2) Montage names are outdated: in MNE-Python 1.13 (the current /stable/ docs) 'standard_1005' and 'standard_1020' were renamed 'colin27_1005' and 'colin27_1020', and new 'fsaverage_1005/1010/1020' and 'spherical_1005/1010/1020' montages were added; make_standard_montage('standard_1005') is no longer an accepted name (names valid in 1.12 and older). biosemi64/128/256 are still correct. (3) The cited doc page lists no montage names at all; the list is produced by get_builtin_montages() (shown in the 'Working with sensor locations' tutorial).",
+    "suggested_fix": "'The 10-5 system of Oostenveld & Praamstra (2001) extends the International 10-20 and 10-10 systems to 345 positions. MNE-Python ships 10-20/10-10/10-5 template montages (fsaverage_1005/1010/1020, colin27_1005/1020, spherical_1005/1010/1020 as of MNE 1.13; standard_1005/standard_1020 in MNE <= 1.12) and the BioSemi 64/128/256 layouts (biosemi64/128/256) via mne.channels.make_standard_montage; see mne.channels.get_builtin_montages().'",
+    "bibliographic_issues": "Oostenveld & Praamstra 2001 details (Clin Neurophysiol 112(4):713-719, DOI 10.1016/S1388-2457(00)00527-7) match Crossref/Europe PMC. The MNE citation's parenthetical '(standard_1005, standard_1020, biosemi64/128/256 and other built-in layouts)' describes content that is not on the cited page, and two of the names are obsolete in the version the /stable/ URL now serves (1.13.2, dated 2026-10-28, not 2025); cite the version or the get_builtin_montages()/tutorial page."
+  }
+]

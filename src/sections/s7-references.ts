@@ -26,7 +26,9 @@ interface, the standard approach ${cite('demunck1993', 'zhang1995', 'nunez2019')
 unit-tested against the closed-form homogeneous sphere (including the factor-of-3 enhancement for a central
 dipole) and checked numerically for interface continuity. Section 4 synthesises a scalp channel from
 published noise magnitudes and spectra; Section 5 uses lumped RC electrode–skin circuits scaled by
-area.</p>
+area. The realistic-head check in Section 6 is precomputed offline (<code>scripts/leadfield_svd.py</code>)
+with MNE-Python’s boundary-element solver on the public fsaverage head ${cite('gramfort2013', 'mnefsaverage')};
+the page ships only the resulting singular values, and a unit test pins the quoted counts to that data.</p>
 <p><strong>What they are not.</strong> Real heads are not spheres: skull thickness and conductivity vary
 by site and age ${cite('mccann2019', 'tang2008')}, cortex is folded, and sources are extended sheets rather
 than points — which is why the cortex-to-scalp ratio ranges from 50–100 for a point dipole to

@@ -1,0 +1,29 @@
+[
+  {
+    "id": "fsaverage-bem",
+    "statement": "FreeSurfer’s fsaverage template (a high-resolution average cortical surface built by spherical intersubject registration) is bundled with MNE-Python together with a three-layer boundary-element head model (inner skull, outer skull, scalp; 5120 triangles per surface, file fsaverage-5120-5120-5120-bem-sol.fif), fiducials, a head–MRI transform and icosahedral cortical source spaces; MNE’s default BEM conductivities are 0.3, 0.006 and 0.3 S/m for brain, skull and scalp.",
+    "sources": [
+      "MNE-Python developers (2025). mne.datasets.fetch_fsaverage — API documentation (fsaverage subject files: BEM surfaces, bem-sol, source spaces). mne.tools  https://mne.tools/stable/generated/mne.datasets.fetch_fsaverage.html",
+      "MNE-Python developers (2025). mne.make_bem_model — API documentation (default conductivity (0.3, 0.006, 0.3) S/m). mne.tools  https://mne.tools/stable/generated/mne.make_bem_model.html",
+      "Fischl B, Sereno MI, Tootell RBH, Dale AM (1999). High-resolution intersubject averaging and a coordinate system for the cortical surface. Human Brain Mapping 8(4):272–284 doi:10.1002/(SICI)1097-0193(1999)8:4<272::AID-HBM10>3.0.CO;2-4"
+    ]
+  },
+  {
+    "id": "mne-bem",
+    "statement": "MNE-Python computes EEG forward solutions (lead fields) for multi-layer boundary-element models with a linear-collocation BEM in the tradition of Hämäläinen & Sarvas (1989); Mosher, Leahy & Lewis (1999) give the general EEG/MEG forward formulation.",
+    "sources": [
+      "Gramfort A, Luessi M, Larson E, Engemann DA, Strohmeier D, Brodbeck C, Goj R, Jas M, Brooks T, Parkkonen L, Hämäläinen M (2013). MEG and EEG data analysis with MNE-Python. Frontiers in Neuroscience 7:267 doi:10.3389/fnins.2013.00267",
+      "Gramfort A, Luessi M, Larson E, Engemann DA, Strohmeier D, Brodbeck C, Parkkonen L, Hämäläinen MS (2014). MNE software for processing MEG and EEG data. NeuroImage 86:446–460 doi:10.1016/j.neuroimage.2013.10.027",
+      "Hämäläinen MS, Sarvas J (1989). Realistic conductivity geometry model of the human head for interpretation of neuromagnetic data. IEEE Transactions on Biomedical Engineering 36(2):165–171 doi:10.1109/10.16463",
+      "Mosher JC, Leahy RM, Lewis PS (1999). EEG and MEG: forward solutions for inverse methods. IEEE Transactions on Biomedical Engineering 46(3):245–259 doi:10.1109/10.748978"
+    ]
+  },
+  {
+    "id": "montages",
+    "statement": "The 10–20, 10–10 and 10–5 electrode positions follow the five-percent electrode system of Oostenveld & Praamstra (2001); MNE-Python ships these and the BioSemi 64/128/256 layouts as standard montages (standard_1020, standard_1005, biosemi64/128/256).",
+    "sources": [
+      "Oostenveld R, Praamstra P (2001). The five percent electrode system for high-resolution EEG and ERP measurements. Clinical Neurophysiology 112(4):713–719 doi:10.1016/S1388-2457(00)00527-7",
+      "MNE-Python developers (2025). mne.channels.make_standard_montage — API documentation (standard_1005, standard_1020, biosemi64/128/256 and other built-in layouts). mne.tools  https://mne.tools/stable/generated/mne.channels.make_standard_montage.html"
+    ]
+  }
+]

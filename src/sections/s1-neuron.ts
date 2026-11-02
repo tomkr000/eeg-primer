@@ -3,7 +3,7 @@ import { controls, readout, slider, fmt } from '../ui/slider';
 import { linePlot, type Series } from '../ui/plot';
 import { glow, drawNeuron, glowLegend, CANVAS_FONT } from '../ui/field';
 import { P, claimCite as c } from '../data/params';
-import { section, figure, prose, readouts } from '../ui/layout';
+import { section, figure, prose, readouts, assumptions } from '../ui/layout';
 
 export function mountNeuron(root: HTMLElement) {
   const sec = section(root, 'neuron', '1', 'How far does one neuron’s signal reach?');
@@ -23,10 +23,9 @@ cannot be picked out of the noise beyond about 140 µm ${c('henze-50um')}${c('he
 synaptic field reaches about as far. At one centimetre a single cell contributes nanovolts, a thousand
 times below anything a scalp amplifier can separate from noise. One cell is invisible from outside.</p>`);
 
-  const sI = slider({ label: 'Net synaptic current into the cell', unit: 'pA', min: 10, max: 10000, value: P.cellCurrentPa, log: true, note: c('cell-current') });
-  const sD = slider({ label: 'Synapse-to-soma distance', unit: 'µm', min: 100, max: 1000, value: P.dipoleLengthUm, step: 10, note: c('dipole-length') });
-  const sSig = slider({ label: 'Grey-matter conductivity σ', unit: 'S/m', min: 0.1, max: 0.6, step: 0.01, value: P.sigmaGray, note: c('sigma-gray') });
+  const sI = slider({ label: 'Net synaptic current into the cell', unit: 'pA', min: 100, max: 5000, value: P.cellCurrentPa, log: true, note: c('cell-current') });
   const sTh = slider({ label: 'Detection threshold (electrode noise)', unit: 'µV', min: 1, max: 50, value: P.spikeNoiseUv, log: true, note: c('spike-noise-floor') });
+  const d = P.dipoleLengthUm * 1e-6, sg = P.sigmaGray;
   const rRadius = readout('Signal drops below threshold within');
   const rAt1cm = readout('Potential 1 cm away');
   const rMoment = readout('Dipole moment p = I·d');
@@ -47,10 +46,15 @@ times below anything a scalp amplifier can separate from noise. One cell is invi
     y: { label: 'Potential (µV)', scale: 'log', domain: [1e-4, 1e4] },
     height: 300,
   });
-  fig.panel.append(controls(sI.el, sD.el, sSig.el, sTh.el), readouts(rRadius.el, rAt1cm.el, rMoment.el));
+  fig.panel.append(controls(sI.el, sTh.el), readouts(rRadius.el, rAt1cm.el, rMoment.el));
+  assumptions(fig.el, [
+    { what: 'Cell geometry', value: `synaptic current enters at the apical tuft and leaves at the cell body ${P.dipoleLengthUm} µm away (a layer-5 pyramidal cell), so the cell is two opposite point sources`, cite: c('dipole-length') + c('monopole') },
+    { what: 'Tissue', value: `uniform grey matter, ${P.sigmaGray} S/m, purely resistive at these frequencies`, cite: c('sigma-gray') + c('quasistatic') },
+    { what: 'Current range', value: 'one synapse passes about 100 to 300 pA; a strongly driven cell a few nanoamps', cite: c('epsc') + c('cell-current') },
+  ]);
 
   function update() {
-    const I = sI.value * 1e-12, d = sD.value * 1e-6, sg = sSig.value, th = sTh.value * 1e-6;
+    const I = sI.value * 1e-12, th = sTh.value * 1e-6;
     const pts: [number, number][] = [], mono: [number, number][] = [], dip: [number, number][] = [];
     for (let k = 0; k <= 160; k++) {
       const r = 1e-5 * Math.pow(1e4, k / 160);
@@ -95,6 +99,6 @@ times below anything a scalp amplifier can separate from noise. One cell is invi
       ctx.restore();
     });
   }
-  [sI, sD, sSig, sTh].forEach((s) => s.onChange(update));
+  [sI, sTh].forEach((s) => s.onChange(update));
   update();
 }

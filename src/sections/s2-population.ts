@@ -3,7 +3,7 @@ import { solveShells, surfacePotential } from '../physics/sphere';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { glow, drawNeuron, glowLegend, CANVAS_FONT } from '../ui/field';
 import { P, claimCite as c, defaultHead } from '../data/params';
-import { section, figure, prose, readouts } from '../ui/layout';
+import { section, figure, prose, readouts, assumptions } from '../ui/layout';
 
 export function mountPopulation(root: HTMLElement) {
   const sec = section(root, 'population', '2', 'Strength in numbers, but only in step');
@@ -33,14 +33,13 @@ hide much. Only coherent, aligned current counts.</p>`);
 
   const sN = slider({ label: 'Neurons in the patch, N', min: 1, max: 1e7, value: 1e4, log: true, format: (v) => fmt(Math.round(v), 3) });
   const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: 0.1, note: c('variances-add') });
-  const sP = slider({ label: 'Dipole moment per cell', unit: 'pA·m', min: 0.05, max: 3, value: P.singleCellMomentPAm, log: true, note: c('single-cell-moment') });
-  const sTh = slider({ label: 'Threshold (dashed circle)', unit: 'µV', min: 0.1, max: 100, value: 10, log: true });
+  const TH_UV = 1; // detection floor drawn as the dashed circle: the noise of a good scalp electrode (section 4)
   const rMoment = readout('Net dipole moment');
-  const rReach = readout('Field above threshold out to (in tissue)');
+  const rReach = readout(`Reach: field above ${TH_UV} µV out to`, c('skin-noise'));
   const rArea = readout('Cortical area of the patch', c('neuron-density') + c('pyramidal-fraction'));
   const rScalp = readout('Peak scalp potential (section 3 head)');
 
-  const fig = figure(sec.fig, 'Left: zoomed in on the patch; each glyph stands for many pyramidal cells and the glow is their summed field, red where positive, blue where negative. Cells firing out of step make a patchwork that cancels; cells in step merge into one large dipole. Right: zoomed out to 6 cm of cortex; the dashed circle is how far the combined field stays above the threshold. Fields are computed for the full three-dimensional patch, in uniform grey matter.');
+  const fig = figure(sec.fig, 'Left: zoomed in on the patch; each glyph stands for many pyramidal cells and the glow is their summed field, red where positive, blue where negative. Cells firing out of step make a patchwork that cancels; cells in step merge into one large dipole. Right: zoomed out to 6 cm of cortex; the dashed circle is the reach of the patch: inside it the field is above 1 µV, the noise floor of a good electrode, so a sensor anywhere inside would register the patch and one outside would not. Fields are computed for the full three-dimensional patch, in uniform grey matter.');
   const row = document.createElement('div');
   row.className = 'viz-row';
   const left = document.createElement('div'), right = document.createElement('div');
@@ -48,15 +47,21 @@ hide much. Only coherent, aligned current counts.</p>`);
   fig.viz.append(row);
   const zoomSpan = 1.6e-3; // ±1.6 mm
   const wideSpan = 30e-3; // ±30 mm
-  const gz = glow(left, { width: 340, height: 400, scale: 2, xRange: [-zoomSpan, zoomSpan], yRange: [-zoomSpan * 1.18, zoomSpan * 1.18], floor: 1e-6, ceiling: 3e-2, grid: { step: 0.5e-3, factor: 1e3, unit: 'mm' } });
+  const gz = glow(left, { width: 340, height: 360, scale: 2, xRange: [-zoomSpan, zoomSpan], yRange: [-zoomSpan * 1.06, zoomSpan * 1.06], floor: 1e-6, ceiling: 3e-2, grid: { step: 0.5e-3, factor: 1e3, unit: 'mm' } });
   const cap1 = document.createElement('div'); cap1.className = 'viz-caption'; cap1.textContent = 'Zoomed in: 3 mm of cortex';
   left.append(cap1);
   glowLegend(left, '1 µV', '30 mV');
-  const gw = glow(right, { width: 340, height: 400, scale: 2, xRange: [-wideSpan, wideSpan], yRange: [-wideSpan * 1.18, wideSpan * 1.18], floor: 1e-7, ceiling: 1e-3, grid: { step: 1e-2, factor: 100, unit: 'cm' } });
+  const gw = glow(right, { width: 340, height: 360, scale: 2, xRange: [-wideSpan, wideSpan], yRange: [-wideSpan * 1.06, wideSpan * 1.06], floor: 1e-7, ceiling: 1e-3, grid: { step: 1e-2, factor: 100, unit: 'cm' } });
   const cap2 = document.createElement('div'); cap2.className = 'viz-caption'; cap2.textContent = 'Zoomed out: 6 cm of cortex';
   right.append(cap2);
-  glowLegend(right, '0.1 µV', '1 mV', 'dashed circle = reach of the field above the threshold');
-  fig.panel.append(controls(sN.el, sF.el, sP.el, sTh.el), readouts(rMoment.el, rReach.el, rArea.el, rScalp.el));
+  glowLegend(right, '0.1 µV', '1 mV', 'dashed circle = reach (field above 1 µV, detectable inside)');
+  fig.panel.append(controls(sN.el, sF.el), readouts(rMoment.el, rReach.el, rArea.el, rScalp.el));
+  assumptions(fig.el, [
+    { what: 'Per-cell source', value: `${P.singleCellMomentPAm} pA·m per cell (a layer-5 pyramidal cell during a burst), all cells aligned normal to the cortex`, cite: c('single-cell-moment') + c('open-closed') },
+    { what: 'Summation', value: 'the synchronous fraction adds coherently (as N); the rest adds as a random walk (as √N) with random phases', cite: c('superposition') + c('variances-add') },
+    { what: 'Reach', value: `distance on the axis at which the net dipole field falls to ${TH_UV} µV in uniform grey matter, the noise floor of a good scalp electrode`, cite: c('dipole') + c('skin-noise') },
+    { what: 'Patch', value: 'a square of cortex sized by the cell density, modelled as 16 × 16 macro-dipoles', cite: c('neuron-density') + c('pyramidal-fraction') },
+  ]);
 
   const head = defaultHead();
   const sol = solveShells(head.shells, head.sourceRadius, 1, 'radial', 120);
@@ -66,7 +71,7 @@ hide much. Only coherent, aligned current counts.</p>`);
   const densityPerM2 = P.neuronsPerMm2 * P.pyramidalFraction * 1e6; // pyramidal cells per m²
 
   function update() {
-    const N = Math.round(sN.value), f = sF.value, p = sP.value * 1e-12, th = sTh.value * 1e-6;
+    const N = Math.round(sN.value), f = sF.value, p = P.singleCellMomentPAm * 1e-12, th = TH_UV * 1e-6;
     const W = Math.sqrt(N / densityPerM2); // side of the square patch, m
     const M = N === 1 ? 1 : 16; // macro-dipoles per side
     const n = N / (M * M); // cells per macro-dipole
@@ -113,12 +118,16 @@ hide much. Only coherent, aligned current counts.</p>`);
       const rp = rx - cx;
       if (rp > 3) {
         ctx.save();
-        ctx.strokeStyle = 'rgba(26,26,26,0.85)'; ctx.lineWidth = 1.2; ctx.setLineDash([5, 4]);
+        ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 5; ctx.setLineDash([8, 6]);
+        ctx.beginPath(); ctx.arc(cx, cy, rp, 0, 2 * Math.PI); ctx.stroke();
+        ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 2.2;
         ctx.beginPath(); ctx.arc(cx, cy, rp, 0, 2 * Math.PI); ctx.stroke();
         ctx.restore();
         const label = reach < 1e-3 ? `${fmt(reach * 1e6, 2)} µm` : reach < 1 ? `${fmt(reach * 1e3, 2)} mm` : `${fmt(reach, 2)} m`;
         const [lx, ly] = toPx(reach * 0.72, reach * 0.72);
-        if (ly > 18 && lx < ctx.canvas.width - 90) ctx.fillText(`reach ${label}`, lx + 4, ly - 4);
+        ctx.font = 'bold 14px system-ui, sans-serif';
+        if (ly > 18 && lx < ctx.canvas.width - 120) ctx.fillText(`reach ${label}`, lx + 6, ly - 6);
+        else ctx.fillText(`reach ${label}`, cx - 50, 24);
       }
     });
     rMoment.set(`${fmt(m * 1e9, 3)} nA·m`);
@@ -127,6 +136,6 @@ hide much. Only coherent, aligned current counts.</p>`);
     rArea.set(areaMm2 < 100 ? `${fmt(areaMm2, 3)} mm²` : `${fmt(areaMm2 / 100, 3)} cm²`);
     rScalp.set(`${fmt(m * scalpPerAm * 1e6, 3)} µV`);
   }
-  [sN, sF, sP, sTh].forEach((s) => s.onChange(update));
+  [sN, sF].forEach((s) => s.onChange(update));
   update();
 }

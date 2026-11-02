@@ -3,7 +3,7 @@ import { controls, readout, slider, fmt } from '../ui/slider';
 import { linePlot } from '../ui/plot';
 import { P, claimCite as c, defaultHead } from '../data/params';
 import { solveShells, surfacePotential } from '../physics/sphere';
-import { section, figure, prose, readouts } from '../ui/layout';
+import { section, figure, prose, readouts, assumptions } from '../ui/layout';
 
 /** Shared defaults so section 5 can reuse the same raw scalp signal. */
 export const RAW_DEFAULTS: NoiseParams = {
@@ -37,11 +37,7 @@ spends waiting.</p>`);
   const sSig = slider({ label: 'Alpha rhythm amplitude', unit: 'µV', min: 1, max: 100, value: RAW_DEFAULTS.signalUv, log: true, note: c('eeg-amplitude') });
   const sEmg = slider({ label: 'Muscle (EMG), 20–300 Hz', unit: 'µV rms', min: 0, max: 100, value: RAW_DEFAULTS.emgUvRms, step: 1, note: c('emg-band') });
   const sBlink = slider({ label: 'Blink amplitude', unit: 'µV', min: 0, max: 300, value: RAW_DEFAULTS.blinkUv, step: 10, note: c('blink-amplitude') });
-  const sBlinkRate = slider({ label: 'Blink rate', unit: '/min', min: 0, max: 30, value: RAW_DEFAULTS.blinksPerMinute, step: 1, note: c('blink-rate') });
-  const sCm = slider({ label: 'Common-mode mains voltage', unit: 'mV', min: 0.1, max: 200, value: 10, log: true, note: c('common-mode') });
-  const sCmrr = slider({ label: 'Amplifier common-mode rejection', unit: 'dB', min: 60, max: 120, value: RAW_DEFAULTS.cmrrDb, step: 1, note: c('cmrr-customary') });
-  const sImb = slider({ label: 'Impedance imbalance ΔZ / Z<sub>in</sub>', min: 1e-6, max: 1e-2, value: RAW_DEFAULTS.imbalanceRatio, log: true, format: (v) => `1 in ${fmt(1 / v, 2)}`, note: c('potential-divider') });
-  const sAmp = slider({ label: 'Amplifier input noise', unit: 'µV rms', min: 0.1, max: 5, value: RAW_DEFAULTS.ampUvRms, log: true, note: c('ads1299') });
+  const sCm = slider({ label: 'Common-mode mains voltage on the body', unit: 'mV', min: 1, max: 300, value: 10, log: true, note: c('common-mode') });
   const sSkin = slider({ label: 'Electrode–skin noise (1/f)', unit: 'µV rms', min: 0, max: 20, value: RAW_DEFAULTS.skinUvRms, step: 0.5, note: c('skin-noise') });
   const rSnr = readout('Signal-to-noise ratio (alpha vs the rest)');
   const rMains = readout('Mains residual after rejection and divider');
@@ -54,13 +50,19 @@ spends waiting.</p>`);
 
   const fig = figure(sec.fig, 'Four seconds of a synthetic scalp channel: the 10 Hz alpha rhythm alone (blue) and the same rhythm buried in muscle, mains, skin and amplifier noise (orange). The large deflections marked are eye blinks. This is the raw signal at the scalp: whatever the electrode type, this is what it is trying to pick up.');
   const plot = linePlot(fig.viz, { x: { label: 'Time (s)', domain: [0, 4] }, y: { label: 'Potential (µV)' }, height: 360 });
-  fig.panel.append(controls(sSig.el, sEmg.el, sBlink.el, sBlinkRate.el, sCm.el, sCmrr.el, sImb.el, sAmp.el, sSkin.el));
+  fig.panel.append(controls(sSig.el, sEmg.el, sBlink.el, sCm.el, sSkin.el));
   fig.viz.append(readouts(rSnr.el, rMains.el, rRms.el, rSource.el, rCells.el));
+  assumptions(fig.el, [
+    { what: 'Blinks', value: `${RAW_DEFAULTS.blinksPerMinute} per minute, 160 ms wide`, cite: c('blink-rate') },
+    { what: 'Mains rejection', value: `the amplifier rejects common-mode voltage by ${RAW_DEFAULTS.cmrrDb} dB, and an impedance imbalance of 1 in ${fmt(1 / RAW_DEFAULTS.imbalanceRatio, 2)} between the two electrodes converts a further fraction into signal (potential-divider effect)`, cite: c('cmrr-customary') + c('potential-divider') },
+    { what: 'Amplifier noise', value: `${RAW_DEFAULTS.ampUvRms} µV rms, white`, cite: c('ads1299') },
+    { what: 'Spectra', value: 'muscle noise band-limited to 20–300 Hz; skin noise with a 1/f spectrum; alpha a pure 10 Hz sine', cite: c('emg-band') + c('skin-noise') },
+  ]);
 
   function update() {
     const s = synthesize({
-      ...RAW_DEFAULTS, signalUv: sSig.value, emgUvRms: sEmg.value, blinkUv: sBlink.value, blinksPerMinute: sBlinkRate.value,
-      mainsUvcm: sCm.value * 1e3, cmrrDb: sCmrr.value, imbalanceRatio: sImb.value, ampUvRms: sAmp.value, skinUvRms: sSkin.value,
+      ...RAW_DEFAULTS, signalUv: sSig.value, emgUvRms: sEmg.value, blinkUv: sBlink.value,
+      mainsUvcm: sCm.value * 1e3, skinUvRms: sSkin.value,
     });
     const toPts = (a: Float64Array) => Array.from(a, (v, i) => [s.t[i], v] as [number, number]);
     plot.update([
@@ -71,9 +73,9 @@ spends waiting.</p>`);
     const moment = sSig.value / scalpUvPerNam; // nA·m
     rSource.set(`${fmt(moment, 3)} nA·m`);
     rCells.set(`${fmt(moment / (P.singleCellMomentPAm * 1e-3), 2)}`);
-    rMains.set(`${fmt(sCm.value * 1e3 * (Math.pow(10, -sCmrr.value / 20) + sImb.value), 3)} µV`);
+    rMains.set(`${fmt(sCm.value * 1e3 * (Math.pow(10, -RAW_DEFAULTS.cmrrDb / 20) + RAW_DEFAULTS.imbalanceRatio), 3)} µV`);
     rRms.set(`${fmt(Math.sqrt(s.total.reduce((a, v) => a + v * v, 0) / s.total.length), 3)} µV`);
   }
-  [sSig, sEmg, sBlink, sBlinkRate, sCm, sCmrr, sImb, sAmp, sSkin].forEach((s) => s.onChange(update));
+  [sSig, sEmg, sBlink, sCm, sSkin].forEach((s) => s.onChange(update));
   update();
 }

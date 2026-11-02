@@ -17,20 +17,8 @@
   --text-secondary: var(--ink-2);
   --panel-w: 380px;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    --page: #121211;
-    --surface-1: #1a1a19;
-    --ink: #f0efec;
-    --ink-2: #c3c2b7;
-    --ink-3: #898781;
-    --rule: #33332f;
-    --grid: #2c2c2a;
-    --accent: #3987e5;
-    --accent-2: #d95926;
-  }
-}
+/* The site is always light: the figures draw with fixed colours (white neuron glyphs, dark contours and
+   grid numbers) that are designed for the light surfaces, so no dark scheme is offered. */
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }

@@ -34,12 +34,12 @@ times below anything a scalp amplifier can separate from noise. One cell is invi
   const row = document.createElement('div');
   row.className = 'viz-row';
   const left = document.createElement('div');
-  left.style.flex = '0 1 340px';
+  left.style.flex = '0 0 380px';
   const right = document.createElement('div');
   row.append(left, right);
   fig.viz.append(row);
   const span = 0.8e-3; // ±0.8 mm
-  const g = glow(left, { width: 340, height: 420, xRange: [-span, span], yRange: [-span * 1.25, span * 1.25], floor: 3e-8, ceiling: 3e-5, gamma: 1, grid: { step: 0.25e-3, factor: 1e3, unit: 'mm' } });
+  const g = glow(left, { width: 380, height: 420, xRange: [-span, span], yRange: [-span * 1.105, span * 1.105], floor: 3e-8, ceiling: 3e-5, gamma: 1, grid: { step: 0.25e-3, factor: 1e3, unit: 'mm' } });
   glowLegend(left, '0.03 µV', '30 µV', 'dashed circles = the detection threshold (detectable inside)');
   const plot = linePlot(right, {
     x: { label: 'Distance from the nearer pole (m)', scale: 'log', domain: [1e-5, 0.1] },
@@ -94,8 +94,9 @@ times below anything a scalp amplifier can separate from noise. One cell is invi
       ctx.font = CANVAS_FONT;
       ctx.fillStyle = '#1a1a1a';
       const [tx, ty] = toPx(0, d / 2), [sx, sy] = toPx(0, -d / 2);
-      ctx.fillText('synapse (current in)', tx + 38, ty - 10);
-      ctx.fillText('cell body (current out)', sx + 30, sy + 5);
+      ctx.font = '13px system-ui, sans-serif';
+      ctx.fillText('synapse (current in)', tx + 36, ty - 10);
+      ctx.fillText('cell body (current out)', sx + 28, sy + 5);
       ctx.restore();
     });
   }

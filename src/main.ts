@@ -6,6 +6,7 @@ import { mountNoise } from './sections/s4-noise';
 import { mountElectrodes } from './sections/s5-electrodes';
 import { mountDimensionality } from './sections/s6-dimensionality';
 import { mountMethod, mountReferences, mountVerification } from './sections/s7-references';
+import { inDepth } from './ui/layout';
 import { claimById } from './data/claims';
 
 const app = document.getElementById('app')!;
@@ -14,24 +15,30 @@ const hero = document.createElement('header');
 hero.className = 'hero';
 hero.innerHTML = `
   <p class="kicker">An interactive, cited walk through the physics</p>
-  <h1>Through the skull, dimly</h1>
-  <p class="standfirst">Scalp electroencephalography (EEG) listens to the brain from the far side of a
+  <h1>EEG primer: an in-depth look at the physics of non-invasive BCI</h1>`;
+const standfirst = document.createElement('div');
+standfirst.className = 'standfirst';
+standfirst.innerHTML = `<p>Scalp electroencephalography (EEG) listens to the brain from the far side of a
   resistive bone, through fluid that shorts the signal sideways and skin that adds noise of its own. Six
   models with sliders show why one neuron is invisible from outside, what it takes for a population to be
   seen, how much the head attenuates and blurs, how noise and electrodes intervene, and how many independent
-  signals a brain\u2013machine interface (BMI) can hope to extract. Every number carries a citation, and every
-  citation was checked by an independent auditor (see the verification log).</p>
-  <nav class="toc" aria-label="Sections">
-    <a href="#neuron"><b>1</b> How far does one neuron\u2019s signal reach?</a>
-    <a href="#population"><b>2</b> Strength in numbers, but only in step</a>
-    <a href="#head"><b>3</b> Out through CSF, dura, skull and scalp</a>
-    <a href="#noise"><b>4</b> Noise from outside the skull</a>
-    <a href="#electrodes"><b>5</b> What the electrode actually touches</a>
+  signals a non-invasive brain\u2013computer interface (BCI) can hope to extract. Every number carries a
+  citation, and every citation was checked by an independent auditor (see the verification log).</p>`;
+hero.append(inDepth(standfirst));
+const toc = document.createElement('nav');
+toc.className = 'toc';
+toc.setAttribute('aria-label', 'Sections');
+toc.innerHTML = `
+    <a href="#neuron"><b>1</b> Neurons make very small electric fields</a>
+    <a href="#population"><b>2</b> Many neurons must fire synchronously to create larger signal</a>
+    <a href="#head"><b>3</b> Only large, multi-neuron signals reach outside the skull</a>
+    <a href="#noise"><b>4</b> The signal that gets outside the skull is noisy</a>
+    <a href="#electrodes"><b>5</b> Different electrode types result in different signals</a>
     <a href="#dimensionality"><b>6</b> How many independent signals can EEG carry?</a>
     <a href="#method">Method and caveats</a>
     <a href="#verification">Verification log</a>
-    <a href="#references">References</a>
-  </nav>`;
+    <a href="#references">References</a>`;
+hero.append(toc);
 app.append(hero);
 
 const main = document.createElement('main');

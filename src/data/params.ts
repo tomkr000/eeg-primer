@@ -19,12 +19,15 @@ export const P = {
   brainRadiusM: 0.08, // 'brain-radius'
   cellCurrentPa: 1000, // net current of one cell during a burst ≈ moment / length ('single-cell-moment', 'dipole-length'); a single synapse ~100 pA ('epsc')
   dipoleLengthUm: 500, // 'dipole-length'
+  somaDepthMm: 1.6, // depth of a layer-5 cell body below the cortical surface, 'cortex-layers'
+  corticalThicknessMm: 2.5, // 'cortex-layers'
   spikeNoiseUv: 5, // 'spike-noise-floor'
   singleCellMomentPAm: 0.5, // 'single-cell-moment'
   singleCellMomentRange: [0.41, 0.9] as [number, number],
   cellsFor10nAm: [10000, 50000] as [number, number], // 'cells-for-10nam'
-  patchDefaultN: 1e5, // default patch size shared by sections 2 and 3
-  patchDefaultSync: 0.1, // default synchronous fraction shared by sections 2 and 3
+  patchDefaultN: 2e5, // default patch size shared by sections 2 to 4: with a tenth in step it is the typical 10 nA·m source
+  patchDefaultSync: 0.1, // default synchronous fraction shared by sections 2 to 4
+  patchMaxN: 2e6, // top of the N sliders: about 17 mm² of cortex; with every cell in step a 1 µA·m seizure-sized source
   neuronsPerMm2: 147000, // 'neuron-density'
   pyramidalFraction: 0.8, // 'pyramidal-fraction'
   /** measured extracellular spike amplitude: ≥ 60 µV within 50 µm of the soma (Henze 2000) */

@@ -1,22 +1,22 @@
 import { CLAIMS } from '../data/claims';
 import { REFERENCES } from '../data/references';
 import { cite, formatReference } from '../ui/cite';
-import { prose } from '../ui/layout';
+import { prose, inDepth } from '../ui/layout';
 
-function plainSection(root: HTMLElement, id: string, title: string): HTMLElement {
+function plainSection(root: HTMLElement, id: string, title: string, collapsed = false): HTMLElement {
   const el = document.createElement('section');
   el.id = id;
   el.className = 'section section-plain';
   el.innerHTML = `<header class="section-head"><h2>${title}</h2></header>`;
   const body = document.createElement('div');
   body.className = 'section-body-plain';
-  el.append(body);
+  el.append(collapsed ? inDepth(body) : body);
   root.append(el);
   return body;
 }
 
 export function mountMethod(root: HTMLElement) {
-  const body = plainSection(root, 'method', 'Method and caveats');
+  const body = plainSection(root, 'method', 'Method and caveats', true);
   prose(body, `
 <p><strong>The models.</strong> Sections 1 and 2 use the quasi-static point-source and dipole formulas in a
 uniform conductor ${cite('malmivuo1995')}. Section 3 solves the concentric-sphere head analytically

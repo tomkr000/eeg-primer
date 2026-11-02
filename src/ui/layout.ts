@@ -1,6 +1,6 @@
 export interface Section {
   el: HTMLElement;
-  /** two-column prose above the figure */
+  /** two-column prose, collapsed under an "In depth" toggle between the title and the figure */
   text: HTMLElement;
   /** full-width figure area below the prose */
   fig: HTMLElement;
@@ -17,9 +17,19 @@ export function section(root: HTMLElement, id: string, number: string, title: st
   text.className = 'section-text';
   const fig = document.createElement('div');
   fig.className = 'section-fig';
-  el.append(header, text, fig);
+  el.append(header, inDepth(text), fig);
   root.append(el);
   return { el, text, fig };
+}
+
+/** Collapsible wrapper for the long-form text. */
+export function inDepth(content: HTMLElement): HTMLElement {
+  const d = document.createElement('details');
+  d.className = 'in-depth';
+  const s = document.createElement('summary');
+  s.textContent = 'In depth';
+  d.append(s, content);
+  return d;
 }
 
 export function prose(target: HTMLElement, html: string): void {

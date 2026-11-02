@@ -30,6 +30,8 @@ export interface PlotCfg {
   height?: number;
   /** shaded x-band regions */
   bands?: { from: number; to: number; label: string; color: string }[];
+  /** draw the legend inside the plot area (top left) instead of below it */
+  legendInside?: boolean;
 }
 
 export interface Plot {
@@ -55,7 +57,8 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
   const gHover = svg.append('g').style('display', 'none');
   const hoverLine = gHover.append('line').attr('class', 'crosshair');
   const tip = root.append('div').attr('class', 'tooltip').style('display', 'none');
-  const legend = root.append('div').attr('class', 'legend');
+  const legend = root.append('div').attr('class', 'legend' + (cfg.legendInside ? ' legend-inside' : ''));
+  if (cfg.legendInside) legend.style('left', `${MARGIN.left + 10}px`).style('top', `${MARGIN.top + 6}px`);
   const overlay = svg.append('rect').attr('fill', 'transparent');
 
   let series: Series[] = [], markers: Marker[] = [], bands = cfg.bands ?? [];

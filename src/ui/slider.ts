@@ -11,6 +11,8 @@ export interface SliderOpts {
   format?: (v: number) => string;
   /** HTML appended after the label (e.g. citation markers) */
   note?: string;
+  /** reference points drawn as carets under the track, e.g. the typical value */
+  marks?: { value: number; label: string }[];
 }
 
 export interface Slider {
@@ -41,16 +43,33 @@ export function fmtSI(v: number, unit: string, digits = 3): string {
 export function slider(o: SliderOpts): Slider {
   const el = document.createElement('label');
   el.className = 'slider';
-  const head = document.createElement('div');
-  head.className = 'slider-head';
-  const name = document.createElement('span');
+  const name = document.createElement('div');
   name.className = 'slider-label';
   name.innerHTML = o.label + (o.note ? ' ' + o.note : '');
   const out = document.createElement('output');
-  head.append(name, out);
   const input = document.createElement('input');
   input.type = 'range';
   const toPos = (v: number) => (o.log ? Math.log(v / o.min) / Math.log(o.max / o.min) : (v - o.min) / (o.max - o.min));
+  const marks = document.createElement('div');
+  marks.className = 'slider-marks';
+  // labels that would collide (estimated at ~6.5 px per character in a 175 px column) drop to a second row
+  const placed: { lo: number; hi: number; row: number }[] = [];
+  const EST_W = 175;
+  for (const m of [...(o.marks ?? [])].sort((a, b) => toPos(a.value) - toPos(b.value))) {
+    const frac = Math.min(1, Math.max(0, toPos(m.value)));
+    const align = frac > 0.72 ? 'end' : frac < 0.28 ? 'start' : 'centre';
+    const w = m.label.length * 6.5, px = 8 + frac * (EST_W - 16);
+    const lo = align === 'start' ? px : align === 'end' ? px - w : px - w / 2, hi = lo + w;
+    let row = 0;
+    while (placed.some((p) => p.row === row && lo < p.hi + 6 && hi > p.lo - 6)) row++;
+    placed.push({ lo, hi, row });
+    const mk = document.createElement('span');
+    mk.className = 'slider-mark' + (align === 'end' ? ' mark-end' : align === 'start' ? ' mark-start' : '');
+    mk.style.left = `calc(8px + ${frac} * (100% - 16px))`;
+    if (row) { mk.style.top = `${row * 15}px`; marks.style.height = `${26 + row * 15}px`; }
+    mk.innerHTML = `<i></i>${m.label}`;
+    marks.append(mk);
+  }
   const fromPos = (p: number) => (o.log ? o.min * Math.pow(o.max / o.min, p) : o.min + p * (o.max - o.min));
   input.min = '0';
   input.max = '1000';
@@ -68,7 +87,8 @@ export function slider(o: SliderOpts): Slider {
     render();
     listeners.forEach((f) => f(value));
   });
-  el.append(head, input);
+  el.append(name, out, input);
+  if (o.marks?.length) el.append(marks);
   render();
   return {
     el,

@@ -18,6 +18,19 @@ type Kind = 'abraded' | 'wet' | 'dry' | 'gap';
 const KINDS: Kind[] = ['abraded', 'wet', 'dry', 'gap'];
 const NAMES: Record<Kind, string> = { abraded: 'Wet gel, abraded skin', wet: 'Wet gel, unprepared skin', dry: 'Dry metal plate', gap: 'Dry plate over hair (gap)' };
 const COLOURS: Record<Kind, string> = { abraded: '#1baf7a', wet: '#2a78d6', dry: '#eb6834', gap: '#6250d6' };
+const SUBS: Record<Kind, string> = { abraded: 'Yes, literally abraded skin', wet: 'the clinical standard', dry: 'most consumer headsets', gap: 'a plate resting on hair' };
+
+/** Small schematic icons (44 × 44): skin at the bottom, the electrode above it. */
+const skin = (scratched = false) => `<rect x="2" y="32" width="40" height="10" fill="#f0c9a6" stroke="#1a1a1a" stroke-width="1"/>${scratched ? '<path d="M8,32 l3,3 M15,32 l3,3 M22,32 l3,3 M29,32 l3,3 M36,32 l3,3" stroke="#b5542a" stroke-width="1.2"/>' : '<rect x="2" y="32" width="40" height="2.5" fill="#d9b48f"/>'}`;
+const cup = (y: number) => `<path d="M11,${y} h22 v8 q0,6 -6,6 h-10 q-6,0 -6,-6 z" fill="#c3c2b7" stroke="#1a1a1a" stroke-width="1.2"/><rect x="20" y="${y - 7}" width="4" height="7" fill="#c3c2b7" stroke="#1a1a1a" stroke-width="1"/>`;
+const ICONS: Record<Kind, string> = {
+  abraded: `${skin(true)}${cup(12)}<path d="M14,24 q8,9 16,0 v8 h-16 z" fill="#2a78d6" opacity="0.75"/>`,
+  wet: `${skin(false)}${cup(12)}<path d="M14,24 q8,9 16,0 v8 h-16 z" fill="#2a78d6" opacity="0.75"/>`,
+  dry: `${skin(false)}<rect x="9" y="25" width="26" height="7" fill="#c3c2b7" stroke="#1a1a1a" stroke-width="1.2"/><rect x="20" y="18" width="4" height="7" fill="#c3c2b7" stroke="#1a1a1a" stroke-width="1"/>`,
+  gap: `${skin(false)}<path d="M7,32 l1,-11 M13,32 l-1,-12 M19,32 l1,-11 M25,32 l-1,-12 M31,32 l1,-11 M37,32 l-1,-12" stroke="#52514e" stroke-width="1.2"/><rect x="9" y="12" width="26" height="7" fill="#c3c2b7" stroke="#1a1a1a" stroke-width="1.2"/><rect x="20" y="5" width="4" height="7" fill="#c3c2b7" stroke="#1a1a1a" stroke-width="1"/>`,
+};
+/** The head of section 3 in miniature, with an arrow at the scalp. */
+const HEAD_ICON = `<path d="M4,40 A20,20 0 0 1 40,40" fill="#fde1df" stroke="#1a1a1a" stroke-width="1.2"/><path d="M8,40 A16,16 0 0 1 36,40" fill="#e8e7e1" stroke="#898781" stroke-width="1"/><path d="M12,40 A12,12 0 0 1 32,40" fill="#dbe8f7" stroke="#898781" stroke-width="1"/><circle cx="22" cy="31" r="2" fill="#1a1a1a"/><path d="M22,4 L22,17" stroke="#d03b3b" stroke-width="2"/><path d="M18,13 L22,19 L26,13 z" fill="#d03b3b"/>`;
 /** electrode–skin noise, µV rms, by contact type (claim 'electrode-noise-levels') */
 const SKIN_NOISE: Record<Kind, number> = { abraded: 1.5, wet: 4, dry: 8, gap: 8 };
 
@@ -38,7 +51,7 @@ function pink(n: number, rms: number, seed: number): Float64Array {
 }
 
 export function mountElectrodes(root: HTMLElement) {
-  const sec = section(root, 'electrodes', '5', 'What the electrode actually touches');
+  const sec = section(root, 'electrodes', '5', 'Different electrode types result in different signals');
   prose(sec.text, `
 <p>An electrode measures what is left of the scalp potential after a voltage divider: the contact has an
 impedance Z<sub>e</sub>, the amplifier input has Z<sub>in</sub>, and the amplifier sees
@@ -67,8 +80,8 @@ per finger ${c('fingered')}.</p>`);
   const sRin = slider({ label: 'Amplifier input resistance', min: 1e7, max: 1e13, value: 1e9, log: true, format: (v) => fmtSI(v, 'Ω', 2), note: c('ads1299') });
   const C_IN_PF = 20, V_CM_MV = RAW_DEFAULTS.mainsUvcm / 1e3, I_NOISE_FA = 1; // fixed amplifier and mains values (assumptions table)
 
-  const fig = figure(sec.fig, 'Two seconds of the raw scalp signal of section 4, in a stretch without a blink (top strip), and what reaches the amplifier through each electrode type: the signal after the impedance divider, plus the contact’s own skin noise, mains pickup from a 50% mismatch between the two electrodes, and the amplifier’s current noise flowing through the contact impedance. Each strip is drawn to its own scale (written at the left) so the shape stays visible; the table gives the contact impedance, the fraction of the signal kept, the noise added and the resulting signal-to-noise ratio (SNR).', { panelWidth: '410px' });
-  const plot = stripPlot(fig.viz, { xLabel: 'Time (s)', xDomain: [0, 2], stripHeight: 62 });
+  const fig = figure(sec.fig, `Top strip: the neural signal at the scalp surface from section 4 (a two-second stretch without a blink), before any electrode touches it. Below it, what reaches the amplifier through each electrode type: the signal after the impedance divider, plus the contact’s own skin noise, mains pickup from a 50% mismatch between the two electrodes, and the amplifier’s current noise flowing through the contact impedance. Each strip is drawn to its own scale (written at the left) so the shape stays visible; the table gives the contact impedance, the fraction of the signal kept, the noise added and the resulting signal-to-noise ratio (SNR). Wet gel on abraded skin is the research standard; most consumer headsets use dry contacts ${c('consumer-electrodes')}.`, { panelWidth: '410px' });
+  const plot = stripPlot(fig.viz, { xLabel: 'Time (s)', xDomain: [0, 2], stripHeight: 68 });
   const table = document.createElement('table');
   table.className = 'mini-table';
   fig.panel.append(controls(sArea.el, sGap.el, sContact.el, sRin.el), table);
@@ -94,7 +107,7 @@ per finger ${c('fingered')}.</p>`);
     const Zin = (f: number) => inputImpedance(sRin.value, C_IN_PF * 1e-12, f);
     const strips: Strip[] = [];
     const t = raw.t;
-    strips.push({ name: 'Raw scalp signal', points: Array.from(raw.total, (v, i) => [t[i], v] as [number, number]), color: '#898781', note: '10 Hz alpha at 20 µV, with muscle, mains and skin noise' });
+    strips.push({ name: 'Neural signal at the scalp', sub: 'before any electrode touches it', icon: HEAD_ICON, points: Array.from(raw.total, (v, i) => [t[i], v] as [number, number]), color: '#898781', note: 'section 4: 10 Hz alpha at 20 µV, with muscle, mains and skin noise' });
     const rows: string[] = [];
     KINDS.forEach((k, idx) => {
       // divider as a frequency response
@@ -127,7 +140,7 @@ per finger ${c('fingered')}.</p>`);
       }
       const h10 = cabs(H(10));
       const snr = 10 * Math.log10(ps / Math.max(pn, 1e-30));
-      strips.push({ name: NAMES[k], points: Array.from(out, (v, i) => [t[i], v] as [number, number]), color: COLOURS[k], note: `keeps ${fmt(100 * h10, 3)}% of the signal, adds ${fmt(Math.sqrt(pn / n), 2)} µV of noise` });
+      strips.push({ name: NAMES[k], sub: SUBS[k], icon: ICONS[k], points: Array.from(out, (v, i) => [t[i], v] as [number, number]), color: COLOURS[k], note: `keeps ${fmt(100 * h10, 3)}% of the signal, adds ${fmt(Math.sqrt(pn / n), 2)} µV of noise` });
       rows.push(`<tr><td><i style="background:${COLOURS[k]}"></i>${NAMES[k]}</td><td>${fmtSI(cabs(Ze(k, 10)), 'Ω', 2)}</td><td>${fmt(100 * h10, 3)}%</td><td>${fmt(Math.sqrt(pn / n), 2)} µV</td><td>${fmt(snr, 2)} dB</td></tr>`);
     });
     plot.update(strips);

@@ -21,7 +21,7 @@ export interface GlowCfg {
   /** exponent applied to the normalised log magnitude before it becomes opacity (default 1.4; 1 is linear) */
   gamma?: number;
   /** grid lines every `step` world units, numbered along the bottom and left edges as value × factor + unit */
-  grid?: { step: number; factor: number; unit: string; xTitle?: string; yTitle?: string };
+  grid?: { step: number; factor: number; unit: string; xTitle?: string; yTitle?: string; labelEvery?: number; note?: string };
 }
 
 export interface Glow {
@@ -134,18 +134,85 @@ function drawGrid(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], cfg: GlowCf
     ctx.fillStyle = '#52514e';
     ctx.fillText(text, px, py);
   };
+  const every = g.labelEvery ?? 1;
+  const isLabelled = (v: number) => Math.abs(Math.round(v / (g.step * every)) * g.step * every - v) < g.step * 1e-6;
   for (let x = x0; x <= x1 + 1e-12; x += g.step) {
+    if (!isLabelled(x)) continue;
     const [px] = toPx(x, 0);
     if (px < 24 || px > cfg.width - 24) continue;
     label(fmtTick(x), px, cfg.height - 5, 'center');
   }
   for (let y = y0; y <= y1 + 1e-12; y += g.step) {
+    if (!isLabelled(y)) continue;
     const [, py] = toPx(0, y);
     if (py < 14 || py > cfg.height - 22) continue;
     label(fmtTick(y), 4, py + 5, 'left');
   }
   label(g.xTitle ?? g.unit, cfg.width - 4, cfg.height - 5, 'right');
   if (g.yTitle) label(g.yTitle, 4, 16, 'left');
+  if (g.note) label(g.note, cfg.width / 2, 16, 'center');
+  ctx.restore();
+}
+
+/**
+ * Shade and label the tissue layers above a cortical cell in a cross-section whose y axis is height above
+ * the cell body (metres): grey matter up to the cortical surface, then CSF, dura and skull.
+ */
+export function drawCortexLayers(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], o: { xRange: [number, number]; yTop: number; surface: number; csf: number; dura: number; labelX?: number }): void {
+  const [x0] = toPx(o.xRange[0], 0), [x1] = toPx(o.xRange[1], 0);
+  const w = x1 - x0;
+  const bands: [number, number, string, string][] = [
+    [o.surface, o.surface + o.csf, 'rgba(27,175,122,0.14)', 'cerebrospinal fluid (CSF)'],
+    [o.surface + o.csf, o.surface + o.csf + o.dura, 'rgba(237,161,0,0.22)', 'dura'],
+    [o.surface + o.csf + o.dura, o.yTop, 'rgba(137,135,129,0.22)', 'skull'],
+  ];
+  ctx.save();
+  ctx.font = CANVAS_FONT;
+  for (const [a, b, fill, name] of bands) {
+    const [, ya] = toPx(0, a), [, yb] = toPx(0, b);
+    ctx.fillStyle = fill;
+    ctx.fillRect(x0, yb, w, ya - yb);
+    ctx.fillStyle = '#1a1a1a';
+    ctx.textAlign = 'right';
+    if (ya - yb > 16) ctx.fillText(name, x1 - 8, (ya + yb) / 2 + 5);
+  }
+  const [, ys] = toPx(0, o.surface);
+  ctx.strokeStyle = 'rgba(26,26,26,0.7)'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(x0, ys); ctx.lineTo(x1, ys); ctx.stroke();
+  ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'right';
+  ctx.fillText('cortical surface', x1 - 8, ys - 6);
+  const [, yg] = toPx(0, o.surface * 0.55);
+  ctx.fillText('grey matter', x1 - 8, yg);
+  ctx.restore();
+}
+
+/** A penetrating microelectrode drawn as a tapered needle whose tip sits at `tip` (px), entering from `from` (px). */
+export function drawProbe(ctx: CanvasRenderingContext2D, tip: [number, number], from: [number, number], label?: string): void {
+  const dx = from[0] - tip[0], dy = from[1] - tip[1];
+  const L = Math.hypot(dx, dy) || 1;
+  const nx = -dy / L, ny = dx / L; // unit normal
+  const wTop = 9, wNear = 1.2; // half-widths in px at the far end and near the tip
+  ctx.save();
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(tip[0], tip[1]);
+  ctx.lineTo(tip[0] + dx * 0.08 + nx * wNear, tip[1] + dy * 0.08 + ny * wNear);
+  ctx.lineTo(from[0] + nx * wTop, from[1] + ny * wTop);
+  ctx.lineTo(from[0] - nx * wTop, from[1] - ny * wTop);
+  ctx.lineTo(tip[0] + dx * 0.08 - nx * wNear, tip[1] + dy * 0.08 - ny * wNear);
+  ctx.closePath();
+  ctx.fillStyle = '#d9d8d0'; ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 1.5;
+  ctx.fill(); ctx.stroke();
+  // bare tip
+  ctx.fillStyle = '#1a1a1a';
+  ctx.beginPath(); ctx.arc(tip[0], tip[1], 2.2, 0, 2 * Math.PI); ctx.fill();
+  if (label) {
+    ctx.font = CANVAS_FONT; ctx.textAlign = 'left';
+    const lx = tip[0] + 14, ly = tip[1] - 10;
+    const w = ctx.measureText(label).width;
+    ctx.fillStyle = 'rgba(252,252,251,0.85)'; ctx.fillRect(lx - 3, ly - 12, w + 6, 17);
+    ctx.fillStyle = '#1a1a1a'; ctx.fillText(label, lx, ly);
+  }
   ctx.restore();
 }
 

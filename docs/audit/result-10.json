@@ -1,0 +1,98 @@
+[
+  {
+    "id": "cortex-layers",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Fischl & Dale 2000 (PMC27146 HTML, full text)",
+      "Mohan et al. 2015 (Europe PMC full-text XML PMC4635923)",
+      "Beaulieu-Laroche et al. 2018 (publisher PDF incl. STAR Methods and supplement, MIT McGovern copy)",
+      "Kalmbach et al. 2021 (published text NOT accessible: PMC/Europe PMC/Cell Press/ScienceDirect all blocked; bioRxiv preprint v1 10.1101/2020.11.02.365080 full text read instead)"
+    ],
+    "evidence_location": "Fischl & Dale: Introduction, first paragraph (statement cites refs 1-3 = Zilles 1990, von Economo 1929, Brodmann 1909, i.e. histology, not this paper's MRI data). Mohan: Results, first paragraph and Fig. 1C: L4 'from 1201 +/- 186 to 1582 +/- 220 um', WM border '2772 +/- 359 um'. Beaulieu-Laroche: STAR Methods, 'Slice preparation/recordings' paragraph. Kalmbach preprint: no statement of L5 depth or soma depth anywhere.",
+    "quote": "places the beginning of L5 at 1.5 mm below the pia, we recorded human L5 neurons 1.5-2.2 mm",
+    "discrepancy": "(1) The 1-4.5 mm range and ~2.5 mm average are quoted by Fischl & Dale from histological atlases (refs 1-3), not measured by MRI; the '(MRI)' tag misattributes the method. (2) The '1.46 to 2.15 mm (means about 1.8 mm)' soma depths were not found in any accessible text: Beaulieu-Laroche states '1.5-2.2 mm below the pia' (no mean given), and the L5 start at 1.5 mm is attributed there to DeFelipe 2002, Mohan 2015 and Allen Institute documentation. Kalmbach 2021 published text could not be opened; its preprint contains no depth values, so those numbers remain unverified. Mohan's L4 end (~1.6 mm) and grey/white border (~2.8 mm) are supported.",
+    "suggested_fix": "Replace '(MRI)' with 'values quoted from histological atlases in an MRI paper' or cite Zilles/von Economo directly. Either state 'human L5 somata recorded 1.5-2.2 mm below the pia (Beaulieu-Laroche et al. 2018)' or verify the 1.46-2.15 mm / ~1.8 mm figures against the published Kalmbach et al. 2021 text and attribute them explicitly to it.",
+    "bibliographic_issues": "None: all four DOIs resolve; authors, years, journals, volumes, issues and pages match Europe PMC records."
+  },
+  {
+    "id": "sync-thalamic",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Hughes & Crunelli 2005 (abstract via Europe PMC; full text subscription-only)"
+    ],
+    "evidence_location": "Abstract: 'During relaxed wakefulness ... alpha frequency band (8-13 Hz)'; 'alpha rhythms are strongly influenced by the thalamus has been confirmed'; 'high-threshold (HT) bursting, which occurs in a specialized subset of thalamocortical (TC) neurons, and second, the interconnection of this subset via gap junctions'; 'theta (2-7 Hz) rhythms when the TC neuron population is less depolarized'.",
+    "quote": "2 key cellular thalamic mechanisms, which come together to generate locally synchronized alpha activity",
+    "discrepancy": "",
+    "suggested_fix": "",
+    "bibliographic_issues": "None: Neuroscientist 11(4):357-372, 2005, DOI resolves (PMID 16061522)."
+  },
+  {
+    "id": "sync-inhibition",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Buzsaki & Wang 2012 (author PDF, cns.nyu.edu/wanglab, full text)"
+    ],
+    "evidence_location": "Introduction and sidebar 'Gamma oscillations: synchronous network rhythm in 30-90 Hz'; section on inhibitory mechanisms: 'Common denominators ... inhibitory interneurons and their actions through GABAA synapses'; 'Perisomatic inhibition by PV basket cells is essential for gamma oscillations' / 'critical role of fast-spiking basket neurons'; I-I model minimal ingredients sentence (Wang & Buzsaki 1996b); 'Synchronization of neurons is substantially more effective by perisomatic inhibitory postsynaptic potentials (IPSPs) than dendritic excitatory (E)PSPs (Lytton & Sejnowski 1991)'.",
+    "quote": "mutually connected inhibitory interneurons, a time constant provided by GABAA receptors, and sufficient drive to induce spiking",
+    "discrepancy": "Only wording: source says 'substantially more effective' (claim: 'far more effectively'); the IPSP-vs-EPSP comparison is the review's citation of Lytton & Sejnowski 1991 modelling, not a finding of the review itself.",
+    "suggested_fix": "Optional: 'substantially more effectively' and note the Lytton & Sejnowski 1991 modelling origin.",
+    "bibliographic_issues": "None: Annu Rev Neurosci 35:203-225, 2012, DOI resolves (PMID 22443509, PMC4049541)."
+  },
+  {
+    "id": "sync-waves",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Muller et al. 2018 (author PDF, cnl.salk.edu/~lmuller, full text)"
+    ],
+    "evidence_location": "Introduction/'Macroscopic and mesoscopic waves' paragraphs: 'Distinct axonal fibre tracts carry waves at the two scales'; 'propagation speeds from 1 to 10 metres per second, falling within the range of the axonal conduction speeds of myelinated white matter fibres' (ref 35); 'unmyelinated horizontal fibres in layer 2/3 (0.1-0.8 metres per second)' (ref 38); macroscopic = 'global patterns of activity over several centimetres'. Sleep-spindle paragraph (ECoG, Muller et al. 2016): 2-5 m/s sentence.",
+    "quote": "The speeds at which these waves travel are concentrated between 2 and 5 metres per second",
+    "discrepancy": "The 2-5 m/s figure is stated only for human ECoG sleep-spindle waves. The review mentions awake ECoG alpha travelling waves only for their dorsoventral direction (ref 55) and assigns them no speed; 'sleep-spindle and alpha waves cluster at 2-5 m/s' over-extends the source to alpha.",
+    "suggested_fix": "'human ECoG sleep-spindle waves cluster at 2-5 m/s' (drop 'and alpha', or cite a separate source for alpha-wave speed).",
+    "bibliographic_issues": "None: Nat Rev Neurosci 19(5):255-268, 2018, DOI resolves (PMID 29563572)."
+  },
+  {
+    "id": "consumer-electrodes",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "LaRocco, Le & Paeng 2020 (Europe PMC full-text XML PMC7593569)",
+      "Arnal et al. 2020 (Europe PMC full-text XML PMC7751170)",
+      "bitbrain.com Diadem product page (WebFetch, 2 Nov 2026)",
+      "emotiv.com EPOC X product page (WebFetch, 2 Nov 2026)",
+      "emotiv.com Insight product page (WebFetch, 2 Nov 2026)"
+    ],
+    "evidence_location": "LaRocco: Headset Information section: 'Most low-cost headsets use dry electrodes'; Muse paragraph: 'the dry electrodes were located at FPz, AF7, AF8, TP9, and TP10'; MindWave paragraph: 'single-channel, dry EEG headset', 'a wider ear clip', 'reference and ground electrodes are placed on the ear, while the EEG electrode is positioned on the forehead'. Arnal: Methods, device description: 'five dry-EEG electrodes (O1, O2, FpZ, F7, and F8)' and silicone/protrusion sentence. Bitbrain page: '12 dry EEG sensors', 'No gels or consumables are required'. EPOC X page: heading 'Refillable Research-Grade Saline Sensors', 'saline-based electrodes'. Insight page: heading 'Semi-Dry Polymer Sensors'.",
+    "quote": "flexible protrusions on electrodes at the back of the head enabling them to acquire signal from the scalp through hair",
+    "discrepancy": "Minor nuance only: Arnal says the through-hair protrusions are on the electrodes at the back of the head (occipital), not on all five electrodes. LaRocco's title reads 'A Systemic Review' (sic); calling it 'a systematic review' is a fair description.",
+    "suggested_fix": "Optional: 'five dry silicone electrodes, the occipital ones carrying protrusions that reach the scalp through hair'.",
+    "bibliographic_issues": "None: both journal records match Europe PMC (Front Neuroinform 14:553352; Sleep 43(11):zsaa097); all three product URLs resolve to the named products."
+  },
+  {
+    "id": "emg-level",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Muthukumaraswamy 2013 (Europe PMC full-text XML PMC3625857)",
+      "Whitham et al. 2007 (abstract only via Europe PMC; full text subscription-only)",
+      "Huigen, Peper & Grimbergen 2002 (abstract only via Europe PMC; full text subscription-only)"
+    ],
+    "evidence_location": "Muthukumaraswamy, section on muscle artifact spectra/amplitudes: 'The amplitude of muscle activity when recorded in temporal MEG/EEG electrodes and sensors can be ~1000 fT and 100 uV' vs high-frequency activity 'less than 20 fT and 1 uV'; neuromuscular-blockade paragraph: 'even for electrodes near the center of the head ... the normal resting EEG shows significant contamination', '~5 times more power' at 40 Hz and '~10 times more power' at 80 Hz. Whitham abstract (Results/Conclusions): '10- to 200-fold differences in the power of frequencies above 20 Hz during paralysis'; 'Most of the scalp EEG recording above 20 Hz is of EMG origin'. Huigen abstract: 'In subjects at rest, the contribution of EMG signals to the total noise level was shown to be negligibly small'.",
+    "quote": "at 40 Hz there was ~5 times more power in the non-paralyzed state",
+    "discrepancy": "No number differs. Two attribution notes: the ~5x (40 Hz) and ~10x (80 Hz) figures are Muthukumaraswamy's summary of Whitham, not checked against Whitham's own text; Huigen's abstract does not state the recording site, so the qualifier 'on skin away from cranial muscles' is the site's gloss and is unverified. The 10 uV rms and 100 uV values are declared modelling choices, not sourced numbers.",
+    "suggested_fix": "Attribute the ~5x/~10x figures to Muthukumaraswamy's reading of Whitham et al. 2007, and verify Huigen's electrode sites before keeping 'away from cranial muscles'.",
+    "bibliographic_issues": "None: Front Hum Neurosci 7:138 (2013); Clin Neurophysiol 118(8):1877-1888 (2007); Med Biol Eng Comput 40(3):332-338 (2002); all DOIs resolve."
+  },
+  {
+    "id": "alpha-source-chain",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Malmivuo & Plonsey 1995, bem.fi Ch. 7 (curl), Ch. 8 and Ch. 13 (WebFetch)",
+      "Nunez, Nunez & Srinivasan 2019 (bioRxiv v2 full text via WebFetch; journal version subscription-only)",
+      "Murakami & Okada 2006 (abstract only via Europe PMC; full text not accessible)",
+      "Hamalainen et al. 1993 (Aalto repository PDF, full text)"
+    ],
+    "evidence_location": "Arithmetic: 20 uV / 0.54 uV per nA.m = 37.0 nA.m; 37.0 nA.m / 0.5 pA.m = 7.4e4 cells (both correct). Hamalainen 1993, Sec. II (neural basis, current-dipole paragraph): 'A typical strength of a dipole, caused by the synchronous activity of probably tens of thousands of neurons, is 10 nA m.' Murakami & Okada abstract: L5 pyramidal envelope '-0.41 to -0.90 pA m', L2/3 envelope '-0.29 pA m', spikes up to 2.97 pA m; 'detectable ... when 10 000-50 000 cells are synchronously active'. Malmivuo & Plonsey: Ch. 7.2 quasistatic conditions (Plonsey & Heppner 1967); Ch. 8.2: eq. 8.7 = monopole potential, eq. 8.15 = dipole potential, infinite homogeneous conductor; Ch. 13: 'The amplitude of the EEG is about 100 uV when measured on the scalp'. Nunez 2019 (head-model section): large synchronous dipole layers 'roughly the 100 uV range', mm-scale layers 'less than a few uV'; no nA.m, pA.m or cell-count values.",
+    "quote": "A typical strength of a dipole, caused by the synchronous activity of probably tens of thousands of neurons",
+    "discrepancy": "Arithmetic is correct. Inputs: (1) '0.5 pA.m per cell' is a rounded mid-value; Murakami & Okada give 0.29-0.90 pA.m per cell for the burst envelope (and larger transient spike moments), so the cell count is really ~4e4-1.3e5. (2) 'tens of thousands' and '10 nA.m' come from Hamalainen 1993 (and Murakami & Okada's 10,000-50,000 detectability estimate), not from Nunez 2019, which contains no such numbers. (3) The derived 37 nA.m is ~4x Hamalainen's 'typical' 10 nA.m, and 7.4e4 exceeds Murakami & Okada's 10,000-50,000 range, so 'within the tens-of-thousands range' is only loosely true. (4) The 0.54 uV per nA.m scalp sensitivity is the site's own four-layer model result; none of the cited sources gives a uV-per-nA.m value or a 20 uV alpha amplitude (M&P Ch. 13 says ~100 uV scalp EEG), so that input cannot be checked against them. Eq. 8.7 is the monopole (not dipole) potential, which is consistent with the generic 'source-field models' citation.",
+    "suggested_fix": "'...about 37 nA.m, roughly four times the 10 nA.m Hamalainen et al. (1993) call typical; at 0.3-0.9 pA.m per cell (Murakami & Okada 2006) this is ~4-12 x 10^4 perfectly synchronous pyramidal cells, the same order as the tens of thousands of neurons Hamalainen et al. associate with a typical source.' Cite Nunez 2019 only for the ~100 uV upper bound / 6-10 cm^2 rule of thumb, or drop it from this sentence.",
+    "bibliographic_issues": "None: Brain Topogr 32(2):193-214 (2019); J Physiol 575(3):925-936 (2006); Rev Mod Phys 65(2):413-497 (1993, Crossref); all DOIs resolve. bem.fi chapters exist as cited (Ch. 7 'Volume Source and Volume Conductor', Ch. 8 'Source-Field Models', Ch. 13 EEG)."
+  }
+]

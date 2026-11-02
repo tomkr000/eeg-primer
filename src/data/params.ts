@@ -23,6 +23,8 @@ export const P = {
   singleCellMomentPAm: 0.5, // 'single-cell-moment'
   singleCellMomentRange: [0.41, 0.9] as [number, number],
   cellsFor10nAm: [10000, 50000] as [number, number], // 'cells-for-10nam'
+  patchDefaultN: 1e5, // default patch size shared by sections 2 and 3
+  patchDefaultSync: 0.1, // default synchronous fraction shared by sections 2 and 3
   neuronsPerMm2: 147000, // 'neuron-density'
   pyramidalFraction: 0.8, // 'pyramidal-fraction'
   /** measured extracellular spike amplitude: ≥ 60 µV within 50 µm of the soma (Henze 2000) */

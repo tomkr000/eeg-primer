@@ -139,7 +139,7 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .choice-group button[aria-checked='true'] { background: var(--accent); border-color: var(--accent); color: #fff; }
 .btn { font: inherit; font-family: var(--sans); font-size: 14px; border: 1px solid var(--rule); background: transparent; color: var(--ink); padding: 4px 10px; border-radius: 999px; cursor: pointer; }
 .btn:hover { border-color: var(--accent); color: var(--accent); }
-.readouts { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 8px 16px; border-top: 1px solid var(--grid); padding-top: 8px; }
+.readouts { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 8px 16px; border-top: 1px solid var(--grid); padding-top: 8px; }
 .readout { font-family: var(--sans); display: flex; flex-direction: column; gap: 1px; }
 .readout-value { font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; line-height: 1.2; }
 .readout-label { font-size: 13.5px; color: var(--ink-2); line-height: 1.3; }

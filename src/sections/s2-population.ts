@@ -31,28 +31,28 @@ ${c('oscillations-synchrony')}, and inhibitory currents in active cells ${c('inh
 sources of any orientation with only modest differences (unlike MEG) ${c('orientation')}, so folding does not
 hide much. Only coherent, aligned current counts.</p>`);
 
-  const sN = slider({ label: 'Neurons in the patch, N', min: 1, max: 1e7, value: 1e4, log: true, format: (v) => fmt(Math.round(v), 3) });
-  const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: 0.1, note: c('variances-add') });
+  const sN = slider({ label: 'Neurons in the patch, N', min: 1, max: 1e7, value: P.patchDefaultN, log: true, format: (v) => fmt(Math.round(v), 3) });
+  const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add') });
   const TH_UV = 1; // detection floor drawn as the dashed circle: the noise of a good scalp electrode (section 4)
   const rMoment = readout('Net dipole moment');
   const rReach = readout(`Reach: field above ${TH_UV} µV out to`, c('skin-noise'));
   const rArea = readout('Cortical area of the patch', c('neuron-density') + c('pyramidal-fraction'));
   const rScalp = readout('Peak scalp potential (section 3 head)');
 
-  const fig = figure(sec.fig, 'Left: zoomed in on the patch; each glyph stands for many pyramidal cells and the glow is their summed field, red where positive, blue where negative. Cells firing out of step make a patchwork that cancels; cells in step merge into one large dipole. Right: zoomed out to 6 cm of cortex; the dashed circle is the reach of the patch: inside it the field is above 1 µV, the noise floor of a good electrode, so a sensor anywhere inside would register the patch and one outside would not. Fields are computed for the full three-dimensional patch, in uniform grey matter.');
+  const fig = figure(sec.fig, 'Left: zoomed in on the patch; each glyph stands for many pyramidal cells and the glow is their summed field, red where positive, blue where negative. Cells firing out of step make a patchwork that cancels; cells in step merge into one large dipole. Right: zoomed out to 10 cm of cortex; the dashed circle is the reach of the patch: inside it the field is above 1 µV, the noise floor of a good electrode, so a sensor anywhere inside would register the patch and one outside would not. Fields are computed for the full three-dimensional patch, in uniform grey matter.');
   const row = document.createElement('div');
   row.className = 'viz-row';
   const left = document.createElement('div'), right = document.createElement('div');
   row.append(left, right);
   fig.viz.append(row);
   const zoomSpan = 1.6e-3; // ±1.6 mm
-  const wideSpan = 30e-3; // ±30 mm
+  const wideSpan = 50e-3; // ±50 mm
   const gz = glow(left, { width: 340, height: 360, scale: 2, xRange: [-zoomSpan, zoomSpan], yRange: [-zoomSpan * 1.06, zoomSpan * 1.06], floor: 1e-6, ceiling: 3e-2, grid: { step: 0.5e-3, factor: 1e3, unit: 'mm' } });
   const cap1 = document.createElement('div'); cap1.className = 'viz-caption'; cap1.textContent = 'Zoomed in: 3 mm of cortex';
   left.append(cap1);
   glowLegend(left, '1 µV', '30 mV');
   const gw = glow(right, { width: 340, height: 360, scale: 2, xRange: [-wideSpan, wideSpan], yRange: [-wideSpan * 1.06, wideSpan * 1.06], floor: 1e-7, ceiling: 1e-3, grid: { step: 1e-2, factor: 100, unit: 'cm' } });
-  const cap2 = document.createElement('div'); cap2.className = 'viz-caption'; cap2.textContent = 'Zoomed out: 6 cm of cortex';
+  const cap2 = document.createElement('div'); cap2.className = 'viz-caption'; cap2.textContent = 'Zoomed out: 10 cm of cortex';
   right.append(cap2);
   glowLegend(right, '0.1 µV', '1 mV', 'dashed circle = reach (field above 1 µV, detectable inside)');
   fig.panel.append(controls(sN.el, sF.el), readouts(rMoment.el, rReach.el, rArea.el, rScalp.el));

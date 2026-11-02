@@ -16,8 +16,8 @@ export function mountNoise(root: HTMLElement) {
   prose(sec.text, `
 <p>What arrives at the scalp is tens of microvolts ${c('eeg-amplitude')}. The alpha rhythm in the figure
 is set at 20 µV, and that number is the end of the chain so far: in the head of section 3 it takes a source
-of about 40 nA·m, which section 2 puts at roughly 10⁵ synchronous cells ${c('alpha-source-chain')} (the
-readouts track it as you move the slider). Almost everything else in the recording is bigger. Scalp and neck muscles produce electromyographic (EMG) activity across roughly
+of about 40 nA·m, which by section 2 is about 70,000 cells in step, or 700,000 with a tenth in step
+${c('alpha-source-chain')} (the readouts track it as you move the slider). Almost everything else in the recording is bigger. Scalp and neck muscles produce electromyographic (EMG) activity across roughly
 20–300 Hz that can reach ~100 µV, against gamma-band brain signals under a microvolt
 ${c('emg-band')}${c('emg-topography')}. Eye blinks give frontal deflections of 100–200 µV
 ${c('blink-amplitude')}, a dozen or more times a minute ${c('blink-rate')}. The body also carries a
@@ -43,7 +43,7 @@ spends waiting.</p>`);
   const rMains = readout('Mains residual after rejection and divider');
   const rRms = readout('Total rms of the recording');
   const rSource = readout('Equivalent cortical source (section 3 head)', c('alpha-source-chain'));
-  const rCells = readout('Perfectly synchronous cells for that source (section 2)', c('alpha-source-chain'));
+  const rCells = readout('N at a tenth in step for that source (section 2)', c('alpha-source-chain'));
   // scalp potential per unit dipole moment for the default head of section 3 (radial source 2 mm below the cortex)
   const head = defaultHead();
   const scalpUvPerNam = surfacePotential(solveShells(head.shells, head.sourceRadius, 1, 'radial', 120), 0) * 1e6 * 1e-9;
@@ -72,7 +72,8 @@ spends waiting.</p>`);
     rSnr.set(`${fmt(s.snrDb, 3)} dB`);
     const moment = sSig.value / scalpUvPerNam; // nA·m
     rSource.set(`${fmt(moment, 3)} nA·m`);
-    rCells.set(`${fmt(moment / (P.singleCellMomentPAm * 1e-3), 2)}`);
+    const inStep = moment / (P.singleCellMomentPAm * 1e-3);
+    rCells.set(fmt(inStep / P.patchDefaultSync, 2));
     rMains.set(`${fmt(sCm.value * 1e3 * (Math.pow(10, -RAW_DEFAULTS.cmrrDb / 20) + RAW_DEFAULTS.imbalanceRatio), 3)} µV`);
     rRms.set(`${fmt(Math.sqrt(s.total.reduce((a, v) => a + v * v, 0) / s.total.length), 3)} µV`);
   }

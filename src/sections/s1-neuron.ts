@@ -24,13 +24,13 @@ synaptic field reaches about as far. At one centimetre a single cell contributes
 times below anything a scalp amplifier can separate from noise. One cell is invisible from outside.</p>`);
 
   const sI = slider({ label: 'Net synaptic current into the cell', unit: 'pA', min: 100, max: 5000, value: P.cellCurrentPa, log: true, note: c('cell-current') });
-  const sTh = slider({ label: 'Detection threshold (electrode noise)', unit: 'µV', min: 1, max: 50, value: P.spikeNoiseUv, log: true, note: c('spike-noise-floor') });
+  const TH_UV = P.spikeNoiseUv; // detection floor: the noise of a silicon probe in the tissue (claim spike-noise-floor)
   const d = P.dipoleLengthUm * 1e-6, sg = P.sigmaGray;
-  const rRadius = readout('Signal drops below threshold within');
+  const rRadius = readout(`Detectable (above ${TH_UV} µV) only within`, c('spike-noise-floor'));
   const rAt1cm = readout('Potential 1 cm away');
   const rMoment = readout('Dipole moment p = I·d');
 
-  const fig = figure(sec.fig, 'Left: the extracellular field of one pyramidal cell. Current enters at the dendritic tuft (blue, negative) and leaves at the cell body (red, positive); colour fades with the logarithm of the potential and the dashed circles mark the detection threshold. Right: potential along the cell’s axis against distance from the nearer pole; the dot is the measured spike amplitude of single hippocampal cells (at least 60 µV within 50 µm), the dotted line the 140 µm limit beyond which spikes vanish into noise.');
+  const fig = figure(sec.fig, 'Left: the extracellular field of one pyramidal cell. Current enters at the dendritic tuft (blue, negative) and leaves at the cell body (red, positive); colour fades with the logarithm of the potential and the dashed circles mark where it falls to 5 µV, the noise floor of a probe inside the tissue: only inside them can the cell be told from noise. Right: potential along the cell’s axis against distance from the nearer pole; the dot is the measured spike amplitude of single hippocampal cells (at least 60 µV within 50 µm), the dotted line the 140 µm limit beyond which spikes vanish into noise.');
   const row = document.createElement('div');
   row.className = 'viz-row';
   const left = document.createElement('div');
@@ -40,21 +40,22 @@ times below anything a scalp amplifier can separate from noise. One cell is invi
   fig.viz.append(row);
   const span = 0.8e-3; // ±0.8 mm
   const g = glow(left, { width: 380, height: 420, xRange: [-span, span], yRange: [-span * 1.105, span * 1.105], floor: 3e-8, ceiling: 3e-5, gamma: 1, grid: { step: 0.25e-3, factor: 1e3, unit: 'mm' } });
-  glowLegend(left, '0.03 µV', '30 µV', 'dashed circles = the detection threshold (detectable inside)');
+  glowLegend(left, '0.03 µV', '30 µV', `dashed circles = ${TH_UV} µV, a probe’s noise floor (detectable inside)`);
   const plot = linePlot(right, {
     x: { label: 'Distance from the nearer pole (m)', scale: 'log', domain: [1e-5, 0.1] },
     y: { label: 'Potential (µV)', scale: 'log', domain: [1e-4, 1e4] },
     height: 300,
   });
-  fig.panel.append(controls(sI.el, sTh.el), readouts(rRadius.el, rAt1cm.el, rMoment.el));
+  fig.panel.append(controls(sI.el), readouts(rRadius.el, rAt1cm.el, rMoment.el));
   assumptions(fig.el, [
     { what: 'Cell geometry', value: `synaptic current enters at the apical tuft and leaves at the cell body ${P.dipoleLengthUm} µm away (a layer-5 pyramidal cell), so the cell is two opposite point sources`, cite: c('dipole-length') + c('monopole') },
     { what: 'Tissue', value: `uniform grey matter, ${P.sigmaGray} S/m, purely resistive at these frequencies`, cite: c('sigma-gray') + c('quasistatic') },
     { what: 'Current range', value: 'one synapse passes about 100 to 300 pA; a strongly driven cell a few nanoamps', cite: c('epsc') + c('cell-current') },
+    { what: 'Detection floor', value: `${TH_UV} µV, the noise of a silicon probe in the action-potential band; the detection distance scales as current ÷ floor, so a quieter probe and a stronger cell are the same picture`, cite: c('spike-noise-floor') },
   ]);
 
   function update() {
-    const I = sI.value * 1e-12, th = sTh.value * 1e-6;
+    const I = sI.value * 1e-12, th = TH_UV * 1e-6;
     const pts: [number, number][] = [], mono: [number, number][] = [], dip: [number, number][] = [];
     for (let k = 0; k <= 160; k++) {
       const r = 1e-5 * Math.pow(1e4, k / 160);
@@ -70,7 +71,7 @@ times below anything a scalp amplifier can separate from noise. One cell is invi
       { name: 'Measured spike (Henze 2000)', points: P.henzeSpikePoints, color: '#6250d6', dots: true },
     ];
     plot.update(series, [
-      { axis: 'y', value: sTh.value, label: 'threshold' },
+      { axis: 'y', value: TH_UV, label: `${TH_UV} µV probe noise` },
       { axis: 'x', value: P.henzeDetectionLimitM, label: '140 µm' },
       { axis: 'x', value: 1e-2, label: '1 cm' },
     ]);
@@ -100,6 +101,6 @@ times below anything a scalp amplifier can separate from noise. One cell is invi
       ctx.restore();
     });
   }
-  [sI, sTh].forEach((s) => s.onChange(update));
+  sI.onChange(update);
   update();
 }

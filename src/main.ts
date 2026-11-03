@@ -2,9 +2,9 @@ import './style.css';
 import { mountNeuron } from './sections/s1-neuron';
 import { mountPopulation } from './sections/s2-population';
 import { mountHead } from './sections/s3-head';
-import { mountNoise } from './sections/s4-noise';
-import { mountElectrodes } from './sections/s5-electrodes';
-import { mountBlur } from './sections/s6-blur';
+import { mountNoise } from './sections/s5-noise';
+import { mountElectrodes } from './sections/s6-electrodes';
+import { mountBlur } from './sections/s4-blur';
 import { mountDimensions } from './sections/s7-dimensions';
 import { mountDelay } from './sections/s8-delay';
 import { mountMethod, mountReferences, mountVerification } from './sections/s7-references';
@@ -23,7 +23,7 @@ standfirst.className = 'standfirst';
 standfirst.innerHTML = `<p>Scalp electroencephalography (EEG) listens to the brain from the far side of a
   resistive bone, through fluid that shorts the signal sideways and skin that adds noise of its own. Eight
   models with sliders show why one neuron is invisible from outside, what it takes for a population to be
-  seen, how much the head attenuates and blurs, how noise and electrodes intervene, how patches of cortex blur together from outside, how many independent
+  seen, how much the head attenuates and blurs, how patches of cortex blur together from outside, how noise and electrodes intervene, how many independent
   signals a non-invasive brain\u2013computer interface (BCI) can hope to extract, and why every one of them
   arrives late. Every number carries a
   citation, and every citation was checked by an independent auditor (see the verification log).</p>`;
@@ -35,9 +35,9 @@ toc.innerHTML = `
     <a href="#neuron"><b>1</b> Neurons make very small electric fields</a>
     <a href="#population"><b>2</b> Many neurons must fire synchronously to create larger signal</a>
     <a href="#head"><b>3</b> Only large, multi-neuron signals reach outside the skull</a>
-    <a href="#noise"><b>4</b> The signal that gets outside the skull is noisy</a>
-    <a href="#electrodes"><b>5</b> Different electrode types result in different signals</a>
-    <a href="#blur"><b>6</b> From outside, patches of cortex blur into broad blobs</a>
+    <a href="#blur"><b>4</b> From outside, patches of cortex blur into broad blobs</a>
+    <a href="#noise"><b>5</b> The signal that gets outside the skull is noisy</a>
+    <a href="#electrodes"><b>6</b> Different electrode types result in different signals</a>
     <a href="#dimensions"><b>7</b> A head with EEG can operate only a few dimensions</a>
     <a href="#delay"><b>8</b> EEG signals have inherent delays</a>
     <a href="#method">Method and caveats</a>
@@ -51,9 +51,9 @@ app.append(main);
 mountNeuron(main);
 mountPopulation(main);
 mountHead(main);
+mountBlur(main);
 mountNoise(main);
 mountElectrodes(main);
-mountBlur(main);
 mountDimensions(main);
 mountDelay(main);
 mountMethod(main);

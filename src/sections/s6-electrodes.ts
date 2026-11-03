@@ -6,7 +6,7 @@ import { controls, slider, fmt, fmtSI } from '../ui/slider';
 import { stripPlot, type Strip } from '../ui/strips';
 import { claimCite as c } from '../data/params';
 import { section, figure, prose, assumptions, vizTitle } from '../ui/layout';
-import { RAW_DEFAULTS, alphaUv, sourceSliders } from './s4-noise';
+import { RAW_DEFAULTS, alphaUv, sourceSliders } from './s5-noise';
 
 /** Reference interface values per cm² (claims 'chi-table' and 'abrasion'). */
 const IFACE: Record<string, InterfaceParams> = {
@@ -51,7 +51,7 @@ function pink(n: number, rms: number, seed: number): Float64Array {
 }
 
 export function mountElectrodes(root: HTMLElement) {
-  const sec = section(root, 'electrodes', '5', 'Different electrode types result in different signals', 'Most electrodes are the Dry Metal Plate below, wet gel will be difficult for consumers');
+  const sec = section(root, 'electrodes', '6', 'Different electrode types result in different signals', 'Most electrodes are the Dry Metal Plate below, wet gel will be difficult for consumers');
   prose(sec.text, `
 <p>An electrode measures what is left of the scalp potential after a voltage divider: the contact has an
 impedance Z<sub>e</sub>, the amplifier input has Z<sub>in</sub>, and the amplifier sees
@@ -74,13 +74,13 @@ ones ${c('kappenman')}. Dry electrodes improve over minutes as sweat accumulates
 ${c('dry-vs-wet-time')}${c('searle')}, and fingered dry electrodes reach the skin through hair at 14–55 kΩ
 per finger ${c('fingered')}.</p>`);
 
-  const { sN, sF } = sourceSliders(); // the same source model as sections 2, 3 and 4
+  const { sN, sF } = sourceSliders(); // the same source model as sections 2 to 5
   const sArea = slider({ label: 'Electrode area', unit: 'cm²', min: 0.1, max: 3, value: 1, log: true, note: c('area-scaling'), marks: [{ value: 1, label: 'Typical' }] });
   const sGap = slider({ label: 'Hair / air gap thickness', unit: 'mm', min: 0.05, max: 2, value: 0.5, log: true, note: c('hair'), marks: [{ value: 0.06, label: 'One hair' }, { value: 0.5, label: 'Assumed' }] });
   const sRin = slider({ label: 'Amplifier input resistance', min: 1e7, max: 5e13, value: 1e9, log: true, format: (v) => fmtSI(v, 'Ω', 2), note: c('ads1299'), marks: [{ value: 1e9, label: 'Typical' }, { value: 5e13, label: 'Research amp' }] });
   const C_IN_PF = 20, V_CM_MV = RAW_DEFAULTS.mainsUvcm / 1e3, I_NOISE_FA = 1; // fixed amplifier and mains values (assumptions table)
 
-  const fig = figure(sec.fig, `Top strip: the scalp signal before any electrode touches it: the alpha rhythm of N cells with a fraction in step (sections 2 to 4) in the noise of section 4, two seconds without a blink. Below it, what reaches the amplifier through each electrode: the signal after the impedance divider, plus the contact’s skin noise, mains pickup from a 50% impedance mismatch between a pair, and the amplifier’s current noise through the contact impedance. The table gives the impedance at 10 Hz, the signal kept, the noise added, and the signal-to-noise ratio (SNR) of the alpha rhythm against everything else. Most consumer headsets use dry contacts ${c('consumer-electrodes')}.`, { panelWidth: '410px' });
+  const fig = figure(sec.fig, `Top strip: the scalp signal before any electrode touches it: the alpha rhythm of N cells with a fraction in step (sections 2 to 5) in the noise of section 5, two seconds without a blink. Below it, what reaches the amplifier through each electrode: the signal after the impedance divider, plus the contact’s skin noise, mains pickup from a 50% impedance mismatch between a pair, and the amplifier’s current noise through the contact impedance. The table gives the impedance at 10 Hz, the signal kept, the noise added, and the signal-to-noise ratio (SNR) of the alpha rhythm against everything else. Most consumer headsets use dry contacts ${c('consumer-electrodes')}.`, { panelWidth: '410px' });
   fig.viz.append(vizTitle('Signal at the amplifier input for four electrode–skin interfaces'));
   const plot = stripPlot(fig.viz, { xLabel: 'Time (s)', xDomain: [0, 2], stripHeight: 82 });
   const table = document.createElement('table');
@@ -95,7 +95,7 @@ per finger ${c('fingered')}.</p>`);
     { what: 'Amplifier input resistance marks', value: '1 GΩ as the ADS1299 front end; 50 TΩ as a research non-contact amplifier', cite: c('ads1299') + c('noncontact-cap') },
     { what: 'Skin noise by contact type', value: `${SKIN_NOISE.abraded} / ${SKIN_NOISE.wet} / ${SKIN_NOISE.dry} / ${SKIN_NOISE.gap} µV rms (abraded / wet / dry / gap), 1/f spectrum, scaled by 1/√area`, cite: c('electrode-noise-levels') },
     { what: 'Amplifier', value: `R<sub>in</sub> from the slider in parallel with ${C_IN_PF} pF; 1 µV rms voltage noise; ${I_NOISE_FA} fA/√Hz current noise`, cite: c('ads1299') + c('amp-current-noise') },
-    { what: 'Mains pickup', value: `${V_CM_MV} mV of common-mode mains on the body (section 4); the two contacts of a pair differ by 50% in impedance, so it leaks in as V<sub>cm</sub> × |H(Z<sub>e</sub>) − H(1.5 Z<sub>e</sub>)| at 60 Hz, with H = Z<sub>in</sub>/(Z<sub>in</sub> + Z<sub>e</sub>)`, cite: c('common-mode') },
+    { what: 'Mains pickup', value: `${V_CM_MV} mV of common-mode mains on the body (section 5); the two contacts of a pair differ by 50% in impedance, so it leaks in as V<sub>cm</sub> × |H(Z<sub>e</sub>) − H(1.5 Z<sub>e</sub>)| at 60 Hz, with H = Z<sub>in</sub>/(Z<sub>in</sub> + Z<sub>e</sub>)`, cite: c('common-mode') },
   ]);
 
   function Ze(k: Kind, f: number): Complex {

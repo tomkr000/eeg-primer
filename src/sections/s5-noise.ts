@@ -6,7 +6,7 @@ import { P, claimCite as c, defaultHead } from '../data/params';
 import { solveShells, surfacePotential } from '../physics/sphere';
 import { section, figure, prose, readouts, assumptions, sw, vizTitle } from '../ui/layout';
 
-/** Shared defaults so section 5 can reuse the same raw scalp signal. */
+/** Shared defaults so section 6 can reuse the same raw scalp signal. */
 export const RAW_DEFAULTS: NoiseParams = {
   fs: 500, seconds: 4, signalUv: 20, signalHz: 10, emgUvRms: 10, blinkUv: 150, blinksPerMinute: 15,
   mainsUvcm: 10e3, cmrrDb: 90, imbalanceRatio: 1e-4, ampUvRms: 1, skinUvRms: 3, seed: 11,
@@ -20,14 +20,14 @@ const momentNam = (N: number, f: number) => netDipole(Math.round(N), f, 1, P.sin
 export const alphaUv = (N: number, f: number) => momentNam(N, f) * scalpUvPerNam;
 /** The patch that gives the textbook 20 µV alpha rhythm with a tenth of its cells in step. */
 export const ALPHA_N = RAW_DEFAULTS.signalUv / (scalpUvPerNam * P.patchDefaultSync * P.singleCellMomentPAm * 1e-3);
-/** The two sliders of the shared source model, used by sections 4 and 5. */
+/** The two sliders of the shared source model, used by sections 4 to 7. */
 export const sourceSliders = (defaultN = ALPHA_N) => ({
   sN: slider({ label: 'Neurons in the patch, N', min: 1e4, max: P.patchMaxN, value: defaultN, log: true, format: (v) => fmt(Math.round(v), 2), marks: [{ value: P.patchDefaultN, label: 'Typical source' }, { value: ALPHA_N, label: 'Alpha rhythm' }], note: c('alpha-source-chain') }),
   sF: slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Seizure' }] }),
 });
 
 export function mountNoise(root: HTMLElement) {
-  const sec = section(root, 'noise', '4', 'The signal that gets outside the skull is noisy');
+  const sec = section(root, 'noise', '5', 'The signal that gets outside the skull is noisy');
   prose(sec.text, `
 <p>What arrives at the scalp is tens of microvolts ${c('eeg-amplitude')}. The alpha rhythm in the figure
 comes from the same chain as the earlier sections: its textbook 20 µV takes a source of about 40 nA·m in

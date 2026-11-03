@@ -3,7 +3,7 @@ import { controls, readout, slider, fmt } from '../ui/slider';
 import { linePlot } from '../ui/plot';
 import { P, claimCite as c } from '../data/params';
 import { section, figure, prose, readouts, assumptions, sw, vizTitle } from '../ui/layout';
-import { RAW_DEFAULTS } from './s4-noise';
+import { RAW_DEFAULTS } from './s5-noise';
 
 /** 2nd-order Butterworth band-pass (two biquads) for the mu band. */
 function bandpass(lo: number, hi: number, fs: number) {
@@ -35,7 +35,7 @@ previous 400 ms, and competition imagery trials allotted 4 s each ${c('bci-windo
 are no faster: the P300 peaks about 300 ms after its stimulus and spellers repeat each flash many times,
 up to 29 s per character ${c('p300-timing')}, and the quickest flicker spellers still need 0.3 to 0.5 s of
 stimulus plus 0.5 s for the eyes to move per character ${c('bci-windows')}.</p>
-<p>The figure simulates the chain for one imagined movement. The mu rhythm of section 4 starts to fade
+<p>The figure simulates the chain for one imagined movement. The mu rhythm of section 5 starts to fade
 0.3 s after the intention and settles within about a second; a sliding window of adjustable length
 estimates its power, and the decoder fires when the estimate crosses halfway to the suppressed level. The
 window is the lever: a short window reacts quickly but its estimate jumps around (few cycles averaged, so
@@ -53,7 +53,7 @@ per decision that no electrode can remove.</p>`);
   const rCycles = readout('Cycles of the 10 Hz rhythm in the window');
   const rFalse = readout('False detections before the intention');
 
-  const fig = figure(sec.fig, `One imagined movement. Top: the scalp signal of section 4 (${sw('#eb6834', 'line')}) with the mu rhythm alone (${sw('#2a78d6', 'line')}); the intention is at t = 0 and the rhythm fades after it (event-related desynchronisation, ERD). Bottom: the rhythm’s power as a decoder would estimate it from a sliding window of the chosen length (${sw('#2a78d6', 'line')}), the true envelope (${sw('#898781', 'dash')}) and the detection threshold (${sw('#52514e', 'dash')}); the decoder fires where the estimate first crosses the threshold after the intention. A shorter window gets jumpy and fires early by accident; a longer one detects later.`);
+  const fig = figure(sec.fig, `One imagined movement. Top: the scalp signal of section 5 (${sw('#eb6834', 'line')}) with the mu rhythm alone (${sw('#2a78d6', 'line')}); the intention is at t = 0 and the rhythm fades after it (event-related desynchronisation, ERD). Bottom: the rhythm’s power as a decoder would estimate it from a sliding window of the chosen length (${sw('#2a78d6', 'line')}), the true envelope (${sw('#898781', 'dash')}) and the detection threshold (${sw('#52514e', 'dash')}); the decoder fires where the estimate first crosses the threshold after the intention. A shorter window gets jumpy and fires early by accident; a longer one detects later.`);
   fig.viz.append(vizTitle('Simulated scalp potential around one imagined movement'));
   const top = linePlot(fig.viz, { x: { label: '', tip: 'Time from the intention', domain: [-2, 4] }, y: { label: 'Potential (µV)' }, height: 172, legendInside: true });
   fig.viz.append(vizTitle('Mu-band power: true envelope versus the sliding-window estimate'));
@@ -61,7 +61,7 @@ per decision that no electrode can remove.</p>`);
   fig.panel.append(controls(sWin.el, sOnset.el, sRamp.el));
   fig.viz.append(readouts(rDelay.el, rRes.el, rCycles.el, rFalse.el));
   assumptions(fig.el, [
-    { what: 'Rhythm', value: `the section 4 mu/alpha rhythm (10 Hz, 20 µV) over the same noise, without blinks; it fades to ${Math.round(P.erdDepth * 100)}% of its amplitude along a linear ramp that starts ${P.erdOnsetS} s after the intention and lasts ${P.erdRampS} s (adjustable)`, cite: c('erd-timecourse') + c('alpha-source-chain') },
+    { what: 'Rhythm', value: `the section 5 mu/alpha rhythm (10 Hz, 20 µV) over the same noise, without blinks; it fades to ${Math.round(P.erdDepth * 100)}% of its amplitude along a linear ramp that starts ${P.erdOnsetS} s after the intention and lasts ${P.erdRampS} s (adjustable)`, cite: c('erd-timecourse') + c('alpha-source-chain') },
     { what: 'Estimator', value: 'the signal is band-passed to 8–13 Hz and its mean square over the trailing window is taken as the power; the threshold is halfway between the resting and the fully suppressed level', cite: c('spectral-window') },
     { what: 'Detection', value: 'the first window after the intention whose estimate falls below the threshold; windows before the intention that fall below it count as false detections', cite: '<span class="assumption-tag">model definition</span>' },
   ]);

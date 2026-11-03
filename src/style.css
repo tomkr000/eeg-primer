@@ -185,7 +185,6 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .mini-table th { text-align: left; font-weight: 600; color: var(--ink-2); padding: 6px 6px 4px 0; border-bottom: 1px solid var(--grid); }
 .mini-table td { padding: 3px 6px 3px 0; border-bottom: 1px solid var(--grid); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .mini-table td i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
-.head-canvas { cursor: crosshair; }
 .strip-path { fill: none; stroke-width: 1; }
 .strip-base { stroke: var(--grid); stroke-width: 1; }
 .strip-sep { fill: var(--grid); }

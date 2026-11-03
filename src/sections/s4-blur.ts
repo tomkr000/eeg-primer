@@ -3,7 +3,7 @@ import { mulberry32 } from '../physics/population';
 import { fmt } from '../ui/slider';
 import { section, figure, prose, assumptions } from '../ui/layout';
 import { CANVAS_FONT, textWithSwatches, type TextPart } from '../ui/field';
-import { state, subscribe, notify, dimControls, patchPattern, miniValues, scalpValue, MOTOR, patchColour, patchLabel, visible, inHead, srcPos, elPos, centre, R, x0, y0, ax, by, sigmaMm, nCh, nSrc, G, miniIn, POS, NEG, type Patch } from './dim-model';
+import { state, subscribe, dimControls, patchPattern, miniValues, scalpValue, MOTOR, patchColour, patchLabel, visible, inHead, srcPos, elPos, centre, R, x0, y0, ax, by, sigmaMm, nCh, nSrc, G, miniIn, POS, NEG } from './dim-model';
 
 const W = 360, H = 300, cx = W / 2, cy = H / 2 + 4, FOOT = 46; // the head view, with a band of notes under it
 const s = Math.min((W / 2 - 16) / ax, (H / 2 - 24) / by); // px per mm
@@ -63,7 +63,7 @@ function footnote(ctx: CanvasRenderingContext2D, lines: TextPart[][]) {
 }
 const RED = '#e34948', BLUE = '#2a78d6';
 export function mountBlur(root: HTMLElement) {
-  const sec = section(root, 'blur', '6', 'From outside, patches of cortex blur into broad blobs', 'Only a few areas can be controlled at will, and their blobs overlap');
+  const sec = section(root, 'blur', '4', 'From outside, patches of cortex blur into broad blobs', 'Only a few areas can be controlled at will, and their blobs overlap');
   prose(sec.text, `
 <p>The skull smears every source into a blob several centimetres wide ${c('spatial-lowpass')}, so two
 patches closer than a few centimetres, or one nested inside another, produce scalp patterns that look
@@ -79,18 +79,18 @@ reach the scalp in principle; they are smaller, and muscle activity occupies the
 ${c('emg-level')}, which is why scalp gamma is hard to trust.</p>
 <p>The figure places patches on a real head, the fsaverage template with a three-layer boundary-element
 model and 128 electrodes ${c('fsaverage-bem')}${c('mne-bem')}${c('montages')}. Each patch is N cells with a
-fraction in step, the source of sections 2 to 5, spread over a disc. The patches are a representative set,
-the motor areas for the hands, the feet and the tongue; click the cortex to try others. The middle map
+fraction in step, the source of sections 2 and 3, spread over a disc. The patches are a representative set,
+the motor areas for the hands, the feet and the tongue. The middle map
 shows each patch alone from outside; the right map shows all of them together with the noise of one
 contact on every electrode, which is the only thing the electrodes ever see. Section 7 counts how many of
 them can be told apart.</p>`);
 
-  const fig = figure(sec.fig, `Left: the cortex from above, nose up, with a representative set of patches on the motor areas a person can modulate at will: the hands, the feet and the tongue ${c('mi-classes')}${c('motor-map')}. Middle: the scalp voltage each patch makes on its own, each map scaled to its own peak, so the shapes can be compared. Right: the voltage of all patches together with the noise of one electrode contact on every electrode ${c('skin-noise')}, on a fixed scale.`, { wide: true });
+  const fig = figure(sec.fig, `Left: the cortex from above, nose up, with a fixed, representative set of patches on the motor areas a person can modulate at will: the hands, the feet and the tongue ${c('mi-classes')}${c('motor-map')}. Middle: the scalp voltage each patch makes on its own, each map scaled to its own peak, so the shapes can be compared. Right: the voltage of all patches together with the noise of one electrode contact on every electrode ${c('skin-noise')}, on a fixed scale.`, { wide: true });
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
   fig.viz.append(row);
-  const cortex = titledCanvas(row, 'Patch locations on the cortex (view from above)', W, H + FOOT, 'glow head-canvas');
+  const cortex = titledCanvas(row, 'Patch locations on the cortex (view from above)', W, H + FOOT);
   const each = titledCanvas(row, 'Scalp potential of each patch alone', W, H + FOOT);
   const summed = titledCanvas(row, 'Sum of all patches, plus electrode noise', W, H + FOOT);
   const cctx = cortex.getContext('2d')!, ectx = each.getContext('2d')!, sctx = summed.getContext('2d')!;
@@ -101,13 +101,13 @@ them can be told apart.</p>`);
   fig.panel.append(dimControls());
   assumptions(fig.el, [
     { what: 'Head', value: `fsaverage three-layer BEM (0.3 / 0.006 / 0.3 S/m), ${nSrc.toLocaleString('en-US')} cortical sources with dipoles normal to the cortex, BioSemi-128 electrodes, average reference`, cite: c('fsaverage-bem') + c('mne-bem') + c('montages') },
-    { what: 'A patch', value: `N cells with a fraction in step (N × fraction × ${P.singleCellMomentPAm} pA·m plus the √N random part, as in sections 2 to 5), shared equally by all cortical sources within the radius of a centre point; a disc of the default radius holds about ${fmt(Math.PI * 100 * P.neuronsPerMm2 / 1e6, 2)} million cells, so N is a small fraction of them; overlapping patches are separate sources`, cite: c('single-cell-moment') + c('variances-add') + c('neuron-density') },
+    { what: 'A patch', value: `N cells with a fraction in step (N × fraction × ${P.singleCellMomentPAm} pA·m plus the √N random part, as in sections 2 and 3), shared equally by all cortical sources within the radius of a centre point; a disc of the default radius holds about ${fmt(Math.PI * 100 * P.neuronsPerMm2 / 1e6, 2)} million cells, so N is a small fraction of them; overlapping patches are separate sources`, cite: c('single-cell-moment') + c('variances-add') + c('neuron-density') },
     { what: 'Drawing', value: `view from above; only cortex and electrodes above the centre of a sphere fitted to the electrodes (radius ${fmt(R / 10, 3)} cm) are drawn, and the outline is the widest extent of those electrodes; scalp maps are a Gaussian-weighted average of all ${nCh} electrode values (width ${fmt(sigmaMm, 2)} mm) on that sphere; the summed map fades from ${FLOOR} µV to solid at ${CEIL} µV on a log scale, the single-patch maps are each scaled to their own peak; patch discs are drawn at the patch radius`, cite: '<span class="assumption-tag">drawing</span>' },
   ]);
 
   function drawCortex() {
     cctx.clearRect(0, 0, W, H + FOOT);
-    footnote(cctx, [['a representative set: motor areas for hands, feet, tongue,'], ['which a person can modulate at will; click to add or remove'], [`each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]]);
+    footnote(cctx, [['a representative set: the motor areas for the hands, feet and'], ['tongue, which a person can modulate at will'], [`each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]]);
     drawGridHead(cctx);
     cctx.fillStyle = 'rgba(26,26,26,0.22)';
     for (const [x, y, z] of srcXY) { if (!visible(z)) continue; cctx.beginPath(); cctx.arc(x, y, 1.3, 0, 2 * Math.PI); cctx.fill(); }
@@ -137,7 +137,6 @@ them can be told apart.</p>`);
       cctx.font = '12px system-ui, sans-serif'; cctx.fillText(p.name, lx, ly);
     });
     headOutline(cctx);
-    if (!state.patches.length) { cctx.font = CANVAS_FONT; cctx.fillStyle = '#52514e'; cctx.textAlign = 'center'; cctx.fillText('no patches: click to add one', cx, cy); }
   }
 
   /** the small map of one pattern into the mini canvas, scaled to its own peak */
@@ -221,15 +220,6 @@ them can be told apart.</p>`);
     drawEach(pats);
     drawSummed(noisy, peak);
   }
-  cortex.addEventListener('click', (ev) => {
-    const r = cortex.getBoundingClientRect();
-    const x = ((ev.clientX - r.left) / r.width) * W, y = ((ev.clientY - r.top) / r.height) * H;
-    const hit = state.patches.findIndex((p) => Math.hypot(srcXY[p.center][0] - x, srcXY[p.center][1] - y) < 9);
-    if (hit >= 0) { state.patches.splice(hit, 1); notify(); return; }
-    let best = -1, bd = Infinity;
-    srcXY.forEach(([sx, sy, z], i) => { if (!visible(z)) return; const d = Math.hypot(sx - x, sy - y); if (d < bd) { bd = d; best = i; } });
-    if (best >= 0 && bd < 12) { state.patches.push({ center: best, radiusMm: state.radiusMm } as Patch); notify(); }
-  });
   subscribe(update);
   state.patches = MOTOR();
   update();

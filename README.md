@@ -7,14 +7,14 @@ under an "In depth" toggle:
 1. Neurons make very small electric fields: one cell in a to-scale cortex cross-section (grey matter, CSF, dura, skull), with a microelectrode whose tip sits at the detection distance
 2. Many neurons must fire synchronously to create larger signal: a patch of N cells with a fraction in step, in the same cross-section; a cited note and schematic on how neurons synchronise (thalamic drive, shared inhibition, travelling waves)
 3. Only large, multi-neuron signals reach outside the skull: the same patch at a chosen depth in the analytic multi-shell head, with the potential profile drawn vertically beside the cross-section
-4. The signal that gets outside the skull is noisy: the alpha amplitude derived from N and synchrony through the section 3 head, buried in muscle, blink, skin, mains and amplifier noise
-5. Different electrode types result in different signals: the scalp signal through wet gel on abraded skin, wet gel, a dry plate and a plate over hair, each with an illustration
-6. From outside, patches of cortex blur into broad blobs: patches on a realistic head (default: the hand, foot and
-   tongue motor areas a person can modulate at will), each one's own scalp map and the summed map the electrodes see,
-   using a precomputed lead field for the fsaverage boundary-element head (MNE-Python)
-7. A head with EEG can operate only a few dimensions: the same patches taken in turn, each bar the signal it adds
+4. From outside, patches of cortex blur into broad blobs: a fixed, representative set of patches on a realistic head
+   (the hand, foot and tongue motor areas a person can modulate at will), each one's own scalp map and the summed map
+   the electrodes see with contact noise added, using a precomputed lead field for the fsaverage boundary-element head (MNE-Python)
+5. The signal that gets outside the skull is noisy: the alpha amplitude derived from N and synchrony through the section 3 head, buried in muscle, blink, skin, mains and amplifier noise
+6. Different electrode types result in different signals: the scalp signal through wet gel on abraded skin, wet gel, a dry plate and a plate over hair, each with an illustration
+7. A head with EEG can operate only a few dimensions: the patches of section 4 taken in turn, each bar the signal it adds
    that the others cannot mimic, against the noise of one contact; plus the full lead-field ceiling and the record.
-   The controls of sections 6 and 7 are one shared state
+   The controls of sections 4 and 7 are one shared state
 8. EEG signals have inherent delays: a simulated imagined movement, the mu rhythm fading on a cited time course and a
    sliding-window power estimate whose length is a slider, with a cited timeline of where the time goes (rhythm,
    window, P300 repetitions, flicker plus gaze shift, readiness potential)
@@ -37,7 +37,7 @@ npm run build      # type-check + production build into dist/
 ```bash
 pip install mne nibabel
 python scripts/leadfield_svd.py --ico 5     # downloads fsaverage (~300 MB) on first run; ~5 min; writes src/data/leadfield-svd.json
-python scripts/export_head_leadfield.py     # compact ico-3 lead field + geometry for the section 6 head view; writes src/data/head-leadfield.json
+python scripts/export_head_leadfield.py     # compact ico-3 lead field + geometry for the head view of sections 4 and 7; writes src/data/head-leadfield.json
 npm test                                    # tests/leadfield.test.ts pins the counts quoted in claim 'svd-counts'
 ```
 
@@ -52,7 +52,7 @@ src/ui/           layout.ts (section/figure grid, In depth toggles), slider.ts (
                   field.ts (glow field renderer, grids, cortex layers, neuron and probe glyphs), citation helpers
 src/data/         references.ts (bibliography), claims.ts (every assumption + status), params.ts (defaults),
                   leadfield-svd.json (realistic-head singular values), head-leadfield.json (128 × 1,284 lead field,
-                  electrode and source positions for the section 6 head)
+                  electrode and source positions for the head of sections 4 and 7)
 scripts/          leadfield_svd.py and export_head_leadfield.py (MNE-Python), verification-report.mjs, merge-audit.mjs
 tests/            vitest unit tests
 docs/             verification.md, the independent audit of every claim

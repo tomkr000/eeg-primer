@@ -1,5 +1,5 @@
 /**
- * The shared model behind sections 6 and 7: a real head (fsaverage, BioSemi-128 lead field), patches of
+ * The shared model behind sections 4 and 7: a real head (fsaverage, BioSemi-128 lead field), patches of
  * synchronous cortex placed on it, the scalp pattern of each, and one state (patches, source sliders, noise)
  * that both sections' controls drive together.
  */
@@ -7,7 +7,7 @@ import { symmetricEigenvalues } from '../physics/linalg';
 import { netDipole } from '../physics/population';
 import { P, claimCite as c } from '../data/params';
 import { controls, slider, fmt, type Slider } from '../ui/slider';
-import { sourceSliders } from './s4-noise';
+import { sourceSliders } from './s5-noise';
 import head from '../data/head-leadfield.json';
 import svd from '../data/leadfield-svd.json';
 
@@ -151,15 +151,10 @@ export function greedyOrder(vecs: Float64Array[]): { idx: number; rest: number }
   return out;
 }
 
-/** The four sliders and a reset button, bound to the shared state; every section gets its own copy and they move together. */
+/** The four sliders, bound to the shared state; every section gets its own copy and they move together. */
 export function dimControls(): HTMLElement {
   const wrap = document.createElement('div');
   wrap.className = 'dim-controls';
-  const presets = document.createElement('div');
-  presets.className = 'choice-group';
-  const reset = document.createElement('button'); reset.className = 'btn'; reset.textContent = 'Reset to the motor areas';
-  reset.addEventListener('click', () => { state.patches = MOTOR(); notify(); });
-  presets.append(reset);
   const { sN, sF } = sourceSliders(state.N);
   const sRadius = slider({ label: 'Patch radius', unit: 'mm', min: 4, max: 30, value: state.radiusMm, step: 1 });
   const sNoise = slider({ label: 'Noise of one electrode contact', unit: 'µV rms', min: 1, max: 20, value: state.noiseUv, log: true, note: c('skin-noise'), marks: [{ value: 1, label: 'Quietest measured' }, { value: 8, label: 'Dry contact' }] });
@@ -168,7 +163,7 @@ export function dimControls(): HTMLElement {
     subscribe(() => { if (s.value !== state[key]) s.set(state[key]); });
   };
   bind(sN, 'N'); bind(sF, 'f'); bind(sRadius, 'radiusMm'); bind(sNoise, 'noiseUv');
-  wrap.append(presets, controls(sN.el, sF.el, sRadius.el, sNoise.el));
+  wrap.append(controls(sN.el, sF.el, sRadius.el, sNoise.el));
   return wrap;
 }
 

@@ -1,5 +1,4 @@
 import { claimCite as c, P } from '../data/params';
-import { mulberry32 } from '../physics/population';
 import { fmt } from '../ui/slider';
 import { section, figure, prose, assumptions } from '../ui/layout';
 import { CANVAS_FONT } from '../ui/field';
@@ -33,18 +32,17 @@ ${c('emg-level')}, which is why scalp gamma is hard to trust.</p>
 model and 128 electrodes ${c('fsaverage-bem')}${c('mne-bem')}${c('montages')}. Each patch is N cells with a
 fraction in step, the source of sections 2 and 3, spread over a disc. The patches are a representative set,
 the motor areas for the hands, the feet and the tongue. The middle map
-shows each patch alone from outside; the right map shows all of them together with the noise of one
-contact on every electrode, which is the only thing the electrodes ever see. Section 7 counts how many of
-them can be told apart.</p>`);
+shows each patch alone from outside; the right map shows all of them together, which is the only thing
+the electrodes ever see. Noise comes in section 5, and section 7 asks what can be controlled.</p>`);
 
-  const fig = figure(sec.fig, `Left: the cortex from above, nose up, with a fixed, representative set of patches on the motor areas a person can modulate at will: the hands, the feet and the tongue ${c('mi-classes')}${c('motor-map')}. Middle: the scalp voltage each patch makes on its own, each map scaled to its own peak, so the shapes can be compared. Right: the voltage of all patches together with the noise of one electrode contact on every electrode ${c('skin-noise')}, on a fixed scale.`, { wide: true });
+  const fig = figure(sec.fig, `Left: the cortex from above, nose up, with a fixed, representative set of patches on the motor areas a person can modulate at will: the hands, the feet and the tongue ${c('mi-classes')}${c('motor-map')}. Middle: the scalp voltage each patch makes on its own, each map scaled to its own peak, so the shapes can be compared. Right: the voltage of all patches together, on a fixed scale.`, { wide: true });
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
   fig.viz.append(row);
   const cortex = titledCanvas(row, 'Patch locations on the cortex (view from above)', W, H + FOOT);
   const each = titledCanvas(row, 'Scalp potential of each patch alone', W, H + FOOT);
-  const summed = titledCanvas(row, 'Sum of all patches, plus electrode noise', W, H + FOOT);
+  const summed = titledCanvas(row, 'Scalp potential of all patches together', W, H + FOOT);
   const cctx = cortex.getContext('2d')!, ectx = each.getContext('2d')!, sctx = summed.getContext('2d')!;
   const mini = document.createElement('canvas'); mini.width = G; mini.height = G;
   const mctx = mini.getContext('2d')!, mimg = mctx.createImageData(G, G);
@@ -93,10 +91,10 @@ them can be told apart.</p>`);
     });
   }
 
-  /** the scalp voltage of all patches together plus the noise of one contact on each electrode, on an absolute log colour scale, with a colour bar */
+  /** the scalp voltage of all patches together, on an absolute log colour scale, with a colour bar */
   function drawSummed(total: Float64Array, peak: number) {
     sctx.clearRect(0, 0, W, H + FOOT);
-    footnote(sctx, H, [[{ sw: RED }, 'above the average of all 128 electrodes, ', { sw: BLUE }, 'below it'], ['far from the patches the voltage dips below that average'], [`signal peak ${fmt(peak, 2)} µV, with ${fmt(state.noiseUv, 2)} µV of noise on every electrode`]]);
+    footnote(sctx, H, [[{ sw: RED }, 'above the average of all 128 electrodes, ', { sw: BLUE }, 'below it'], ['far from the patches the voltage dips below that average'], [`signal peak ${fmt(peak, 2)} µV at the strongest electrode`]]);
     const hw = half.width, hh = half.height, d = himg.data, lf = Math.log10(FLOOR), lc = Math.log10(CEIL);
     for (let j = 0; j < hh; j++) for (let i = 0; i < hw; i++) {
       const k = (j * hw + i) * 4, px = (i + 0.5) * 2, py = (j + 0.5) * 2;
@@ -113,7 +111,7 @@ them can be told apart.</p>`);
     sctx.fillStyle = 'rgba(26,26,26,0.7)';
     for (const [x, y, z] of elXY) { if (!visible(z)) continue; sctx.beginPath(); sctx.arc(x, y, 2, 0, 2 * Math.PI); sctx.fill(); }
     geo.outline(sctx);
-    // colour bar: positive up, negative down, with the noise of one contact marked
+    // colour bar: positive up, negative down
     const bx = W - 28, bt = 48, bb = H - 44, bw = 12;
     for (let y = bt; y < bb; y++) {
       const u = 1 - 2 * (y - bt) / (bb - bt); // +1 at the top, −1 at the bottom
@@ -134,12 +132,9 @@ them can be told apart.</p>`);
     const total = new Float64Array(nCh);
     for (const p of pats) for (let ch = 0; ch < nCh; ch++) total[ch] += p.a[ch];
     const peak = Math.max(0, ...Array.from(total, Math.abs));
-    // one draw of the noise of one contact on every electrode (fixed seed, so only the sliders change the picture)
-    const rng = mulberry32(7);
-    const noisy = Float64Array.from(total, (v) => { const u = Math.max(rng(), 1e-12), w = rng(); return v + state.noiseUv * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * w); });
     drawCortexView();
     drawEach(pats);
-    drawSummed(noisy, peak);
+    drawSummed(total, peak);
   }
   subscribe(update);
   state.patches = MOTOR();

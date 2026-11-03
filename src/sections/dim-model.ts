@@ -96,8 +96,8 @@ export function miniValues(a: ArrayLike<number>): { vals: Float32Array; vmax: nu
 }
 export const POS: [number, number, number] = [227, 73, 72], NEG: [number, number, number] = [42, 120, 214];
 
-/** The patches of section 4, the three slider values, and one contact's noise on every electrode of the summed map (µV rms). */
-export const state = { patches: [] as Patch[], N: P.patchDefaultN, f: P.patchDefaultSync, radiusMm: 10, noiseUv: 1 };
+/** The patches of section 4 and the three slider values. */
+export const state = { patches: [] as Patch[], N: P.patchDefaultN, f: P.patchDefaultSync, radiusMm: 10 };
 const listeners: (() => void)[] = [];
 export const subscribe = (fn: () => void) => { listeners.push(fn); };
 export const notify = () => listeners.forEach((f) => f());

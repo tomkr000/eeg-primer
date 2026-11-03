@@ -39,9 +39,9 @@ far too weak to use what is there.</p>`);
   const rScalp = readout('Peak scalp potential');
   const rCortex = readout('Peak at the cortical surface');
   const rRatio = readout('Cortex-to-scalp attenuation');
-  const rWidth = readout('Scalp half-width of the pattern');
+  const rWidth = readout(`Stretch of scalp above ${1} µV`);
 
-  const fig = figure(sec.fig, 'Left: the layers between cortex and air in cross-section, drawn flat like sections 1 and 2 (the sphere model unrolled; axes in centimetres). Red positive, blue negative, fading with the logarithm of the potential; the dark line is where it falls to 1 µV, the noise of the quietest electrode contact alone (section 4 adds the rest). The potential continues into the air, but no electrode can read it there: a square centimetre held a centimetre off the scalp couples through under a tenth of a picofarad, hopeless as section 5 shows, so the air is faded and the profile dotted. Right: the potential straight above the source, on the same vertical scale. The source is the patch of section 2 at the chosen depth, pointing outward.', { panelWidth: '400px' });
+  const fig = figure(sec.fig, 'Left: the layers between cortex and air in cross-section, drawn flat like sections 1 and 2 (the sphere model unrolled; axes in centimetres). Red positive, blue negative, fading with the logarithm of the potential. The thick black stretch of scalp is where an electrode on it would see more than 1 µV, the noise of the quietest electrode contact alone (section 4 adds the rest). The potential continues into the air, but no electrode can read it there: a square centimetre held a centimetre off the scalp couples through under a tenth of a picofarad, hopeless as section 5 shows, so the air is faded and the profile stops at the scalp. Right: the potential straight above the source, on the same vertical scale. The source is the patch of section 2 at the chosen depth, pointing outward.', { panelWidth: '400px' });
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
@@ -53,8 +53,8 @@ far too weak to use what is there.</p>`);
   const xRange: [number, number] = [-0.04, 0.04];
   const yRange: [number, number] = [-0.033, -0.033 + 0.08 * 330 / 390];
   let scalpY = Infinity; // height of the scalp surface above the cortex (set in update)
-  const hm = glow(left, { width: 390, height: 330, scale: 2, xRange, yRange, floor: 1e-7, ceiling: 1e-4, threshold: 1e-6, contourWhere: (_x, y) => y <= scalpY, fadeWhere: (_x, y) => (y > scalpY ? 0.3 : 1), grid: { step: 0.01, factor: 100, unit: 'cm', note: 'each grid square = 1 cm' } });
-  glowLegend(left, '0.1 µV', '100 µV', 'dark line = 1 µV, a quiet contact’s noise; air faded: unreadable (section 5)');
+  const hm = glow(left, { width: 390, height: 330, scale: 2, xRange, yRange, floor: 1e-7, ceiling: 1e-4, fadeWhere: (_x, y) => (y > scalpY ? 0.3 : 1), grid: { step: 0.01, factor: 100, unit: 'cm', note: 'each grid square = 1 cm' } });
+  glowLegend(left, '0.1 µV', '100 µV', 'black bar: scalp where an electrode sees > 1 µV; air faded: unreadable');
   const radial = verticalProfile(right, { height: 330, yDomain: [yRange[0] * 100, yRange[1] * 100], yLabel: 'cm above the cortical surface', xLabel: 'Potential straight above the source (µV)', xDomain: [0.1, 1e4] });
   fig.panel.append(controls(sN.el, sF.el, sDepth.el));
   fig.viz.append(readouts(rSource.el, rScalp.el, rCortex.el, rRatio.el, rWidth.el));
@@ -88,15 +88,15 @@ far too weak to use what is there.</p>`);
     const prof: [number, number][] = [];
     for (let k = 0; k <= 400; k++) {
       const y = yRange[0] + ((yRange[1] - yRange[0]) * k) / 400, r = rCortexSurf + y;
-      const v = r <= R ? potential(sol, Math.min(r, R - 1e-9), 0, 0) : exteriorPotential(sol, r, 0, 0);
-      prof.push([Math.abs(v) * 1e6, y * 100]);
+      if (r > R) break; // the profile stops at the scalp: nothing can read the field in the air
+      prof.push([Math.abs(potential(sol, Math.min(r, R - 1e-9), 0, 0)) * 1e6, y * 100]);
     }
     const layerColours = ['#2a78d6', '#1baf7a', '#eda100', '#898781', '#eb6834'];
     const above = (r: number) => (r - rCortexSurf) * 100;
     const bands = shells.map((sh, i) => ({ from: i === 0 ? yRange[0] * 100 : above(shells[i - 1].outerRadius), to: above(sh.outerRadius), label: i === 0 ? 'grey matter' : sh.name, color: layerColours[i % layerColours.length] }));
     bands.push({ from: above(R), to: yRange[1] * 100, label: 'air: unreadable', color: '#f4f1ea' });
     scalpY = R - rCortexSurf;
-    radial.update(prof, bands, [{ value: TH_UV, label: '1 µV' }], (b - rCortexSurf) * 100, scalpY * 100);
+    radial.update(prof, bands, [{ value: TH_UV, label: '1 µV' }], (b - rCortexSurf) * 100);
     let peakScalp = 0, peakCortex = 0;
     for (let th = 0; th < Math.PI / 2; th += 0.005) {
       peakScalp = Math.max(peakScalp, Math.abs(surfacePotential(sol, th, 0)));
@@ -105,10 +105,10 @@ far too weak to use what is there.</p>`);
     rScalp.set(`${fmt(peakScalp * 1e6, 3)} µV`);
     rCortex.set(`${fmt(peakCortex * 1e6, 3)} µV`);
     rRatio.set(`${fmt(peakCortex / peakScalp, 3)}×`);
-    let hw = NaN;
-    for (let th = 0; th < Math.PI; th += 0.002) if (Math.abs(surfacePotential(sol, th)) < peakScalp / 2) { hw = th * R; break; }
-    rWidth.set(isNaN(hw) ? 'n/a' : `${fmt(hw * 100, 3)} cm`);
-    hm.setThreshold(TH_UV * 1e-6);
+    // the stretch of scalp where a contact electrode sees more than the floor, measured along the scalp from the point above the source
+    let reach = 0;
+    for (let th = 0; th < Math.PI; th += 0.002) { if (Math.abs(surfacePotential(sol, th)) < TH_UV * 1e-6) break; reach = th * R; }
+    rWidth.set(reach > 0 ? `${fmt(2 * reach * 100, 3)} cm` : 'none');
     hm.draw((x, y) => {
       // unrolled sphere: x is distance along the scalp, y height above the cortical surface
       const r = rCortexSurf + y, th = Math.abs(x) / R, ph = x < 0 ? Math.PI : 0;
@@ -118,9 +118,21 @@ far too weak to use what is there.</p>`);
       const t = (i: number) => shells[i].outerRadius - shells[i - 1].outerRadius;
       drawCortexLayers(ctx, toPx, { xRange, yTop: yRange[1], surface: 0, csf: t(1), dura: t(2), skull: t(3), scalp: t(4), greyLabelY: -0.012 });
       ctx.font = CANVAS_FONT; ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'left';
-      const [lx, ly] = toPx(xRange[0] + 0.0065, scalpY + 0.004);
-      ctx.fillText('the field continues into the air,', lx, ly - 16);
-      ctx.fillText('but nothing can read it without contact', lx, ly);
+      const [lx, ly] = toPx(xRange[0] + 0.0065, yRange[1] - 0.006);
+      ctx.fillText('the field continues into the air,', lx, ly);
+      ctx.fillText('but nothing can read it without contact', lx, ly + 16);
+      if (reach > 0) {
+        // the black bar along the scalp; arrowheads where it runs past the edge of the picture
+        const [x1, y1] = toPx(-reach, scalpY), [x2] = toPx(reach, scalpY), a = Math.max(x1, 10), z = Math.min(x2, 380);
+        ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 5; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(a, y1); ctx.lineTo(z, y1); ctx.stroke();
+        ctx.fillStyle = '#1a1a1a';
+        if (x1 < 10) { ctx.beginPath(); ctx.moveTo(1, y1); ctx.lineTo(11, y1 - 6); ctx.lineTo(11, y1 + 6); ctx.fill(); }
+        if (x2 > 380) { ctx.beginPath(); ctx.moveTo(389, y1); ctx.lineTo(379, y1 - 6); ctx.lineTo(379, y1 + 6); ctx.fill(); }
+        ctx.textAlign = 'center'; ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+        const t = `electrodes on this ${fmt(2 * reach * 100, 2)} cm of scalp see more than ${TH_UV} µV`;
+        ctx.strokeText(t, (a + z) / 2, y1 - 9); ctx.fillText(t, (a + z) / 2, y1 - 9);
+      }
       const [sx, sy] = toPx(0, b - rCortexSurf);
       ctx.beginPath(); ctx.arc(sx, sy, 3.5, 0, 2 * Math.PI); ctx.fill();
       ctx.fillText('source', sx + 8, sy + 5);

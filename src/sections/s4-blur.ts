@@ -2,65 +2,14 @@ import { claimCite as c, P } from '../data/params';
 import { mulberry32 } from '../physics/population';
 import { fmt } from '../ui/slider';
 import { section, figure, prose, assumptions } from '../ui/layout';
-import { CANVAS_FONT, textWithSwatches, type TextPart } from '../ui/field';
-import { state, subscribe, dimControls, patchPattern, miniValues, scalpValue, MOTOR, patchColour, patchLabel, visible, inHead, srcPos, elPos, centre, R, x0, y0, ax, by, sigmaMm, nCh, nSrc, G, miniIn, POS, NEG } from './dim-model';
+import { CANVAS_FONT } from '../ui/field';
+import { state, subscribe, dimControls, patchPattern, miniValues, scalpValue, MOTOR, patchColour, patchLabel, visible, inHead, R, x0, y0, ax, by, sigmaMm, nCh, nSrc, G, miniIn, POS, NEG } from './dim-model';
+import { headGeometry, titledCanvas, footnote, drawCortex } from './head-view';
 
-const W = 360, H = 360, cx = W / 2, cy = H / 2 + 4, FOOT = 46; // the head view, with a band of notes under it
-const s = Math.min((W / 2 - 16) / ax, (H / 2 - 24) / by); // px per mm
-/** orthographic view from above: x right, y (nose) up; z is height above the sphere centre (mm) */
-const project = (p: number[]): [number, number, number] => [cx + (p[0] - x0) * s, cy - (p[1] - y0) * s, p[2] - centre[2]];
-const elXY = elPos.map(project), srcXY = srcPos.map(project);
+const W = 360, H = 360, FOOT = 46; // the head view, with a band of notes under it
+const geo = headGeometry(W, H);
+const { cx, cy, s, elXY } = geo;
 const FLOOR = 0.1, CEIL = 50; // µV: the colour scale of the summed map
-
-function headPath(ctx: CanvasRenderingContext2D) { ctx.beginPath(); ctx.ellipse(cx, cy, ax * s, by * s, 0, 0, 2 * Math.PI); }
-/** faint 5 cm grid with numbered ticks, in head coordinates about the outline centre */
-function drawGridHead(ctx: CanvasRenderingContext2D) {
-  ctx.save();
-  ctx.font = CANVAS_FONT; ctx.strokeStyle = 'rgba(26,26,26,0.16)'; ctx.lineWidth = 1;
-  const fmtTick = (mm: number) => String(mm / 10).replace('-', '−');
-  for (let mm = -100; mm <= 100; mm += 50) {
-    const px = cx + mm * s, py = cy - mm * s;
-    ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, H); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(W, py); ctx.stroke();
-  }
-  ctx.fillStyle = '#52514e';
-  for (let mm = -100; mm <= 100; mm += 50) {
-    const px = cx + mm * s, py = cy - mm * s;
-    ctx.textAlign = 'center'; ctx.fillText(fmtTick(mm), px, H - 5);
-    if (mm !== 0) { ctx.textAlign = 'left'; ctx.fillText(fmtTick(mm), 4, py + 5); }
-  }
-  ctx.textAlign = 'left'; ctx.fillText('cm', 4, 16);
-  ctx.restore();
-}
-function headOutline(ctx: CanvasRenderingContext2D) {
-  ctx.save();
-  ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 1.5;
-  headPath(ctx); ctx.stroke();
-  const top = cy - by * s, side = ax * s;
-  ctx.beginPath(); ctx.moveTo(cx - 10, top + 1); ctx.lineTo(cx, top - 12); ctx.lineTo(cx + 10, top + 1); ctx.stroke();
-  ctx.beginPath(); ctx.ellipse(cx - side - 5, cy, 5, 15, 0, 0, 2 * Math.PI); ctx.stroke();
-  ctx.beginPath(); ctx.ellipse(cx + side + 5, cy, 5, 15, 0, 0, 2 * Math.PI); ctx.stroke();
-  ctx.font = CANVAS_FONT; ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'center';
-  ctx.fillText('front', cx, top - 17); ctx.fillText('back', cx, cy + by * s - 8);
-  ctx.restore();
-}
-/** a titled canvas */
-function titledCanvas(parent: HTMLElement, title: string, w: number, h: number, cls = 'glow'): HTMLCanvasElement {
-  const box = document.createElement('div');
-  box.className = 'viz-box';
-  const t = document.createElement('div'); t.className = 'viz-title'; t.textContent = title;
-  const cv = document.createElement('canvas');
-  cv.width = w; cv.height = h; cv.className = cls; cv.style.width = `${w}px`;
-  box.append(t, cv);
-  parent.append(box);
-  return cv;
-}
-/** one or two lines of notes in the band under the head view; colours appear as swatches, never as words */
-function footnote(ctx: CanvasRenderingContext2D, lines: TextPart[][]) {
-  ctx.save(); ctx.font = '12px system-ui, sans-serif'; ctx.fillStyle = '#1a1a1a';
-  lines.forEach((l, i) => textWithSwatches(ctx, l, 6, H + 13 + i * 15));
-  ctx.restore();
-}
 const RED = '#e34948', BLUE = '#2a78d6';
 export function mountBlur(root: HTMLElement) {
   const sec = section(root, 'blur', '4', 'From outside, patches of cortex blur into broad blobs', 'Only a few areas can be controlled at will, and their blobs overlap');
@@ -105,38 +54,10 @@ them can be told apart.</p>`);
     { what: 'Drawing', value: `view from above; only cortex and electrodes above the centre of a sphere fitted to the electrodes (radius ${fmt(R / 10, 3)} cm) are drawn, and the outline is the widest extent of those electrodes; scalp maps are a Gaussian-weighted average of all ${nCh} electrode values (width ${fmt(sigmaMm, 2)} mm) on that sphere; the summed map fades from ${FLOOR} µV to solid at ${CEIL} µV on a log scale, the single-patch maps are each scaled to their own peak; patch discs are drawn at the patch radius`, cite: '<span class="assumption-tag">drawing</span>' },
   ]);
 
-  function drawCortex() {
+  function drawCortexView() {
     cctx.clearRect(0, 0, W, H + FOOT);
-    footnote(cctx, [['a representative set: the motor areas for the hands, feet and'], ['tongue, which a person can modulate at will'], [`each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]]);
-    drawGridHead(cctx);
-    cctx.fillStyle = 'rgba(26,26,26,0.22)';
-    for (const [x, y, z] of srcXY) { if (!visible(z)) continue; cctx.beginPath(); cctx.arc(x, y, 1.3, 0, 2 * Math.PI); cctx.fill(); }
-    cctx.save();
-    cctx.globalCompositeOperation = 'multiply';
-    state.patches.forEach((p, idx) => {
-      const [px, py] = srcXY[p.center], r = Math.max(4, p.radiusMm * s);
-      const g = cctx.createRadialGradient(px, py, 0, px, py, r), col = patchColour(idx);
-      g.addColorStop(0, col + 'e6'); g.addColorStop(0.6, col + '99'); g.addColorStop(1, col + '00');
-      cctx.fillStyle = g;
-      cctx.beginPath(); cctx.arc(px, py, r, 0, 2 * Math.PI); cctx.fill();
-    });
-    cctx.restore();
-    // name labels: below the disc, else above, left or right, wherever they hit neither a disc nor an earlier label
-    type Box = [number, number, number, number];
-    const taken: Box[] = state.patches.map((p) => { const [px, py] = srcXY[p.center], r = Math.max(4, p.radiusMm * s); return [px - r, px + r, py - r, py + r]; });
-    const hits = (b: Box, skip: number) => taken.some((t, i) => i !== skip && b[0] < t[1] + 6 && b[1] > t[0] - 6 && b[2] < t[3] && b[3] > t[2]);
-    state.patches.forEach((p, idx) => {
-      const [px, py] = srcXY[p.center];
-      cctx.font = 'bold 14px system-ui, sans-serif'; cctx.fillStyle = '#1a1a1a'; cctx.textAlign = 'center';
-      cctx.fillText(String(idx + 1), px, py + 5);
-      if (!p.name) return;
-      const w = p.name.length * 6.5, r = Math.max(4, p.radiusMm * s);
-      const spots: [number, number][] = [[px, py + r + 14], [px, py - r - 5], [px - r - w / 2 - 4, py + 5], [px + r + w / 2 + 4, py + 5]];
-      const [lx, ly] = spots.find(([x, y]) => !hits([x - w / 2, x + w / 2, y - 12, y], idx)) ?? spots[0];
-      taken.push([lx - w / 2, lx + w / 2, ly - 12, ly]);
-      cctx.font = '12px system-ui, sans-serif'; cctx.fillText(p.name, lx, ly);
-    });
-    headOutline(cctx);
+    footnote(cctx, H, [['a representative set: the motor areas for the hands, feet and'], ['tongue, which a person can modulate at will'], [`each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]]);
+    drawCortex(cctx, geo, state.patches);
   }
 
   /** the small map of one pattern into the mini canvas, scaled to its own peak */
@@ -149,7 +70,7 @@ them can be told apart.</p>`);
 
   function drawEach(pats: { a: Float64Array }[]) {
     ectx.clearRect(0, 0, W, H + FOOT);
-    footnote(ectx, [[{ sw: RED }, 'positive voltage, ', { sw: BLUE }, 'negative'], ['each map is scaled to its own peak, to compare shapes'], ['a rhythm is this pattern reversing sign every half-cycle']]);
+    footnote(ectx, H, [[{ sw: RED }, 'positive voltage, ', { sw: BLUE }, 'negative'], ['each map is scaled to its own peak, to compare shapes'], ['a rhythm is this pattern reversing sign every half-cycle']]);
     ectx.font = CANVAS_FONT; ectx.fillStyle = '#52514e'; ectx.textAlign = 'center';
     if (!pats.length) { ectx.fillText('no patches placed', W / 2, H / 2); return; }
     const cols = Math.ceil(Math.sqrt(pats.length)), rows = Math.ceil(pats.length / cols);
@@ -172,7 +93,7 @@ them can be told apart.</p>`);
   /** the scalp voltage of all patches together plus the noise of one contact on each electrode, on an absolute log colour scale, with a colour bar */
   function drawSummed(total: Float64Array, peak: number) {
     sctx.clearRect(0, 0, W, H + FOOT);
-    footnote(sctx, [[{ sw: RED }, 'above the average of all 128 electrodes, ', { sw: BLUE }, 'below it'], ['far from the patches the voltage dips below that average'], [`signal peak ${fmt(peak, 2)} µV, with ${fmt(state.noiseUv, 2)} µV of noise on every electrode`]]);
+    footnote(sctx, H, [[{ sw: RED }, 'above the average of all 128 electrodes, ', { sw: BLUE }, 'below it'], ['far from the patches the voltage dips below that average'], [`signal peak ${fmt(peak, 2)} µV, with ${fmt(state.noiseUv, 2)} µV of noise on every electrode`]]);
     const hw = half.width, hh = half.height, d = himg.data, lf = Math.log10(FLOOR), lc = Math.log10(CEIL);
     for (let j = 0; j < hh; j++) for (let i = 0; i < hw; i++) {
       const k = (j * hw + i) * 4, px = (i + 0.5) * 2, py = (j + 0.5) * 2;
@@ -184,11 +105,11 @@ them can be told apart.</p>`);
       d[k] = col[0]; d[k + 1] = col[1]; d[k + 2] = col[2]; d[k + 3] = Math.round(235 * t);
     }
     hctx.putImageData(himg, 0, 0);
-    sctx.save(); headPath(sctx); sctx.clip(); sctx.imageSmoothingEnabled = true; sctx.drawImage(half, 0, 0, W, H); sctx.restore();
-    drawGridHead(sctx);
+    sctx.save(); geo.headPath(sctx); sctx.clip(); sctx.imageSmoothingEnabled = true; sctx.drawImage(half, 0, 0, W, H); sctx.restore();
+    geo.grid(sctx);
     sctx.fillStyle = 'rgba(26,26,26,0.7)';
     for (const [x, y, z] of elXY) { if (!visible(z)) continue; sctx.beginPath(); sctx.arc(x, y, 2, 0, 2 * Math.PI); sctx.fill(); }
-    headOutline(sctx);
+    geo.outline(sctx);
     // colour bar: positive up, negative down, with the noise of one contact marked
     const bx = W - 28, bt = 48, bb = H - 44, bw = 12;
     for (let y = bt; y < bb; y++) {
@@ -213,7 +134,7 @@ them can be told apart.</p>`);
     // one draw of the noise of one contact on every electrode (fixed seed, so only the sliders change the picture)
     const rng = mulberry32(7);
     const noisy = Float64Array.from(total, (v) => { const u = Math.max(rng(), 1e-12), w = rng(); return v + state.noiseUv * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * w); });
-    drawCortex();
+    drawCortexView();
     drawEach(pats);
     drawSummed(noisy, peak);
   }

@@ -101,6 +101,8 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .figure-wide { grid-template-columns: 1fr; }
 .figure-wide .controls { grid-template-columns: repeat(4, 1fr); gap: 6px 24px; }
 .figure-wide .controls:has(> :nth-child(3):last-child) { grid-template-columns: repeat(3, 1fr); }
+.figure-wide .controls:has(> :nth-child(5)) { grid-template-columns: repeat(5, 1fr); gap: 6px 18px; }
+.head-drag { cursor: grab; touch-action: none; }
 .dim-controls { display: flex; align-items: flex-start; gap: 24px; }
 .dim-controls .controls { flex: 1; }
 .dim-controls .choice-group { order: 2; margin-top: 24px; }

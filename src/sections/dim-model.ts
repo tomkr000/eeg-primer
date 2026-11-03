@@ -125,7 +125,7 @@ export function ceilingSv(r: number): number[] {
 export const ceilingCount = () => { const q = momentNam(); return ceilingSv(state.radiusMm).filter((v) => v * q > state.noiseUv).length; };
 
 /** One state for both sections: the patches and the four slider values. */
-export const state = { patches: [] as Patch[], N: P.patchDefaultN, f: P.patchDefaultSync, radiusMm: 10, noiseUv: 1 };
+export const state = { patches: [] as Patch[], explore: [] as Patch[], N: P.patchDefaultN, f: P.patchDefaultSync, radiusMm: 10, noiseUv: 1 }; // patches: the fixed set of section 4; explore: the movable set of section 7
 const listeners: (() => void)[] = [];
 export const subscribe = (fn: () => void) => { listeners.push(fn); };
 export const notify = () => listeners.forEach((f) => f());
@@ -134,6 +134,8 @@ export const momentNam = () => netDipole(Math.round(state.N), state.f, 1, P.sing
 export const nearestSource = (x: number, y: number, z: number) => { let best = 0, bd = Infinity; srcPos.forEach((p, i) => { const d = Math.hypot(p[0] - x, p[1] - y, p[2] - z); if (d < bd) { bd = d; best = i; } }); return best; };
 export const at = (x: number, y: number, z: number, r?: number): Patch => ({ center: nearestSource(x, y, z), radiusMm: r ?? state.radiusMm });
 /** motor areas in fsaverage head coordinates (mm), converted from approximate MNI coordinates with MNE (claim motor-map) */
+/** spots for the patches added beyond the motor set (head coordinates, mm): a ring round the top of the head */
+export const SPARE_SPOTS: [number, number, number][] = [[-45, 40, 85], [45, 40, 85], [-55, -10, 90], [55, -10, 90], [-35, -55, 75], [35, -55, 75], [-25, 70, 70], [25, 70, 70]];
 export const MOTOR = (): Patch[] => [
   { ...at(-38.8, 9.6, 98.9, 10), name: 'left hand' }, { ...at(35.2, 9.3, 98.9, 10), name: 'right hand' }, { ...at(-1.9, 5.2, 113.2, 10), name: 'feet' },
   { ...at(-56.8, 25.3, 76.0, 10), name: 'tongue' }, { ...at(53.2, 25.0, 76.0, 10), name: 'tongue' },
@@ -171,18 +173,18 @@ export function greedyOrder(vecs: Float64Array[]): { idx: number; rest: number }
 }
 
 /** The shared sliders, bound to the shared state; every section gets its own copy and they move together. */
-export function dimControls(opts: { noise?: boolean } = {}): HTMLElement {
+export function dimControls(opts: { noise?: boolean; extra?: HTMLElement[] } = {}): HTMLElement {
   const wrap = document.createElement('div');
   wrap.className = 'dim-controls';
   const { sN, sF } = sourceSliders(state.N);
   const sRadius = slider({ label: 'Patch radius', unit: 'mm', min: 4, max: 30, value: state.radiusMm, step: 1 });
   const sNoise = slider({ label: 'Noise of one electrode contact', unit: 'µV rms', min: 1, max: 20, value: state.noiseUv, log: true, note: c('skin-noise'), marks: [{ value: 1, label: 'Quietest measured' }, { value: 8, label: 'Dry contact' }] });
   const bind = (s: Slider, key: 'N' | 'f' | 'radiusMm' | 'noiseUv') => {
-    s.onChange((v) => { if (state[key] === v) return; state[key] = v; if (key === 'radiusMm') state.patches = state.patches.map((p) => ({ ...p, radiusMm: v })); notify(); });
+    s.onChange((v) => { if (state[key] === v) return; state[key] = v; if (key === 'radiusMm') { state.patches = state.patches.map((p) => ({ ...p, radiusMm: v })); state.explore = state.explore.map((p) => ({ ...p, radiusMm: v })); } notify(); });
     subscribe(() => { if (s.value !== state[key]) s.set(state[key]); });
   };
   bind(sN, 'N'); bind(sF, 'f'); bind(sRadius, 'radiusMm'); bind(sNoise, 'noiseUv');
-  wrap.append(controls(sN.el, sF.el, sRadius.el, ...(opts.noise === false ? [] : [sNoise.el])));
+  wrap.append(controls(sN.el, sF.el, sRadius.el, ...(opts.noise === false ? [] : [sNoise.el]), ...(opts.extra ?? [])));
   return wrap;
 }
 

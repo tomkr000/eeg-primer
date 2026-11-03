@@ -49,9 +49,9 @@ export interface Figure {
 }
 
 /** A figure row sized for a laptop screen: visuals on the left, controls on the right, caption underneath. */
-export function figure(target: HTMLElement, caption: string, opts: { panelWidth?: string } = {}): Figure {
+export function figure(target: HTMLElement, caption: string, opts: { panelWidth?: string; wide?: boolean } = {}): Figure {
   const el = document.createElement('figure');
-  el.className = 'figure';
+  el.className = opts.wide ? 'figure figure-wide' : 'figure'; // wide: visuals across the full width, controls in a row below
   if (opts.panelWidth) el.style.setProperty('--panel-w', opts.panelWidth);
   const viz = document.createElement('div');
   viz.className = 'viz';

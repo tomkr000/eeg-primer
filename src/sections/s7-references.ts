@@ -29,7 +29,7 @@ resulting matrices, and a unit test pins the quoted counts to that data.</p>
 <p><strong>What they are not.</strong> Real heads are not spheres and skull properties vary by site and age
 ${cite('mccann2019', 'tang2008')}; sources are sheets, not points, which is why the cortex-to-scalp ratio
 ranges from 50–100 for a point dipole to 2–5 for a large synchronous sheet ${cite('nunez2019')}. The
-dimension counts in section 6 depend on the noise and source strength you choose. Some inputs rest on thin
+dimension counts in section 7 depend on the noise and source strength you choose. Some inputs rest on thin
 evidence: electrode impedances were measured on the forearm ${cite('chi2010')}, the scalp thickness comes
 from a case report, and the noise levels per electrode type are assumptions guided by the measured
 1–20 µV range. Each weakness is recorded against its claim in the verification log.</p>

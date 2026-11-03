@@ -97,6 +97,11 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .figure { margin: 0; background: var(--surface-1); border: 1px solid var(--rule); padding: 14px 16px 10px; display: grid; grid-template-columns: minmax(0, 1fr) var(--panel-w); gap: 10px 22px; align-items: start; }
 .figure figcaption { grid-column: 1 / -1; font-family: var(--sans); font-size: 14.5px; color: var(--ink-2); line-height: 1.45; margin: 0; border-top: 1px solid var(--grid); padding-top: 8px; }
 .viz { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.figure-wide { grid-template-columns: 1fr; }
+.figure-wide .controls { grid-template-columns: repeat(4, 1fr); gap: 6px 24px; }
+.dim-controls { display: flex; flex-direction: column; gap: 8px; }
+.viz-box { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.viz-title { font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--ink); }
 .figure-note { grid-template-columns: 1fr; margin-top: 0; }
 .section-note { margin-bottom: 18px; }
 .figure-note .panel { display: none; }

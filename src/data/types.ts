@@ -20,7 +20,7 @@ export type ClaimStatus =
 
 export interface Claim {
   id: string;
-  section: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+  section: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
   statement: string;
   value?: number;
   units?: string;

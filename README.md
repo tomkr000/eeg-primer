@@ -9,10 +9,13 @@ under an "In depth" toggle:
 3. Only large, multi-neuron signals reach outside the skull: the same patch at a chosen depth in the analytic multi-shell head, with the potential profile drawn vertically beside the cross-section
 4. The signal that gets outside the skull is noisy: the alpha amplitude derived from N and synchrony through the section 3 head, buried in muscle, blink, skin, mains and amplifier noise
 5. Different electrode types result in different signals: the scalp signal through wet gel on abraded skin, wet gel, a dry plate and a plate over hair, each with an illustration
-6. A head with EEG can operate only a few dimensions: patches on a realistic head (default: the hand, foot and tongue
-   motor areas a person can modulate at will) and a count of the scalp patterns that stand above the noise, using a
-   precomputed lead field for the fsaverage boundary-element head (MNE-Python); plus the full lead-field ceiling
-7. EEG signals have inherent delays: a simulated imagined movement, the mu rhythm fading on a cited time course and a
+6. From outside, patches of cortex blur into broad blobs: patches on a realistic head (default: the hand, foot and
+   tongue motor areas a person can modulate at will), each one's own scalp map and the summed map the electrodes see,
+   using a precomputed lead field for the fsaverage boundary-element head (MNE-Python)
+7. A head with EEG can operate only a few dimensions: the same patches taken in turn, each bar the signal it adds
+   that the others cannot mimic, against the noise of one contact; plus the full lead-field ceiling and the record.
+   The controls of sections 6 and 7 are one shared state
+8. EEG signals have inherent delays: a simulated imagined movement, the mu rhythm fading on a cited time course and a
    sliding-window power estimate whose length is a slider, with a cited timeline of where the time goes (rhythm,
    window, P300 repetitions, flicker plus gaze shift, readiness potential)
 

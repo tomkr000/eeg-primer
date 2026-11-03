@@ -1,6 +1,8 @@
-import { singularValues, symmetricEigenvalues } from '../physics/linalg';
+import { symmetricEigenvalues } from '../physics/linalg';
 import { controls, readout, slider, fmt } from '../ui/slider';
-import { claimCite as c } from '../data/params';
+import { P, claimCite as c } from '../data/params';
+import { netDipole } from '../physics/population';
+import { sourceSliders } from './s4-noise';
 import { section, figure, prose, assumptions, readouts } from '../ui/layout';
 import { CANVAS_FONT } from '../ui/field';
 import head from '../data/head-leadfield.json';
@@ -64,22 +66,22 @@ ${c('intracortical')}.</p>`);
   /** orthographic view from above: x right, y (nose) up; z is height above the sphere centre (mm) */
   const project = (p: number[]): [number, number, number] => [cx + (p[0] - x0) * s, cy - (p[1] - y0) * s, p[2] - centre[2]];
   const inHead = (x: number, y: number) => ((x - x0) / ax) ** 2 + ((y - y0) / by) ** 2 <= 1;
-  const elXY = elPos.map(project);
   const srcXY = srcPos.map(project);
   // interpolation kernel width: a bit under the mean electrode spacing
   let nn = 0;
   for (let i = 0; i < nCh; i++) { let best = Infinity; for (let j = 0; j < nCh; j++) if (j !== i) best = Math.min(best, dist3(elPos[i], elPos[j])); nn += best; }
   const sigmaMm = 0.8 * (nn / nCh);
 
-  const sRadius = slider({ label: 'Patch radius', unit: 'mm', min: 4, max: 30, value: 12, step: 1 });
-  const sQ = slider({ label: 'Patch strength (total dipole moment)', unit: 'nA·m', min: 1, max: 100, value: 10, log: true, note: c('cells-for-10nam') });
-  const sNoise = slider({ label: 'Noise per electrode', unit: 'µV rms', min: 0.1, max: 10, value: 1, log: true, note: c('skin-noise') });
+  const { sN, sF } = sourceSliders(P.patchDefaultN); // the source model of sections 2 to 5
+  const sRadius = slider({ label: 'Patch radius', unit: 'mm', min: 4, max: 30, value: 10, step: 1 });
+  const sNoise = slider({ label: 'Noise per electrode', unit: 'µV rms', min: 0.1, max: 10, value: 1, log: true, note: c('skin-noise'), marks: [{ value: 1, label: 'Quietest contact' }, { value: 8, label: 'Dry contact' }] });
+  const momentNam = () => netDipole(Math.round(sN.value), sF.value, 1, P.singleCellMomentPAm * 1e-12).total * 1e9;
   const rK = readout('Patches placed');
-  const rD = readout('Distinguishable dimensions');
-  const rCeil = readout('Ceiling, every cortical point a source');
-  const rVar = readout('Components for 99% of the variance', c('svd-counts'));
+  const rD = readout('Told apart from outside');
+  const rCeil = readout('Ceiling, all cortical points as sources', c('svd-method'));
+  const rRecord = readout('Record, dimensions people controlled', c('dof-control'));
 
-  const fig = figure(sec.fig, 'A real head (the fsaverage template) from above, nose up. Left: the cortex, each synchronous patch a coloured disc; the default preset puts five patches on the areas a person can modulate at will: left hand (1), right hand (2), feet (3) and the left and right tongue areas (4, 5). Click to add a patch, click a patch to remove it; a third population can live where two discs overlap. Right: the scalp potential of all patches together (red positive, blue negative; dots are the electrodes seen from above). The bars rank the independent scalp patterns; each one above the noise line is a dimension a decoder could recover, and the count is the answer to the section’s question. The ceiling repeats the count with every cortical point as its own source.');
+  const fig = figure(sec.fig, 'A real head (the fsaverage template) from above, nose up. Left: the cortex; each patch is N cells with a fraction in step (the source of sections 2 to 5) over a disc of the chosen radius; the preset puts five on areas a person can modulate at will. Click to add a patch, click one to remove it. Middle: each patch’s own scalp potential (red positive, blue negative, each map to its own peak): after the skull’s blur every patch is a broad blob and neighbours look alike. Right: the patches taken in turn, each bar the part of its pattern that the patches before it cannot mimic; below the noise line a decoder cannot use it, so that patch adds no dimension. The ceiling counts the same way with every cortical point as a source; the record is what people have controlled.', { panelWidth: '400px' });
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
@@ -95,11 +97,25 @@ ${c('intracortical')}.</p>`);
     return cv;
   };
   const cortex = mkCanvas(left, 'Cortex: the synchronous patches', W, H, 'glow head-canvas');
-  const scalp = mkCanvas(right, 'Scalp: the potential the electrodes record', W, H);
+  const scalp = mkCanvas(right, 'Scalp: what each patch looks like from outside', W, H);
   const cctx = cortex.getContext('2d')!, sctx = scalp.getContext('2d')!;
-  const half = document.createElement('canvas'); half.width = W / 2; half.height = H / 2;
-  const hctx = half.getContext('2d')!;
-  const himg = hctx.createImageData(half.width, half.height);
+  // mini scalp maps: a fixed grid over the head outline with precomputed interpolation weights per electrode
+  const G = 56;
+  const mini = document.createElement('canvas'); mini.width = G; mini.height = G;
+  const mctx = mini.getContext('2d')!, mimg = mctx.createImageData(G, G);
+  const miniW = new Float32Array(G * G * nCh), miniIn = new Uint8Array(G * G);
+  {
+    const twoSig = 2 * sigmaMm * sigmaMm;
+    for (let j = 0; j < G; j++) for (let i = 0; i < G; i++) {
+      const x = x0 + ((i + 0.5) / G - 0.5) * 2 * ax, y = y0 - ((j + 0.5) / G - 0.5) * 2 * by; // head coordinates, mm
+      if (!inHead(x, y)) continue;
+      miniIn[j * G + i] = 1;
+      const X = x - centre[0], Y = y - centre[1], Z = Math.sqrt(Math.max(0, R * R - X * X - Y * Y));
+      let den = 0;
+      for (let e = 0; e < nCh; e++) { const ex = elPos[e][0] - x, ey = elPos[e][1] - y, ez = elPos[e][2] - centre[2] - Z; const w = Math.exp(-(ex * ex + ey * ey + ez * ez) / twoSig); miniW[(j * G + i) * nCh + e] = w; den += w; }
+      for (let e = 0; e < nCh; e++) miniW[(j * G + i) * nCh + e] /= den || 1;
+    }
+  }
 
   const presets = document.createElement('div');
   presets.className = 'choice-group';
@@ -116,22 +132,21 @@ ${c('intracortical')}.</p>`);
   mk('Motor areas: hands, feet, tongue', () => { patches = MOTOR(); });
   mk('One patch', () => { patches = [at(-38, 0, 105)]; });
   mk('Two patches', () => { patches = [at(-38, 0, 105), at(38, 0, 105)]; });
-  mk('Two + their overlap', () => { patches = VENN(); });
-  mk('Ring of eight', () => { patches = [at(-45, 40, 85), at(45, 40, 85), at(-55, -10, 90), at(55, -10, 90), at(-35, -55, 75), at(35, -55, 75), at(-25, 70, 70), at(25, 70, 70)]; });
+  mk('Two + overlap', () => { patches = VENN(); });
+  mk('Ring of 8', () => { patches = [at(-45, 40, 85), at(45, 40, 85), at(-55, -10, 90), at(55, -10, 90), at(-35, -55, 75), at(35, -55, 75), at(-25, 70, 70), at(25, 70, 70)]; });
   mk('Clear', () => { patches = []; });
-  fig.panel.append(presets, controls(sRadius.el, sQ.el, sNoise.el));
-  fig.viz.append(readouts(rK.el, rD.el, rCeil.el, rVar.el));
-  const bars = mkCanvas(fig.panel, '', 380, 100);
+  fig.panel.append(presets, controls(sN.el, sF.el, sRadius.el, sNoise.el));
+  fig.viz.append(readouts(rK.el, rD.el, rCeil.el, rRecord.el));
+  const bars = mkCanvas(fig.panel, '', 380, 110);
   bars.style.width = '100%';
   const barsCap = bars.nextElementSibling as HTMLElement;
   const bctx = bars.getContext('2d')!;
   assumptions(fig.el, [
     { what: 'Head', value: `fsaverage three-layer BEM (0.3 / 0.006 / 0.3 S/m), ${nSrc.toLocaleString('en-US')} cortical sources with dipoles normal to the cortex, BioSemi-128 electrodes, average reference`, cite: c('fsaverage-bem') + c('mne-bem') + c('montages') },
-    { what: 'A patch', value: 'all cortical sources within the radius of a centre point, sharing the total moment equally; overlapping patches are separate sources', cite: '<span class="assumption-tag">model assumption</span>' },
-    { what: 'Distinguishable', value: 'singular values of the patches’ scalp patterns divided by the per-electrode noise; those above 1 count', cite: c('svd-method') },
-    { what: 'Ceiling', value: 'the same count for the full lead field, each cortical point carrying the moment of one patch', cite: c('svd-method') },
-    { what: 'Components for 99% of the variance', value: 'lead-field components that carry 99% of the scalp variance of independent, identically distributed sources with 128 electrodes (scripts/leadfield_svd.py)', cite: c('svd-counts') },
-    { what: 'Drawing', value: `view from above; only cortex and electrodes above the centre of a sphere fitted to the electrodes (radius ${fmt(R / 10, 3)} cm) are drawn, and the outline is the widest extent of those electrodes; the scalp map is a Gaussian-weighted average of all ${nCh} electrode values (width ${fmt(sigmaMm, 2)} mm) evaluated on that sphere; patch discs are drawn at the patch radius`, cite: '<span class="assumption-tag">display only</span>' },
+    { what: 'A patch', value: `N cells with a fraction in step (N × fraction × ${P.singleCellMomentPAm} pA·m plus the √N random part, as in sections 2 to 5), shared equally by all cortical sources within the radius of a centre point; a disc of the default radius holds about ${fmt(Math.PI * 100 * P.neuronsPerMm2 / 1e6, 2)} million cells, so N is a small fraction of them; overlapping patches are separate sources`, cite: c('single-cell-moment') + c('variances-add') + c('neuron-density') },
+    { what: 'Told apart', value: 'patches are taken in turn, each time the one whose scalp pattern differs most from every combination of those already taken (column-pivoted QR); the bar is the size of that remainder over the 128 electrodes, and the patch counts when it exceeds the per-electrode noise. Counting the best combinations instead (singular values above the noise, the criterion of the next row) gives the same number to within one for the presets', cite: '<span class="assumption-tag">model assumption</span>' + c('svd-method') },
+    { what: 'Ceiling', value: `singular values of the full lead field, each cortical point carrying the moment of one patch, counted above the noise; ${svd.models.bem.biosemi128.components_99pct} lead-field components carry 99% of the scalp variance of independent, identically distributed sources (scripts/leadfield_svd.py)`, cite: c('svd-method') + c('svd-counts') },
+    { what: 'Drawing', value: `view from above; only cortex and electrodes above the centre of a sphere fitted to the electrodes (radius ${fmt(R / 10, 3)} cm) are drawn, and the outline is the widest extent of those electrodes; each scalp map is a Gaussian-weighted average of all ${nCh} electrode values (width ${fmt(sigmaMm, 2)} mm) evaluated on that sphere; patch discs are drawn at the patch radius`, cite: '<span class="assumption-tag">drawing</span>' },
   ]);
 
   // full lead-field singular values (for the ceiling): eigenvalues of L Lᵀ (nCh × nCh)
@@ -148,12 +163,33 @@ ${c('intracortical')}.</p>`);
     const members: number[] = [];
     srcPos.forEach((q, i) => { if (dist3(q, cpos) <= p.radiusMm) members.push(i); });
     const a = new Float64Array(nCh);
-    const q = sQ.value / members.length;
+    const q = momentNam() / members.length;
     for (const m of members) for (let ch = 0; ch < nCh; ch++) a[ch] += L[ch * nSrc + m] * q;
     return { a, members };
   }
 
+  /** Patches in the order a decoder would take them: each the most unlike every combination of those before; the remainder's size in µV. */
+  function greedyOrder(vecs: Float64Array[]): { idx: number; rest: number }[] {
+    const basis: Float64Array[] = [], out: { idx: number; rest: number }[] = [];
+    const left = vecs.map((_, i) => i);
+    const dot = (u: Float64Array, v: Float64Array) => { let s = 0; for (let i = 0; i < u.length; i++) s += u[i] * v[i]; return s; };
+    while (left.length) {
+      let best = -1, bestR: Float64Array | null = null, bestN = -1;
+      for (const k of left) {
+        const r = Float64Array.from(vecs[k]);
+        for (const b of basis) { const d = dot(r, b); for (let i = 0; i < r.length; i++) r[i] -= d * b[i]; }
+        const nrm = Math.sqrt(dot(r, r));
+        if (nrm > bestN) { bestN = nrm; best = k; bestR = r; }
+      }
+      out.push({ idx: best, rest: bestN });
+      left.splice(left.indexOf(best), 1);
+      if (bestR && bestN > 1e-12) basis.push(Float64Array.from(bestR, (v) => v / bestN));
+    }
+    return out;
+  }
+
   const PATCH_COLOURS = ['#2a78d6', '#eb6834', '#1baf7a', '#6250d6', '#eda100', '#e34948', '#008383', '#8a6d3b'];
+  const label = (p: Patch, i: number) => p.name ? `${i + 1} ${p.name}` : String(i + 1);
 
   const headPath = (ctx: CanvasRenderingContext2D) => { ctx.beginPath(); ctx.ellipse(cx, cy, ax * s, by * s, 0, 0, 2 * Math.PI); };
   /** faint 5 cm grid with numbered ticks, in head coordinates about the outline centre */
@@ -215,85 +251,83 @@ ${c('intracortical')}.</p>`);
     headOutline(cctx);
   }
 
-  function drawScalp(total: Float64Array) {
+  /** one small scalp map per patch, each scaled to its own peak */
+  function drawMaps(pats: { a: Float64Array }[]) {
     sctx.clearRect(0, 0, W, H);
-    const vmax = Math.max(1e-9, ...Array.from(total, Math.abs));
-    const hw = half.width, hh = half.height, d = himg.data;
-    const twoSig = 2 * sigmaMm * sigmaMm;
-    for (let j = 0; j < hh; j++) for (let i = 0; i < hw; i++) {
-      const k = (j * hw + i) * 4;
-      const px = (i + 0.5) * 2, py = (j + 0.5) * 2;
-      const x = x0 + (px - cx) / s, y = y0 - (py - cy) / s; // head coordinates, mm
-      if (!inHead(x, y)) { d[k + 3] = 0; continue; }
-      const X = x - centre[0], Y = y - centre[1];
-      const Z = Math.sqrt(Math.max(0, R * R - X * X - Y * Y)); // height on the fitted sphere (its rim beyond it)
-      let num = 0, den = 0;
-      for (let e = 0; e < nCh; e++) {
-        const ex = elPos[e][0] - x, ey = elPos[e][1] - y, ez = elPos[e][2] - centre[2] - Z;
-        const w = Math.exp(-(ex * ex + ey * ey + ez * ez) / twoSig);
-        num += w * total[e]; den += w;
+    sctx.font = CANVAS_FONT; sctx.fillStyle = '#52514e'; sctx.textAlign = 'center';
+    if (!pats.length) { sctx.fillText('no patches placed', W / 2, H / 2); return; }
+    const cols = Math.ceil(Math.sqrt(pats.length)), rows = Math.ceil(pats.length / cols);
+    const cw = W / cols, ch = (H - 22) / rows, d = mimg.data;
+    sctx.fillText('red = positive, blue = negative, each to its own peak', W / 2, H - 6);
+    pats.forEach((p, k) => {
+      let vmax = 1e-9;
+      const vals = new Float32Array(G * G);
+      for (let g = 0; g < G * G; g++) { if (!miniIn[g]) continue; let v = 0; for (let e = 0; e < nCh; e++) v += miniW[g * nCh + e] * p.a[e]; vals[g] = v; vmax = Math.max(vmax, Math.abs(v)); }
+      for (let g = 0; g < G * G; g++) {
+        const v = vals[g] / vmax, col = v >= 0 ? [227, 73, 72] : [42, 120, 214];
+        d[g * 4] = col[0]; d[g * 4 + 1] = col[1]; d[g * 4 + 2] = col[2]; d[g * 4 + 3] = miniIn[g] ? Math.round(225 * Math.min(1, Math.abs(v))) : 0;
       }
-      const v = den > 1e-12 ? num / den / vmax : 0;
-      const col = v >= 0 ? [227, 73, 72] : [42, 120, 214];
-      d[k] = col[0]; d[k + 1] = col[1]; d[k + 2] = col[2]; d[k + 3] = Math.round(225 * Math.min(1, Math.abs(v)));
-    }
-    hctx.putImageData(himg, 0, 0);
-    sctx.save();
-    headPath(sctx); sctx.clip();
-    sctx.imageSmoothingEnabled = true;
-    sctx.drawImage(half, 0, 0, W, H);
-    sctx.restore();
-    drawGridHead(sctx);
-    sctx.fillStyle = 'rgba(26,26,26,0.7)';
-    for (const [x, y, z] of elXY) { if (!visible(z)) continue; sctx.beginPath(); sctx.arc(x, y, 2, 0, 2 * Math.PI); sctx.fill(); }
-    headOutline(sctx);
-    sctx.font = CANVAS_FONT; sctx.fillStyle = '#1a1a1a'; sctx.textAlign = 'right';
-    sctx.fillText(`peak ${fmt(vmax, 2)} µV`, W - 6, 18);
+      mctx.putImageData(mimg, 0, 0);
+      const rx = Math.min(cw / 2 - 6, ((ch - 40) / 2) * ax / by), ry = rx * by / ax;
+      const ox = (k % cols) * cw + cw / 2, oy = Math.floor(k / cols) * ch + ry + 8;
+      sctx.save();
+      sctx.beginPath(); sctx.ellipse(ox, oy, rx, ry, 0, 0, 2 * Math.PI); sctx.clip();
+      sctx.imageSmoothingEnabled = true;
+      sctx.drawImage(mini, ox - rx, oy - ry, 2 * rx, 2 * ry);
+      sctx.restore();
+      sctx.strokeStyle = PATCH_COLOURS[k % PATCH_COLOURS.length]; sctx.lineWidth = 2;
+      sctx.beginPath(); sctx.ellipse(ox, oy, rx, ry, 0, 0, 2 * Math.PI); sctx.stroke();
+      sctx.beginPath(); sctx.moveTo(ox - 5, oy - ry + 1); sctx.lineTo(ox, oy - ry - 6); sctx.lineTo(ox + 5, oy - ry + 1); sctx.stroke();
+      sctx.fillStyle = '#1a1a1a'; sctx.textAlign = 'center'; sctx.font = '13px system-ui, sans-serif';
+      sctx.fillText(label(patches[k], k), ox, oy + ry + 15);
+      sctx.fillStyle = '#52514e'; sctx.fillText(`peak ${fmt(vmax, 2)} µV`, ox, oy + ry + 29);
+    });
   }
 
-  function drawBars(sv: number[], noise: number) {
-    const W = bars.width, H = bars.height, ml = 50, mb = 22, mt = 8;
+  function drawBars(order: { idx: number; rest: number }[], noise: number) {
+    const W = bars.width, H = bars.height, ml = 50, mb = 36, mt = 10;
     bctx.clearRect(0, 0, W, H);
-    const D = sv.filter((v) => v > noise).length;
-    barsCap.textContent = !sv.length ? 'Place a patch to see its scalp pattern.'
-      : `${sv.length} scalp pattern${sv.length === 1 ? '' : 's'}, strongest first; ${D} above the noise${D < sv.length ? '. The rest are too alike after the skull’s blur.' : '.'}`;
-    const lo = Math.log10(noise / 30), hi = Math.log10(Math.max(noise * 30, ...sv, 1e-9) * 1.5);
+    const D = order.filter((o) => o.rest > noise).length;
+    barsCap.textContent = !order.length ? 'Place a patch to see its scalp pattern.'
+      : `${D} of ${order.length} rise${D === 1 ? 's' : ''} above the noise${D < order.length ? '; the rest are mixes of the others.' : '.'}`;
+    const vals = order.map((o) => o.rest);
+    const lo = Math.log10(noise / 30), hi = Math.log10(Math.max(noise * 30, ...vals, 1e-9) * 1.5);
     const y = (v: number) => mt + (H - mt - mb) * (1 - (Math.log10(Math.max(v, Math.pow(10, lo))) - lo) / (hi - lo));
     bctx.strokeStyle = '#c3c2b7'; bctx.lineWidth = 1;
     bctx.beginPath(); bctx.moveTo(ml, mt); bctx.lineTo(ml, H - mb); bctx.lineTo(W - 8, H - mb); bctx.stroke();
-    bctx.fillStyle = '#898781'; bctx.font = '13px system-ui, sans-serif'; bctx.textAlign = 'right';
+    bctx.fillStyle = '#898781'; bctx.font = '12px system-ui, sans-serif'; bctx.textAlign = 'right';
     for (const tick of [0.1, 1, 10]) { const v = noise * tick; if (v < Math.pow(10, lo) || v > Math.pow(10, hi)) continue; bctx.fillText(`${fmt(v, 2)} µV`, ml - 4, y(v) + 4); }
     bctx.strokeStyle = '#898781'; bctx.setLineDash([4, 3]);
     bctx.beginPath(); bctx.moveTo(ml, y(noise)); bctx.lineTo(W - 8, y(noise)); bctx.stroke();
     bctx.setLineDash([]);
-    bctx.textAlign = 'left'; bctx.fillText('noise', W - 40, y(noise) - 4);
-    const n = Math.max(sv.length, 1), bw = Math.min(30, (W - ml - 56) / n - 5);
-    sv.forEach((v, i) => {
-      const x = ml + 8 + i * (bw + 5);
-      bctx.fillStyle = v > noise ? '#2a78d6' : '#c3c2b7';
-      bctx.fillRect(x, y(v), bw, H - mb - y(v));
+    bctx.textAlign = 'right'; bctx.fillText('noise', W - 10, y(noise) - 4);
+    const n = Math.max(order.length, 1), slot = (W - ml - 16) / n, bw = Math.min(34, slot - 6);
+    order.forEach((o, i) => {
+      const x = ml + 8 + i * slot + (slot - 6 - bw) / 2;
+      const p = patches[o.idx];
+      bctx.fillStyle = o.rest > noise ? PATCH_COLOURS[o.idx % PATCH_COLOURS.length] : '#c3c2b7';
+      bctx.fillRect(x, y(o.rest), bw, H - mb - y(o.rest));
       bctx.fillStyle = '#52514e'; bctx.textAlign = 'center';
-      bctx.fillText(String(i + 1), x + bw / 2, H - mb + 14);
+      bctx.fillText(String(o.idx + 1), x + bw / 2, H - mb + 13);
+      if (p.name && slot > 44) bctx.fillText(p.name, x + bw / 2, H - mb + 27);
     });
-    if (!sv.length) { bctx.fillStyle = '#52514e'; bctx.textAlign = 'center'; bctx.fillText('no patches placed', (ml + W) / 2, H / 2); }
+    if (!order.length) { bctx.fillStyle = '#52514e'; bctx.textAlign = 'center'; bctx.fillText('no patches placed', (ml + W) / 2, H / 2); }
   }
 
   function update() {
     const noise = sNoise.value;
     const pats = patches.map(patchPattern);
-    const total = new Float64Array(nCh);
-    for (const p of pats) for (let ch = 0; ch < nCh; ch++) total[ch] += p.a[ch];
-    const sv = singularValues(pats.map((p) => p.a));
-    const D = sv.filter((v) => v > noise).length;
+    const order = greedyOrder(pats.map((p) => p.a));
+    const D = order.filter((o) => o.rest > noise).length;
     drawCortex();
-    drawScalp(total);
-    drawBars(sv, noise);
+    drawMaps(pats);
+    drawBars(order, noise);
     rK.set(String(patches.length));
     rD.set(`${D}`);
     const members = pats.length ? pats[0].members.length : Math.max(1, Math.round(Math.PI * sRadius.value * sRadius.value / 50));
-    const qPerPoint = sQ.value / members;
+    const qPerPoint = momentNam() / members;
     rCeil.set(`${fullSv.filter((v) => v * qPerPoint > noise).length}`);
-    rVar.set(`${svd.models.bem.biosemi128.components_99pct}`);
+    rRecord.set('3');
   }
   cortex.addEventListener('click', (ev) => {
     const r = cortex.getBoundingClientRect();
@@ -307,7 +341,7 @@ ${c('intracortical')}.</p>`);
     if (best >= 0 && bd < 12) { patches.push({ center: best, radiusMm: sRadius.value }); update(); }
   });
   sRadius.onChange((v) => { patches = patches.map((p) => ({ ...p, radiusMm: v })); update(); });
-  [sQ, sNoise].forEach((sl) => sl.onChange(update));
+  [sN, sF, sNoise].forEach((sl) => sl.onChange(update));
   patches = MOTOR();
   update();
 }

@@ -6,7 +6,7 @@ import { controls, slider, fmt, fmtSI } from '../ui/slider';
 import { stripPlot, type Strip } from '../ui/strips';
 import { claimCite as c } from '../data/params';
 import { section, figure, prose, assumptions } from '../ui/layout';
-import { RAW_DEFAULTS } from './s4-noise';
+import { RAW_DEFAULTS, alphaUv, sourceSliders } from './s4-noise';
 
 /** Reference interface values per cm² (claims 'chi-table' and 'abrasion'). */
 const IFACE: Record<string, InterfaceParams> = {
@@ -74,21 +74,21 @@ ones ${c('kappenman')}. Dry electrodes improve over minutes as sweat accumulates
 ${c('dry-vs-wet-time')}${c('searle')}, and fingered dry electrodes reach the skin through hair at 14–55 kΩ
 per finger ${c('fingered')}.</p>`);
 
+  const { sN, sF } = sourceSliders(); // the same source model as sections 2, 3 and 4
   const sArea = slider({ label: 'Electrode area', unit: 'cm²', min: 0.1, max: 3, value: 1, log: true, note: c('area-scaling'), marks: [{ value: 1, label: 'Typical' }] });
-  const sGap = slider({ label: 'Hair / air gap thickness', unit: 'mm', min: 0.05, max: 2, value: 0.5, log: true, note: c('hair'), marks: [{ value: 0.06, label: 'One hair' }, { value: 0.5, label: 'Assumed gap' }] });
-  const sContact = slider({ label: 'Area touching skin through the hair', unit: '%', min: 0, max: 100, step: 1, value: 0, marks: [{ value: 0, label: 'Over hair' }, { value: 100, label: 'Bare skin' }] });
+  const sGap = slider({ label: 'Hair / air gap thickness', unit: 'mm', min: 0.05, max: 2, value: 0.5, log: true, note: c('hair'), marks: [{ value: 0.06, label: 'One hair' }, { value: 0.5, label: 'Assumed' }] });
   const sRin = slider({ label: 'Amplifier input resistance', min: 1e7, max: 5e13, value: 1e9, log: true, format: (v) => fmtSI(v, 'Ω', 2), note: c('ads1299'), marks: [{ value: 1e9, label: 'Typical' }, { value: 5e13, label: 'Research amp' }] });
   const C_IN_PF = 20, V_CM_MV = RAW_DEFAULTS.mainsUvcm / 1e3, I_NOISE_FA = 1; // fixed amplifier and mains values (assumptions table)
 
-  const fig = figure(sec.fig, `Top strip: the neural signal at the scalp surface from section 4 (a two-second stretch without a blink), before any electrode touches it. Below it, what reaches the amplifier through each electrode type: the signal after the impedance divider, plus the contact’s own skin noise, mains pickup from a 50% mismatch between the two electrodes, and the amplifier’s current noise flowing through the contact impedance. Each strip is drawn to its own scale (written at the left) so the shape stays visible; the table gives the contact impedance, the fraction of the signal kept, the noise added and the resulting signal-to-noise ratio (SNR). Wet gel on abraded skin is the research standard; most consumer headsets use dry contacts ${c('consumer-electrodes')}.`, { panelWidth: '410px' });
+  const fig = figure(sec.fig, `Top strip: the scalp signal before any electrode touches it: the alpha rhythm of N cells with a fraction in step (sections 2 to 4) in the noise of section 4, two seconds without a blink. Below it, what reaches the amplifier through each electrode: the signal after the impedance divider, plus the contact’s skin noise, mains pickup from a 50% impedance mismatch between a pair, and the amplifier’s current noise through the contact impedance. The table gives the impedance at 10 Hz, the signal kept, the noise added, and the signal-to-noise ratio (SNR) of the alpha rhythm against everything else. Most consumer headsets use dry contacts ${c('consumer-electrodes')}.`, { panelWidth: '410px' });
   const plot = stripPlot(fig.viz, { xLabel: 'Time (s)', xDomain: [0, 2], stripHeight: 82 });
   const table = document.createElement('table');
   table.className = 'mini-table';
-  fig.panel.append(controls(sArea.el, sGap.el, sContact.el, sRin.el), table);
+  fig.panel.append(controls(sN.el, sF.el, sArea.el, sGap.el, sRin.el), table);
   assumptions(fig.el, [
     { what: 'Wet gel on abraded skin', value: '7.5 kΩ·cm² ∥ 25 nF/cm² + 200 Ω·cm² series', cite: c('abrasion') },
     { what: 'Wet gel, unprepared / dry plate', value: '350 kΩ ∥ 25 nF and 1.3 MΩ ∥ 12 nF per cm²', cite: c('chi-table') },
-    { what: 'Gap coupling', value: 'C = ε₀ε<sub>r</sub>A/d (air, ε<sub>r</sub> = 1) in series with dry skin; any contacting fraction in parallel', cite: c('hair-permittivity') },
+    { what: 'Gap coupling', value: 'C = ε₀ε<sub>r</sub>A/d (air, ε<sub>r</sub> = 1) in series with dry skin; a flat plate resting on hair touches none of the skin (fingered electrodes that reach through hair behave like the dry plate above)', cite: c('hair-permittivity') + c('fingered') },
     { what: 'Area scaling', value: 'R ∝ 1/A, C ∝ A relative to 1 cm²', cite: c('area-scaling') },
     { what: 'Hair gap default', value: '0.5 mm, a modelling choice of several hair diameters (one hair is about 0.06 mm); one hair is marked on the slider', cite: c('hair') },
     { what: 'Amplifier input resistance marks', value: '1 GΩ as the ADS1299 front end; 50 TΩ as a research non-contact amplifier', cite: c('ads1299') + c('noncontact-cap') },
@@ -97,19 +97,19 @@ per finger ${c('fingered')}.</p>`);
     { what: 'Mains pickup', value: `${V_CM_MV} mV of common-mode mains on the body (section 4); the two contacts of a pair differ by 50% in impedance, so it leaks in as V<sub>cm</sub> × |H(Z<sub>e</sub>) − H(1.5 Z<sub>e</sub>)| at 60 Hz, with H = Z<sub>in</sub>/(Z<sub>in</sub> + Z<sub>e</sub>)`, cite: c('common-mode') },
   ]);
 
-  const raw = synthesize({ ...RAW_DEFAULTS, seconds: 2, seed: 11, blinksPerMinute: 0 }); // a stretch without a blink
-  const n = raw.total.length;
-
   function Ze(k: Kind, f: number): Complex {
-    if (k === 'gap') return gapElectrodeImpedance(IFACE.dry, sArea.value, { contactFraction: sContact.value / 100, gapM: sGap.value * 1e-3, epsr: 1 }, f);
+    if (k === 'gap') return gapElectrodeImpedance(IFACE.dry, sArea.value, { contactFraction: 0, gapM: sGap.value * 1e-3, epsr: 1 }, f);
     return contactImpedance(IFACE[k], sArea.value, f);
   }
 
   function update() {
+    const alpha = alphaUv(sN.value, sF.value);
+    const raw = synthesize({ ...RAW_DEFAULTS, seconds: 2, seed: 11, blinksPerMinute: 0, signalUv: alpha }); // a stretch without a blink
+    const n = raw.total.length;
     const Zin = (f: number) => inputImpedance(sRin.value, C_IN_PF * 1e-12, f);
     const strips: Strip[] = [];
     const t = raw.t;
-    strips.push({ name: 'Neural signal at the scalp', sub: 'before any electrode touches it', icon: HEAD_ICON, points: Array.from(raw.total, (v, i) => [t[i], v] as [number, number]), color: '#898781', note: 'section 4: 10 Hz alpha at 20 µV, with muscle, mains and skin noise' });
+    strips.push({ name: 'Neural signal at the scalp', sub: 'before any electrode touches it', icon: HEAD_ICON, points: Array.from(raw.total, (v, i) => [t[i], v] as [number, number]), color: '#898781', note: `${fmt(Math.round(sN.value), 2)} cells, ${fmt(sF.value, 2)} in step: ${fmt(alpha, 3)} µV alpha + muscle, mains and skin noise` });
     const rows: string[] = [];
     KINDS.forEach((k, idx) => {
       // divider as a frequency response
@@ -119,7 +119,7 @@ per finger ${c('fingered')}.</p>`);
         const d = den.re * den.re + den.im * den.im;
         return { re: (zin.re * den.re + zin.im * den.im) / d, im: (zin.im * den.re - zin.re * den.im) / d };
       };
-      const sig = applyTransfer(raw.total, RAW_DEFAULTS.fs, H);
+      const sig = applyTransfer(raw.total, RAW_DEFAULTS.fs, H), alphaOut = applyTransfer(raw.signal, RAW_DEFAULTS.fs, H); // everything, and the alpha alone
       const skin = pink(n, SKIN_NOISE[k] / Math.sqrt(sArea.value), 20 + idx);
       // amplifier current noise i_n (A/√Hz) flowing through |Ze(f)|: white current, shaped by the impedance
       const iWhite = new Float64Array(n);
@@ -134,21 +134,22 @@ per finger ${c('fingered')}.</p>`);
       const h1 = div(ze60), h2 = div({ re: 1.5 * ze60.re, im: 1.5 * ze60.im });
       const mains = V_CM_MV * 1e3 * cabs({ re: h1.re - h2.re, im: h1.im - h2.im });
       const out = new Float64Array(n);
-      let ps = 0, pn = 0;
+      let ps = 0, pn = 0, pAdded = 0; // alpha power, power of everything else, power the electrode added
       for (let i = 0; i < n; i++) {
         const noise = skin[i] + curr[i] + mains * Math.sin(2 * Math.PI * 60 * t[i] + 0.3);
         out[i] = sig[i] + noise;
-        ps += sig[i] * sig[i]; pn += noise * noise;
+        const rest = out[i] - alphaOut[i];
+        ps += alphaOut[i] * alphaOut[i]; pn += rest * rest; pAdded += noise * noise;
       }
       const h10 = cabs(H(10));
       const snr = 10 * Math.log10(ps / Math.max(pn, 1e-30));
-      strips.push({ name: NAMES[k], sub: SUBS[k], icon: ICONS[k], highlight: k === 'dry', points: Array.from(out, (v, i) => [t[i], v] as [number, number]), color: COLOURS[k], note: `keeps ${fmt(100 * h10, 3)}% of the signal, adds ${fmt(Math.sqrt(pn / n), 2)} µV of noise` });
-      rows.push(`<tr><td><i style="background:${COLOURS[k]}"></i>${NAMES[k]}</td><td>${fmtSI(cabs(Ze(k, 10)), 'Ω', 2)}</td><td>${fmt(100 * h10, 3)}%</td><td>${fmt(Math.sqrt(pn / n), 2)} µV</td><td>${fmt(snr, 2)} dB</td></tr>`);
+      strips.push({ name: NAMES[k], sub: SUBS[k], icon: ICONS[k], highlight: k === 'dry', points: Array.from(out, (v, i) => [t[i], v] as [number, number]), color: COLOURS[k], note: `keeps ${fmt(100 * h10, 3)}% of the signal, adds ${fmt(Math.sqrt(pAdded / n), 2)} µV of noise` });
+      rows.push(`<tr><td><i style="background:${COLOURS[k]}"></i>${NAMES[k]}</td><td>${fmtSI(cabs(Ze(k, 10)), 'Ω', 2)}</td><td>${fmt(100 * h10, 3)}%</td><td>${fmt(Math.sqrt(pAdded / n), 2)} µV</td><td>${fmt(snr, 2)} dB</td></tr>`);
     });
     plot.update(strips);
-    table.innerHTML = `<thead><tr><th>Electrode</th><th>|Z<sub>e</sub>| at 10 Hz</th><th>Kept</th><th>Noise</th><th>SNR</th></tr></thead><tbody>${rows.join('')}</tbody>`;
-    sGap.el.title = `gap capacitance ${fmt(gapCapacitance(sArea.value * (1 - sContact.value / 100), sGap.value * 1e-3, 1) * 1e12, 3)} pF`;
+    table.innerHTML = `<thead><tr><th>Electrode</th><th>|Z<sub>e</sub>|</th><th>Kept</th><th>Adds</th><th>SNR</th></tr></thead><tbody>${rows.join('')}</tbody>`;
+    sGap.el.title = `gap capacitance ${fmt(gapCapacitance(sArea.value, sGap.value * 1e-3, 1) * 1e12, 3)} pF`;
   }
-  [sArea, sGap, sContact, sRin].forEach((s) => s.onChange(update));
+  [sN, sF, sArea, sGap, sRin].forEach((s) => s.onChange(update));
   update();
 }

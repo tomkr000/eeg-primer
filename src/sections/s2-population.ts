@@ -10,7 +10,7 @@ export function mountPopulation(root: HTMLElement) {
   // "How do neurons fall into step?": a heading above the figure, with the schematic and its note under a toggle
   const syncHead = document.createElement('h3');
   syncHead.className = 'note-title';
-  syncHead.textContent = 'How do neurons fall into step?';
+  syncHead.textContent = 'How do neurons synchronize?';
   const syncBody = document.createElement('div');
   syncBody.className = 'section-note';
   sec.fig.append(syncHead, inDepth(syncBody));

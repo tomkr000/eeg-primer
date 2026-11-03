@@ -158,31 +158,43 @@ function drawGrid(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], cfg: GlowCf
  * Shade and label the tissue layers above a cortical cell in a cross-section whose y axis is height above
  * the cell body (metres): grey matter up to the cortical surface, then CSF, dura and skull.
  */
-export function drawCortexLayers(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], o: { xRange: [number, number]; yTop: number; surface: number; csf: number; dura: number; labelX?: number }): void {
+/**
+ * The tissue above the cortex as horizontal tinted bands: CSF, dura and skull (sections 1 and 2, the skull
+ * running to the top of the picture), or CSF, dura, skull, scalp and air when `skull` and `scalp` are given
+ * (section 3). Bands too thin to label are named together at the left, and labels get a white halo.
+ */
+export function drawCortexLayers(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], o: { xRange: [number, number]; yTop: number; surface: number; csf: number; dura: number; skull?: number; scalp?: number; greyLabelY?: number }): void {
   const [x0] = toPx(o.xRange[0], 0), [x1] = toPx(o.xRange[1], 0);
   const w = x1 - x0;
+  const top = o.surface + o.csf + o.dura;
   const bands: [number, number, string, string][] = [
     [o.surface, o.surface + o.csf, 'rgba(27,175,122,0.14)', 'cerebrospinal fluid (CSF)'],
-    [o.surface + o.csf, o.surface + o.csf + o.dura, 'rgba(237,161,0,0.22)', 'dura'],
-    [o.surface + o.csf + o.dura, o.yTop, 'rgba(137,135,129,0.22)', 'skull'],
+    [o.surface + o.csf, top, 'rgba(237,161,0,0.22)', 'dura'],
+    [top, o.skull ? top + o.skull : o.yTop, 'rgba(137,135,129,0.22)', 'skull'],
   ];
+  if (o.skull && o.scalp) bands.push([top + o.skull, top + o.skull + o.scalp, 'rgba(240,201,166,0.5)', 'scalp'], [top + o.skull + o.scalp, o.yTop, 'rgba(0,0,0,0)', 'air']);
   ctx.save();
   ctx.font = CANVAS_FONT;
+  const text = (s: string, x: number, y: number, align: CanvasTextAlign) => {
+    ctx.textAlign = align; ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,255,255,0.8)'; ctx.strokeText(s, x, y); ctx.fillStyle = '#1a1a1a'; ctx.fillText(s, x, y);
+  };
+  const thin: string[] = [];
   for (const [a, b, fill, name] of bands) {
     const [, ya] = toPx(0, a), [, yb] = toPx(0, b);
     ctx.fillStyle = fill;
     ctx.fillRect(x0, yb, w, ya - yb);
-    ctx.fillStyle = '#1a1a1a';
-    ctx.textAlign = 'right';
-    if (ya - yb > 16) ctx.fillText(name, x1 - 8, (ya + yb) / 2 + 5);
+    if (ya - yb > 16) text(name, x1 - 8, (ya + yb) / 2 + 5, 'right'); else thin.push(name.replace('cerebrospinal fluid (CSF)', 'CSF'));
   }
   const [, ys] = toPx(0, o.surface);
   ctx.strokeStyle = 'rgba(26,26,26,0.7)'; ctx.lineWidth = 1.2;
   ctx.beginPath(); ctx.moveTo(x0, ys); ctx.lineTo(x1, ys); ctx.stroke();
-  ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'right';
-  ctx.fillText('cortical surface', x1 - 8, ys - 6);
-  const [, yg] = toPx(0, o.surface * 0.55);
-  ctx.fillText('grey matter', x1 - 8, yg);
+  if (thin.length) {
+    const [, yt] = toPx(0, top);
+    text(`${thin.join(' + ')} (thin)`, x0 + 8, yt - 4, 'left');
+    text('cortical surface', x1 - 8, ys + 16, 'right');
+  } else text('cortical surface', x1 - 8, ys - 6, 'right');
+  const [, yg] = toPx(0, o.greyLabelY ?? o.surface * 0.55);
+  text('grey matter', x1 - 8, yg, 'right');
   ctx.restore();
 }
 

@@ -1,7 +1,7 @@
 import { exteriorPotential, potential, solveShells, surfacePotential, stackShells, type Shell } from '../physics/sphere';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { verticalProfile } from '../ui/profile';
-import { glow, glowLegend, CANVAS_FONT } from '../ui/field';
+import { glow, glowLegend, CANVAS_FONT, drawCortexLayers } from '../ui/field';
 import { P, claimCite as c } from '../data/params';
 import { netDipole } from '../physics/population';
 import { section, figure, prose, assumptions, readouts } from '../ui/layout';
@@ -40,7 +40,7 @@ the scalp has to work with (section 5).</p>`);
   const rRatio = readout('Cortex-to-scalp attenuation');
   const rWidth = readout('Scalp half-width of the pattern');
 
-  const fig = figure(sec.fig, 'Left: the top of the head in cross-section; red positive, blue negative, fading with the logarithm of the potential; the dark line is where the potential falls to 1 µV, the noise of the quietest electrode contact alone (section 4 adds everything else). The arcs, inside to out, bound grey matter, cerebrospinal fluid (CSF), dura, skull and scalp; the field continues into the air above the scalp, where a non-contact electrode would sense it. Right: the potential straight above the source, drawn on the same vertical scale as the picture, through each layer and out into the air. The source is the patch of section 2 at the chosen depth, pointing outward as on a gyral crown; grid numbers are centimetres from the head centre.', { panelWidth: '400px' });
+  const fig = figure(sec.fig, 'Left: the layers between cortex and air in cross-section, drawn flat like sections 1 and 2 (the head model is a sphere; the horizontal axis is distance along the scalp, the vertical axis height above the cortical surface, both in centimetres). Red positive, blue negative, fading with the logarithm of the potential; the dark line is where the potential falls to 1 µV, the noise of the quietest electrode contact alone (section 4 adds everything else). The bands, bottom to top, are cerebrospinal fluid (CSF), dura, skull and scalp; the field continues into the air above the scalp, where a non-contact electrode would sense it. Right: the potential straight above the source on the same vertical scale, through each layer and out into the air. The source is the patch of section 2 at the chosen depth, pointing outward as on a gyral crown.', { panelWidth: '400px' });
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
@@ -48,10 +48,12 @@ the scalp has to work with (section 5).</p>`);
   left.style.flex = '0 0 390px';
   row.append(left, right);
   fig.viz.append(row);
-  const yRange: [number, number] = [0.02, 0.02 + 0.12 * 300 / 390];
-  const hm = glow(left, { width: 390, height: 300, scale: 2, xRange: [-0.06, 0.06], yRange, floor: 1e-7, ceiling: 1e-4, threshold: 1e-6, grid: { step: 0.02, factor: 100, unit: 'cm' } });
+  // picture coordinates: x along the scalp, y above the cortical surface (metres); the sphere is unrolled
+  const xRange: [number, number] = [-0.05, 0.05];
+  const yRange: [number, number] = [-0.03, -0.03 + 0.1 * 300 / 390];
+  const hm = glow(left, { width: 390, height: 300, scale: 2, xRange, yRange, floor: 1e-7, ceiling: 1e-4, threshold: 1e-6, grid: { step: 0.01, factor: 100, unit: 'cm', note: 'each grid square = 1 cm' } });
   glowLegend(left, '0.1 µV', '100 µV', 'dark line = 1 µV, the quietest contact’s own noise');
-  const radial = verticalProfile(right, { height: 300, yDomain: [yRange[0] * 100, yRange[1] * 100], yLabel: 'cm from the head centre', xLabel: 'Potential straight above the source (µV)', xDomain: [0.1, 1e4] });
+  const radial = verticalProfile(right, { height: 300, yDomain: [yRange[0] * 100, yRange[1] * 100], yLabel: 'cm above the cortical surface', xLabel: 'Potential straight above the source (µV)', xDomain: [0.1, 1e4] });
   fig.panel.append(controls(sN.el, sF.el, sDepth.el));
   fig.viz.append(readouts(rSource.el, rScalp.el, rCortex.el, rRatio.el, rWidth.el));
   assumptions(fig.el, [
@@ -80,17 +82,18 @@ the scalp has to work with (section 5).</p>`);
     const solMap = solveShells(shells, b, p, orientation, 120);
     const R = shells[shells.length - 1].outerRadius;
     const rCortexSurf = P.brainRadiusM;
-    // profile straight above the source, from the head centre out into the air (cm from the centre)
+    // profile straight above the source, from below the cortex out into the air (cm above the cortical surface)
     const prof: [number, number][] = [];
     for (let k = 0; k <= 400; k++) {
-      const r = yRange[0] + ((yRange[1] - yRange[0]) * k) / 400;
+      const y = yRange[0] + ((yRange[1] - yRange[0]) * k) / 400, r = rCortexSurf + y;
       const v = r <= R ? potential(sol, Math.min(r, R - 1e-9), 0, 0) : exteriorPotential(sol, r, 0, 0);
-      prof.push([Math.abs(v) * 1e6, r * 100]);
+      prof.push([Math.abs(v) * 1e6, y * 100]);
     }
     const layerColours = ['#2a78d6', '#1baf7a', '#eda100', '#898781', '#eb6834'];
-    const bands = shells.map((sh, i) => ({ from: (i === 0 ? yRange[0] : shells[i - 1].outerRadius) * 100, to: sh.outerRadius * 100, label: i === 0 ? 'brain' : sh.name, color: layerColours[i % layerColours.length] }));
-    bands.push({ from: R * 100, to: yRange[1] * 100, label: 'air', color: '#f4f1ea' });
-    radial.update(prof, bands, [{ value: TH_UV, label: '1 µV' }], b * 100);
+    const above = (r: number) => (r - rCortexSurf) * 100;
+    const bands = shells.map((sh, i) => ({ from: i === 0 ? yRange[0] * 100 : above(shells[i - 1].outerRadius), to: above(sh.outerRadius), label: i === 0 ? 'grey matter' : sh.name, color: layerColours[i % layerColours.length] }));
+    bands.push({ from: above(R), to: yRange[1] * 100, label: 'air', color: '#f4f1ea' });
+    radial.update(prof, bands, [{ value: TH_UV, label: '1 µV' }], (b - rCortexSurf) * 100);
     let peakScalp = 0, peakCortex = 0;
     for (let th = 0; th < Math.PI / 2; th += 0.005) {
       peakScalp = Math.max(peakScalp, Math.abs(surfacePotential(sol, th, 0)));
@@ -104,43 +107,15 @@ the scalp has to work with (section 5).</p>`);
     rWidth.set(isNaN(hw) ? 'n/a' : `${fmt(hw * 100, 3)} cm`);
     hm.setThreshold(TH_UV * 1e-6);
     hm.draw((x, y) => {
-      const r = Math.hypot(x, y);
-      const th = Math.atan2(Math.abs(x), y), ph = x < 0 ? Math.PI : 0;
+      // unrolled sphere: x is distance along the scalp, y height above the cortical surface
+      const r = rCortexSurf + y, th = Math.abs(x) / R, ph = x < 0 ? Math.PI : 0;
       return r > R ? exteriorPotential(solMap, r, th, ph) : potential(solMap, r, th, ph);
     }, (ctx, toPx) => {
       ctx.save();
-      ctx.lineWidth = 1;
-      const [cx, cy] = toPx(0, 0);
-      // the layers as tinted bands, like the cortex cross-sections of sections 1 and 2
-      const tint: Record<string, string> = { CSF: 'rgba(27,175,122,0.4)', dura: 'rgba(237,161,0,0.55)', skull: 'rgba(137,135,129,0.3)', scalp: 'rgba(240,201,166,0.5)' };
-      const pxR = (r: number) => toPx(r, 0)[0] - cx;
-      shells.forEach((s, i) => {
-        if (i === 0) return;
-        ctx.fillStyle = tint[s.name] ?? 'rgba(0,0,0,0.1)';
-        ctx.beginPath(); ctx.arc(cx, cy, pxR(s.outerRadius), Math.PI, 2 * Math.PI); ctx.arc(cx, cy, pxR(shells[i - 1].outerRadius), 2 * Math.PI, Math.PI, true); ctx.closePath(); ctx.fill();
-      });
-      shells.forEach((s, i) => {
-        ctx.strokeStyle = i === shells.length - 1 ? 'rgba(26,26,26,0.9)' : 'rgba(26,26,26,0.45)';
-        ctx.beginPath(); ctx.arc(cx, cy, pxR(s.outerRadius), Math.PI, 2 * Math.PI); ctx.stroke();
-      });
-      ctx.fillStyle = '#1a1a1a';
-      ctx.font = CANVAS_FONT;
-      // layer names written along their arcs on the right side of the head
-      const labelOnArc = (text: string, r: number, theta: number) => {
-        const [lx, ly] = toPx(r * Math.sin(theta), r * Math.cos(theta));
-        ctx.save(); ctx.translate(lx, ly); ctx.rotate(theta); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.strokeText(text, 0, 0); ctx.fillText(text, 0, 0); ctx.restore();
-      };
-      const mid = (i: number) => (shells[i - 1].outerRadius + shells[i].outerRadius) / 2;
-      labelOnArc('scalp', mid(4), 0.6);
-      labelOnArc('skull', mid(3), 0.6);
-      labelOnArc('CSF + dura (thin)', shells[0].outerRadius - 0.0045, 0.6);
-      ctx.textAlign = 'left';
-      const [ax, ay] = toPx(-0.052, R + 0.016);
-      ctx.fillText('air', ax, ay);
-      const [bx, by] = toPx(-0.052, 0.034);
-      ctx.fillText('brain', bx, by);
-      const [sx, sy] = toPx(0, b);
+      const t = (i: number) => shells[i].outerRadius - shells[i - 1].outerRadius;
+      drawCortexLayers(ctx, toPx, { xRange, yTop: yRange[1], surface: 0, csf: t(1), dura: t(2), skull: t(3), scalp: t(4), greyLabelY: -0.012 });
+      ctx.font = CANVAS_FONT; ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'left';
+      const [sx, sy] = toPx(0, b - rCortexSurf);
       ctx.beginPath(); ctx.arc(sx, sy, 3.5, 0, 2 * Math.PI); ctx.fill();
       ctx.fillText('source', sx + 8, sy + 5);
       ctx.restore();

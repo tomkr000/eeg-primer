@@ -12,6 +12,20 @@ export const RAW_DEFAULTS: NoiseParams = {
   mainsUvcm: 10e3, cmrrDb: 90, imbalanceRatio: 1e-4, ampUvRms: 1, skinUvRms: 3, seed: 11,
 };
 
+// scalp potential per unit dipole moment for the default head of section 3 (radial source 2 mm below the cortex)
+const head = defaultHead();
+const scalpUvPerNam = surfacePotential(solveShells(head.shells, head.sourceRadius, 1, 'radial', 120), 0) * 1e6 * 1e-9;
+const momentNam = (N: number, f: number) => netDipole(Math.round(N), f, 1, P.singleCellMomentPAm * 1e-12).total * 1e9;
+/** Alpha amplitude at the scalp (µV) for N cells with a fraction f in step: the chain of sections 2 and 3. */
+export const alphaUv = (N: number, f: number) => momentNam(N, f) * scalpUvPerNam;
+/** The patch that gives the textbook 20 µV alpha rhythm with a tenth of its cells in step. */
+export const ALPHA_N = RAW_DEFAULTS.signalUv / (scalpUvPerNam * P.patchDefaultSync * P.singleCellMomentPAm * 1e-3);
+/** The two sliders of the shared source model, used by sections 4 and 5. */
+export const sourceSliders = (defaultN = ALPHA_N) => ({
+  sN: slider({ label: 'Neurons in the patch, N', min: 1e4, max: P.patchMaxN, value: defaultN, log: true, format: (v) => fmt(Math.round(v), 2), marks: [{ value: P.patchDefaultN, label: 'Typical source' }, { value: ALPHA_N, label: 'Alpha rhythm' }], note: c('alpha-source-chain') }),
+  sF: slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Seizure' }] }),
+});
+
 export function mountNoise(root: HTMLElement) {
   const sec = section(root, 'noise', '4', 'The signal that gets outside the skull is noisy');
   prose(sec.text, `
@@ -35,14 +49,7 @@ trials improves the signal-to-noise ratio (SNR) by √N ${c('averaging')}, which
 paradigms work and why they are slow: for a brain–computer interface (BCI) every averaged trial is time the user
 spends waiting.</p>`);
 
-  // scalp potential per unit dipole moment for the default head of section 3 (radial source 2 mm below the cortex)
-  const head = defaultHead();
-  const scalpUvPerNam = surfacePotential(solveShells(head.shells, head.sourceRadius, 1, 'radial', 120), 0) * 1e6 * 1e-9;
-  const momentNam = (N: number, f: number) => netDipole(Math.round(N), f, 1, P.singleCellMomentPAm * 1e-12).total * 1e9;
-  // the patch that gives the textbook 20 µV alpha rhythm with a tenth of its cells in step
-  const alphaN = RAW_DEFAULTS.signalUv / (scalpUvPerNam * P.patchDefaultSync * P.singleCellMomentPAm * 1e-3);
-  const sN = slider({ label: 'Neurons in the patch, N', min: 1e4, max: P.patchMaxN, value: alphaN, log: true, format: (v) => fmt(Math.round(v), 2), marks: [{ value: P.patchDefaultN, label: 'Typical source' }, { value: alphaN, label: 'Alpha rhythm' }], note: c('alpha-source-chain') });
-  const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Seizure' }] });
+  const { sN, sF } = sourceSliders();
   const sEmg = slider({ label: 'Muscle (EMG), 20–300 Hz', unit: 'µV rms', min: 0, max: 100, value: RAW_DEFAULTS.emgUvRms, step: 1, note: c('emg-level'), marks: [{ value: RAW_DEFAULTS.emgUvRms, label: 'Relaxed' }, { value: 100, label: 'Clenched jaw' }] });
   const sSkin = slider({ label: 'Electrode–skin noise (1/f)', unit: 'µV rms', min: 0, max: 20, value: RAW_DEFAULTS.skinUvRms, step: 0.5, note: c('skin-noise'), marks: [{ value: 1.5, label: 'Abraded skin' }, { value: 8, label: 'Dry contact' }] });
   const rAlpha = readout('Alpha amplitude at the scalp (section 3 head)', c('alpha-source-chain'));
@@ -62,14 +69,14 @@ spends waiting.</p>`);
   ]);
 
   function update() {
-    const alphaUv = momentNam(sN.value, sF.value) * scalpUvPerNam;
-    const s = synthesize({ ...RAW_DEFAULTS, signalUv: alphaUv, emgUvRms: sEmg.value, skinUvRms: sSkin.value });
+    const alpha = alphaUv(sN.value, sF.value);
+    const s = synthesize({ ...RAW_DEFAULTS, signalUv: alpha, emgUvRms: sEmg.value, skinUvRms: sSkin.value });
     const toPts = (a: Float64Array) => Array.from(a, (v, i) => [s.t[i], v] as [number, number]);
     plot.update([
       { name: 'Raw scalp signal (alpha + noise sources)', points: toPts(s.total), color: '#eb6834', width: 1 },
       { name: 'Idealized alpha rhythm signal', points: toPts(s.signal), color: '#2a78d6', width: 1.8 },
     ], s.blinkTimes.map((t) => ({ axis: 'x' as const, value: t, label: 'eye blink', callout: true })));
-    rAlpha.set(`${fmt(alphaUv, 3)} µV`);
+    rAlpha.set(`${fmt(alpha, 3)} µV`);
     rSnr.set(`${fmt(s.snrDb, 3)} dB`);
     rRms.set(`${fmt(Math.sqrt(s.total.reduce((a, v) => a + v * v, 0) / s.total.length), 3)} µV`);
   }

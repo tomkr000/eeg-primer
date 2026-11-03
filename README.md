@@ -38,7 +38,7 @@ npm run build      # type-check + production build into dist/
 ```bash
 pip install mne nibabel
 python scripts/leadfield_svd.py --ico 5     # downloads fsaverage (~300 MB) on first run; ~5 min; writes src/data/leadfield-svd.json
-python scripts/export_head_leadfield.py     # compact ico-3 lead field + geometry for the head view of sections 4 and 7; writes src/data/head-leadfield.json
+python scripts/export_head_leadfield.py     # compact ico-4 lead field (int16) + geometry for the head view of sections 4 and 7; writes src/data/head-leadfield.json
 npm test                                    # tests/leadfield.test.ts pins the counts quoted in claim 'svd-counts'
 ```
 
@@ -52,7 +52,7 @@ src/ui/           layout.ts (section/figure grid, In depth toggles), slider.ts (
                   plot.ts (D3 line plot), profile.ts (vertical potential profile), strips.ts (small multiples),
                   field.ts (glow field renderer, grids, cortex layers, neuron and probe glyphs), citation helpers
 src/data/         references.ts (bibliography), claims.ts (every assumption + status), params.ts (defaults),
-                  leadfield-svd.json (realistic-head singular values), head-leadfield.json (128 × 1,284 lead field,
+                  leadfield-svd.json (realistic-head singular values), head-leadfield.json (128 × 5,124 lead field, int16,
                   electrode and source positions for the head of sections 4 and 7)
 scripts/          leadfield_svd.py and export_head_leadfield.py (MNE-Python), verification-report.mjs, merge-audit.mjs
 tests/            vitest unit tests

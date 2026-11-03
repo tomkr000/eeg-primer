@@ -17,13 +17,18 @@ export const patchColour = (i: number) => PATCH_COLOURS[i % PATCH_COLOURS.length
 export const patchLabel = (p: Patch, i: number) => (p.name ? `${i + 1} ${p.name}` : `patch ${i + 1}`);
 export const COMPONENTS_99 = svd.models.bem.biosemi128.components_99pct;
 
-/** Decode the base64 float32 lead field (channels × sources, µV per nA·m). */
-function decodeLeadfield(): Float32Array {
-  const bin = atob(head.leadfield.float32_base64);
-  const buf = new ArrayBuffer(bin.length);
-  const u8 = new Uint8Array(buf);
+function b64(s: string): ArrayBuffer {
+  const bin = atob(s), u8 = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
-  return new Float32Array(buf);
+  return u8.buffer;
+}
+/** Decode the lead field (channels × sources, µV per nA·m): int16 values times one float32 scale per source. */
+function decodeLeadfield(): Float32Array {
+  const q = new Int16Array(b64(head.leadfield.int16_base64)), scale = new Float32Array(b64(head.leadfield.scale_float32_base64));
+  const [nch, nsrc] = head.leadfield.shape;
+  const L = new Float32Array(q.length);
+  for (let ch = 0; ch < nch; ch++) for (let k = 0; k < nsrc; k++) L[ch * nsrc + k] = q[ch * nsrc + k] * scale[k];
+  return L;
 }
 export const dist3 = (a: number[], b: number[]) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 
@@ -94,16 +99,30 @@ export function miniValues(a: ArrayLike<number>): { vals: Float32Array; vmax: nu
 }
 export const POS: [number, number, number] = [227, 73, 72], NEG: [number, number, number] = [42, 120, 214];
 
-// full lead-field singular values (for the ceiling): eigenvalues of L Lᵀ (nCh × nCh), in µV per nA·m per source
-export const fullSv = (() => {
-  const gram = new Float64Array(nCh * nCh);
-  for (let i = 0; i < nCh; i++) for (let j = i; j < nCh; j++) {
-    let acc = 0;
-    for (let k = 0; k < nSrc; k++) acc += L[i * nSrc + k] * L[j * nSrc + k];
-    gram[i * nCh + j] = acc; gram[j * nCh + i] = acc;
+/**
+ * The ceiling: the whole cortex tiled with non-overlapping patches of radius r, each carrying 1 nA·m; the singular
+ * values of their scalp patterns (µV per nA·m) scale with the patch moment, so they are cached per radius.
+ */
+const ceilingCache = new Map<number, number[]>();
+export function ceilingSv(r: number): number[] {
+  const hit = ceilingCache.get(r);
+  if (hit) return hit;
+  const taken = new Uint8Array(nSrc), centres: number[] = [];
+  for (let i = 0; i < nSrc; i++) {
+    if (taken[i]) continue;
+    centres.push(i);
+    for (let j = i; j < nSrc; j++) if (!taken[j] && dist3(srcPos[i], srcPos[j]) < 1.9 * r) taken[j] = 1;
   }
-  return symmetricEigenvalues(gram, nCh).map((v) => Math.sqrt(Math.max(v, 0)));
-})();
+  const A = centres.map((c) => { const a = new Float64Array(nCh); const m: number[] = []; srcPos.forEach((q, i) => { if (dist3(q, srcPos[c]) <= r) m.push(i); }); for (const k of m) for (let ch = 0; ch < nCh; ch++) a[ch] += L[ch * nSrc + k] / m.length; return a; });
+  const gram = new Float64Array(nCh * nCh);
+  for (const a of A) for (let i = 0; i < nCh; i++) for (let j = i; j < nCh; j++) gram[i * nCh + j] += a[i] * a[j];
+  for (let i = 0; i < nCh; i++) for (let j = 0; j < i; j++) gram[i * nCh + j] = gram[j * nCh + i];
+  const sv = symmetricEigenvalues(gram, nCh).map((v) => Math.sqrt(Math.max(v, 0)));
+  ceilingCache.set(r, sv);
+  return sv;
+}
+/** how many patches of the current size, tiling the whole cortex, could be told apart at this noise */
+export const ceilingCount = () => { const q = momentNam(); return ceilingSv(state.radiusMm).filter((v) => v * q > state.noiseUv).length; };
 
 /** One state for both sections: the patches and the four slider values. */
 export const state = { patches: [] as Patch[], N: P.patchDefaultN, f: P.patchDefaultSync, radiusMm: 10, noiseUv: 1 };

@@ -1,7 +1,7 @@
 import { claimCite as c } from '../data/params';
 import { fmt, readout } from '../ui/slider';
 import { section, figure, prose, assumptions, readouts } from '../ui/layout';
-import { state, subscribe, dimControls, patchPattern, greedyOrder, fullSv, momentNam, patchColour, patchLabel, COMPONENTS_99 } from './dim-model';
+import { state, subscribe, dimControls, patchPattern, greedyOrder, ceilingCount, patchColour, patchLabel, COMPONENTS_99 } from './dim-model';
 import { textWithSwatches, partsWidth, type TextPart } from '../ui/field';
 
 /** a boxed note with a pointer line to a spot; colours in the text appear as swatches */
@@ -40,7 +40,7 @@ Intracortical arrays, for comparison, decode handwriting at 90 characters/min an
 ${c('intracortical')}.</p>`);
 
   const rD = readout('patches told apart from outside, at this noise');
-  const rCeil = readout('the ceiling: every point of cortex as its own source, same noise', c('svd-method'));
+  const rCeil = readout('the ceiling: the whole cortex tiled with patches this size, same noise', c('svd-method'));
   const rRecord = readout('the record: dimensions people have controlled at will', c('dof-control'));
   const fig = figure(sec.fig, `The patches of section 4 taken in turn, strongest first; each bar is the scalp signal that patch adds which the patches before it cannot mimic, against the noise of one electrode contact ${c('svd-method')}${c('skin-noise')}. The sliders are the same as in section 4 and move together.`, { wide: true });
   const row = document.createElement('div');
@@ -61,7 +61,7 @@ ${c('intracortical')}.</p>`);
   assumptions(fig.el, [
     { what: 'Noise of one contact', value: 'the electrode–skin noise of a single contact, 1 to 20 µV rms as measured; the slider starts at the quietest contact ever measured and marks a typical dry contact; muscle, blinks and mains (section 5) would add to it', cite: c('skin-noise') },
     { what: 'Told apart', value: 'patches are taken in turn, each time the one whose scalp pattern differs most from every combination of those already taken (column-pivoted QR); the bar is the size of that remainder over the 128 electrodes, and the patch counts when it exceeds the noise of one contact. Counting the best combinations instead (singular values above the noise, the criterion of the next row) gives the same number to within one for the presets', cite: '<span class="assumption-tag">model assumption</span>' + c('svd-method') },
-    { what: 'Ceiling', value: `singular values of the full lead field, each cortical point carrying the moment of one patch, counted above the noise; ${COMPONENTS_99} lead-field components carry 99% of the scalp variance of independent, identically distributed sources (scripts/leadfield_svd.py)`, cite: c('svd-method') + c('svd-counts') },
+    { what: 'Ceiling', value: `the whole cortex tiled with non-overlapping patches of the chosen radius, each with the moment of one patch; the singular values of their scalp patterns are counted above the noise, which is the most patterns of that size any decoder could separate. For comparison, ${COMPONENTS_99} lead-field components carry 99% of the scalp variance of independent, identically distributed point sources (scripts/leadfield_svd.py)`, cite: c('svd-method') + c('svd-counts') },
   ]);
 
   function draw(order: { idx: number; rest: number }[], noise: number) {
@@ -120,8 +120,7 @@ ${c('intracortical')}.</p>`);
     const D = order.filter((o) => o.rest > noise).length;
     draw(order, noise);
     rD.set(state.patches.length ? `${D} of ${state.patches.length}` : 'none placed');
-    const members = pats.length ? pats[0].members.length : Math.max(1, Math.round(Math.PI * state.radiusMm * state.radiusMm / 50));
-    rCeil.set(`${fullSv.filter((v) => (v * momentNam()) / members > noise).length}`);
+    rCeil.set(`${ceilingCount()}`);
     rRecord.set('3');
   }
   subscribe(update);

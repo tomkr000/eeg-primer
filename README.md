@@ -1,7 +1,7 @@
 # EEG primer: the physics of a non-invasive BCI
 
 An interactive, fully cited explorer of the physics that limits scalp electroencephalography (EEG) for
-non-invasive brain–computer interfaces (BCI). Six slider-driven models, each with its long-form text folded
+non-invasive brain–computer interfaces (BCI). Eight slider-driven models, each with its long-form text folded
 under an "In depth" toggle:
 
 1. Neurons make very small electric fields: one cell in a to-scale cortex cross-section (grey matter, CSF, dura, skull), with a microelectrode whose tip sits at the detection distance
@@ -34,6 +34,14 @@ npm run dev        # http://localhost:5173, hot reload on every save
 npm test           # unit tests for the multi-shell sphere solver
 npm run build      # type-check + production build into dist/
 ```
+
+## Deploy
+
+Live at [eeg-primer.tomkr.ai](https://eeg-primer.tomkr.ai). Every push to `main` on GitHub runs
+`.github/workflows/pages.yml`: `npm ci`, the tests, the type-checked build, then publishes `dist/` to GitHub Pages.
+The custom domain is set in the repository's Settings → Pages, and DNS (GoDaddy, the registrar for tomkr.ai) has a
+CNAME record `eeg-primer` → `tomkr000.github.io`. Assets use relative paths (`base: './'` in `vite.config.ts`), so the
+build also works from a sub-path.
 
 ## Regenerating the realistic-head data
 

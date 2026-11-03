@@ -33,3 +33,6 @@ Vite + vanilla TypeScript + D3; no framework. `npm run dev` for hot reload, `npm
 - Review every figure change in a screenshot before committing, cropped to the changed region and upscaled 2× (`/home/claude/shoot2.mjs` then PIL crop/resize): a styling difference that looks fine at 1366 px can vanish on the user's screen, as a grey-versus-dark contour did.
 - The site is light only: no `prefers-color-scheme: dark` block (the canvases use fixed colours tuned for the light surfaces). Keep it that way.
 - Fields are drawn as red/blue glows (`src/ui/field.ts`) over a numbered grid (`grid` option) so the scale is explicit; detection limits are dashed circles or a dark contour, always named in the legend under the canvas. Neuron glyphs are white with a dark halo. On-canvas text uses `CANVAS_FONT` (14 px); figure chrome (sliders, captions, axes) is 13 to 14.5 px.
+
+## Deploy
+- The site is published at https://eeg-primer.tomkr.ai by GitHub Pages from the GitHub repository's `main` branch (`.github/workflows/pages.yml`: npm ci, tests, build, upload `dist/`). Pushing to `main` is a production deploy. Keep `base: './'` in `vite.config.ts`; static files that must keep their names go in `public/`.

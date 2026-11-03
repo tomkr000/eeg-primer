@@ -27,7 +27,8 @@ scalp, tens of times less than at the cortical surface for a focal source ${c('e
 with scalp EEG at tens of microvolts ${c('eeg-amplitude')}; 10 nA·m, a typical measured source, takes
 10,000 to 50,000 cells in step ${c('cells-for-10nam')}. Nothing special happens at the skin: the potential continues into the
 air, halving about a centimetre above it ${c('exterior-potential')}, which is what an electrode held off
-the scalp has to work with (section 5).</p>`);
+the scalp has to work with, and why, as section 5 shows, it gets almost nothing: the coupling through air is
+far too weak to use what is there.</p>`);
 
   const sN = slider({ label: 'Neurons in the patch, N', min: 1, max: P.patchMaxN, value: P.patchDefaultN, log: true, format: (v) => fmt(Math.round(v), 3), marks: [{ value: P.patchDefaultN, label: 'Typical source' }] });
   const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Seizure' }] });
@@ -40,7 +41,7 @@ the scalp has to work with (section 5).</p>`);
   const rRatio = readout('Cortex-to-scalp attenuation');
   const rWidth = readout('Scalp half-width of the pattern');
 
-  const fig = figure(sec.fig, 'Left: the layers between cortex and air in cross-section, drawn flat like sections 1 and 2 (the head model is a sphere; the horizontal axis is distance along the scalp, the vertical axis height above the cortical surface, both in centimetres). Red positive, blue negative, fading with the logarithm of the potential; the dark line is where the potential falls to 1 µV, the noise of the quietest electrode contact alone (section 4 adds everything else). The bands, bottom to top, are cerebrospinal fluid (CSF), dura, skull and scalp; the field continues into the air above the scalp, where a non-contact electrode would sense it. Right: the potential straight above the source on the same vertical scale, through each layer and out into the air. The source is the patch of section 2 at the chosen depth, pointing outward as on a gyral crown.', { panelWidth: '400px' });
+  const fig = figure(sec.fig, 'Left: the layers between cortex and air in cross-section, drawn flat like sections 1 and 2 (the head model is a sphere; the horizontal axis is distance along the scalp, the vertical axis height above the cortical surface, both in centimetres). Red positive, blue negative, fading with the logarithm of the potential; the dark line is where the potential falls to 1 µV, the noise of the quietest electrode contact alone (section 4 adds everything else). The bands, bottom to top, are cerebrospinal fluid (CSF), dura, skull and scalp. The potential does continue into the air above the scalp (grey line, dashed in the profile), but no electrode can read it there: a square centimetre held a centimetre off the scalp couples through under a tenth of a picofarad, which section 5 shows is hopeless. Right: the potential straight above the source on the same vertical scale. The source is the patch of section 2 at the chosen depth, pointing outward as on a gyral crown.', { panelWidth: '400px' });
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
@@ -50,17 +51,18 @@ the scalp has to work with (section 5).</p>`);
   fig.viz.append(row);
   // picture coordinates: x along the scalp, y above the cortical surface (metres); the sphere is unrolled
   const xRange: [number, number] = [-0.05, 0.05];
-  const yRange: [number, number] = [-0.03, -0.03 + 0.1 * 300 / 390];
-  const hm = glow(left, { width: 390, height: 300, scale: 2, xRange, yRange, floor: 1e-7, ceiling: 1e-4, threshold: 1e-6, grid: { step: 0.01, factor: 100, unit: 'cm', note: 'each grid square = 1 cm' } });
-  glowLegend(left, '0.1 µV', '100 µV', 'dark line = 1 µV, the quietest contact’s own noise');
-  const radial = verticalProfile(right, { height: 300, yDomain: [yRange[0] * 100, yRange[1] * 100], yLabel: 'cm above the cortical surface', xLabel: 'Potential straight above the source (µV)', xDomain: [0.1, 1e4] });
+  const yRange: [number, number] = [-0.034, -0.034 + 0.1 * 250 / 390];
+  let scalpY = Infinity; // height of the scalp surface above the cortex (set in update)
+  const hm = glow(left, { width: 390, height: 250, scale: 2, xRange, yRange, floor: 1e-7, ceiling: 1e-4, threshold: 1e-6, thresholdMuted: (_x, y) => y > scalpY, grid: { step: 0.01, factor: 100, unit: 'cm', note: 'each grid square = 1 cm' } });
+  glowLegend(left, '0.1 µV', '100 µV', 'dark line = 1 µV, the quietest contact’s own noise; grey in the air: the field is there but nothing can read it without contact (section 5)');
+  const radial = verticalProfile(right, { height: 250, yDomain: [yRange[0] * 100, yRange[1] * 100], yLabel: 'cm above the cortical surface', xLabel: 'Potential straight above the source (µV)', xDomain: [0.1, 1e4] });
   fig.panel.append(controls(sN.el, sF.el, sDepth.el));
   fig.viz.append(readouts(rSource.el, rScalp.el, rCortex.el, rRatio.el, rWidth.el));
   assumptions(fig.el, [
     { what: 'Head geometry', value: `concentric spheres, brain radius 8.0 cm; CSF ${P.thicknessCsfMm} mm, dura ${P.thicknessDuraMm} mm, skull ${P.thicknessSkullMm} mm, scalp ${P.thicknessScalpMm} mm (measured averages)`, cite: c('brain-radius') + c('sphere-model') + c('thickness-csf') + c('thickness-dura') + c('thickness-skull') + c('thickness-scalp') },
     { what: 'Conductivities', value: `grey matter ${P.sigmaGray} S/m, CSF ${P.sigmaCsf}, dura ${P.sigmaDura}, skull ${P.sigmaSkull} (the key uncertain one: measured values span 0.003 to 0.08), scalp ${P.sigmaScalp}`, cite: c('sigma-gray') + c('sigma-csf') + c('sigma-dura') + c('sigma-skull') + c('sigma-scalp') },
     { what: 'Source', value: `the patch of section 2 as one current dipole at the chosen depth, pointing outward (a gyral crown): N × fraction in step × ${P.singleCellMomentPAm} pA·m per cell, plus the √N random-walk part; a real source is a sheet, not a point`, cite: c('single-cell-moment') + c('variances-add') + c('cells-for-10nam') + c('orientation') },
-    { what: 'Detection floor', value: `${TH_UV} µV, the lower end of measured electrode–skin noise: the quietest contact alone, with muscle, blinks, mains and amplifier noise all removed`, cite: c('skin-noise') },
+    { what: 'Detection floor', value: `${TH_UV} µV, the lower end of measured electrode–skin noise: the quietest contact alone, with muscle, blinks, mains and amplifier noise all removed; drawn grey above the scalp because a contact floor does not apply there (a plate in air couples through C = ε₀A/d, under 0.1 pF for 1 cm² at 1 cm)`, cite: c('skin-noise') + c('hair-permittivity') },
     { what: 'Solution', value: 'Legendre series per degree with continuity of potential and radial current at each interface, 600 terms; the air above the scalp carries the exterior solution', cite: c('sphere-model') + c('exterior-potential') },
   ]);
 
@@ -93,7 +95,8 @@ the scalp has to work with (section 5).</p>`);
     const above = (r: number) => (r - rCortexSurf) * 100;
     const bands = shells.map((sh, i) => ({ from: i === 0 ? yRange[0] * 100 : above(shells[i - 1].outerRadius), to: above(sh.outerRadius), label: i === 0 ? 'grey matter' : sh.name, color: layerColours[i % layerColours.length] }));
     bands.push({ from: above(R), to: yRange[1] * 100, label: 'air', color: '#f4f1ea' });
-    radial.update(prof, bands, [{ value: TH_UV, label: '1 µV' }], (b - rCortexSurf) * 100);
+    scalpY = R - rCortexSurf;
+    radial.update(prof, bands, [{ value: TH_UV, label: '1 µV' }], (b - rCortexSurf) * 100, scalpY * 100);
     let peakScalp = 0, peakCortex = 0;
     for (let th = 0; th < Math.PI / 2; th += 0.005) {
       peakScalp = Math.max(peakScalp, Math.abs(surfacePotential(sol, th, 0)));

@@ -16,6 +16,8 @@ export interface GlowCfg {
   ceiling: number;
   /** draw a contour where |V| crosses this value (same unit as V) */
   threshold?: number;
+  /** where this returns true the contour is drawn light grey instead of dark (a region where the field exists but cannot be read) */
+  thresholdMuted?: (x: number, y: number) => boolean;
   /** compute the field at 1/scale resolution and upscale smoothly; overlays stay crisp (default 1) */
   scale?: number;
   /** exponent applied to the normalised log magnitude before it becomes opacity (default 1.4; 1 is linear) */
@@ -84,7 +86,9 @@ export function glow(container: HTMLElement, cfg: GlowCfg): Glow {
           if (!(m >= th)) continue;
           if (mag[j * W + i - 1] < th || mag[j * W + i + 1] < th || mag[(j - 1) * W + i] < th || mag[(j + 1) * W + i] < th) {
             const k = (j * W + i) * 4;
-            d[k] = 20; d[k + 1] = 20; d[k + 2] = 20; d[k + 3] = 255;
+            const muted = cfg.thresholdMuted?.(cfg.xRange[0] + ((i + 0.5) / W) * (cfg.xRange[1] - cfg.xRange[0]), cfg.yRange[1] - ((j + 0.5) / H) * (cfg.yRange[1] - cfg.yRange[0]));
+            const g = muted ? 150 : 20;
+            d[k] = g; d[k + 1] = g; d[k + 2] = g; d[k + 3] = 255;
           }
         }
       }

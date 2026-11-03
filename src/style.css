@@ -108,7 +108,7 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .viz-title { font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--ink); }
 .figure-note { grid-template-columns: 1fr; margin-top: 0; }
 .section-note { margin-bottom: 18px; }
-.section.aside { padding: 18px 0 6px; }
+.section.question { padding: 18px 0 6px; border-bottom: none; }
 .figure-note .panel { display: none; }
 .figure-note figcaption { border-top: none; padding-top: 0; font-size: 14.5px; color: var(--ink); }
 .sync-svg { display: block; max-width: 100%; height: auto; }

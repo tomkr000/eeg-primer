@@ -5,7 +5,7 @@ import { section, figure, prose, assumptions } from '../ui/layout';
 import { CANVAS_FONT, textWithSwatches, type TextPart } from '../ui/field';
 import { state, subscribe, dimControls, patchPattern, miniValues, scalpValue, MOTOR, patchColour, patchLabel, visible, inHead, srcPos, elPos, centre, R, x0, y0, ax, by, sigmaMm, nCh, nSrc, G, miniIn, POS, NEG } from './dim-model';
 
-const W = 360, H = 300, cx = W / 2, cy = H / 2 + 4, FOOT = 46; // the head view, with a band of notes under it
+const W = 360, H = 360, cx = W / 2, cy = H / 2 + 4, FOOT = 46; // the head view, with a band of notes under it
 const s = Math.min((W / 2 - 16) / ax, (H / 2 - 24) / by); // px per mm
 /** orthographic view from above: x right, y (nose) up; z is height above the sphere centre (mm) */
 const project = (p: number[]): [number, number, number] => [cx + (p[0] - x0) * s, cy - (p[1] - y0) * s, p[2] - centre[2]];
@@ -124,7 +124,7 @@ them can be told apart.</p>`);
     // name labels: below the disc, else above, left or right, wherever they hit neither a disc nor an earlier label
     type Box = [number, number, number, number];
     const taken: Box[] = state.patches.map((p) => { const [px, py] = srcXY[p.center], r = Math.max(4, p.radiusMm * s); return [px - r, px + r, py - r, py + r]; });
-    const hits = (b: Box, skip: number) => taken.some((t, i) => i !== skip && b[0] < t[1] && b[1] > t[0] && b[2] < t[3] && b[3] > t[2]);
+    const hits = (b: Box, skip: number) => taken.some((t, i) => i !== skip && b[0] < t[1] + 6 && b[1] > t[0] - 6 && b[2] < t[3] && b[3] > t[2]);
     state.patches.forEach((p, idx) => {
       const [px, py] = srcXY[p.center];
       cctx.font = 'bold 14px system-ui, sans-serif'; cctx.fillStyle = '#1a1a1a'; cctx.textAlign = 'center';
@@ -172,7 +172,7 @@ them can be told apart.</p>`);
   /** the scalp voltage of all patches together plus the noise of one contact on each electrode, on an absolute log colour scale, with a colour bar */
   function drawSummed(total: Float64Array, peak: number) {
     sctx.clearRect(0, 0, W, H + FOOT);
-    footnote(sctx, [[{ sw: RED }, 'above the average of all 128 electrodes, ', { sw: BLUE }, 'below it'], ['far from the patches the voltage dips below that average'], [`with ${fmt(state.noiseUv, 2)} µV of noise on every electrode, as recorded`]]);
+    footnote(sctx, [[{ sw: RED }, 'above the average of all 128 electrodes, ', { sw: BLUE }, 'below it'], ['far from the patches the voltage dips below that average'], [`signal peak ${fmt(peak, 2)} µV, with ${fmt(state.noiseUv, 2)} µV of noise on every electrode`]]);
     const hw = half.width, hh = half.height, d = himg.data, lf = Math.log10(FLOOR), lc = Math.log10(CEIL);
     for (let j = 0; j < hh; j++) for (let i = 0; i < hw; i++) {
       const k = (j * hw + i) * 4, px = (i + 0.5) * 2, py = (j + 0.5) * 2;
@@ -190,7 +190,7 @@ them can be told apart.</p>`);
     for (const [x, y, z] of elXY) { if (!visible(z)) continue; sctx.beginPath(); sctx.arc(x, y, 2, 0, 2 * Math.PI); sctx.fill(); }
     headOutline(sctx);
     // colour bar: positive up, negative down, with the noise of one contact marked
-    const bx = W - 30, bt = 40, bb = H - 40, bw = 12;
+    const bx = W - 28, bt = 48, bb = H - 44, bw = 12;
     for (let y = bt; y < bb; y++) {
       const u = 1 - 2 * (y - bt) / (bb - bt); // +1 at the top, −1 at the bottom
       const v = Math.sign(u) * Math.pow(10, lf + Math.abs(u) * (lc - lf));
@@ -199,13 +199,10 @@ them can be told apart.</p>`);
       sctx.fillRect(bx, y, bw, 1);
     }
     sctx.strokeStyle = '#898781'; sctx.lineWidth = 1; sctx.strokeRect(bx, bt, bw, bb - bt);
-    sctx.fillStyle = '#1a1a1a'; sctx.font = '12px system-ui, sans-serif'; sctx.textAlign = 'right';
-    sctx.fillText(`+${CEIL} µV`, bx - 4, bt + 4); sctx.fillText('0', bx - 4, (bt + bb) / 2 + 4); sctx.fillText(`−${CEIL} µV`, bx - 4, bb + 4);
-    sctx.font = 'bold 12px system-ui, sans-serif'; sctx.fillText('positive', bx - 4, bt + 18); sctx.fillText('negative', bx - 4, bb - 10);
-    sctx.font = 'bold 15px system-ui, sans-serif'; sctx.textAlign = 'right';
-    sctx.fillText(`signal peak ${fmt(peak, 2)} µV`, W - 6, 16);
-    sctx.font = '12px system-ui, sans-serif'; sctx.fillStyle = '#52514e';
-    sctx.fillText(`noise ${fmt(state.noiseUv, 2)} µV on each electrode`, W - 6, 30);
+    sctx.fillStyle = '#1a1a1a'; sctx.font = 'bold 12px system-ui, sans-serif'; sctx.textAlign = 'right';
+    sctx.fillText(`+${CEIL} µV positive`, bx + bw, bt - 6); sctx.fillText(`−${CEIL} µV negative`, bx + bw, bb + 14);
+    sctx.font = '12px system-ui, sans-serif'; sctx.textAlign = 'left'; sctx.fillText('0', bx + bw + 3, (bt + bb) / 2 + 4);
+
   }
 
   function update() {

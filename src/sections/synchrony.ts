@@ -4,7 +4,7 @@ import { figure, inDepth } from '../ui/layout';
 /** "How do neurons synchronize?": an aside with a schematic and a cited note, placed after section 4. */
 export function mountSynchrony(root: HTMLElement) {
   const el = document.createElement('section');
-  el.className = 'section aside';
+  el.className = 'section question';
   el.id = 'synchrony';
   const body = document.createElement('div');
   body.className = 'section-note';

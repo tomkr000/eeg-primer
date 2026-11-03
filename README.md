@@ -5,11 +5,12 @@ non-invasive brain–computer interfaces (BCI). Six slider-driven models, each w
 under an "In depth" toggle:
 
 1. Neurons make very small electric fields: one cell in a to-scale cortex cross-section (grey matter, CSF, dura, skull), with a microelectrode whose tip sits at the detection distance
-2. Many neurons must fire synchronously to create larger signal: a patch of N cells with a fraction in step, in the same cross-section; a cited note and schematic on how neurons synchronise (thalamic drive, shared inhibition, travelling waves)
+2. Many neurons must fire synchronously to create larger signal: a patch of N cells with a fraction in step, in the same cross-section
 3. Only large, multi-neuron signals reach outside the skull: the same patch at a chosen depth in the analytic multi-shell head, with the potential profile drawn vertically beside the cross-section
 4. From outside, patches of cortex blur into broad blobs: a fixed, representative set of patches on a realistic head
    (the hand, foot and tongue motor areas a person can modulate at will), each one's own scalp map and the summed map
    the electrodes see with contact noise added, using a precomputed lead field for the fsaverage boundary-element head (MNE-Python)
+   (After section 4, an unnumbered aside, "How do neurons synchronize?": a cited note and schematic on thalamic drive, shared inhibition and travelling waves.)
 5. The signal that gets outside the skull is noisy: the alpha amplitude derived from N and synchrony through the section 3 head, buried in muscle, blink, skin, mains and amplifier noise
 6. Different electrode types result in different signals: the scalp signal through wet gel on abraded skin, wet gel, a dry plate and a plate over hair, each with an illustration
 7. A head with EEG can operate only a few dimensions: the patches of section 4 taken in turn, each bar the signal it adds

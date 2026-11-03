@@ -16,8 +16,10 @@ export interface GlowCfg {
   ceiling: number;
   /** draw a contour where |V| crosses this value (same unit as V) */
   threshold?: number;
-  /** where this returns true the contour is drawn light grey instead of dark (a region where the field exists but cannot be read) */
-  thresholdMuted?: (x: number, y: number) => boolean;
+  /** draw the contour only where this returns true (default everywhere) */
+  contourWhere?: (x: number, y: number) => boolean;
+  /** opacity multiplier for the glow at a point, 0 to 1 (default 1): fade a region where the field exists but cannot be read */
+  fadeWhere?: (x: number, y: number) => number;
   /** compute the field at 1/scale resolution and upscale smoothly; overlays stay crisp (default 1) */
   scale?: number;
   /** exponent applied to the normalised log magnitude before it becomes opacity (default 1.4; 1 is linear) */
@@ -76,7 +78,7 @@ export function glow(container: HTMLElement, cfg: GlowCfg): Glow {
           const t = Math.max(0, Math.min(1, (Math.log10(Math.max(a, 1e-30)) - lf) / (lc - lf)));
           const c = v >= 0 ? POS : NEG;
           d[k] = c[0]; d[k + 1] = c[1]; d[k + 2] = c[2];
-          d[k + 3] = Math.round(235 * Math.pow(t, gamma));
+          d[k + 3] = Math.round(235 * Math.pow(t, gamma) * (cfg.fadeWhere?.(x, y) ?? 1));
         }
       }
       if (threshold !== undefined) {
@@ -85,10 +87,9 @@ export function glow(container: HTMLElement, cfg: GlowCfg): Glow {
           const m = mag[j * W + i];
           if (!(m >= th)) continue;
           if (mag[j * W + i - 1] < th || mag[j * W + i + 1] < th || mag[(j - 1) * W + i] < th || mag[(j + 1) * W + i] < th) {
+            if (cfg.contourWhere && !cfg.contourWhere(cfg.xRange[0] + ((i + 0.5) / W) * (cfg.xRange[1] - cfg.xRange[0]), cfg.yRange[1] - ((j + 0.5) / H) * (cfg.yRange[1] - cfg.yRange[0]))) continue;
             const k = (j * W + i) * 4;
-            const muted = cfg.thresholdMuted?.(cfg.xRange[0] + ((i + 0.5) / W) * (cfg.xRange[1] - cfg.xRange[0]), cfg.yRange[1] - ((j + 0.5) / H) * (cfg.yRange[1] - cfg.yRange[0]));
-            const g = muted ? 150 : 20;
-            d[k] = g; d[k + 1] = g; d[k + 2] = g; d[k + 3] = 255;
+            d[k] = 20; d[k + 1] = 20; d[k + 2] = 20; d[k + 3] = 255;
           }
         }
       }

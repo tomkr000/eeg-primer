@@ -12,7 +12,7 @@ export function verticalProfile(container: HTMLElement, cfg: { height: number; y
   const svg = root.append('svg').attr('class', 'plot-svg').attr('height', cfg.height + M.bottom);
   const gBands = svg.append('g');
   const gGrid = svg.append('g').attr('class', 'grid');
-  const pathMuted = svg.append('path').attr('fill', 'none').attr('stroke', '#898781').attr('stroke-width', 2).attr('stroke-dasharray', '4 3');
+  const pathMuted = svg.append('path').attr('fill', 'none').attr('stroke', '#b8b6ae').attr('stroke-width', 1.5).attr('stroke-dasharray', '2 5');
   const path = svg.append('path').attr('fill', 'none').attr('stroke', '#2a78d6').attr('stroke-width', 2.5);
   const gMarkers = svg.append('g');
   const gX = svg.append('g').attr('class', 'axis');

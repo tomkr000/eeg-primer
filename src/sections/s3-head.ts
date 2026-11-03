@@ -41,7 +41,7 @@ far too weak to use what is there.</p>`);
   const rRatio = readout('Cortex-to-scalp attenuation');
   const rWidth = readout('Scalp half-width of the pattern');
 
-  const fig = figure(sec.fig, 'Left: the layers between cortex and air in cross-section, drawn flat like sections 1 and 2 (the head model is a sphere; the horizontal axis is distance along the scalp, the vertical axis height above the cortical surface, both in centimetres). Red positive, blue negative, fading with the logarithm of the potential; the dark line is where the potential falls to 1 µV, the noise of the quietest electrode contact alone (section 4 adds everything else). The bands, bottom to top, are cerebrospinal fluid (CSF), dura, skull and scalp. The potential does continue into the air above the scalp (grey line, dashed in the profile), but no electrode can read it there: a square centimetre held a centimetre off the scalp couples through under a tenth of a picofarad, which section 5 shows is hopeless. Right: the potential straight above the source on the same vertical scale. The source is the patch of section 2 at the chosen depth, pointing outward as on a gyral crown.', { panelWidth: '400px' });
+  const fig = figure(sec.fig, 'Left: the layers between cortex and air in cross-section, drawn flat like sections 1 and 2 (the sphere model unrolled; axes in centimetres). Red positive, blue negative, fading with the logarithm of the potential; the dark line is where it falls to 1 µV, the noise of the quietest electrode contact alone (section 4 adds the rest). The potential continues into the air, but no electrode can read it there: a square centimetre held a centimetre off the scalp couples through under a tenth of a picofarad, hopeless as section 5 shows, so the air is faded and the profile dotted. Right: the potential straight above the source, on the same vertical scale. The source is the patch of section 2 at the chosen depth, pointing outward.', { panelWidth: '400px' });
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
@@ -50,12 +50,12 @@ far too weak to use what is there.</p>`);
   row.append(left, right);
   fig.viz.append(row);
   // picture coordinates: x along the scalp, y above the cortical surface (metres); the sphere is unrolled
-  const xRange: [number, number] = [-0.05, 0.05];
-  const yRange: [number, number] = [-0.034, -0.034 + 0.1 * 250 / 390];
+  const xRange: [number, number] = [-0.04, 0.04];
+  const yRange: [number, number] = [-0.033, -0.033 + 0.08 * 330 / 390];
   let scalpY = Infinity; // height of the scalp surface above the cortex (set in update)
-  const hm = glow(left, { width: 390, height: 250, scale: 2, xRange, yRange, floor: 1e-7, ceiling: 1e-4, threshold: 1e-6, thresholdMuted: (_x, y) => y > scalpY, grid: { step: 0.01, factor: 100, unit: 'cm', note: 'each grid square = 1 cm' } });
-  glowLegend(left, '0.1 µV', '100 µV', 'dark line = 1 µV, the quietest contact’s own noise; grey in the air: the field is there but nothing can read it without contact (section 5)');
-  const radial = verticalProfile(right, { height: 250, yDomain: [yRange[0] * 100, yRange[1] * 100], yLabel: 'cm above the cortical surface', xLabel: 'Potential straight above the source (µV)', xDomain: [0.1, 1e4] });
+  const hm = glow(left, { width: 390, height: 330, scale: 2, xRange, yRange, floor: 1e-7, ceiling: 1e-4, threshold: 1e-6, contourWhere: (_x, y) => y <= scalpY, fadeWhere: (_x, y) => (y > scalpY ? 0.3 : 1), grid: { step: 0.01, factor: 100, unit: 'cm', note: 'each grid square = 1 cm' } });
+  glowLegend(left, '0.1 µV', '100 µV', 'dark line = 1 µV, a quiet contact’s noise; air faded: unreadable (section 5)');
+  const radial = verticalProfile(right, { height: 330, yDomain: [yRange[0] * 100, yRange[1] * 100], yLabel: 'cm above the cortical surface', xLabel: 'Potential straight above the source (µV)', xDomain: [0.1, 1e4] });
   fig.panel.append(controls(sN.el, sF.el, sDepth.el));
   fig.viz.append(readouts(rSource.el, rScalp.el, rCortex.el, rRatio.el, rWidth.el));
   assumptions(fig.el, [
@@ -94,7 +94,7 @@ far too weak to use what is there.</p>`);
     const layerColours = ['#2a78d6', '#1baf7a', '#eda100', '#898781', '#eb6834'];
     const above = (r: number) => (r - rCortexSurf) * 100;
     const bands = shells.map((sh, i) => ({ from: i === 0 ? yRange[0] * 100 : above(shells[i - 1].outerRadius), to: above(sh.outerRadius), label: i === 0 ? 'grey matter' : sh.name, color: layerColours[i % layerColours.length] }));
-    bands.push({ from: above(R), to: yRange[1] * 100, label: 'air', color: '#f4f1ea' });
+    bands.push({ from: above(R), to: yRange[1] * 100, label: 'air: unreadable', color: '#f4f1ea' });
     scalpY = R - rCortexSurf;
     radial.update(prof, bands, [{ value: TH_UV, label: '1 µV' }], (b - rCortexSurf) * 100, scalpY * 100);
     let peakScalp = 0, peakCortex = 0;
@@ -118,6 +118,9 @@ far too weak to use what is there.</p>`);
       const t = (i: number) => shells[i].outerRadius - shells[i - 1].outerRadius;
       drawCortexLayers(ctx, toPx, { xRange, yTop: yRange[1], surface: 0, csf: t(1), dura: t(2), skull: t(3), scalp: t(4), greyLabelY: -0.012 });
       ctx.font = CANVAS_FONT; ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'left';
+      const [lx, ly] = toPx(xRange[0] + 0.0065, scalpY + 0.004);
+      ctx.fillText('the field continues into the air,', lx, ly - 16);
+      ctx.fillText('but nothing can read it without contact', lx, ly);
       const [sx, sy] = toPx(0, b - rCortexSurf);
       ctx.beginPath(); ctx.arc(sx, sy, 3.5, 0, 2 * Math.PI); ctx.fill();
       ctx.fillText('source', sx + 8, sy + 5);

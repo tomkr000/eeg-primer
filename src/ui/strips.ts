@@ -11,6 +11,8 @@ export interface Strip {
   sub?: string;
   /** SVG markup (a <g> sized 44 × 44) drawn at the left of the name */
   icon?: string;
+  /** draw a box around the whole strip */
+  highlight?: boolean;
 }
 
 export interface StripPlot {
@@ -44,6 +46,7 @@ export function stripPlot(container: HTMLElement, cfg: { xLabel: string; xDomain
     const rows = gRows.selectAll<SVGGElement, Strip>('g.strip').data(strips, (d) => d.name);
     rows.exit().remove();
     const enter = rows.enter().append('g').attr('class', 'strip');
+    enter.append('rect').attr('class', 'strip-box');
     enter.append('line').attr('class', 'strip-base');
     enter.append('rect').attr('class', 'strip-sep');
     enter.append('path').attr('class', 'strip-path');
@@ -58,6 +61,7 @@ export function stripPlot(container: HTMLElement, cfg: { xLabel: string; xDomain
       const g = d3.select(this);
       const peak = Math.max(1e-9, d3.max(d.points, (p) => Math.abs(p[1])) ?? 0);
       const y = d3.scaleLinear().domain([-peak, peak]).range([sh - 3, 17]);
+      g.select('rect.strip-box').attr('x', 2).attr('y', 2).attr('width', width - 4).attr('height', sh - 4).attr('rx', 6).attr('visibility', d.highlight ? 'visible' : 'hidden');
       g.select('line.strip-base').attr('x1', M.left).attr('x2', M.left + iw).attr('y1', y(0)).attr('y2', y(0));
       g.select('rect.strip-sep').attr('x', M.left).attr('width', iw).attr('y', sh - 0.5).attr('height', 1);
       const line = d3.line<[number, number]>().x((p) => x(p[0])).y((p) => y(p[1]));

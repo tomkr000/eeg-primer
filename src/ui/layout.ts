@@ -6,13 +6,13 @@ export interface Section {
   fig: HTMLElement;
 }
 
-export function section(root: HTMLElement, id: string, number: string, title: string): Section {
+export function section(root: HTMLElement, id: string, number: string, title: string, subtitle?: string): Section {
   const el = document.createElement('section');
   el.id = id;
   el.className = 'section';
   const header = document.createElement('header');
   header.className = 'section-head';
-  header.innerHTML = `<span class="section-number">${number}</span><h2>${title}</h2>`;
+  header.innerHTML = `<span class="section-number">${number}</span><div><h2>${title}</h2>${subtitle ? `<p class="section-subtitle">${subtitle}</p>` : ''}</div>`;
   const text = document.createElement('div');
   text.className = 'section-text';
   const fig = document.createElement('div');

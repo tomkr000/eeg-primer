@@ -7,7 +7,7 @@ import { netDipole } from '../physics/population';
 import { section, figure, prose, assumptions, readouts } from '../ui/layout';
 
 export function mountHead(root: HTMLElement) {
-  const sec = section(root, 'head', '3', 'Only large, multi-neuron signals reach outside the skull');
+  const sec = section(root, 'head', '3', 'Between the brain and scalp, many layers attenuate signal', 'Only large-scale synchronous events get through');
   prose(sec.text, `
 <p>Between a cortical source and a scalp electrode lie grey matter, a film of cerebrospinal fluid (CSF),
 the dura, the skull and the scalp, each with its own conductivity ${c('mccann-meta')}. CSF is the best
@@ -111,13 +111,31 @@ the scalp has to work with (section 5).</p>`);
       ctx.save();
       ctx.lineWidth = 1;
       const [cx, cy] = toPx(0, 0);
+      // the layers as tinted bands, like the cortex cross-sections of sections 1 and 2
+      const tint: Record<string, string> = { CSF: 'rgba(27,175,122,0.4)', dura: 'rgba(237,161,0,0.55)', skull: 'rgba(137,135,129,0.3)', scalp: 'rgba(240,201,166,0.5)' };
+      const pxR = (r: number) => toPx(r, 0)[0] - cx;
       shells.forEach((s, i) => {
-        const [rx] = toPx(s.outerRadius, 0);
-        ctx.strokeStyle = i === shells.length - 1 ? 'rgba(26,26,26,0.9)' : 'rgba(26,26,26,0.55)';
-        ctx.beginPath(); ctx.arc(cx, cy, rx - cx, Math.PI, 2 * Math.PI); ctx.stroke();
+        if (i === 0) return;
+        ctx.fillStyle = tint[s.name] ?? 'rgba(0,0,0,0.1)';
+        ctx.beginPath(); ctx.arc(cx, cy, pxR(s.outerRadius), Math.PI, 2 * Math.PI); ctx.arc(cx, cy, pxR(shells[i - 1].outerRadius), 2 * Math.PI, Math.PI, true); ctx.closePath(); ctx.fill();
+      });
+      shells.forEach((s, i) => {
+        ctx.strokeStyle = i === shells.length - 1 ? 'rgba(26,26,26,0.9)' : 'rgba(26,26,26,0.45)';
+        ctx.beginPath(); ctx.arc(cx, cy, pxR(s.outerRadius), Math.PI, 2 * Math.PI); ctx.stroke();
       });
       ctx.fillStyle = '#1a1a1a';
       ctx.font = CANVAS_FONT;
+      // layer names written along their arcs on the right side of the head
+      const labelOnArc = (text: string, r: number, theta: number) => {
+        const [lx, ly] = toPx(r * Math.sin(theta), r * Math.cos(theta));
+        ctx.save(); ctx.translate(lx, ly); ctx.rotate(theta); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.strokeText(text, 0, 0); ctx.fillText(text, 0, 0); ctx.restore();
+      };
+      const mid = (i: number) => (shells[i - 1].outerRadius + shells[i].outerRadius) / 2;
+      labelOnArc('scalp', mid(4), 0.6);
+      labelOnArc('skull', mid(3), 0.6);
+      labelOnArc('CSF + dura (thin)', shells[0].outerRadius - 0.0045, 0.6);
+      ctx.textAlign = 'left';
       const [ax, ay] = toPx(-0.052, R + 0.016);
       ctx.fillText('air', ax, ay);
       const [bx, by] = toPx(-0.052, 0.034);

@@ -3,10 +3,17 @@ import { solveShells, surfacePotential } from '../physics/sphere';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { glow, drawNeuron, drawCortexLayers, glowLegend, CANVAS_FONT } from '../ui/field';
 import { P, claimCite as c, defaultHead } from '../data/params';
-import { section, figure, prose, readouts, assumptions } from '../ui/layout';
+import { section, figure, prose, readouts, assumptions, inDepth } from '../ui/layout';
 
 export function mountPopulation(root: HTMLElement) {
   const sec = section(root, 'population', '2', 'Many neurons must fire synchronously to create larger signal');
+  // "How do neurons fall into step?": a heading above the figure, with the schematic and its note under a toggle
+  const syncHead = document.createElement('h3');
+  syncHead.className = 'note-title';
+  syncHead.textContent = 'How do neurons fall into step?';
+  const syncBody = document.createElement('div');
+  syncBody.className = 'section-note';
+  sec.fig.append(syncHead, inDepth(syncBody));
   prose(sec.text, `
 <p>Fields add linearly ${c('superposition')}, so a patch of N cells is louder than one. How much louder
 depends on timing. If the cells’ synaptic currents rise and fall together, their dipoles add in phase
@@ -108,11 +115,10 @@ hide much. Only coherent, aligned current counts.</p>`);
   [sN, sF].forEach((s) => s.onChange(update));
   update();
 
-  // How cells fall into step: a cited note with a schematic
-  const syncFig = figure(sec.fig, '', { panelWidth: '0px' });
+  const syncFig = figure(syncBody, '', { panelWidth: '0px' });
   syncFig.el.classList.add('figure-note');
   syncFig.viz.innerHTML = synchronySvg();
-  syncFig.caption.innerHTML = `<strong>How do neurons fall into step?</strong> Three ways, often together. A shared rhythmic drive: the thalamus sends the same oscillation to many cortical cells, which is how the alpha rhythm is paced ${c('sync-thalamic')}. Shared inhibition: networks of inhibitory interneurons silence a population together and release it together, so its cells can only fire in the same brief window, the mechanism behind gamma oscillations ${c('sync-inhibition')}. Travelling waves: activity sweeps across the cortex, so neighbours fire a little after each other rather than exactly together; such waves cross the cortex at roughly 0.1 to 10 metres per second ${c('sync-waves')}. The bigger the pool recruited in each cycle, the slower the rhythm ${c('oscillations-synchrony')}.`;
+  syncFig.caption.innerHTML = `Three ways, often together. A shared rhythmic drive: the thalamus sends the same oscillation to many cortical cells, which is how the alpha rhythm is paced ${c('sync-thalamic')}. Shared inhibition: networks of inhibitory interneurons silence a population together and release it together, so its cells can only fire in the same brief window, the mechanism behind gamma oscillations ${c('sync-inhibition')}. Travelling waves: activity sweeps across the cortex, so neighbours fire a little after each other rather than exactly together; such waves cross the cortex at roughly 0.1 to 10 metres per second ${c('sync-waves')}. The bigger the pool recruited in each cycle, the slower the rhythm ${c('oscillations-synchrony')}.`;
 }
 
 /** Schematic of three synchronising mechanisms, as inline SVG. */

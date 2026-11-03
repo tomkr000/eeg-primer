@@ -41,7 +41,7 @@ spends waiting.</p>`);
   const momentNam = (N: number, f: number) => netDipole(Math.round(N), f, 1, P.singleCellMomentPAm * 1e-12).total * 1e9;
   // the patch that gives the textbook 20 µV alpha rhythm with a tenth of its cells in step
   const alphaN = RAW_DEFAULTS.signalUv / (scalpUvPerNam * P.patchDefaultSync * P.singleCellMomentPAm * 1e-3);
-  const sN = slider({ label: 'Neurons in the patch, N', min: 1, max: P.patchMaxN, value: alphaN, log: true, format: (v) => fmt(Math.round(v), 2), marks: [{ value: P.patchDefaultN, label: 'Typical source' }, { value: alphaN, label: 'Alpha rhythm' }], note: c('alpha-source-chain') });
+  const sN = slider({ label: 'Neurons in the patch, N', min: 1e4, max: P.patchMaxN, value: alphaN, log: true, format: (v) => fmt(Math.round(v), 2), marks: [{ value: P.patchDefaultN, label: 'Typical source' }, { value: alphaN, label: 'Alpha rhythm' }], note: c('alpha-source-chain') });
   const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Seizure' }] });
   const sEmg = slider({ label: 'Muscle (EMG), 20–300 Hz', unit: 'µV rms', min: 0, max: 100, value: RAW_DEFAULTS.emgUvRms, step: 1, note: c('emg-level'), marks: [{ value: RAW_DEFAULTS.emgUvRms, label: 'Relaxed' }, { value: 100, label: 'Clenched jaw' }] });
   const sSkin = slider({ label: 'Electrode–skin noise (1/f)', unit: 'µV rms', min: 0, max: 20, value: RAW_DEFAULTS.skinUvRms, step: 0.5, note: c('skin-noise'), marks: [{ value: 1.5, label: 'Abraded skin' }, { value: 8, label: 'Dry contact' }] });
@@ -49,7 +49,7 @@ spends waiting.</p>`);
   const rSnr = readout('Signal-to-noise ratio (alpha vs the rest)');
   const rRms = readout('Total rms of the recording');
 
-  const fig = figure(sec.fig, 'Four seconds of a synthetic scalp channel: the 10 Hz alpha rhythm alone (blue) and the same rhythm buried in muscle, blink, skin, mains and amplifier noise (orange). The alpha amplitude is not a free number: it comes from the patch of sections 2 and 3 through the same head, and the textbook 20 µV needs about 740,000 cells with a tenth in step, more than the typical evoked source. The large deflections are eye blinks at their reported size and rate. This is the raw signal at the scalp: whatever the electrode type, this is what it is trying to pick up.');
+  const fig = figure(sec.fig, 'Four seconds of a synthetic scalp channel: the idealized 10 Hz alpha rhythm (blue) and the same rhythm buried in muscle, blink, skin, mains and amplifier noise (orange). The alpha amplitude is not a free number: it comes from the patch of sections 2 and 3 through the same head, and the textbook 20 µV needs about 740,000 cells with a tenth in step, more than the typical evoked source. The large deflections are eye blinks at their reported size and rate. This is the raw signal at the scalp: whatever the electrode type, this is what it is trying to pick up.');
   const plot = linePlot(fig.viz, { x: { label: 'Time (s)', domain: [0, 4] }, y: { label: 'Potential (µV)' }, height: 360, legendInside: true });
   fig.panel.append(controls(sN.el, sF.el, sEmg.el, sSkin.el));
   fig.viz.append(readouts(rAlpha.el, rSnr.el, rRms.el));
@@ -66,9 +66,9 @@ spends waiting.</p>`);
     const s = synthesize({ ...RAW_DEFAULTS, signalUv: alphaUv, emgUvRms: sEmg.value, skinUvRms: sSkin.value });
     const toPts = (a: Float64Array) => Array.from(a, (v, i) => [s.t[i], v] as [number, number]);
     plot.update([
-      { name: 'Raw scalp signal (alpha + everything else)', points: toPts(s.total), color: '#eb6834', width: 1 },
-      { name: 'Alpha rhythm alone', points: toPts(s.signal), color: '#2a78d6', width: 1.8 },
-    ], s.blinkTimes.map((t) => ({ axis: 'x' as const, value: t, label: 'eye blink' })));
+      { name: 'Raw scalp signal (alpha + noise sources)', points: toPts(s.total), color: '#eb6834', width: 1 },
+      { name: 'Idealized alpha rhythm signal', points: toPts(s.signal), color: '#2a78d6', width: 1.8 },
+    ], s.blinkTimes.map((t) => ({ axis: 'x' as const, value: t, label: 'eye blink', callout: true })));
     rAlpha.set(`${fmt(alphaUv, 3)} µV`);
     rSnr.set(`${fmt(s.snrDb, 3)} dB`);
     rRms.set(`${fmt(Math.sqrt(s.total.reduce((a, v) => a + v * v, 0) / s.total.length), 3)} µV`);

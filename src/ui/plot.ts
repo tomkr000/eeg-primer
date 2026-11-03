@@ -17,6 +17,8 @@ export interface Marker {
   value: number;
   label: string;
   color?: string;
+  /** x markers only: draw the label as a boxed callout near the top of the plot instead of at the foot of the line */
+  callout?: boolean;
 }
 export interface AxisCfg {
   label: string;
@@ -126,7 +128,16 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
         if (m.value < xd[0] || m.value > xd[1]) continue;
         gMarkers.append('line').attr('y1', MARGIN.top).attr('y2', MARGIN.top + ih).attr('x1', x(m.value)).attr('x2', x(m.value)).attr('stroke', col).attr('stroke-dasharray', '2 3');
         const nearRight = x(m.value) > MARGIN.left + iw * 0.8;
-        gMarkers.append('text').attr('class', 'marker-label').attr('x', x(m.value) + (nearRight ? -4 : 4)).attr('y', MARGIN.top + ih - 6).attr('text-anchor', nearRight ? 'end' : 'start').attr('fill', col).text(m.label);
+        if (m.callout) {
+          const g = gMarkers.append('g').attr('class', 'callout');
+          const tx = x(m.value) + (nearRight ? -10 : 10), ty = MARGIN.top + 14;
+          const txt = g.append('text').attr('class', 'callout-text').attr('x', tx).attr('y', ty).attr('text-anchor', nearRight ? 'end' : 'start').text(m.label);
+          const bb = (txt.node() as SVGTextElement).getBBox();
+          g.insert('rect', 'text').attr('x', bb.x - 6).attr('y', bb.y - 3).attr('width', bb.width + 12).attr('height', bb.height + 6).attr('rx', 4).attr('class', 'callout-box');
+          g.append('line').attr('x1', nearRight ? bb.x + bb.width + 6 : bb.x - 6).attr('y1', bb.y + bb.height / 2).attr('x2', x(m.value)).attr('y2', bb.y + bb.height / 2).attr('class', 'callout-line');
+        } else {
+          gMarkers.append('text').attr('class', 'marker-label').attr('x', x(m.value) + (nearRight ? -4 : 4)).attr('y', MARGIN.top + ih - 6).attr('text-anchor', nearRight ? 'end' : 'start').attr('fill', col).text(m.label);
+        }
       }
     }
     // legend (only for ≥ 2 series)

@@ -59,6 +59,9 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .section-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 12px; }
 .section-number { font-family: var(--sans); font-weight: 600; font-size: 14px; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 999px; width: 28px; height: 28px; display: inline-grid; place-items: center; flex: none; }
 .section h2 { font-size: clamp(26px, 3vw, 34px); line-height: 1.1; font-weight: 600; letter-spacing: -0.015em; margin: 0; }
+.section-subtitle { font-family: var(--sans); font-size: 17px; color: var(--ink-2); margin: 6px 0 0; }
+.section-head > div { min-width: 0; }
+.note-title { font-size: 24px; font-weight: 600; margin: 4px 0 6px; }
 .section h3 { font-size: 19px; font-weight: 600; margin: 14px 0 6px; column-span: all; }
 .section-text { column-count: 2; column-gap: 44px; column-rule: 1px solid var(--grid); max-width: 1180px; margin: 6px 0 10px; }
 .section-text .prose p:first-child { margin-top: 0; }
@@ -94,7 +97,8 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .figure { margin: 0; background: var(--surface-1); border: 1px solid var(--rule); padding: 14px 16px 10px; display: grid; grid-template-columns: minmax(0, 1fr) var(--panel-w); gap: 10px 22px; align-items: start; }
 .figure figcaption { grid-column: 1 / -1; font-family: var(--sans); font-size: 14.5px; color: var(--ink-2); line-height: 1.45; margin: 0; border-top: 1px solid var(--grid); padding-top: 8px; }
 .viz { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-.figure-note { grid-template-columns: 1fr; margin-top: 14px; }
+.figure-note { grid-template-columns: 1fr; margin-top: 0; }
+.section-note { margin-bottom: 18px; }
 .figure-note .panel { display: none; }
 .figure-note figcaption { border-top: none; padding-top: 0; font-size: 14.5px; color: var(--ink); }
 .sync-svg { display: block; max-width: 100%; height: auto; }
@@ -112,6 +116,9 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .plot-svg .axis-label { fill: var(--ink); font-size: 14px; }
 .plot-svg .marker-label, .plot-svg .band-label { font-size: 13px; fill: var(--ink-2); }
 .plot-svg .crosshair { stroke: var(--ink-3); stroke-dasharray: 2 2; }
+.plot-svg .callout-text { font-size: 13px; fill: var(--ink); }
+.plot-svg .callout-box { fill: rgba(252, 252, 251, 0.92); stroke: var(--rule); }
+.plot-svg .callout-line { stroke: var(--ink-2); }
 .tooltip { position: absolute; pointer-events: none; background: var(--surface-1); border: 1px solid var(--rule); padding: 6px 9px; font-family: var(--sans); font-size: 13px; line-height: 1.5; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); min-width: 150px; }
 .tooltip .tip-x { color: var(--ink-2); }
 .tooltip i, .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
@@ -166,6 +173,7 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .strip-sep { fill: var(--grid); }
 .strip-name { font-family: var(--sans); font-size: 16px; font-weight: 600; fill: var(--ink); }
 .strip-sub { font-family: var(--sans); font-size: 12px; font-style: italic; fill: var(--ink-2); }
+.strip-box { fill: rgba(235, 104, 52, 0.06); stroke: var(--accent-2); stroke-width: 1.5; }
 .strip-scale { font-family: var(--sans); font-size: 13px; fill: var(--ink-2); font-variant-numeric: tabular-nums; }
 .strip-note { font-family: var(--sans); font-size: 12.5px; fill: var(--ink-2); }
 

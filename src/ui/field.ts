@@ -186,35 +186,6 @@ export function drawCortexLayers(ctx: CanvasRenderingContext2D, toPx: Glow['toPx
   ctx.restore();
 }
 
-/** A penetrating microelectrode drawn as a tapered needle whose tip sits at `tip` (px), entering from `from` (px). */
-export function drawProbe(ctx: CanvasRenderingContext2D, tip: [number, number], from: [number, number], label?: string): void {
-  const dx = from[0] - tip[0], dy = from[1] - tip[1];
-  const L = Math.hypot(dx, dy) || 1;
-  const nx = -dy / L, ny = dx / L; // unit normal
-  const wTop = 9, wNear = 1.2; // half-widths in px at the far end and near the tip
-  ctx.save();
-  ctx.lineJoin = 'round';
-  ctx.beginPath();
-  ctx.moveTo(tip[0], tip[1]);
-  ctx.lineTo(tip[0] + dx * 0.08 + nx * wNear, tip[1] + dy * 0.08 + ny * wNear);
-  ctx.lineTo(from[0] + nx * wTop, from[1] + ny * wTop);
-  ctx.lineTo(from[0] - nx * wTop, from[1] - ny * wTop);
-  ctx.lineTo(tip[0] + dx * 0.08 - nx * wNear, tip[1] + dy * 0.08 - ny * wNear);
-  ctx.closePath();
-  ctx.fillStyle = '#d9d8d0'; ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 1.5;
-  ctx.fill(); ctx.stroke();
-  // bare tip
-  ctx.fillStyle = '#1a1a1a';
-  ctx.beginPath(); ctx.arc(tip[0], tip[1], 2.2, 0, 2 * Math.PI); ctx.fill();
-  if (label) {
-    ctx.font = CANVAS_FONT; ctx.textAlign = 'left';
-    const lx = tip[0] + 14, ly = tip[1] - 10;
-    const w = ctx.measureText(label).width;
-    ctx.fillStyle = 'rgba(252,252,251,0.85)'; ctx.fillRect(lx - 3, ly - 12, w + 6, 17);
-    ctx.fillStyle = '#1a1a1a'; ctx.fillText(label, lx, ly);
-  }
-  ctx.restore();
-}
 
 export interface NeuronGlyphOpts {
   /** horizontal position and vertical position of the soma centre (world units) */

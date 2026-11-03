@@ -1,6 +1,6 @@
 import { detectionRadius, twoMonopole } from '../physics/dipole';
 import { controls, readout, slider, fmt } from '../ui/slider';
-import { glow, drawNeuron, drawCortexLayers, drawProbe, glowLegend, CANVAS_FONT } from '../ui/field';
+import { glow, drawNeuron, drawCortexLayers, glowLegend, CANVAS_FONT } from '../ui/field';
 import { P, claimCite as c } from '../data/params';
 import { section, figure, prose, readouts, assumptions } from '../ui/layout';
 
@@ -28,13 +28,13 @@ outside.</p>`);
   const sI = slider({ label: 'Net synaptic current into the cell', unit: 'pA', min: 100, max: 5000, value: P.cellCurrentPa, log: true, note: c('cell-current'), marks: [{ value: P.cellCurrentPa, label: 'Average current' }] });
   const TH_UV = P.spikeNoiseUv; // detection floor: the noise of a silicon probe in the tissue (claim spike-noise-floor)
   const d = P.dipoleLengthUm * 1e-6, sg = P.sigmaGray;
-  const rRadius = readout(`Probe tip must be within (field above ${TH_UV} µV)`, c('spike-noise-floor'));
+  const rRadius = readout(`Field above an electrode’s ${TH_UV} µV noise floor only within`, c('spike-noise-floor'));
   const rAt1cm = readout('Potential 1 cm away');
   const rMoment = readout('Dipole moment p = I·d');
   const rMeasured = readout('Measured: a single spike vanishes beyond', c('henze-140um'));
   rMeasured.set('140 µm');
 
-  const fig = figure(sec.fig, 'One pyramidal cell in the cortex, seen in cross-section with the tissue layers above it to scale. Current enters at the dendritic tuft (blue, negative) and leaves at the cell body (red, positive); the colour fades with the logarithm of the potential. The probe is a microelectrode in the tissue: its tip is drawn at the furthest point where the cell’s field still exceeds the probe’s own 5 µV noise, and it moves with the slider. Each grid square is 0.25 mm; the field is computed as in uniform grey matter.');
+  const fig = figure(sec.fig, 'One pyramidal cell in the cortex, seen in cross-section with the tissue layers above it to scale. Current enters at the dendritic tuft (blue, negative) and leaves at the cell body (red, positive); the colour fades with the logarithm of the potential, and it is below 0.1 µV before it reaches the cortical surface. Each grid square is 0.25 mm; the field is computed as in uniform grey matter.');
   const W = 620, H = 400;
   const xr: [number, number] = [-3.1e-3, 3.1e-3], yr: [number, number] = [-0.9e-3, 3.1e-3];
   const surface = P.somaDepthMm * 1e-3, csf = P.thicknessCsfMm * 1e-3, dura = P.thicknessDuraMm * 1e-3;
@@ -47,7 +47,7 @@ outside.</p>`);
     { what: 'Layers', value: `cell body ${P.somaDepthMm} mm below the cortical surface in a ${P.corticalThicknessMm} mm cortex; CSF ${P.thicknessCsfMm} mm and dura ${P.thicknessDuraMm} mm drawn to scale above it; the field itself is computed as in uniform grey matter (it is below 0.1 µV before it reaches the surface)`, cite: c('cortex-layers') + c('thickness-csf') + c('thickness-dura') },
     { what: 'Tissue', value: `uniform grey matter, ${P.sigmaGray} S/m, purely resistive at these frequencies`, cite: c('sigma-gray') + c('quasistatic') },
     { what: 'Current range', value: 'one synapse passes about 100 to 300 pA; a strongly driven cell a few nanoamps', cite: c('epsc') + c('cell-current') },
-    { what: 'Probe', value: `a microelectrode with ${TH_UV} µV rms noise in the action-potential band; its tip is placed where the field equals that noise, so the distance scales as current ÷ noise`, cite: c('spike-noise-floor') },
+    { what: 'Detection floor', value: `${TH_UV} µV rms, the noise of a silicon probe in the action-potential band; the detection distance scales as current ÷ noise`, cite: c('spike-noise-floor') },
   ]);
 
   function update() {
@@ -59,12 +59,6 @@ outside.</p>`);
     g.draw((x, y) => twoMonopole(I, sg, d, x, y), (ctx, toPx) => {
       drawCortexLayers(ctx, toPx, { xRange: xr, yTop: yr[1], surface, csf, dura });
       drawNeuron(ctx, toPx, { x: 0, soma: -d / 2, tuft: d / 2 });
-      // the probe: tip at the detection distance from the cell body, coming down from the right
-      const ang = Math.PI / 5; // from vertical
-      const r = Math.max(rad, 8e-6);
-      const [tx, ty] = toPx(r * Math.sin(ang), -d / 2 + r * Math.cos(ang));
-      const [fx, fy] = toPx(0.9e-3 + 2.4e-3 * Math.tan(ang) * 0.6, 3.3e-3);
-      drawProbe(ctx, [tx, ty], [fx, fy], `probe tip, ${fmt(rad * 1e6, 2)} µm from the cell body`);
       ctx.save();
       ctx.font = CANVAS_FONT; ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'right';
       const [sx, sy] = toPx(0, -d / 2), [ux, uy] = toPx(0, d / 2);

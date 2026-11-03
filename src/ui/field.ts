@@ -204,7 +204,7 @@ export function drawCortexLayers(ctx: CanvasRenderingContext2D, toPx: Glow['toPx
     const [, ya] = toPx(0, a), [, yb] = toPx(0, b);
     ctx.fillStyle = fill;
     ctx.fillRect(x0, yb, w, ya - yb);
-    if (ya - yb > 16) text(name, x1 - 8, (ya + yb) / 2 + 5, 'right'); else thin.push(name.replace('cerebrospinal fluid (CSF)', 'CSF'));
+    if (ya - yb > 16) text(name, x1 - 8, (ya + yb) / 2 + 5, 'right'); else if (b < o.yTop) thin.push(name.replace('cerebrospinal fluid (CSF)', 'CSF')); // a band cut off by the top of the view is not thin
   }
   const [, ys] = toPx(0, o.surface);
   ctx.strokeStyle = 'rgba(26,26,26,0.7)'; ctx.lineWidth = 1.2;
@@ -278,11 +278,12 @@ export function scaleBar(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], x0: 
 }
 
 /** Legend for the glow colours. */
+/** The legend of a glow, collapsed under a "Legend" toggle. */
 export function glowLegend(container: HTMLElement, floor: string, ceiling: string, note?: string): void {
-  const el = document.createElement('div');
-  el.className = 'glow-legend';
-  el.innerHTML = `<span class="sw" style="background:linear-gradient(90deg,rgba(42,120,214,0),rgba(42,120,214,0.92))"></span><span>negative</span>
+  const el = document.createElement('details');
+  el.className = 'legend-toggle';
+  el.innerHTML = `<summary>Legend</summary><div class="glow-legend"><span class="sw" style="background:linear-gradient(90deg,rgba(42,120,214,0),rgba(42,120,214,0.92))"></span><span>negative</span>
     <span class="sw" style="background:linear-gradient(90deg,rgba(227,73,72,0),rgba(227,73,72,0.92))"></span><span>positive</span>
-    <span class="note">faint = ${floor}, solid = ${ceiling}${note ? `; ${note}` : ''}</span>`;
+    <span class="note">faint = ${floor}, solid = ${ceiling}${note ? `; ${note}` : ''}</span></div>`;
   container.append(el);
 }

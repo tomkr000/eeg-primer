@@ -22,6 +22,8 @@ export interface Marker {
 }
 export interface AxisCfg {
   label: string;
+  /** name used in the tooltip when the axis label is left empty (a plot stacked over another with the same axis) */
+  tip?: string;
   scale?: 'linear' | 'log';
   domain?: [number, number];
   format?: (v: number) => string;
@@ -159,7 +161,7 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
           return p ? `<div><i style="background:${s.color}"></i>${s.name}: <b>${fmt(p[1])}</b></div>` : '';
         });
         tip.style('display', null).style('left', `${Math.min(mx + 12, width - 180)}px`).style('top', `${MARGIN.top}px`)
-          .html(`<div class="tip-x">${cfg.x.label.split(' (')[0]}: ${fmt(xv)}</div>${rows.join('')}`);
+          .html(`<div class="tip-x">${(cfg.x.tip ?? cfg.x.label).split(' (')[0]}: ${fmt(xv)}</div>${rows.join('')}`);
       })
       .on('mouseleave', () => { gHover.style('display', 'none'); tip.style('display', 'none'); });
   }

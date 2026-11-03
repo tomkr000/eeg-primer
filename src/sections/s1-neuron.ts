@@ -2,7 +2,7 @@ import { detectionRadius, twoMonopole } from '../physics/dipole';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { glow, drawNeuron, drawCortexLayers, glowLegend, CANVAS_FONT } from '../ui/field';
 import { P, claimCite as c } from '../data/params';
-import { section, figure, prose, readouts, assumptions, sw } from '../ui/layout';
+import { section, figure, prose, readouts, assumptions, sw, vizTitle } from '../ui/layout';
 
 export function mountNeuron(root: HTMLElement) {
   const sec = section(root, 'neuron', '1', 'Neurons make very small electric fields');
@@ -38,6 +38,7 @@ outside.</p>`);
   const W = 620, H = 400;
   const xr: [number, number] = [-3.1e-3, 3.1e-3], yr: [number, number] = [-0.9e-3, 3.1e-3];
   const surface = P.somaDepthMm * 1e-3, csf = P.thicknessCsfMm * 1e-3, dura = P.thicknessDuraMm * 1e-3;
+  fig.viz.append(vizTitle('The electric field of one neuron, in cross-section'));
   const g = glow(fig.viz, { width: W, height: H, scale: 2, xRange: xr, yRange: yr, floor: 3e-8, ceiling: 3e-5, gamma: 1, grid: { step: 0.25e-3, factor: 1e3, unit: 'mm', labelEvery: 4, note: 'each grid square = 0.25 mm' } });
   g.canvas.style.width = `${W}px`;
   glowLegend(fig.viz, '0.03 µV', '30 µV');

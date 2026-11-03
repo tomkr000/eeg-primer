@@ -48,6 +48,8 @@ code { font-family: var(--sans); font-size: 0.9em; background: var(--surface-1);
 .in-depth > summary::before { content: ''; width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 7px solid currentColor; transition: transform 0.15s; }
 .in-depth[open] > summary::before { transform: rotate(90deg); }
 .in-depth > summary::after { content: ''; }
+.in-depth-question > summary { font-family: var(--serif); font-size: 24px; font-weight: 600; color: var(--ink); gap: 10px; }
+.in-depth-question > summary::before { border-top-width: 7px; border-bottom-width: 7px; border-left-width: 9px; color: var(--accent); }
 .toc { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 4px 28px; font-family: var(--sans); font-size: 14px; }
 .toc a { color: var(--ink); text-decoration: none; padding: 5px 0; border-top: 1px solid var(--rule); }
 .toc a b { color: var(--accent); margin-right: 8px; font-weight: 600; }
@@ -61,7 +63,6 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .section h2 { font-size: clamp(26px, 3vw, 34px); line-height: 1.1; font-weight: 600; letter-spacing: -0.015em; margin: 0; }
 .section-subtitle { font-family: var(--sans); font-size: 17px; color: var(--ink-2); margin: 6px 0 0; }
 .section-head > div { min-width: 0; }
-.note-title { font-size: 24px; font-weight: 600; margin: 4px 0 6px; }
 .section h3 { font-size: 19px; font-weight: 600; margin: 14px 0 6px; column-span: all; }
 .section-text { column-count: 2; column-gap: 44px; column-rule: 1px solid var(--grid); max-width: 1180px; margin: 6px 0 10px; }
 .section-text .prose p:first-child { margin-top: 0; }
@@ -139,6 +140,9 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .sw-patch { width: 12px; height: 12px; border-radius: 2px; }
 .sw-line { width: 20px; height: 0; vertical-align: 3px; }
 .sw-glow { width: 26px; height: 11px; border: 1px solid var(--grid); }
+.legend-toggle { font-family: var(--sans); font-size: 13.5px; }
+.legend-toggle summary { cursor: pointer; color: var(--ink-2); }
+.legend-toggle[open] summary { margin-bottom: 4px; }
 .glow-legend { display: flex; align-items: center; gap: 6px 8px; flex-wrap: wrap; font-family: var(--sans); font-size: 13.5px; color: var(--ink-2); }
 .glow-legend .sw { display: inline-block; width: 54px; height: 10px; border: 1px solid var(--grid); }
 .glow-legend .note { margin-left: 6px; }

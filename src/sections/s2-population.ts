@@ -3,17 +3,14 @@ import { solveShells, surfacePotential } from '../physics/sphere';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { glow, drawNeuron, drawCortexLayers, glowLegend, CANVAS_FONT } from '../ui/field';
 import { P, claimCite as c, defaultHead } from '../data/params';
-import { section, figure, prose, readouts, assumptions, inDepth, sw } from '../ui/layout';
+import { section, figure, prose, readouts, assumptions, inDepth, sw, vizTitle } from '../ui/layout';
 
 export function mountPopulation(root: HTMLElement) {
   const sec = section(root, 'population', '2', 'Many neurons must fire synchronously to create larger signal');
   // "How do neurons fall into step?": a heading above the figure, with the schematic and its note under a toggle
-  const syncHead = document.createElement('h3');
-  syncHead.className = 'note-title';
-  syncHead.textContent = 'How do neurons synchronize?';
   const syncBody = document.createElement('div');
   syncBody.className = 'section-note';
-  sec.fig.append(syncHead, inDepth(syncBody));
+  sec.fig.append(inDepth(syncBody, 'How do neurons synchronize?'));
   prose(sec.text, `
 <p>Fields add linearly ${c('superposition')}, so a patch of N cells is louder than one. How much louder
 depends on timing. If the cells’ synaptic currents rise and fall together, their dipoles add in phase
@@ -48,6 +45,7 @@ hide much. Only coherent, aligned current counts.</p>`);
   const W = 620, H = 400;
   const xr: [number, number] = [-5e-3, 5e-3], yr: [number, number] = [-1.2e-3, -1.2e-3 + 10e-3 * H / W];
   const surface = P.somaDepthMm * 1e-3, csf = P.thicknessCsfMm * 1e-3, dura = P.thicknessDuraMm * 1e-3;
+  fig.viz.append(vizTitle('The summed field of a patch of neurons, in cross-section'));
   const gz = glow(fig.viz, { width: W, height: H, scale: 2, xRange: xr, yRange: yr, floor: 1e-7, ceiling: 1e-2, grid: { step: 0.5e-3, factor: 1e3, unit: 'mm', labelEvery: 2, note: 'each grid square = 0.5 mm' } });
   gz.canvas.style.width = `${W}px`;
   glowLegend(fig.viz, '0.1 µV', '10 mV');

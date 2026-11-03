@@ -4,7 +4,7 @@ import { verticalProfile } from '../ui/profile';
 import { glow, glowLegend, CANVAS_FONT, drawCortexLayers } from '../ui/field';
 import { P, claimCite as c } from '../data/params';
 import { netDipole } from '../physics/population';
-import { section, figure, prose, assumptions, readouts, sw } from '../ui/layout';
+import { section, figure, prose, assumptions, readouts, sw, vizTitle } from '../ui/layout';
 
 export function mountHead(root: HTMLElement) {
   const sec = section(root, 'head', '3', 'Between the brain and scalp, many layers attenuate signal', 'Only large-scale synchronous events get through');
@@ -53,6 +53,8 @@ far too weak to use what is there.</p>`);
   const xRange: [number, number] = [-0.04, 0.04];
   const yRange: [number, number] = [-0.033, -0.033 + 0.08 * 330 / 390];
   let scalpY = Infinity; // height of the scalp surface above the cortex (set in update)
+  left.append(vizTitle('From cortex to air: the field through the layers'));
+  right.append(vizTitle('Potential straight above the source'));
   const hm = glow(left, { width: 390, height: 330, scale: 2, xRange, yRange, floor: 1e-7, ceiling: 1e-4, fadeWhere: (_x, y) => (y > scalpY ? 0.3 : 1), grid: { step: 0.01, factor: 100, unit: 'cm', note: 'each grid square = 1 cm' } });
   glowLegend(left, '0.1 µV', '100 µV', `${sw('#1a1a1a', 'thick')} scalp where an electrode sees > 1 µV; air faded: unreadable`);
   const radial = verticalProfile(right, { height: 330, yDomain: [yRange[0] * 100, yRange[1] * 100], yLabel: 'cm above the cortical surface', xLabel: 'Potential straight above the source (µV)', xDomain: [0.1, 1e4] });

@@ -2,7 +2,7 @@ import { synthesize } from '../physics/noise';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { linePlot } from '../ui/plot';
 import { P, claimCite as c } from '../data/params';
-import { section, figure, prose, readouts, assumptions, sw } from '../ui/layout';
+import { section, figure, prose, readouts, assumptions, sw, vizTitle } from '../ui/layout';
 import { RAW_DEFAULTS } from './s4-noise';
 
 /** 2nd-order Butterworth band-pass (two biquads) for the mu band. */
@@ -53,9 +53,11 @@ per decision that no electrode can remove.</p>`);
   const rCycles = readout('Cycles of the 10 Hz rhythm in the window');
   const rFalse = readout('False detections before the intention');
 
-  const fig = figure(sec.fig, `One imagined movement. Top: the scalp signal of section 4 (${sw('#eb6834', 'line')}) with the mu rhythm alone (${sw('#2a78d6', 'line')}); the intention is at t = 0 and the rhythm fades after it (event-related desynchronisation, ERD). Bottom: the rhythm’s power as a decoder would estimate it from a sliding window of the chosen length (${sw('#2a78d6', 'line')}), the true envelope (${sw('#898781', 'dash')}) and the detection threshold (${sw('#52514e', 'dash')}); the decoder fires where the estimate first crosses the threshold after the intention. Drag the window shorter and the estimate gets jumpy and fires early by accident; drag it longer and the detection slides later.`);
-  const top = linePlot(fig.viz, { x: { label: 'Time from the intention (s)', domain: [-2, 4] }, y: { label: 'Potential (µV)' }, height: 200, legendInside: true });
-  const bottom = linePlot(fig.viz, { x: { label: 'Time from the intention (s)', domain: [-2, 4] }, y: { label: 'Mu power (relative)', domain: [0, 1.6] }, height: 200, legendInside: true });
+  const fig = figure(sec.fig, `One imagined movement. Top: the scalp signal of section 4 (${sw('#eb6834', 'line')}) with the mu rhythm alone (${sw('#2a78d6', 'line')}); the intention is at t = 0 and the rhythm fades after it (event-related desynchronisation, ERD). Bottom: the rhythm’s power as a decoder would estimate it from a sliding window of the chosen length (${sw('#2a78d6', 'line')}), the true envelope (${sw('#898781', 'dash')}) and the detection threshold (${sw('#52514e', 'dash')}); the decoder fires where the estimate first crosses the threshold after the intention. A shorter window gets jumpy and fires early by accident; a longer one detects later.`);
+  fig.viz.append(vizTitle('The scalp signal around one imagined movement'));
+  const top = linePlot(fig.viz, { x: { label: '', tip: 'Time from the intention', domain: [-2, 4] }, y: { label: 'Potential (µV)' }, height: 172, legendInside: true });
+  fig.viz.append(vizTitle('The rhythm’s power as a decoder estimates it'));
+  const bottom = linePlot(fig.viz, { x: { label: 'Time from the intention (s)', domain: [-2, 4] }, y: { label: 'Mu power (relative)', domain: [0, 1.6] }, height: 172, legendInside: true });
   fig.panel.append(controls(sWin.el, sOnset.el, sRamp.el));
   fig.viz.append(readouts(rDelay.el, rRes.el, rCycles.el, rFalse.el));
   assumptions(fig.el, [
@@ -117,7 +119,8 @@ per decision that no electrode can remove.</p>`);
   // timeline of the delay sources
   const note = figure(sec.fig, '', { panelWidth: '0px' });
   note.el.classList.add('figure-note');
-  note.viz.innerHTML = timelineSvg();
+  note.viz.append(vizTitle('Where the time goes, for four ways of reading a decision'));
+  note.viz.insertAdjacentHTML('beforeend', timelineSvg());
   note.caption.innerHTML = `<strong>Where the time goes.</strong> After a cue to imagine a movement the motor cortex responds in about 0.3 s and the imagery is best told apart about 1 s later; a window of several cycles must then fill ${c('erd-timecourse')}${c('bci-windows')}. A P300 speller waits 0.3 s for each response and repeats the flashes, up to 29 s per character ${c('p300-timing')}. A flicker speller needs 0.5 s of stimulus and 0.5 s for the eyes to move ${c('bci-windows')}. And the brain starts before the person knows it: the readiness potential begins about 2 s before a self-initiated movement, while the reported decision comes only 0.2 s before it ${c('readiness-potential')}. None of these is an electrode problem.`;
 }
 

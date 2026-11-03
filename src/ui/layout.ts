@@ -23,6 +23,14 @@ export function section(root: HTMLElement, id: string, number: string, title: st
 }
 
 /** Collapsible wrapper for the long-form text. */
+/** A title above a graph. */
+export function vizTitle(text: string): HTMLElement {
+  const el = document.createElement('div');
+  el.className = 'viz-title';
+  el.textContent = text;
+  return el;
+}
+
 /** An inline colour swatch for captions and legends: show the colour, never name it. */
 export function sw(color: string, kind: 'patch' | 'line' | 'dash' | 'thick' | 'glow' = 'patch'): string {
   if (kind === 'patch') return `<i class="sw-i sw-patch" style="background:${color}"></i>`;
@@ -30,11 +38,11 @@ export function sw(color: string, kind: 'patch' | 'line' | 'dash' | 'thick' | 'g
   return `<i class="sw-i sw-line" style="border-top:${kind === 'thick' ? '5px solid' : kind === 'dash' ? '2px dashed' : '2.5px solid'} ${color}"></i>`;
 }
 
-export function inDepth(content: HTMLElement): HTMLElement {
+export function inDepth(content: HTMLElement, label = 'In depth'): HTMLElement {
   const d = document.createElement('details');
-  d.className = 'in-depth';
+  d.className = label === 'In depth' ? 'in-depth' : 'in-depth in-depth-question'; // a question as the toggle text gets heading size
   const s = document.createElement('summary');
-  s.textContent = 'In depth';
+  s.textContent = label;
   d.append(s, content);
   return d;
 }

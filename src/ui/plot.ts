@@ -11,6 +11,8 @@ export interface Series {
   dots?: boolean;
   /** shade the area between the line and the bottom of the plot */
   fill?: boolean;
+  /** leave this series out of the legend (a second line of the same kind, such as a lower envelope) */
+  noLegend?: boolean;
   width?: number;
 }
 export interface Marker {
@@ -39,6 +41,8 @@ export interface AxisCfg {
   scale?: 'linear' | 'log';
   domain?: [number, number];
   format?: (v: number) => string;
+  /** suggested number of ticks (default 6 on x, 5 on y) */
+  ticks?: number;
 }
 export interface PlotCfg {
   x: AxisCfg;
@@ -95,8 +99,8 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
     const yd = cfg.y.domain ?? (d3.extent(all, (p) => p[1]) as [number, number]);
     const x = mkScale(cfg.x).domain(xd).range([MARGIN.left, MARGIN.left + iw]);
     const y = mkScale(cfg.y).domain(yd).range([MARGIN.top + ih, MARGIN.top]);
-    const xAxis = d3.axisBottom(x).ticks(6);
-    const yAxis = d3.axisLeft(y).ticks(5);
+    const xAxis = d3.axisBottom(x).ticks(cfg.x.ticks ?? 6);
+    const yAxis = d3.axisLeft(y).ticks(cfg.y.ticks ?? 5);
     // log axes: plain numbers in the readable range, short scientific notation outside it
     const logFmt = (v: number) => {
       const e = Math.log10(v);
@@ -112,7 +116,7 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
     gX.attr('transform', `translate(0,${MARGIN.top + ih})`).call(xAxis as never);
     gY.attr('transform', `translate(${MARGIN.left},0)`).call(yAxis as never);
     gGrid.selectAll('*').remove();
-    gGrid.selectAll('line').data(y.ticks(5)).join('line')
+    gGrid.selectAll('line').data(y.ticks(cfg.y.ticks ?? 5)).join('line')
       .attr('x1', MARGIN.left).attr('x2', MARGIN.left + iw).attr('y1', (d) => y(d)).attr('y2', (d) => y(d));
     xLabel.attr('x', MARGIN.left + iw / 2).attr('y', height - 8).text(cfg.x.label);
     yLabel.attr('x', -(MARGIN.top + ih / 2)).attr('y', 14).text(cfg.y.label);
@@ -180,8 +184,9 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
     }
     // legend (only for ≥ 2 series)
     legend.selectAll('*').remove();
-    if (series.length >= 2) {
-      legend.selectAll('span').data(series).join('span').attr('class', 'legend-item')
+    const named = series.filter((s) => !s.noLegend);
+    if (named.length >= 2) {
+      legend.selectAll('span').data(named).join('span').attr('class', 'legend-item')
         .html((s) => s.dots ? `<i class="legend-dot" style="background:${s.color}"></i>${s.name}` : `<i style="border-top:3px ${s.dashed ? 'dashed' : 'solid'} ${s.color}"></i>${s.name}`);
     }
     // hover

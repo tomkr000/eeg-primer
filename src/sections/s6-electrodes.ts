@@ -81,7 +81,7 @@ per finger ${c('fingered')}.</p>`);
   const BLINK_S = 0.4; // one eye blink in the two-second window (section 5's size and width)
   const C_IN_PF = 20, V_CM_MV = RAW_DEFAULTS.mainsUvcm / 1e3, I_NOISE_FA = 1; // fixed amplifier and mains values (assumptions table)
 
-  const fig = figure(sec.fig, `Top strip: the scalp signal before any electrode touches it: the alpha rhythm of N cells with a fraction in step (sections 2 to 5) in the noise of section 5, including its muscle (EMG) noise and one eye blink, over two seconds. Below it, what reaches the amplifier through each electrode: the signal after the impedance divider, plus the contact’s skin noise, mains pickup from a 50% impedance mismatch between a pair, and the amplifier’s current noise through the contact impedance. The table gives the impedance at 10 Hz, the signal kept, the noise added, and the signal-to-noise ratio (SNR) of the alpha rhythm against everything else. Most consumer headsets use dry contacts ${c('consumer-electrodes')}.`, { panelWidth: '410px' });
+  const fig = figure(sec.fig, `Top strip: the scalp signal before any electrode touches it: the alpha rhythm of N cells with a fraction in step (sections 2 to 5) in the noise of section 5, including its muscle (EMG) noise and one eye blink (a potential of the eye, not muscle), over two seconds. Below it, what reaches the amplifier through each electrode: the signal after the impedance divider, plus the contact’s skin noise, mains pickup from a 50% impedance mismatch between a pair, and the amplifier’s current noise through the contact impedance. The table gives the impedance at 10 Hz, the signal kept, the noise added, and the signal-to-noise ratio (SNR) of the alpha rhythm against everything else. Most consumer headsets use dry contacts ${c('consumer-electrodes')}.`, { panelWidth: '410px' });
   fig.viz.append(vizTitle('Signal at the amplifier input for four electrode–skin interfaces'));
   const plot = stripPlot(fig.viz, { xLabel: 'Time (s)', xDomain: [0, 2], stripHeight: 82 });
   const table = document.createElement('table');
@@ -96,7 +96,7 @@ per finger ${c('fingered')}.</p>`);
     { what: 'Amplifier input resistance marks', value: '1 GΩ as the ADS1299 front end; 50 TΩ as a research non-contact amplifier', cite: c('ads1299') + c('noncontact-cap') },
     { what: 'Skin noise by contact type', value: `${SKIN_NOISE.abraded} / ${SKIN_NOISE.wet} / ${SKIN_NOISE.dry} / ${SKIN_NOISE.gap} µV rms (abraded / wet / dry / gap), 1/f spectrum, scaled by 1/√area`, cite: c('electrode-noise-levels') },
     { what: 'Amplifier', value: `R<sub>in</sub> from the slider in parallel with ${C_IN_PF} pF; 1 µV rms voltage noise; ${I_NOISE_FA} fA/√Hz current noise`, cite: c('ads1299') + c('amp-current-noise') },
-    { what: 'Muscle (EMG) and eye blink', value: `in the scalp signal before any electrode: ${RAW_DEFAULTS.emgUvRms} µV rms of muscle noise in 20–300 Hz, and one blink at ${BLINK_S} s, a ${RAW_DEFAULTS.blinkUv} µV deflection 160 ms wide (section 5); both are potentials at the scalp, so each electrode passes them like the neural signal`, cite: c('emg-level') + c('blink-amplitude') + c('blink-rate') },
+    { what: 'Muscle (EMG) and eye blink', value: `in the scalp signal before any electrode: ${RAW_DEFAULTS.emgUvRms} µV rms of muscle noise in 20–300 Hz, and one blink at ${BLINK_S} s, a ${RAW_DEFAULTS.blinkUv} µV deflection about 190 ms wide at half height (section 5) that comes from the eye, the eyelid sliding over the cornea, not from muscle; both are potentials at the scalp, so each electrode passes them like the neural signal`, cite: c('emg-level') + c('blink-amplitude') + c('blink-rate') + c('blink-width') + c('blink-mechanism') },
     { what: 'Mains pickup', value: `${V_CM_MV} mV of common-mode mains on the body (section 5); the two contacts of a pair differ by 50% in impedance, so it leaks in as V<sub>cm</sub> × |H(Z<sub>e</sub>) − H(1.5 Z<sub>e</sub>)| at 60 Hz, with H = Z<sub>in</sub>/(Z<sub>in</sub> + Z<sub>e</sub>)`, cite: c('common-mode') },
   ]);
 
@@ -149,7 +149,7 @@ per finger ${c('fingered')}.</p>`);
       strips.push({ name: NAMES[k], sub: SUBS[k], icon: ICONS[k], highlight: k === 'dry', points: Array.from(out, (v, i) => [t[i], v] as [number, number]), color: COLOURS[k], note: `keeps ${fmt(100 * h10, 3)}% of the signal, adds ${fmt(Math.sqrt(pAdded / n), 2)} µV of noise` });
       rows.push(`<tr><td><i style="background:${COLOURS[k]}"></i>${NAMES[k]}</td><td>${fmtSI(cabs(Ze(k, 10)), 'Ω', 2)}</td><td>${fmt(100 * h10, 3)}%</td><td>${fmt(Math.sqrt(pAdded / n), 2)} µV</td><td>${fmt(snr, 2)} dB</td></tr>`);
     });
-    plot.update(strips, [{ t: BLINK_S, label: 'eye blink' }]);
+    plot.update(strips, [{ t: BLINK_S, label: 'eye blink, not muscle' }]);
     table.innerHTML = `<thead><tr><th>Electrode</th><th>|Z<sub>e</sub>|</th><th>Kept</th><th>Adds</th><th>SNR</th></tr></thead><tbody>${rows.join('')}</tbody>`;
     sGap.el.title = `gap capacitance ${fmt(gapCapacitance(sArea.value, sGap.value * 1e-3, 1) * 1e12, 3)} pF`;
   }

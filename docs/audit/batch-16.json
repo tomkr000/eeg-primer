@@ -1,0 +1,14 @@
+[
+ {
+  "id": "blink-mechanism",
+  "statement": "A blink’s deflection on the scalp is not a muscle signal: blink potentials arise as the eyelids slide down over the cornea, which sits at a steady potential of about +13 mV relative to the forehead, so that the lid acts like a sliding electrode short-circuiting the cornea to the scalp, and the artifact is mostly frontal. Blink artifacts seen in intracranial recordings have been described as resembling these ocular components, which arise from the corneoretinal potential and the eye’s changing conductivity rather than muscle depolarization. The muscle that closes the lid adds at most a small burst: in magnetoencephalography (MEG) a burst above 30 Hz appears at blink onset, which the authors attribute to muscle contraction together with eyelid currents.",
+  "sources": [
+   "Lins OG, Picton TW, Berg P, Scherg M (1993). Ocular artifacts in EEG and event-related potentials. I: Scalp topography. Brain Topography 6(1):51–63. doi:10.1007/BF01234127",
+   "Picton TW, van Roon P, Armilio ML, Berg P, Ille N, Scherg M (2000). The correction of ocular artifacts: a topographic perspective. Clinical Neurophysiology 111(1):53–65. doi:10.1016/S1388-2457(99)00227-8",
+   "Plöchl M, Ossandón JP, König P (2012). Combining EEG and eye tracking: identification, characterization, and correction of eye movement artifacts in electroencephalographic data. Frontiers in Human Neuroscience 6:278. doi:10.3389/fnhum.2012.00278",
+   "Kovach CK, Tsuchiya N, Kawasaki H, Oya H, Howard MA, Adolphs R (2011). Manifestation of ocular-muscle EMG contamination in human intracranial recordings. NeuroImage 54(1):213–233. doi:10.1016/j.neuroimage.2010.08.002",
+   "Bardouille T, Picton TW, Ross B (2006). Correlates of eye blinking as determined by synthetic aperture magnetometry. Clinical Neurophysiology 117(5):952–958. doi:10.1016/j.clinph.2006.01.021"
+  ],
+  "note_for_auditor": ""
+ }
+]

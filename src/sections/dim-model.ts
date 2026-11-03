@@ -119,14 +119,6 @@ export const MOTOR = (): Patch[] => [
   { ...at(-38.8, 9.6, 98.9, 10), name: 'left hand' }, { ...at(35.2, 9.3, 98.9, 10), name: 'right hand' }, { ...at(-1.9, 5.2, 113.2, 10), name: 'feet' },
   { ...at(-56.8, 25.3, 76.0, 10), name: 'tongue' }, { ...at(53.2, 25.0, 76.0, 10), name: 'tongue' },
 ];
-const PRESETS: [string, () => Patch[]][] = [
-  ['Motor areas: hands, feet, tongue', MOTOR],
-  ['One patch', () => [at(-38, 0, 105)]],
-  ['Two patches', () => [at(-38, 0, 105), at(38, 0, 105)]],
-  ['Two + overlap', () => [at(-16, 0, 112, 20), at(16, 0, 112, 20), at(0, 0, 115, 9)]],
-  ['Ring of 8', () => [at(-45, 40, 85), at(45, 40, 85), at(-55, -10, 90), at(55, -10, 90), at(-35, -55, 75), at(35, -55, 75), at(-25, 70, 70), at(25, 70, 70)]],
-  ['Clear', () => []],
-];
 
 /** scalp pattern of a patch (µV at each electrode) and the cortical sources it covers */
 export function patchPattern(p: Patch): { a: Float64Array; members: number[] } {
@@ -159,17 +151,15 @@ export function greedyOrder(vecs: Float64Array[]): { idx: number; rest: number }
   return out;
 }
 
-/** The preset buttons and the four sliders, bound to the shared state; every section gets its own copy and they move together. */
+/** The four sliders and a reset button, bound to the shared state; every section gets its own copy and they move together. */
 export function dimControls(): HTMLElement {
   const wrap = document.createElement('div');
   wrap.className = 'dim-controls';
   const presets = document.createElement('div');
   presets.className = 'choice-group';
-  for (const [label, fn] of PRESETS) {
-    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
-    b.addEventListener('click', () => { state.patches = fn(); notify(); });
-    presets.append(b);
-  }
+  const reset = document.createElement('button'); reset.className = 'btn'; reset.textContent = 'Reset to the motor areas';
+  reset.addEventListener('click', () => { state.patches = MOTOR(); notify(); });
+  presets.append(reset);
   const { sN, sF } = sourceSliders(state.N);
   const sRadius = slider({ label: 'Patch radius', unit: 'mm', min: 4, max: 30, value: state.radiusMm, step: 1 });
   const sNoise = slider({ label: 'Noise of one electrode contact', unit: 'µV rms', min: 1, max: 20, value: state.noiseUv, log: true, note: c('skin-noise'), marks: [{ value: 1, label: 'Quietest measured' }, { value: 8, label: 'Dry contact' }] });

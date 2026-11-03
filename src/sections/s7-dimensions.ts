@@ -80,7 +80,7 @@ ${c('intracortical')}.</p>`);
     ctx.strokeStyle = '#52514e'; ctx.setLineDash([5, 4]);
     ctx.beginPath(); ctx.moveTo(ml, y(noise)); ctx.lineTo(DW - mr, y(noise)); ctx.stroke();
     ctx.setLineDash([]);
-    if (!order.length) { ctx.font = '14px system-ui, sans-serif'; ctx.fillStyle = '#52514e'; ctx.textAlign = 'center'; ctx.fillText('no patches placed: use a preset or click the cortex in section 6', ml + plotW / 2, (mt + DH - mb) / 2); return; }
+    if (!order.length) { ctx.font = '14px system-ui, sans-serif'; ctx.fillStyle = '#52514e'; ctx.textAlign = 'center'; ctx.fillText('no patches placed: click the cortex in section 6 to add one', ml + plotW / 2, (mt + DH - mb) / 2); return; }
     const slot = Math.min(118, (plotW - 16) / order.length), bw = Math.min(52, slot - 24);
     const xc = (i: number) => ml + 16 + i * slot + slot / 2;
     let firstGrey = -1, firstBlue = -1;

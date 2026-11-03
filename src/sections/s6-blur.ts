@@ -1,10 +1,11 @@
 import { claimCite as c, P } from '../data/params';
+import { mulberry32 } from '../physics/population';
 import { fmt } from '../ui/slider';
 import { section, figure, prose, assumptions } from '../ui/layout';
 import { CANVAS_FONT, textWithSwatches, type TextPart } from '../ui/field';
 import { state, subscribe, notify, dimControls, patchPattern, miniValues, scalpValue, MOTOR, patchColour, patchLabel, visible, inHead, srcPos, elPos, centre, R, x0, y0, ax, by, sigmaMm, nCh, nSrc, G, miniIn, POS, NEG, type Patch } from './dim-model';
 
-const W = 360, H = 300, cx = W / 2, cy = H / 2 + 4, FOOT = 32; // the head view, with a band for notes under it
+const W = 360, H = 300, cx = W / 2, cy = H / 2 + 4, FOOT = 46; // the head view, with a band of notes under it
 const s = Math.min((W / 2 - 16) / ax, (H / 2 - 24) / by); // px per mm
 /** orthographic view from above: x right, y (nose) up; z is height above the sphere centre (mm) */
 const project = (p: number[]): [number, number, number] => [cx + (p[0] - x0) * s, cy - (p[1] - y0) * s, p[2] - centre[2]];
@@ -71,21 +72,27 @@ on demand: what can be modulated at will and still seen from outside are the sen
 body parts, the hands, the feet and the tongue, the four motor-imagery classes used in brain–computer
 interface (BCI) competitions ${c('mi-classes')}. Their cortical areas are not spread evenly: the hand areas
 sit on a knob of the precentral gyrus either side of the midline, the foot areas next to the midline, and the
-mouth areas low on the side of the head ${c('motor-map')}.</p>
+mouth areas low on the side of the head ${c('motor-map')}. The maps below are snapshots of one instant: a
+rhythm such as alpha is this same pattern reversing sign every half-cycle, its shape fixed and only its
+amplitude swinging. The tissue does not filter in time ${c('quasistatic')}, so faster rhythms such as gamma
+reach the scalp in principle; they are smaller, and muscle activity occupies the same 20 to 300 Hz band
+${c('emg-level')}, which is why scalp gamma is hard to trust.</p>
 <p>The figure places patches on a real head, the fsaverage template with a three-layer boundary-element
 model and 128 electrodes ${c('fsaverage-bem')}${c('mne-bem')}${c('montages')}. Each patch is N cells with a
-fraction in step, the source of sections 2 to 5, spread over a disc. The middle map shows each patch alone
-from outside; the right map shows all of them together, which is the only thing the electrodes ever see.
-Section 7 counts how many of them can be told apart.</p>`);
+fraction in step, the source of sections 2 to 5, spread over a disc. The patches are a representative set,
+the motor areas for the hands, the feet and the tongue; click the cortex to try others. The middle map
+shows each patch alone from outside; the right map shows all of them together with the noise of one
+contact on every electrode, which is the only thing the electrodes ever see. Section 7 counts how many of
+them can be told apart.</p>`);
 
-  const fig = figure(sec.fig, `Left: the cortex from above, nose up, with the patches; the preset puts five on the areas a person can modulate at will ${c('mi-classes')}${c('motor-map')}. Middle: the scalp voltage each patch makes on its own, each map scaled to its own peak, so the shapes can be compared. Right: the voltage of all patches together on a fixed scale, so the sliders show. Voltages are relative to the average of all 128 electrodes, which is defined as zero ${c('montages')}.`, { wide: true });
+  const fig = figure(sec.fig, `Left: the cortex from above, nose up, with a representative set of patches on the motor areas a person can modulate at will: the hands, the feet and the tongue ${c('mi-classes')}${c('motor-map')}. Middle: the scalp voltage each patch makes on its own, each map scaled to its own peak, so the shapes can be compared. Right: the voltage of all patches together with the noise of one electrode contact on every electrode ${c('skin-noise')}, on a fixed scale.`, { wide: true });
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
   fig.viz.append(row);
   const cortex = titledCanvas(row, 'Locations of patches', W, H + FOOT, 'glow head-canvas');
   const each = titledCanvas(row, 'How each patch looks from outside', W, H + FOOT);
-  const summed = titledCanvas(row, 'How patches look together', W, H + FOOT);
+  const summed = titledCanvas(row, 'How patches look together, as recorded', W, H + FOOT);
   const cctx = cortex.getContext('2d')!, ectx = each.getContext('2d')!, sctx = summed.getContext('2d')!;
   const mini = document.createElement('canvas'); mini.width = G; mini.height = G;
   const mctx = mini.getContext('2d')!, mimg = mctx.createImageData(G, G);
@@ -100,7 +107,7 @@ Section 7 counts how many of them can be told apart.</p>`);
 
   function drawCortex() {
     cctx.clearRect(0, 0, W, H + FOOT);
-    footnote(cctx, [['click to add a patch, click one to remove it'], [`each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]]);
+    footnote(cctx, [['a representative set: motor areas for hands, feet, tongue,'], ['which a person can modulate at will; click to add or remove'], [`each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]]);
     drawGridHead(cctx);
     cctx.fillStyle = 'rgba(26,26,26,0.22)';
     for (const [x, y, z] of srcXY) { if (!visible(z)) continue; cctx.beginPath(); cctx.arc(x, y, 1.3, 0, 2 * Math.PI); cctx.fill(); }
@@ -143,7 +150,7 @@ Section 7 counts how many of them can be told apart.</p>`);
 
   function drawEach(pats: { a: Float64Array }[]) {
     ectx.clearRect(0, 0, W, H + FOOT);
-    footnote(ectx, [[{ sw: RED }, 'positive voltage, ', { sw: BLUE }, 'negative'], ['each map is scaled to its own peak, to compare shapes']]);
+    footnote(ectx, [[{ sw: RED }, 'positive voltage, ', { sw: BLUE }, 'negative'], ['each map is scaled to its own peak, to compare shapes'], ['a rhythm is this pattern reversing sign every half-cycle']]);
     ectx.font = CANVAS_FONT; ectx.fillStyle = '#52514e'; ectx.textAlign = 'center';
     if (!pats.length) { ectx.fillText('no patches placed', W / 2, H / 2); return; }
     const cols = Math.ceil(Math.sqrt(pats.length)), rows = Math.ceil(pats.length / cols);
@@ -163,19 +170,16 @@ Section 7 counts how many of them can be told apart.</p>`);
     });
   }
 
-  /** the scalp voltage of all patches together on an absolute log colour scale, with a colour bar and a note on the blue */
-  function drawSummed(total: Float64Array) {
+  /** the scalp voltage of all patches together plus the noise of one contact on each electrode, on an absolute log colour scale, with a colour bar */
+  function drawSummed(total: Float64Array, peak: number) {
     sctx.clearRect(0, 0, W, H + FOOT);
-    footnote(sctx, [[{ sw: RED }, 'above the average of all 128 electrodes, ', { sw: BLUE }, 'below it'], ['far from the patches the voltage dips below that average']]);
-    let vmax = 0, vmin = 0, minAt: [number, number] = [cx, cy];
+    footnote(sctx, [[{ sw: RED }, 'above the average of all 128 electrodes, ', { sw: BLUE }, 'below it'], ['far from the patches the voltage dips below that average'], [`with ${fmt(state.noiseUv, 2)} µV of noise on every electrode, as recorded`]]);
     const hw = half.width, hh = half.height, d = himg.data, lf = Math.log10(FLOOR), lc = Math.log10(CEIL);
     for (let j = 0; j < hh; j++) for (let i = 0; i < hw; i++) {
       const k = (j * hw + i) * 4, px = (i + 0.5) * 2, py = (j + 0.5) * 2;
       const x = x0 + (px - cx) / s, y = y0 - (py - cy) / s;
       if (!inHead(x, y)) { d[k + 3] = 0; continue; }
       const v = scalpValue(total, x, y);
-      vmax = Math.max(vmax, Math.abs(v));
-      if (v < vmin) { vmin = v; minAt = [px, py]; }
       const t = Math.max(0, Math.min(1, (Math.log10(Math.max(Math.abs(v), 1e-30)) - lf) / (lc - lf)));
       const col = v >= 0 ? POS : NEG;
       d[k] = col[0]; d[k + 1] = col[1]; d[k + 2] = col[2]; d[k + 3] = Math.round(235 * t);
@@ -200,19 +204,22 @@ Section 7 counts how many of them can be told apart.</p>`);
     sctx.fillText(`+${CEIL} µV`, bx - 4, bt + 4); sctx.fillText('0', bx - 4, (bt + bb) / 2 + 4); sctx.fillText(`−${CEIL} µV`, bx - 4, bb + 4);
     sctx.font = 'bold 12px system-ui, sans-serif'; sctx.fillText('positive', bx - 4, bt + 18); sctx.fillText('negative', bx - 4, bb - 10);
     sctx.font = 'bold 15px system-ui, sans-serif'; sctx.textAlign = 'right';
-    sctx.fillText(`peak ${fmt(vmax, 2)} µV`, W - 6, 16);
+    sctx.fillText(`signal peak ${fmt(peak, 2)} µV`, W - 6, 16);
     sctx.font = '12px system-ui, sans-serif'; sctx.fillStyle = '#52514e';
-    sctx.fillText(`noise of one contact ${fmt(state.noiseUv, 2)} µV`, W - 6, 30);
-    if (vmin < -FLOOR && minAt[1] > cy + (by * s) / 3) { sctx.strokeStyle = '#1a1a1a'; sctx.lineWidth = 1.2; sctx.beginPath(); sctx.moveTo(minAt[0], minAt[1]); sctx.lineTo(Math.min(minAt[0], 60), H + 4); sctx.stroke(); sctx.fillStyle = '#1a1a1a'; sctx.beginPath(); sctx.arc(minAt[0], minAt[1], 3, 0, 2 * Math.PI); sctx.fill(); }
+    sctx.fillText(`noise ${fmt(state.noiseUv, 2)} µV on each electrode`, W - 6, 30);
   }
 
   function update() {
     const pats = state.patches.map(patchPattern);
     const total = new Float64Array(nCh);
     for (const p of pats) for (let ch = 0; ch < nCh; ch++) total[ch] += p.a[ch];
+    const peak = Math.max(0, ...Array.from(total, Math.abs));
+    // one draw of the noise of one contact on every electrode (fixed seed, so only the sliders change the picture)
+    const rng = mulberry32(7);
+    const noisy = Float64Array.from(total, (v) => { const u = Math.max(rng(), 1e-12), w = rng(); return v + state.noiseUv * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * w); });
     drawCortex();
     drawEach(pats);
-    drawSummed(total);
+    drawSummed(noisy, peak);
   }
   cortex.addEventListener('click', (ev) => {
     const r = cortex.getBoundingClientRect();

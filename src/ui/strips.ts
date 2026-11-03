@@ -15,11 +15,14 @@ export interface Strip {
   highlight?: boolean;
 }
 
+/** an event marked across all strips: a dashed line, with a boxed label at the top of the first strip */
+export interface StripMarker { t: number; label: string; }
+
 export interface StripPlot {
-  update(strips: Strip[]): void;
+  update(strips: Strip[], markers?: StripMarker[]): void;
 }
 
-const M = { top: 6, right: 14, bottom: 36, left: 300 };
+const M = { top: 6, right: 14, bottom: 36, left: 322 };
 const ICON = 52; // icon column width
 
 /**
@@ -31,9 +34,10 @@ export function stripPlot(container: HTMLElement, cfg: { xLabel: string; xDomain
   const root = d3.select(container).append('div').attr('class', 'plot');
   const svg = root.append('svg').attr('class', 'plot-svg');
   const gRows = svg.append('g');
+  const gMarks = svg.append('g');
   const gX = svg.append('g').attr('class', 'axis');
   const xLabel = svg.append('text').attr('class', 'axis-label').attr('text-anchor', 'middle');
-  let strips: Strip[] = [];
+  let strips: Strip[] = [], markers: StripMarker[] = [];
 
   function render() {
     const width = container.clientWidth || 600;
@@ -74,10 +78,20 @@ export function stripPlot(container: HTMLElement, cfg: { xLabel: string; xDomain
       g.select('text.strip-scale').attr('x', tx).attr('y', hasSub ? sh / 2 + 19 : sh / 2 + 13).text(`±${formatPeak(peak)} µV`);
       g.select('text.strip-note').attr('x', M.left + iw - 4).attr('y', 14).text(d.note ?? '');
     });
+    gMarks.selectAll('*').remove();
+    for (const m of markers) {
+      const mx = x(m.t);
+      gMarks.append('line').attr('x1', mx).attr('x2', mx).attr('y1', M.top + 15).attr('y2', M.top + strips.length * sh).attr('stroke', '#52514e').attr('stroke-dasharray', '4 3');
+      // the label sits in the top band of the first strip, left of the line, boxed like the callouts of section 5
+      const txt = gMarks.append('text').attr('class', 'callout-text').attr('x', mx - 14).attr('y', M.top + 12).attr('text-anchor', 'end').text(m.label);
+      const bb = (txt.node() as SVGTextElement).getBBox();
+      gMarks.insert('rect', 'text').attr('class', 'callout-box').attr('x', bb.x - 6).attr('y', bb.y - 2).attr('width', bb.width + 12).attr('height', bb.height + 4).attr('rx', 4);
+      gMarks.append('line').attr('class', 'callout-line').attr('x1', bb.x + bb.width + 6).attr('x2', mx).attr('y1', bb.y + bb.height / 2).attr('y2', bb.y + bb.height / 2);
+    }
   }
   const ro = new ResizeObserver(() => render());
   ro.observe(container);
-  return { update(s) { strips = s; render(); } };
+  return { update(s, m) { strips = s; markers = m ?? []; render(); } };
 }
 
 function formatPeak(v: number): string {

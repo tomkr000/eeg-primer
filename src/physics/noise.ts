@@ -20,6 +20,8 @@ export interface NoiseParams {
   seed: number;
   /** optional multiplier on the alpha amplitude as a function of time (default: a slow waxing and waning) */
   envelope?: (t: number) => number;
+  /** fixed blink times in seconds, instead of random ones drawn from blinksPerMinute */
+  blinkAtS?: number[];
 }
 
 /** Simple 2nd-order Butterworth band-pass via two cascaded biquads (bilinear transform). */
@@ -77,8 +79,8 @@ export function synthesize(p: NoiseParams): Synth {
   rms = Math.sqrt(pink.reduce((s, v) => s + v * v, 0) / n) || 1;
   for (let i = 0; i < n; i++) pink[i] *= p.skinUvRms / rms;
   // Blinks: positive-going deflections ~0.3 s wide at random times
-  const blinkTimes: number[] = [];
-  const expected = (p.blinksPerMinute * p.seconds) / 60;
+  const blinkTimes: number[] = p.blinkAtS ? [...p.blinkAtS] : [];
+  const expected = p.blinkAtS ? 0 : (p.blinksPerMinute * p.seconds) / 60;
   // blinks are spread through the middle 80% of the window so a whole deflection is visible
   for (let k = 0; k < Math.ceil(expected); k++) if (rng() < expected - k) blinkTimes.push(p.seconds * (0.1 + 0.8 * rng()));
   // Mains: residual after CMRR, plus the common-mode→differential conversion from impedance imbalance

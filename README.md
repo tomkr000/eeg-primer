@@ -13,9 +13,11 @@ under an "In depth" toggle:
    (After section 4, an unnumbered aside, "How do neurons synchronize?": a cited note and schematic on thalamic drive, shared inhibition and travelling waves.)
 5. The signal that gets outside the skull is noisy: the alpha amplitude derived from N and synchrony through the section 3 head, buried in muscle, blink, skin, mains and amplifier noise
 6. Different electrode types result in different signals: the scalp signal through wet gel on abraded skin, wet gel, a dry plate and a plate over hair, each with an illustration
-7. A head with EEG can operate only a few dimensions: the patches of section 4 taken in turn, each bar the signal it adds
-   that the others cannot mimic, against the noise of one contact; plus the full lead-field ceiling and the record.
-   The controls of sections 4 and 7 are one shared state
+7. A head with EEG can operate only a few dimensions: movable patches on the head (drag, add, remove), each a coherent
+   dipole of the stated moment, taken in turn; each bar the signal-to-noise ratio of what the patch adds beyond the earlier
+   ones against the brain's own in-band activity plus contact noise over a 1 s window, with a bits-per-second axis and the
+   rates of real interfaces marked; plus the tiled-cortex ceiling and the record. The N, synchrony and radius sliders are
+   shared with section 4
 8. EEG signals have inherent delays: a simulated imagined movement, the mu rhythm fading on a cited time course and a
    sliding-window power estimate whose length is a slider, with a cited timeline of where the time goes (rhythm,
    window, P300 repetitions, flicker plus gaze shift, readiness potential)

@@ -53,6 +53,8 @@ function fitSphere(pts: number[][]): { centre: number[]; R: number } {
 
 export const L = decodeLeadfield();
 export const nCh = head.leadfield.shape[0], nSrc = head.leadfield.shape[1];
+/** unit dipole direction of each source (the cortical normal), row-major n × 3 */
+export const srcNn = new Float32Array(b64(head.sources.normal_float32_base64));
 export const srcPos = head.sources.pos_mm as number[][];
 export const elPos = head.electrodes.pos_mm as number[][];
 // sphere fitted to the electrodes → centre and radius for the top view; only what is above its centre is drawn
@@ -103,9 +105,10 @@ export const POS: [number, number, number] = [227, 73, 72], NEG: [number, number
  * The ceiling: the whole cortex tiled with non-overlapping patches of radius r, each carrying 1 nA·m; the singular
  * values of their scalp patterns (µV per nA·m) scale with the patch moment, so they are cached per radius.
  */
-const ceilingCache = new Map<number, number[]>();
-export function ceilingSv(r: number): number[] {
-  const hit = ceilingCache.get(r);
+const tileCache = new Map<number, Float64Array[]>();
+/** the whole cortex tiled with non-overlapping coherent patches of radius r at 1 nA·m: their scalp patterns */
+function tiles(r: number): Float64Array[] {
+  const hit = tileCache.get(r);
   if (hit) return hit;
   const taken = new Uint8Array(nSrc), centres: number[] = [];
   for (let i = 0; i < nSrc; i++) {
@@ -113,19 +116,31 @@ export function ceilingSv(r: number): number[] {
     centres.push(i);
     for (let j = i; j < nSrc; j++) if (!taken[j] && dist3(srcPos[i], srcPos[j]) < 1.9 * r) taken[j] = 1;
   }
-  const A = centres.map((c) => { const a = new Float64Array(nCh); const m: number[] = []; srcPos.forEach((q, i) => { if (dist3(q, srcPos[c]) <= r) m.push(i); }); for (const k of m) for (let ch = 0; ch < nCh; ch++) a[ch] += L[ch * nSrc + k] / m.length; return a; });
+  const A = centres.map((c) => coherentPattern(c, r, 1).a);
+  tileCache.set(r, A);
+  return A;
+}
+const ceilingCache = new Map<string, number[]>();
+/** singular values of the whitened tile patterns (per nA·m): the SNR each independent combination of tiles would have */
+export function ceilingSv(r: number): number[] {
+  const key = `${r}|${state.noiseUv}|${state.backgroundUv}`;
+  const hit = ceilingCache.get(key);
+  if (hit) return hit;
+  const A = tiles(r).map(whiten);
   const gram = new Float64Array(nCh * nCh);
   for (const a of A) for (let i = 0; i < nCh; i++) for (let j = i; j < nCh; j++) gram[i * nCh + j] += a[i] * a[j];
   for (let i = 0; i < nCh; i++) for (let j = 0; j < i; j++) gram[i * nCh + j] = gram[j * nCh + i];
   const sv = symmetricEigenvalues(gram, nCh).map((v) => Math.sqrt(Math.max(v, 0)));
-  ceilingCache.set(r, sv);
+  ceilingCache.set(key, sv);
   return sv;
 }
-/** how many patches of the current size, tiling the whole cortex, could be told apart at this noise */
-export const ceilingCount = () => { const q = momentNam(); return ceilingSv(state.radiusMm).filter((v) => v * q > state.noiseUv).length; };
+/** how many patches of the current size, tiling the whole cortex, stand above SNR 1 in the decoder's window */
+export const ceilingCount = () => { const q = momentNam() * WINDOW_GAIN; return ceilingSv(state.radiusMm).filter((v) => v * q > 1).length; };
 
 /** One state for both sections: the patches and the four slider values. */
-export const state = { patches: [] as Patch[], explore: [] as Patch[], N: P.patchDefaultN, f: P.patchDefaultSync, radiusMm: 10, noiseUv: 1 }; // patches: the fixed set of section 4; explore: the movable set of section 7
+export const state = { patches: [] as Patch[], explore: [] as Patch[], N: P.patchDefaultN, f: P.patchDefaultSync, radiusMm: 10, noiseUv: 1, backgroundUv: 10 }; // patches: the fixed set of section 4; explore: the movable set of section 7; backgroundUv: the brain's own in-band activity per electrode
+/** the decoder's window and the band it reads: 2BT independent samples, so the SNR of a pattern grows by √(2BT) (claim window-samples) */
+export const WINDOW_S = 1, BAND_HZ = 3, WINDOW_GAIN = Math.sqrt(2 * BAND_HZ * WINDOW_S);
 const listeners: (() => void)[] = [];
 export const subscribe = (fn: () => void) => { listeners.push(fn); };
 export const notify = () => listeners.forEach((f) => f());
@@ -142,15 +157,62 @@ export const MOTOR = (): Patch[] => [
 ];
 
 /** scalp pattern of a patch (µV at each electrode) and the cortical sources it covers */
-export function patchPattern(p: Patch): { a: Float64Array; members: number[] } {
-  const cpos = srcPos[p.center];
+/**
+ * scalp pattern (µV at each electrode) of a patch of radius r about source c whose members share one moment per
+ * cell and together form a coherent dipole of net moment Q along the mean cortical normal: equal moments q per
+ * member with |q Σ nᵢ| = Q, the vector sum floored at a fifth of the member count so a patch on opposing sulcal
+ * walls cannot demand an unbounded current
+ */
+export function coherentPattern(c: number, r: number, Q: number): { a: Float64Array; members: number[] } {
+  const cpos = srcPos[c];
   const members: number[] = [];
-  srcPos.forEach((q, i) => { if (dist3(q, cpos) <= p.radiusMm) members.push(i); });
-  const a = new Float64Array(nCh);
-  const q = momentNam() / members.length;
+  srcPos.forEach((q, i) => { if (dist3(q, cpos) <= r) members.push(i); });
+  let nx = 0, ny = 0, nz = 0;
+  for (const m of members) { nx += srcNn[m * 3]; ny += srcNn[m * 3 + 1]; nz += srcNn[m * 3 + 2]; }
+  const net = Math.max(Math.hypot(nx, ny, nz), 0.2 * members.length);
+  const a = new Float64Array(nCh), q = Q / net;
   for (const m of members) for (let ch = 0; ch < nCh; ch++) a[ch] += L[ch * nSrc + m] * q;
   return { a, members };
 }
+export const patchPattern = (p: Patch) => coherentPattern(p.center, p.radiusMm, momentNam());
+
+/**
+ * Noise seen by the electrodes: one contact's own noise (white, state.noiseUv) plus the brain's in-band background
+ * (state.backgroundUv rms per electrode), the latter spatially correlated as independent cortical sources through
+ * the same lead field. Returned as the lower Cholesky factor R of the covariance (C = R Rᵀ), cached.
+ */
+const gramAll = (() => {
+  const g = new Float64Array(nCh * nCh);
+  for (let i = 0; i < nCh; i++) for (let j = i; j < nCh; j++) { let acc = 0; for (let k = 0; k < nSrc; k++) acc += L[i * nSrc + k] * L[j * nSrc + k]; g[i * nCh + j] = acc; g[j * nCh + i] = acc; }
+  let tr = 0; for (let i = 0; i < nCh; i++) tr += g[i * nCh + i];
+  for (let i = 0; i < g.length; i++) g[i] *= nCh / tr; // unit variance per electrode on average
+  return g;
+})();
+let cholKey = '', chol = new Float64Array(0);
+export function noiseCholesky(): Float64Array {
+  const key = `${state.noiseUv}|${state.backgroundUv}`;
+  if (key === cholKey) return chol;
+  const C = new Float64Array(nCh * nCh), b2 = state.backgroundUv ** 2, n2 = state.noiseUv ** 2;
+  for (let i = 0; i < nCh; i++) for (let j = 0; j < nCh; j++) C[i * nCh + j] = b2 * gramAll[i * nCh + j] + (i === j ? n2 : 0);
+  const R = new Float64Array(nCh * nCh);
+  for (let i = 0; i < nCh; i++) for (let j = 0; j <= i; j++) {
+    let sum = C[i * nCh + j];
+    for (let k = 0; k < j; k++) sum -= R[i * nCh + k] * R[j * nCh + k];
+    R[i * nCh + j] = i === j ? Math.sqrt(Math.max(sum, 1e-18)) : sum / R[j * nCh + j];
+  }
+  cholKey = key; chol = R;
+  return R;
+}
+/** R⁻¹ a by forward substitution: the pattern in whitened units, where its norm is the single-sample SNR of the best linear detector */
+export function whiten(a: Float64Array): Float64Array {
+  const R = noiseCholesky(), w = new Float64Array(nCh);
+  for (let i = 0; i < nCh; i++) { let sum = a[i]; for (let k = 0; k < i; k++) sum -= R[i * nCh + k] * w[k]; w[i] = sum / R[i * nCh + i]; }
+  return w;
+}
+/** bits per second a Gaussian channel carries at this SNR over the decoder's window (claim channel-bits) */
+export const bitsPerSecond = (snr: number) => (0.5 * Math.log2(1 + snr * snr)) / WINDOW_S;
+/** the SNR at which that channel carries the given bits per second */
+export const snrForBits = (bps: number) => Math.sqrt(Math.pow(2, 2 * bps * WINDOW_S) - 1);
 
 /** Patches in the order a decoder would take them: each the most unlike every combination of those before; the remainder's size in µV. */
 export function greedyOrder(vecs: Float64Array[]): { idx: number; rest: number }[] {
@@ -173,18 +235,19 @@ export function greedyOrder(vecs: Float64Array[]): { idx: number; rest: number }
 }
 
 /** The shared sliders, bound to the shared state; every section gets its own copy and they move together. */
-export function dimControls(opts: { noise?: boolean; extra?: HTMLElement[] } = {}): HTMLElement {
+export function dimControls(opts: { noise?: boolean; background?: boolean; extra?: HTMLElement[] } = {}): HTMLElement {
   const wrap = document.createElement('div');
   wrap.className = 'dim-controls';
   const { sN, sF } = sourceSliders(state.N);
   const sRadius = slider({ label: 'Patch radius', unit: 'mm', min: 4, max: 30, value: state.radiusMm, step: 1 });
   const sNoise = slider({ label: 'Noise of one electrode contact', unit: 'µV rms', min: 1, max: 20, value: state.noiseUv, log: true, note: c('skin-noise'), marks: [{ value: 1, label: 'Quietest measured' }, { value: 8, label: 'Dry contact' }] });
-  const bind = (s: Slider, key: 'N' | 'f' | 'radiusMm' | 'noiseUv') => {
+  const sBg = slider({ label: 'Brain’s own activity in the band', unit: 'µV rms', min: 1, max: 30, value: state.backgroundUv, log: true, note: c('brain-background'), marks: [{ value: 10, label: 'Assumed' }] });
+  const bind = (s: Slider, key: 'N' | 'f' | 'radiusMm' | 'noiseUv' | 'backgroundUv') => {
     s.onChange((v) => { if (state[key] === v) return; state[key] = v; if (key === 'radiusMm') { state.patches = state.patches.map((p) => ({ ...p, radiusMm: v })); state.explore = state.explore.map((p) => ({ ...p, radiusMm: v })); } notify(); });
     subscribe(() => { if (s.value !== state[key]) s.set(state[key]); });
   };
-  bind(sN, 'N'); bind(sF, 'f'); bind(sRadius, 'radiusMm'); bind(sNoise, 'noiseUv');
-  wrap.append(controls(sN.el, sF.el, sRadius.el, ...(opts.noise === false ? [] : [sNoise.el]), ...(opts.extra ?? [])));
+  bind(sN, 'N'); bind(sF, 'f'); bind(sRadius, 'radiusMm'); bind(sNoise, 'noiseUv'); bind(sBg, 'backgroundUv');
+  wrap.append(controls(sN.el, sF.el, sRadius.el, ...(opts.noise === false ? [] : [sNoise.el]), ...(opts.background ? [sBg.el] : []), ...(opts.extra ?? [])));
   return wrap;
 }
 

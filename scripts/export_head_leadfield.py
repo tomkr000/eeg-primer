@@ -5,7 +5,8 @@ fsaverage three-layer BEM (MNE-Python), ico-4 cortical sources (5124 vertices, a
 orientation normal to the cortex; ico-3 at 7 mm left a 10 mm patch with only 4 to 7 points, so mirror-image
 patches came out up to twice as strong as each other), BioSemi-128 electrodes fitted to the same head. The
 lead field is average-referenced, in µV per nA·m, quantised to int16 with one scale per source (base64), with
-electrode and source positions in head coordinates (mm).
+electrode and source positions in head coordinates (mm), and the unit normal of each source so a patch can be
+normalised to a stated net moment.
 
 Usage: python scripts/export_head_leadfield.py   →  src/data/head-leadfield.json
 """
@@ -35,6 +36,8 @@ L_q = np.round(L_uv_per_nAm / scale).astype(np.int16)
 # positions in head coordinates (mm): the forward solution's source space is already in head coordinates
 assert all(s['coord_frame'] == mne.io.constants.FIFF.FIFFV_COORD_HEAD for s in fwd['src'])
 src_head = np.concatenate([s['rr'][s['vertno']] for s in fwd['src']]) * 1e3
+src_nn = fwd['source_nn']  # unit dipole direction of each source (head coordinates): the cortical normal
+assert src_nn.shape == (L.shape[1], 3)
 hemi = np.concatenate([np.full(len(s['vertno']), i) for i, s in enumerate(fwd['src'])])
 # electrode positions: the template montage is a sphere; MNE projects EEG electrodes onto the BEM scalp for the
 # forward computation, so report the projected positions (nearest scalp-surface vertex, head coordinates, mm)
@@ -50,7 +53,7 @@ out = {
     'mne_version': mne.__version__,
     'electrodes': {'names': montage.ch_names, 'pos_mm': np.round(el, 1).tolist(), 'note': 'projected onto the fsaverage scalp surface, head coordinates'},
     'scalp_centre_mm': np.round(centre, 1).tolist(),
-    'sources': {'pos_mm': np.round(src_head, 1).tolist(), 'hemi': hemi.tolist(), 'n': int(L.shape[1])},
+    'sources': {'pos_mm': np.round(src_head, 1).tolist(), 'hemi': hemi.tolist(), 'n': int(L.shape[1]), 'normal_float32_base64': base64.b64encode(src_nn.astype(np.float32).tobytes()).decode('ascii'), 'note': 'unit dipole direction per source, head coordinates, row-major n × 3'},
     'leadfield': {'shape': list(L.shape), 'units': 'uV per nA·m', 'int16_base64': base64.b64encode(L_q.tobytes()).decode('ascii'), 'scale_float32_base64': base64.b64encode(scale.tobytes()).decode('ascii')},
 }
 out_path = Path(__file__).resolve().parents[1] / 'src' / 'data' / 'head-leadfield.json'

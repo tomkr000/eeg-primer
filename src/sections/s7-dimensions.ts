@@ -1,9 +1,12 @@
-import { restVersusImagery, mWayCorrect, bandNoise, wolpawBits, gammaPdf, snrVersusElectrodes } from '../physics/control';
-import { controls, readout, slider, fmt } from '../ui/slider';
-import { linePlot, type Note } from '../ui/plot';
+import * as d3 from 'd3';
+import { gammaSample, classifyWindows, wolpawBits, snrVersusElectrodes, gammaP } from '../physics/control';
+import { mulberry32 } from '../physics/population';
+import { controls, readout, slider, choice, fmt } from '../ui/slider';
 import { P, claimCite as c } from '../data/params';
 import { section, figure, prose, readouts, assumptions, sw, vizTitle } from '../ui/layout';
 import { sourceSliders, momentNam } from './s5-noise';
+import { MOTOR } from './dim-model';
+import { headGeometry, titledCanvas, footnote, drawCortex } from './head-view';
 
 /** the decoder's channel: the best linear combination of a 64-electrode cap (the model of section 9) */
 const CAP = { electrodes: 64, noiseUv: 1, bgUv: 10, radiusMm: 10 };
@@ -11,134 +14,175 @@ const [cap] = snrVersusElectrodes([CAP.electrodes], CAP.noiseUv, CAP.bgUv, CAP.r
 /** rhythm power over the in-band noise power in that channel */
 const rhoOf = (N: number, f: number) => (momentNam(N, f) * cap.withBrain) ** 2;
 
-// a simulated recording: rest and imagery alternate in blocks; the rhythm and the noise are fixed random draws
-const FS = 50, SHOW = 24, LEAD = 4, BLOCK = 4;
-const nS = (SHOW + LEAD) * FS;
-const rhythm = bandNoise(nS, FS, 10, P.decoderBandHz, 31), noise = bandNoise(nS, FS, 10, P.decoderBandHz, 77);
-const isImagery = (t: number) => t >= 0 && Math.floor(t / BLOCK) % 2 === 1;
-/** rhythm power at time t (rest = 1): it fades after each imagery cue and recovers after each rest cue (section 8 timing) */
-function powerAt(t: number, d: number): number {
-  if (t < BLOCK) return 1;
-  const k = Math.floor(t / BLOCK), u = Math.min(1, Math.max(0, (t - k * BLOCK - P.erdOnsetS) / P.erdRampS));
-  return k % 2 === 1 ? 1 - d * u : 1 - d + d * u;
-}
-const REST = '#2a78d6', TASK = '#eb6834';
-/** left- versus right-hand imagery, median of nine people, read from Miladinović et al. 2024 (claim window-accuracy); log-linear in between */
-const MEASURED: [number, number][] = [[0.5, 60], [1, 65], [2, 71], [4, 74]];
-function measuredLR(T: number): number {
-  for (let i = 1; i < MEASURED.length; i++) {
-    const [t0, a0] = MEASURED[i - 1], [t1, a1] = MEASURED[i];
-    if (T <= t1) return a0 + ((a1 - a0) * Math.log(T / t0)) / Math.log(t1 / t0);
-  }
-  return MEASURED[MEASURED.length - 1][1];
-}
+/** Measured change of mu power at the three central electrodes during four imagined movements (claim mi-matrix), per cent of rest. */
+const ELECTRODES = ['C3', 'Cz', 'C4'] as const;
+const COLOURS = ['#2a78d6', '#1baf7a', '#eb6834'];
+const MOVES = [
+  { name: 'Left hand', erd: [-64.6, -56.8, -86.7], sd: [25.2, 14.7, 9.4] },
+  { name: 'Right hand', erd: [-84.7, -58.3, -71.6], sd: [16.8, 18.4, 18.8] },
+  { name: 'Feet', erd: [89.3, -21.3, 112.7], sd: [116.8, 65.1, 140.8] },
+  { name: 'Tongue', erd: [145.2, 107.0, 133.6], sd: [128.9, 66.8, 160.5] },
+];
+const MC = 600; // random windows per movement behind the readouts
+/** mean power during the movement relative to rest, as the channel sees it: the rhythm's change plus the unchanging noise floor */
+const seen = (erdPct: number, n: number) => (1 + erdPct / 100 + n) / (1 + n);
 
 export function mountDimensions(root: HTMLElement) {
-  const sec = section(root, 'dimensions', '7', 'A head with EEG can operate only a few dimensions', 'Few rhythms can be changed at will, and each change hides in the rhythm’s own fluctuation');
+  const sec = section(root, 'dimensions', '7', 'A head with EEG can operate only a few dimensions', 'Few rhythms can be changed at will, their changes overlap, and each hides in the rhythm’s own fluctuation');
   prose(sec.text, `
-<p>Seeing a rhythm is not the same as controlling one. To steer with EEG a person changes a rhythm at will,
-most often by imagining a movement: the rhythms over the hand area lose part of their power while a movement
-of that hand is imagined (event-related desynchronization, ERD), about half of it on average in one study and
-about 85% in the most reactive mu band in another, both averaged over many trials ${c('erd-depth')}, and the
-decoder has to notice the drop within a window of about a second ${c('bci-windows')}. There the rhythm itself gets in the way. A rhythm is not a steady
-sine: its power waxes and wanes, and the power measured over a window of T seconds in a band B hertz wide
-scatters by about 1/√(BT) of its mean from one window to the next, ±58% for a 3 Hz band over 1 s, however far
-the rhythm stands above the noise ${c('erd-detect')}. Real alpha power fluctuates two to three times more than
-that ${c('rhythm-fluctuation')}. A drop of half the power is smaller than the scatter of one window. The figure
-simulates the decision with the alpha-sized rhythm of section 5, read through the best channel of a
-64-electrode cap (section 9): the rhythm stands well above the noise, yet a single window is called right only
-about two times in three, and a perfect recording would add only a few points. Longer windows help as √T but
-cost time (section 8); measured accuracy for left- versus right-hand imagery climbs the same way, from about
-65% with 1 s windows to 74% with 4 s ${c('window-accuracy')}.</p>
-<p>A dimension of control needs its own rhythm that the person can move independently, and there are few. The
-classic set is imagined movement of the left hand, the right hand, the feet and the tongue ${c('mi-classes')},
-and they are not independent: imagining one hand lowers the mu rhythm over both hemispheres, and in some people
-every task lowers every central rhythm, which makes the tasks hard to tell apart ${c('mi-overlap')}. Adding a fourth or fifth mental task did not add
-information, which led one group to put the upper limit at three tasks ${c('task-limit')}. The model's
-four-way choice, with each rhythm read on its own, gives about the 0.15 bits/s that the winning algorithm
-reached on four-class competition data ${c('mi-bitrate')}; the best interfaces of 2002 managed 10 to 25 bits
-per minute ${c('itr-2002')}. Continuous control from sensorimotor rhythms has reached three independent
-dimensions ${c('dof-control')}, attempts to read limb trajectories from EEG did not beat chance
-${c('kinematics-chance')}, and control fails altogether for an estimated 15 to 30% of users
-${c('bci-inefficiency')}. The fastest EEG spellers reach about 5 bits/s only by decoding responses to
-flickering targets chosen by gaze, a selection rather than a dimension of control ${c('itr-ssvep')}.
-Intracortical arrays, for comparison, decode handwriting at 90 characters/min and speech at 62 words/min
-${c('intracortical')}.</p>`);
+<p>A dimension of control is a signal a person can move at will, independently of the others. With EEG the
+signals are the sensorimotor rhythms, and the way to move one is to imagine a movement: the mu rhythm over
+that body part's area loses part of its power (event-related desynchronization, ERD), about half of it on
+average in one study and about 85% in the most reactive band in another, both averaged over many trials
+${c('erd-depth')}. The body parts with areas large enough and far enough apart to show up from outside are
+few: the two hands, the feet and the tongue, the four classes of the imagery competitions
+${c('mi-classes')}. The figure shows what each of the four does to the three central electrodes, measured in
+nine people ${c('mi-matrix')}. The four responses are not four independent signals. Imagining either hand
+dims the rhythm under both hand electrodes, C3 and C4, and the two hands differ only in which side dims
+more; imagining the feet or the tongue does not dim the hand electrodes but brightens them, and the two
+differ mainly at the midline electrode Cz ${c('mi-overlap')}. Three electrodes and four coupled responses
+leave about three contrasts to read: hands against the rest, left against right, and the midline up or
+down. That is the ceiling the record reflects: three dimensions controlled at will ${c('dof-control')}, and
+a three-task limit found when tasks were added one by one ${c('task-limit')}.</p>
+<p>Each contrast is then read through the rhythm's own fluctuation. A rhythm is not a steady sine: the power
+measured over a window of T seconds in a band B hertz wide scatters by about 1/√(BT) of its mean from one
+window to the next, ±58% for a 3 Hz band over 1 s, however strong the rhythm ${c('erd-detect')}, and real
+alpha power scatters two to three times more than that ${c('rhythm-fluctuation')}. The bands in the figure
+are that scatter, and the dots are one window's reading; press the button to draw another and watch the
+left-hand row turn into the right-hand row. Longer windows narrow the bands as √T but cost time (section 8);
+measured accuracy for left- versus right-hand imagery climbs the same way, from about 65% with 1 s windows to
+74% with 4 s ${c('window-accuracy')}. The four-way choice carries about 0.15 bits/s at best
+${c('mi-bitrate')}; the best interfaces of 2002 managed 10 to 25 bits per minute ${c('itr-2002')}; attempts
+to read limb trajectories from EEG did not beat chance ${c('kinematics-chance')}; and control fails
+altogether for an estimated 15 to 30% of users ${c('bci-inefficiency')}. The fastest EEG spellers reach
+about 5 bits/s only by decoding responses to flickering targets chosen by gaze, a selection rather than a
+dimension of control ${c('itr-ssvep')}. Intracortical arrays, for comparison, decode handwriting at
+90 characters/min and speech at 62 words/min ${c('intracortical')}.</p>`);
 
   const { sN, sF } = sourceSliders();
-  const sDepth = slider({ label: 'Power lost during imagery (ERD)', unit: '%', min: 10, max: 90, step: 1, value: P.erdPowerDrop * 100, marks: [{ value: P.erdPowerDrop * 100, label: 'Typical' }, { value: 85, label: 'Best case' }], note: c('erd-depth') });
   const sWin = slider({ label: 'Window for one decision', unit: 's', min: 0.5, max: 4, step: 0.05, value: 1, marks: [{ value: 1, label: 'Typical' }, { value: 4, label: 'Competition' }], note: c('bci-windows') });
-  const rRho = readout('Rhythm power over noise, 64-electrode cap', c('snr-electrodes'));
-  const rTwo = readout('Rest or imagery: correct calls', c('erd-detect'));
-  const rLR = readout('Left or right hand: model (measured)', c('window-accuracy'));
-  const rBits = readout('Four-way choice: bits/s (measured 0.15)', c('mi-bitrate'));
+  let move = 1;
+  const pick = choice('Imagined movement', MOVES.map((m, i) => ({ value: String(i), label: m.name })), '1', (v) => { move = Number(v); update(false); });
+  const again = document.createElement('button');
+  again.className = 'btn'; again.textContent = 'Draw another window';
+  const rLR = readout('Left or right hand: one window called right', c('erd-detect'));
+  const rFT = readout('Feet or tongue: one window called right', c('erd-detect'));
+  const rFour = readout('Which of the four: called right (chance 25%)', c('mi-bitrate'));
+  const rRecord = readout('The record: dimensions controlled at will', c('dof-control'));
 
-  const fig = figure(sec.fig, `Top: twenty-four seconds of a simulated recording in which rest and imagined movement alternate every ${BLOCK} s (imagery blocks shaded ${sw(TASK, 'patch')}). The line (${sw('#1a1a1a', 'line')}) is the mu-band power that a decoder estimates from a sliding window of the chosen length, relative to the resting level; the dashed line (${sw('#898781', 'dash')}) is the true level of rhythm plus noise; the decoder calls imagery when the estimate falls below the threshold. Bottom: how the estimates of single windows spread, at rest (${sw(REST, 'patch')}) and during imagery (${sw(TASK, 'patch')}); the overlap is the share of windows called wrong ${c('erd-detect')}. The rhythm is the patch of the N and synchrony sliders (sections 2 and 5), read through the best linear combination of a 64-electrode cap against the brain's background and the electrodes' noise (section 9) ${c('snr-electrodes')}.`);
-  fig.viz.append(vizTitle('Mu-band power over a sliding window, rest and imagined movement alternating'));
-  const TRACE_Y: [number, number] = [0, 3.2], TRACE_H = 180;
-  const trace = linePlot(fig.viz, { x: { label: 'Time (s)', domain: [0, SHOW] }, y: { label: 'Power (rest = 1)', domain: TRACE_Y }, height: TRACE_H });
-  fig.viz.append(vizTitle('Spread of single-window estimates: rest versus imagery'));
-  const spread = linePlot(fig.viz, { x: { label: 'Mu-band power in one window (rest = 1)', domain: [0, 3] }, y: { label: 'Probability density' }, height: 164, legendInside: 'right' });
-  fig.viz.append(readouts(rRho.el, rTwo.el, rLR.el, rBits.el));
-  fig.panel.append(controls(sN.el, sF.el, sDepth.el, sWin.el));
+  const fig = figure(sec.fig, `Left: the head from above with the motor areas of section 4 and the three central electrodes of the 10–20 system, C3 over the left hemisphere's hand area (which moves the right hand), Cz on the midline and C4 over the right hemisphere's. The discs show the mu power at each electrode in one window during the chosen imagined movement, relative to rest. Right: the measured mean change of mu power at those electrodes for each of the four imagined movements (${sw(COLOURS[0], 'patch')} C3, ${sw(COLOURS[1], 'patch')} Cz, ${sw(COLOURS[2], 'patch')} C4), each as a tick, with the band that one window's estimate scatters over at the chosen window length and a dot for one such window ${c('mi-matrix')}${c('erd-detect')}; the shaded region lies below the channel's noise floor, the mean reading with the rhythm gone entirely. The readouts are the shares of windows a decoder reading the three electrodes calls right, from ${MC} random windows per movement; the measured four-class figure is 68% with 4 s windows and many more electrodes ${c('mi-bitrate')}.`, { wide: true });
+  const row = document.createElement('div');
+  row.className = 'viz-row';
+  row.style.flexWrap = 'nowrap';
+  fig.viz.append(row);
+  const HW = 300, HH = 282, FOOT = 46;
+  const headBox = document.createElement('div');
+  headBox.style.flex = `0 0 ${HW}px`;
+  const head = titledCanvas(headBox, 'Where the electrodes sit', HW, HH + FOOT);
+  const hctx = head.getContext('2d')!;
+  const geo = headGeometry(HW, HH);
+  const plotBox = document.createElement('div');
+  plotBox.className = 'viz-box'; plotBox.style.flex = '1 1 400px';
+  plotBox.append(vizTitle('Mu power at the three electrodes during each imagined movement, relative to rest'));
+  const svg = d3.select(plotBox).append('svg').attr('class', 'plot-svg').attr('height', HH + FOOT);
+  row.append(headBox, plotBox);
+  const verdict = readouts(rLR.el, rFT.el, rFour.el, rRecord.el);
+  verdict.style.gridTemplateColumns = 'repeat(4, 1fr)';
+  fig.viz.append(verdict);
+  again.style.alignSelf = 'start';
+  fig.panel.append(controls(pick.el, sWin.el, sN.el, sF.el, again));
   assumptions(fig.el, [
-    { what: 'Rhythm', value: `a Gaussian process in a ${P.decoderBandHz} Hz band round 10 Hz, from the patch of the N and synchrony sliders; during imagery its power falls by the ERD fraction, starting ${P.erdOnsetS} s after the cue and settling ${P.erdRampS} s later (the timing of section 8)`, cite: c('erd-depth') + c('erd-timecourse') },
-    { what: 'Channel', value: `the best linear combination of ${CAP.electrodes} electrodes for a ${CAP.radiusMm} mm patch, against the brain's background (${CAP.bgUv} µV per electrode) and ${CAP.noiseUv} µV of electrode noise: ${fmt(cap.withBrain, 2)} SNR per nA·m (section 9)`, cite: c('snr-electrodes') + c('brain-background') },
-    { what: 'Estimate and decision', value: 'the mean square of the band-passed channel over the window, relative to the resting mean; an estimate over B·T degrees of freedom is gamma distributed with a spread of 1/√(BT) of its mean. The decoder calls imagery below the threshold where the two distributions cross, the best single threshold', cite: c('erd-detect') + c('window-samples') },
-    { what: 'Two- and four-way choices', value: 'each imagined movement lowers its own rhythm, each read in its own channel, independent of the others (an upper bound: real classes overlap); the decoder picks the channel whose power fell most; bits per window by Wolpaw’s formula. The measured left-or-right figure in brackets is the median of nine people at this window length, read from a published figure and interpolated', cite: c('mi-overlap') + c('mi-bitrate') + c('window-accuracy') },
+    { what: 'Responses', value: 'the mean change of mu power at C3, Cz and C4 during imagined movements of the left hand, right hand, feet and tongue in nine people (trial-averaged, in each person’s most reactive band, so upper bounds for a fixed-band decoder); the two hand responses are also what section 4 shows from the lead field: each hand area is seen by both hand electrodes', cite: c('mi-matrix') + c('mi-overlap') },
+    { what: 'Channel', value: `the rhythm is the patch of the N and synchrony sliders through the best linear combination of ${CAP.electrodes} electrodes for a ${CAP.radiusMm} mm patch, against the brain's background (${CAP.bgUv} µV per electrode) and ${CAP.noiseUv} µV of electrode noise (section 9); the unchanging noise adds a floor of 1/ρ to every reading, with ρ the rhythm's power over the noise`, cite: c('snr-electrodes') + c('brain-background') },
+    { what: 'One window', value: 'the power estimate over B·T degrees of freedom is gamma distributed with a spread of 1/√(BT) of its mean (B = 3 Hz); the band drawn is the 16th to 84th percentile; the dots are one random draw per electrode, the same draws on the head', cite: c('erd-detect') + c('window-samples') },
+    { what: 'Decoder', value: `reads the three electrodes of one window, taken as independent, and picks the movement whose measured response makes the reading most likely (the gamma likelihood); the shares are from ${MC} windows per movement. Real decoders use more electrodes and learned spatial filters, which is why the measured four-class figure, 68% with 4 s windows, beats this one`, cite: c('mi-bitrate') + c('window-accuracy') },
+    { what: 'Electrodes on the head', value: 'C3 and C4 are drawn above the hand areas of section 4 and Cz on the midline above the foot area; the 10–20 positions lie approximately there', cite: c('mi-matrix') },
   ]);
 
-  function update() {
-    const rho = rhoOf(sN.value, sF.value), d = sDepth.value / 100, T = sWin.value, B = P.decoderBandHz;
-    const r = restVersusImagery(d, B, T, rho), n = 1 / rho, w = Math.max(1, Math.round(T * FS));
-    // the simulated recording, its sliding-window power and the true level
-    const est: [number, number][] = [], truth: [number, number][] = [];
-    let acc = 0;
-    const sq = new Float64Array(nS);
-    for (let i = 0; i < nS; i++) {
-      const t = i / FS - LEAD, y = Math.sqrt(powerAt(t, d)) * rhythm[i] + Math.sqrt(n) * noise[i];
-      sq[i] = y * y; acc += sq[i]; if (i >= w) acc -= sq[i - w];
-      if (t >= 0) { est.push([t, acc / w / (1 + n)]); truth.push([t, (powerAt(t, d) + n) / (1 + n)]); }
-    }
-    // the worst single windows, the lowest at rest in the first half and the highest during imagery in the second, in the settled
-    // second half of a block; their notes sit in the empty band at the top of the plot, at the two ends
-    const worst = (imagery: boolean) => {
-      let best: [number, number] | null = null;
-      for (const p of est) {
-        if (isImagery(p[0]) !== imagery || p[0] % BLOCK < BLOCK / 2 || (imagery ? p[0] < SHOW / 2 : p[0] >= SHOW / 2)) continue;
-        if (!best || (imagery ? p[1] > best[1] : p[1] < best[1])) best = p;
-      }
-      return best;
-    };
-    const notes: Note[] = [];
-    const lowRest = worst(false), highTask = worst(true);
-    if (lowRest && lowRest[1] < r.threshold) notes.push({ x: lowRest[0], y: lowRest[1], text: 'at rest, called imagery', at: [0.3, 2.3], align: 'start' });
-    if (highTask && highTask[1] > r.threshold) notes.push({ x: highTask[0], y: highTask[1], text: 'imagining, called rest', at: [SHOW - 0.3, 2.3], align: 'end' });
-    const bands = [1, 3, 5].map((k) => ({ from: k * BLOCK, to: (k + 1) * BLOCK, label: 'imagery', color: TASK }));
-    trace.update([
-      { name: `Estimate from a ${fmt(T, 2)} s window`, points: est, color: '#1a1a1a', width: 1.4 },
-      { name: 'True level', points: truth, color: '#898781', dashed: true, width: 1.5 },
-    ], [{ axis: 'y', value: r.threshold, label: 'threshold' }], bands, notes);
-
-    // the two distributions
-    const xs = Array.from({ length: 301 }, (_, i) => 0.005 + (i / 300) * 2.995);
-    const pdf = (theta: number) => xs.map((x) => [x, gammaPdf(x, r.k, theta)] as [number, number]);
-    const rest = pdf(r.tRest), task = pdf(r.tTask);
-    const at = (pts: [number, number][], x: number) => pts.reduce((a, p) => (Math.abs(p[0] - x) < Math.abs(a[0] - x) ? p : a));
-    const sdX = 1 + 1 / Math.sqrt(r.k), sdP = at(rest, sdX), thr = at(rest, r.threshold);
-    spread.update([
-      { name: 'At rest', points: rest, color: REST, fill: true },
-      { name: 'During imagery', points: task, color: TASK, fill: true },
-    ], [{ axis: 'x', value: r.threshold, label: 'threshold' }], undefined, [
-      { x: sdP[0], y: sdP[1], text: `one window: ±${Math.round(100 / Math.sqrt(r.k))}%`, dx: 16, dy: -14 },
-      { x: thr[0], y: thr[1], text: `overlap: ${Math.round(100 * (1 - r.correct))}% of windows called wrong`, dx: 14, dy: -26 },
-    ]);
-    const four = mWayCorrect(4, d, B, T, rho), two = mWayCorrect(2, d, B, T, rho);
-    rRho.set(`${fmt(rho, 2)}×`);
-    rTwo.set(`${fmt(100 * r.correct, 2)}%`);
-    rLR.set(`${Math.round(100 * two)}% <span class="readout-aside">(${Math.round(measuredLR(T))}%)</span>`);
-    rBits.set(fmt(wolpawBits(four, 4) / T, 2));
+  // head view: the five patches of section 4 and three electrode discs above the hand areas and the midline
+  const patches = MOTOR();
+  const above = (i: number) => { const [x, y] = geo.srcXY[patches[i].center]; return [x, y] as [number, number]; };
+  const elXY: [number, number][] = [above(0), [(above(0)[0] + above(1)[0]) / 2, above(2)[1]], above(1)];
+  const shade = (p: number) => { const t = Math.max(0, Math.min(1, (Math.log2(p) + 2) / 4)); return d3.interpolateRgb('#ffffff', '#1a1a1a')(0.08 + 0.84 * t); }; // ×0.25 light, ×1 mid, ×4 dark
+  function drawHead(sample: number[]) {
+    hctx.clearRect(0, 0, HW, HH + FOOT);
+    drawCortex(hctx, geo, patches);
+    ELECTRODES.forEach((name, e) => {
+      const [x, y] = elXY[e];
+      hctx.beginPath(); hctx.arc(x, y, 16, 0, 2 * Math.PI);
+      hctx.fillStyle = shade(sample[e]); hctx.fill();
+      hctx.lineWidth = 3; hctx.strokeStyle = COLOURS[e]; hctx.stroke();
+      hctx.font = 'bold 12px system-ui, sans-serif'; hctx.textAlign = 'center';
+      hctx.fillStyle = sample[e] > 0.9 ? '#fff' : '#1a1a1a'; hctx.fillText(`×${fmt(sample[e], 2)}`, x, y + 4);
+      hctx.fillStyle = '#1a1a1a'; hctx.font = 'bold 13px system-ui, sans-serif'; hctx.fillText(name, x, y + 31);
+    });
+    footnote(hctx, HH, [[`imagining the ${MOVES[move].name.toLowerCase()}: mu power in one window`], [{ sw: shade(0.25) }, '×0.25 (dim)   ', { sw: shade(1) }, '×1 (rest)   ', { sw: shade(4) }, '×4 (bright)'], ['patches 1 to 5: the motor areas of section 4']]);
   }
-  [sN, sF, sDepth, sWin].forEach((s) => s.onChange(update));
-  update();
+
+  let seed = 1;
+  function update(newDraw = true) {
+    if (newDraw) seed++;
+    const T = sWin.value, k = P.decoderBandHz * T, n = 1 / rhoOf(sN.value, sF.value), floor = n / (1 + n);
+    const means = MOVES.map((m) => m.erd.map((v) => seen(v, n)));
+    const rng = mulberry32(seed);
+    const draws = means.map((row) => row.map((mu) => gammaSample(k, mu / k, rng)));
+    drawHead(draws[move]);
+    drawPlot(means, draws, k, floor);
+    const acc = (idx: number[]) => classifyWindows(idx.map((i) => means[i]), k, MC, 7).overall;
+    const lr = acc([0, 1]), ft = acc([2, 3]), four = acc([0, 1, 2, 3]);
+    rLR.set(`${Math.round(100 * lr)}%`);
+    rFT.set(`${Math.round(100 * ft)}%`);
+    rFour.set(`${Math.round(100 * four)}% <span class="readout-aside">${fmt(wolpawBits(four, 4) / T, 2)} bits/s</span>`);
+    rRecord.set('3');
+  }
+
+  /** the dot plot: twelve rows, the band of one window's scatter, the measured mean and one draw */
+  function drawPlot(means: number[][], draws: number[][], k: number, floor: number) {
+    const W = Math.max(520, plotBox.clientWidth || 0), H = HH + FOOT, ml = 118, mr = 210, mt = 26, mb = 36;
+    svg.attr('width', W).attr('viewBox', `0 0 ${W} ${H}`);
+    svg.selectAll('*').remove();
+    const x = d3.scaleLog().domain([0.06, 8]).range([ml, W - mr]);
+    const rowH = (H - mt - mb) / 12, y = (g: number, e: number) => mt + (g * 3 + e + 0.5) * rowH;
+    // the noise floor, the rest line and the axis
+    svg.append('rect').attr('x', x(0.06)).attr('y', mt).attr('width', x(floor) - x(0.06)).attr('height', H - mt - mb).attr('fill', '#1a1a1a').attr('opacity', 0.08);
+    const floorLeft = floor > 0.55; // when the floor nears the rest line, label it from the left edge instead
+    svg.append('text').attr('class', 'marker-label').attr('x', floorLeft ? x(0.06) + 4 : x(floor) - 4).attr('y', mt - 8).attr('text-anchor', floorLeft ? 'start' : 'end').text('noise floor');
+    svg.append('line').attr('x1', x(1)).attr('x2', x(1)).attr('y1', mt).attr('y2', H - mb).attr('stroke', '#52514e').attr('stroke-dasharray', '4 3');
+    svg.append('text').attr('class', 'marker-label').attr('x', x(1) + 4).attr('y', mt - 8).text('rest');
+    const axis = d3.axisBottom(x).tickValues([0.1, 0.25, 0.5, 1, 2, 4]).tickFormat((v) => `×${v}`);
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - mb})`).call(axis as never);
+    svg.append('text').attr('class', 'axis-label').attr('x', (ml + W - mr) / 2).attr('y', H - 4).attr('text-anchor', 'middle').text('mu power in one window, relative to rest');
+    // the selected movement's rows, highlighted
+    svg.append('rect').attr('x', 4).attr('y', mt + move * 3 * rowH).attr('width', W - mr - 4).attr('height', 3 * rowH).attr('fill', '#2a78d6').attr('opacity', 0.07).attr('rx', 4);
+    MOVES.forEach((m, g) => {
+      svg.append('text').attr('x', 8).attr('y', y(g, 1) + 4).attr('font-size', 13).attr('font-weight', 600).attr('fill', '#1a1a1a').text(m.name);
+      ELECTRODES.forEach((name, e) => {
+        const yy = y(g, e), mu = means[g][e], q = (p: number) => gammaQuantile(k, mu / k, p);
+        svg.append('text').attr('x', ml - 8).attr('y', yy + 4).attr('text-anchor', 'end').attr('font-size', 12).attr('fill', COLOURS[e]).attr('font-weight', 600).text(name);
+        svg.append('rect').attr('x', x(q(0.16))).attr('y', yy - rowH * 0.36).attr('width', Math.max(1, x(q(0.84)) - x(q(0.16)))).attr('height', rowH * 0.72).attr('fill', COLOURS[e]).attr('opacity', 0.22).attr('rx', 3);
+        svg.append('line').attr('x1', x(mu)).attr('x2', x(mu)).attr('y1', yy - rowH * 0.42).attr('y2', yy + rowH * 0.42).attr('stroke', COLOURS[e]).attr('stroke-width', 2.5);
+        svg.append('circle').attr('cx', x(draws[g][e])).attr('cy', yy).attr('r', 5).attr('fill', COLOURS[e]).attr('stroke', '#fcfcfb').attr('stroke-width', 1.5);
+      });
+    });
+    // brackets with the two messages
+    const bracket = (g0: number, g1: number, lines: string[]) => {
+      const bx = W - mr + 10, y0 = y(g0, 0) - rowH * 0.4, y1 = y(g1, 2) + rowH * 0.4;
+      svg.append('path').attr('d', `M${bx},${y0} h6 v${y1 - y0} h-6`).attr('fill', 'none').attr('stroke', '#52514e').attr('stroke-width', 1.2);
+      const t = svg.append('text').attr('x', bx + 12).attr('y', (y0 + y1) / 2 - (lines.length - 1) * 7).attr('font-size', 12.5).attr('fill', '#1a1a1a');
+      lines.forEach((l, i) => t.append('tspan').attr('x', bx + 12).attr('dy', i ? '1.2em' : 0).text(l));
+    };
+    bracket(0, 1, ['both hands dim all three;', 'left and right differ', 'only in degree']);
+    bracket(2, 3, ['feet and tongue brighten', 'the hand electrodes;', 'they differ mainly at Cz']);
+  }
+  again.addEventListener('click', () => update(true));
+  [sWin, sN, sF].forEach((s) => s.onChange(() => update(false)));
+  new ResizeObserver(() => update(false)).observe(plotBox);
+  update(false);
+}
+
+/** gamma quantile by bisection on the regularised incomplete gamma function */
+function gammaQuantile(k: number, theta: number, p: number): number {
+  let lo = 0, hi = theta * k * 10;
+  for (let i = 0; i < 60; i++) { const mid = (lo + hi) / 2; if (gammaP(k, mid / theta) < p) lo = mid; else hi = mid; }
+  return (lo + hi) / 2;
 }

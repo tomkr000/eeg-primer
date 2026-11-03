@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { snrVersusElectrodes, ceilingPerNam, dPrime, phi, wolpawBits, gammaPdf, gammaP, restVersusImagery, bandNoise, headModes } from '../src/physics/control';
+import { snrVersusElectrodes, ceilingPerNam, dPrime, phi, wolpawBits, gammaPdf, gammaP, restVersusImagery, bandNoise, headModes, gammaSample, classifyWindows } from '../src/physics/control';
+import { mulberry32 } from '../src/physics/population';
 
 describe('SNR versus electrode count', () => {
   it('the per-degree formula agrees with the exact electrode-space solution', () => {
@@ -60,5 +61,18 @@ describe('detecting a drop in band power', () => {
     const m = est.reduce((a, v) => a + v, 0) / est.length, sd = Math.sqrt(est.reduce((a, v) => a + (v - m) ** 2, 0) / est.length);
     expect(m).toBeCloseTo(1, 1);
     expect(Math.abs(sd / m - 1 / Math.sqrt(B * T))).toBeLessThan(0.08);
+  });
+});
+
+describe('classifying windows', () => {
+  it('gamma draws have the right mean and spread; identical classes are at chance', () => {
+    let s = 0, s2 = 0; const rng = mulberry32(3), n = 20000;
+    for (let i = 0; i < n; i++) { const g = gammaSample(3, 1 / 3, rng); s += g; s2 += g * g; }
+    const m = s / n, sd = Math.sqrt(s2 / n - m * m);
+    expect(m).toBeCloseTo(1, 1);
+    expect(Math.abs(sd / m - 1 / Math.sqrt(3))).toBeLessThan(0.03);
+    expect(Math.abs(classifyWindows([[1, 1, 1], [1, 1, 1]], 3, 4000).overall - 0.5)).toBeLessThan(0.03);
+    const r = classifyWindows([[0.2, 1, 0.2], [2, 1, 2]], 3, 2000);
+    expect(r.overall).toBeGreaterThan(0.95);
   });
 });

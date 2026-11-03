@@ -1,0 +1,1379 @@
+[
+  {
+    "id": "t10-01",
+    "claim": "The alpha rhythm is 8 to 13 Hz inclusive, occurs during wakefulness over the posterior head and is largest over the occipital areas (10-20 sites O1, O2, Oz).",
+    "value": null,
+    "units": "Hz",
+    "range": [
+      8,
+      13
+    ],
+    "source": {
+      "authors": "Kane N, Acharya J, Benickzy S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM",
+      "year": 2017,
+      "title": "A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017",
+      "journal": "Clinical Neurophysiology Practice",
+      "volume_pages": "2:170-185",
+      "doi": "10.1016/j.cnp.2017.07.002",
+      "url": "https://europepmc.org/article/PMC/PMC6123891"
+    },
+    "evidence_location": "Glossary entry 'Alpha rhythm' (Section: glossary, alphabetical)",
+    "quote": "Rhythm at 8–13 Hz inclusive occurring during wakefulness over the posterior regions of the head, generally with maximum amplitudes over the occipital areas.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC full-text XML of the open-access glossary); quote checked word for word. The glossary names regions, not electrodes; the occipital electrodes of the 10-20 system are O1, O2 (and Oz in the 10-10 extension), which is the reviewer's mapping, not the glossary's. Synonym given: posterior dominant rhythm."
+  },
+  {
+    "id": "t10-02",
+    "claim": "Adult alpha rhythm amplitude is mostly below 50 microvolts at the scalp (often much higher in children).",
+    "value": 50,
+    "units": "uV",
+    "range": null,
+    "source": {
+      "authors": "Kane N, Acharya J, Benickzy S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM",
+      "year": 2017,
+      "title": "A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017",
+      "journal": "Clinical Neurophysiology Practice",
+      "volume_pages": "2:170-185",
+      "doi": "10.1016/j.cnp.2017.07.002",
+      "url": "https://europepmc.org/article/PMC/PMC6123891"
+    },
+    "evidence_location": "Glossary entry 'Alpha rhythm'",
+    "quote": "Amplitude varies but is mostly below 50 µV in the adult, but often much higher in children.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC full-text XML of the open-access glossary); quote checked word for word. No verified source was found for the often-quoted '20 to 60 microvolts eyes closed' figure; use 'mostly below 50 microvolts'."
+  },
+  {
+    "id": "t10-03",
+    "claim": "Alpha is strongest with the eyes closed during relaxation and mental inactivity, and is blocked or attenuated by attention (especially visual) and mental effort.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Kane N, Acharya J, Benickzy S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM",
+      "year": 2017,
+      "title": "A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017",
+      "journal": "Clinical Neurophysiology Practice",
+      "volume_pages": "2:170-185",
+      "doi": "10.1016/j.cnp.2017.07.002",
+      "url": "https://europepmc.org/article/PMC/PMC6123891"
+    },
+    "evidence_location": "Glossary entry 'Alpha rhythm'",
+    "quote": "Best seen with the eyes closed, during physical relaxation and relative mental inactivity. Blocked or attenuated by attention, especially visual, and mental effort.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC full-text XML of the open-access glossary); quote checked word for word."
+  },
+  {
+    "id": "t10-04",
+    "claim": "Opening the eyes reduces mean absolute alpha power across the scalp (28 university students, eyes closed versus eyes open resting EEG); the reduction in alpha was global rather than topographically focal.",
+    "value": 28,
+    "units": "subjects",
+    "range": null,
+    "source": {
+      "authors": "Barry RJ, Clarke AR, Johnstone SJ, Magee CA, Rushby JA",
+      "year": 2007,
+      "title": "EEG differences between eyes-closed and eyes-open resting conditions",
+      "journal": "Clinical Neurophysiology",
+      "volume_pages": "118:2765-2773",
+      "doi": "10.1016/j.clinph.2007.07.028",
+      "url": "https://doi.org/10.1016/j.clinph.2007.07.028"
+    },
+    "evidence_location": "Abstract (Results)",
+    "quote": "Reductions were found in across-scalp mean absolute delta, theta, alpha and beta from the eyes-closed to eyes-open condition.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. The abstract gives no microvolt or percentage figure for the alpha reduction."
+  },
+  {
+    "id": "t10-05",
+    "claim": "The mu rhythm is 7 to 11 Hz, composed of arch-shaped waves over the central or centro-parietal scalp (10-20 sites C3, Cz, C4) during wakefulness.",
+    "value": null,
+    "units": "Hz",
+    "range": [
+      7,
+      11
+    ],
+    "source": {
+      "authors": "Kane N, Acharya J, Benickzy S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM",
+      "year": 2017,
+      "title": "A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017",
+      "journal": "Clinical Neurophysiology Practice",
+      "volume_pages": "2:170-185",
+      "doi": "10.1016/j.cnp.2017.07.002",
+      "url": "https://europepmc.org/article/PMC/PMC6123891"
+    },
+    "evidence_location": "Glossary entry 'Mu rhythm'",
+    "quote": "Rhythm at 7–11 Hz, composed of arch-shaped waves occurring over the central or centro-parietal regions of the scalp during wakefulness.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC full-text XML of the open-access glossary); quote checked word for word. Synonyms listed (use discouraged): rhythme rolandique en arceau, comb rhythm. Contemporary work usually uses 8 to 13 Hz for mu (Hobson & Bishop 2017, t10-25)."
+  },
+  {
+    "id": "t10-06",
+    "claim": "Mu rhythm amplitude is mostly below 50 microvolts, and it is blocked most clearly by contralateral movement, the thought of movement, readiness to move, or tactile stimulation.",
+    "value": 50,
+    "units": "uV",
+    "range": null,
+    "source": {
+      "authors": "Kane N, Acharya J, Benickzy S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM",
+      "year": 2017,
+      "title": "A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017",
+      "journal": "Clinical Neurophysiology Practice",
+      "volume_pages": "2:170-185",
+      "doi": "10.1016/j.cnp.2017.07.002",
+      "url": "https://europepmc.org/article/PMC/PMC6123891"
+    },
+    "evidence_location": "Glossary entry 'Mu rhythm'",
+    "quote": "Blocked or attenuated most clearly by contralateral movement, thought of movement, readiness to move or tactile stimulation.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC full-text XML of the open-access glossary); quote checked word for word. The amplitude sentence in the same entry reads 'Amplitude varies but is mostly below 50 µV.'"
+  },
+  {
+    "id": "t10-07",
+    "claim": "Mu power over sensorimotor cortex is reduced in normal adults by self-initiated movement, imagined movement and observed movement.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Pineda JA",
+      "year": 2005,
+      "title": "The functional significance of mu rhythms: translating \"seeing\" and \"hearing\" into \"doing\"",
+      "journal": "Brain Research Reviews",
+      "volume_pages": "50:57-68",
+      "doi": "10.1016/j.brainresrev.2005.04.005",
+      "url": "https://bci.ucsd.edu/Papers_files/Pineda,%20J.A.%C2%A0%20The%20functional%20significance%20of%20mu%20rhythms.pdf"
+    },
+    "evidence_location": "Section 3.4 of the review (author copy PDF)",
+    "quote": "is reduced in normal adults by self-initiated movement, imagined movement, and observed movement",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Read from the author's PDF copy hosted at bci.ucsd.edu via a fetch tool that returned sentence extracts; the publisher version was not opened. Full sentence: 'Mu power recorded from electrodes at scalp locations over sensorimotor cortex is reduced in normal adults by self-initiated movement, imagined movement, and observed movement [5,21,44,112].'"
+  },
+  {
+    "id": "t10-08",
+    "claim": "Unlike posterior alpha, the mu rhythm is not affected by opening or closing the eyes; its 20 Hz component is blocked by clenching the fist but not by opening the eyes.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Tiihonen J, Kajola M, Hari R",
+      "year": 1989,
+      "title": "Magnetic mu rhythm in man",
+      "journal": "Neuroscience",
+      "volume_pages": "32:793-800",
+      "doi": "10.1016/0306-4522(89)90299-6",
+      "url": "https://doi.org/10.1016/0306-4522(89)90299-6"
+    },
+    "evidence_location": "Abstract",
+    "quote": "The high-frequency activity was blocked by clenching of the fist, but not by opening of the eyes",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Four subjects, magnetoencephalography (MEG). Pineda 2005 (Section 2.3) states the same for EEG: 'mu rhythms are not affected by opening or closing of the eyes, but rather are desynchronized and attenuated by actual movement or the motor imagery of movement'."
+  },
+  {
+    "id": "t10-09",
+    "claim": "Mu is routinely identified at 10-20 electrode sites C3 and C4, the central sites over sensorimotor cortex.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Hobson HM, Bishop DVM",
+      "year": 2017,
+      "title": "The interpretation of mu suppression as an index of mirror neuron activity: past, present and future",
+      "journal": "Royal Society Open Science",
+      "volume_pages": "4:160662",
+      "doi": "10.1098/rsos.160662",
+      "url": "https://europepmc.org/article/PMC/PMC5383811"
+    },
+    "evidence_location": "Section 2.1 'Early studies of mu suppression'",
+    "quote": "routinely identify mu rhythms from EEG sites C3 and C4 (central sites situated over the sensorimotor cortex)",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC XML, open access). Wolpaw & McFarland 2004 (t10-28) likewise used C3 and C4 'over sensorimotor cortex'."
+  },
+  {
+    "id": "t10-10",
+    "claim": "The beta rhythm is 14 to 30 Hz, most characteristically recorded over the fronto-central head during wakefulness, with amplitude mostly below 30 microvolts; it is blocked by contralateral movement or tactile stimulation (most obviously in electrocorticograms).",
+    "value": 30,
+    "units": "uV",
+    "range": [
+      14,
+      30
+    ],
+    "source": {
+      "authors": "Kane N, Acharya J, Benickzy S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM",
+      "year": 2017,
+      "title": "A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017",
+      "journal": "Clinical Neurophysiology Practice",
+      "volume_pages": "2:170-185",
+      "doi": "10.1016/j.cnp.2017.07.002",
+      "url": "https://europepmc.org/article/PMC/PMC6123891"
+    },
+    "evidence_location": "Glossary entries 'Beta band' and 'Beta rhythm or activity'",
+    "quote": "Most characteristically recorded over the fronto-central regions of the head during wakefulness. Amplitude of fronto-central beta rhythm varies but is mostly below 30 µV.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC full-text XML of the open-access glossary); quote checked word for word. The entry adds: 'Blocking or attenuation of the beta rhythm by contralateral movement or tactile stimulation is especially obvious in electrocorticograms' and that other beta rhythms may be drug induced (benzodiazepines, barbiturates, alcohol)."
+  },
+  {
+    "id": "t10-11",
+    "claim": "The rolandic (sensorimotor) rhythm has components at about 10 and 20 Hz; both are completely suppressed during a thumb movement and rebound 0.5 to 2.5 s after it, the 20 Hz component reacting about 300 ms faster.",
+    "value": 20,
+    "units": "Hz",
+    "range": [
+      0.5,
+      2.5
+    ],
+    "source": {
+      "authors": "Salmelin R, Hari R",
+      "year": 1994,
+      "title": "Spatiotemporal characteristics of sensorimotor neuromagnetic rhythms related to thumb movement",
+      "journal": "Neuroscience",
+      "volume_pages": "60:537-550",
+      "doi": "10.1016/0306-4522(94)90263-1",
+      "url": "https://doi.org/10.1016/0306-4522(94)90263-1"
+    },
+    "evidence_location": "Abstract",
+    "quote": "Both components were completely suppressed during the movement and increased substantially 0.5-2.5 s after it; the 20-Hz component reacted about 300 ms faster.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. MEG in four healthy subjects, self-paced thumb movements. The range field holds the rebound window in seconds after the movement."
+  },
+  {
+    "id": "t10-12",
+    "claim": "Frontal midline theta (4 to <8 Hz) is a normal variant located on the midline just anterior to the vertex (near 10-20 site Fz), appearing during psychological stress and cognitive tasks such as problem solving, mainly in young adults under 30.",
+    "value": null,
+    "units": "Hz",
+    "range": [
+      4,
+      8
+    ],
+    "source": {
+      "authors": "Kane N, Acharya J, Benickzy S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM",
+      "year": 2017,
+      "title": "A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017",
+      "journal": "Clinical Neurophysiology Practice",
+      "volume_pages": "2:170-185",
+      "doi": "10.1016/j.cnp.2017.07.002",
+      "url": "https://europepmc.org/article/PMC/PMC6123891"
+    },
+    "evidence_location": "Glossary entries 'Fronto-central theta' and 'Theta band'",
+    "quote": "Theta rhythm located in the midline, just anterior to the vertex, that occurs during psychological stress and cognitive tasks, particularly problem solving.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC full-text XML of the open-access glossary); quote checked word for word. Theta band defined as 4 to <8 Hz. Synonyms: frontal midline theta, Ciganek rhythm. 'It appears predominantly in young healthy adults (<30 years of age).' The Fz mapping (frontal midline electrode anterior to Cz, the vertex) is the reviewer's, consistent with the 10-20 layout."
+  },
+  {
+    "id": "t10-13",
+    "claim": "Frontal midline theta appears during concentrated performance of mental tasks; its MEG source lies in bilateral medial prefrontal cortex including the anterior cingulate.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Ishii R, Shinosaki K, Ukai S, Inouye T, Ishihara T, Yoshimine T, Hirabuki N, Asada H, Kihara T, Robinson SE, Takeda M",
+      "year": 1999,
+      "title": "Medial prefrontal cortex generates frontal midline theta rhythm",
+      "journal": "NeuroReport",
+      "volume_pages": "10:675-679",
+      "doi": "10.1097/00001756-199903170-00003",
+      "url": "https://doi.org/10.1097/00001756-199903170-00003"
+    },
+    "evidence_location": "Abstract",
+    "quote": "SAM analysis showed bilateral medial prefrontal cortices, including anterior cingulate cortex, as the source of Fm theta.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Four healthy subjects, 64-channel whole-head MEG, synthetic aperture magnetometry (SAM)."
+  },
+  {
+    "id": "t10-14",
+    "claim": "The gamma band is >30 to 80 Hz; gamma rhythms are most commonly recorded with intracranial electrodes from actively engaged or driven neural networks.",
+    "value": null,
+    "units": "Hz",
+    "range": [
+      30,
+      80
+    ],
+    "source": {
+      "authors": "Kane N, Acharya J, Benickzy S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM",
+      "year": 2017,
+      "title": "A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017",
+      "journal": "Clinical Neurophysiology Practice",
+      "volume_pages": "2:170-185",
+      "doi": "10.1016/j.cnp.2017.07.002",
+      "url": "https://europepmc.org/article/PMC/PMC6123891"
+    },
+    "evidence_location": "Glossary entries 'Gamma band' and 'Gamma rhythm or activity'",
+    "quote": "Comment: most commonly recorded with intracranial electrodes from actively engaged or driven neural networks.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC full-text XML of the open-access glossary); quote checked word for word. Band sentence reads 'Gamma band: Frequency band from >30 to 80 Hz.' Scalp gamma has no fixed site in the glossary; sensory stimulation or engagement increases it locally (intracranial)."
+  },
+  {
+    "id": "t10-15",
+    "claim": "Neural high-frequency (gamma) activity at the scalp can be below 1 microvolt, whereas muscle activity at temporal electrodes can reach about 100 microvolts, two orders of magnitude larger.",
+    "value": 1,
+    "units": "uV",
+    "range": null,
+    "source": {
+      "authors": "Muthukumaraswamy SD",
+      "year": 2013,
+      "title": "High-frequency brain activity and muscle artifacts in MEG/EEG: a review and recommendations",
+      "journal": "Frontiers in Human Neuroscience",
+      "volume_pages": "7:138",
+      "doi": "10.3389/fnhum.2013.00138",
+      "url": "https://europepmc.org/article/PMC/PMC3625857"
+    },
+    "evidence_location": "Section 'Spectral and spatial characteristics of muscle artifacts' (full text)",
+    "quote": "which can be less than 20 fT and 1 μV in MEG and EEG, respectively",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC XML, open access). Preceding sentence: 'The amplitude of muscle activity when recorded in temporal MEG/EEG electrodes and sensors can be ~1000 fT and 100 μV, respectively.' (fT = femtotesla for MEG)."
+  },
+  {
+    "id": "t10-16",
+    "claim": "Several regions of the healthy human cortex have their own intrinsic rhythms, typically 8 to 40 Hz, each with modality- and frequency-specific reactivity (MEG view).",
+    "value": null,
+    "units": "Hz",
+    "range": [
+      8,
+      40
+    ],
+    "source": {
+      "authors": "Hari R, Salmelin R",
+      "year": 1997,
+      "title": "Human cortical oscillations: a neuromagnetic view through the skull",
+      "journal": "Trends in Neurosciences",
+      "volume_pages": "20:44-49",
+      "doi": "10.1016/s0166-2236(96)10065-5",
+      "url": "https://doi.org/10.1016/s0166-2236(96)10065-5"
+    },
+    "evidence_location": "Abstract",
+    "quote": "several regions of the healthy human cortex have their own intrinsic rhythms, typically 8-40 Hz in frequency, with modality- and frequency-specific reactivity",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Trends in Neurosciences review; full text paywalled."
+  },
+  {
+    "id": "t10-17",
+    "claim": "The 10-20 system places scalp electrodes at 10 or 20 percent steps of head measurements from four landmarks; projected to cortex, 10-20 positions land with an average standard deviation of 8 mm across 17 adults.",
+    "value": 8,
+    "units": "mm",
+    "range": null,
+    "source": {
+      "authors": "Okamoto M, Dan H, Sakamoto K, Takeo K, Shimizu K, Kohno S, Oda I, Isobe S, Suzuki T, Kohyama K, Dan I",
+      "year": 2004,
+      "title": "Three-dimensional probabilistic anatomical cranio-cerebral correlation via the international 10-20 system oriented for transcranial functional brain mapping",
+      "journal": "NeuroImage",
+      "volume_pages": "21:99-111",
+      "doi": "10.1016/j.neuroimage.2003.08.026",
+      "url": "https://doi.org/10.1016/j.neuroimage.2003.08.026"
+    },
+    "evidence_location": "Abstract",
+    "quote": "10-20 cortical projection points in the standard MNI or Talairach space could be estimated with an average standard deviation of 8 mm",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. The definition is from the Kane 2017 glossary entry 'Ten-twenty (10–20) system': 'the placement of electrodes is determined by measuring the head from 4 external landmarks and taking 10 or 20 percentiles of these measurements.' Alamia & VanRullen 2019 list the midline chain posterior to frontal as Oz, POz, Pz, CPz, Cz, FCz, Fz."
+  },
+  {
+    "id": "t10-18",
+    "claim": "Amplitude or power of the classical (posterior) alpha rhythm tends to be larger than that of mu rhythms.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Pineda JA",
+      "year": 2005,
+      "title": "The functional significance of mu rhythms: translating \"seeing\" and \"hearing\" into \"doing\"",
+      "journal": "Brain Research Reviews",
+      "volume_pages": "50:57-68",
+      "doi": "10.1016/j.brainresrev.2005.04.005",
+      "url": "https://bci.ucsd.edu/Papers_files/Pineda,%20J.A.%C2%A0%20The%20functional%20significance%20of%20mu%20rhythms.pdf"
+    },
+    "evidence_location": "Section 2.3 of the review (author copy PDF)",
+    "quote": "It is also the case that amplitude or power in the classical alpha rhythm tends to be larger than in mu rhythms",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Read from the author's PDF copy via a fetch tool (sentence extracts); the review cites its reference [135] for this and gives no microvolt numbers. The Kane 2017 glossary gives 'mostly below 50 µV' for both alpha (adults) and mu, so the glossary does not separate them numerically."
+  },
+  {
+    "id": "t10-19",
+    "claim": "The rolandic mu rhythm is found with scalp EEG in only a minority of subjects, although all healthy adults presumably have it; a particularly powerful scalp mu may even indicate mild CNS dysfunction.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Niedermeyer E",
+      "year": 1997,
+      "title": "Alpha rhythms as physiological and abnormal phenomena",
+      "journal": "International Journal of Psychophysiology",
+      "volume_pages": "26:31-49",
+      "doi": "10.1016/s0167-8760(97)00754-x",
+      "url": "https://doi.org/10.1016/s0167-8760(97)00754-x"
+    },
+    "evidence_location": "Abstract",
+    "quote": "is found with scalp EEG in a minority of subjects but there is good reason to presume that all healthy adults have this rhythm",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. The abstract contains the typo 'Rolandic my rhythm'. Also states that no posterior alpha may be detectable in a minority of healthy adults with an inherited low-voltage fast EEG."
+  },
+  {
+    "id": "t10-20",
+    "claim": "In visually read EEG of the 1950s, mu was identified in only 2.9 percent (Schnell & Klass) to 14 percent (Gastaut, 500 healthy male adults) of participants.",
+    "value": 14,
+    "units": "percent",
+    "range": [
+      2.9,
+      14
+    ],
+    "source": {
+      "authors": "Hobson HM, Bishop DVM",
+      "year": 2017,
+      "title": "The interpretation of mu suppression as an index of mirror neuron activity: past, present and future",
+      "journal": "Royal Society Open Science",
+      "volume_pages": "4:160662",
+      "doi": "10.1098/rsos.160662",
+      "url": "https://europepmc.org/article/PMC/PMC5383811"
+    },
+    "evidence_location": "Section 2.1 'Early studies of mu suppression'",
+    "quote": "found mu in 14% of a population of 500 healthy male adults",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC XML). Full sentence: 'Gastaut et al. [13,14] found mu in 14% of a population of 500 healthy male adults, and its occurrence was suggested to be related to psychopathic personality traits.' Preceding sentence: 'Schnell & Klass [12] identified mu in just 2.9% of their participants.' The review cites the primary reports; those were not opened."
+  },
+  {
+    "id": "t10-21",
+    "claim": "With spectral analysis mu was found in about half of subjects (Kuhlman 1978) and with coherence analysis in 60 percent of 54 participants (Schoppenhorst & Brauer 1980), far more than by visual inspection.",
+    "value": 60,
+    "units": "percent",
+    "range": [
+      50,
+      60
+    ],
+    "source": {
+      "authors": "Hobson HM, Bishop DVM",
+      "year": 2017,
+      "title": "The interpretation of mu suppression as an index of mirror neuron activity: past, present and future",
+      "journal": "Royal Society Open Science",
+      "volume_pages": "4:160662",
+      "doi": "10.1098/rsos.160662",
+      "url": "https://europepmc.org/article/PMC/PMC5383811"
+    },
+    "evidence_location": "Section 2.1",
+    "quote": "Schoppenhorst & Brauer [19] were able to identify mu in 60% of 54 participants, a much higher proportion than discovered previously",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC XML). Kuhlman sentence: 'mu activity, with its characteristic wicket shape, was rarely visually identified in the EEGs of their participants, but power spectral analysis revealed it in around half of their sample.' Primary papers (Kuhlman 1978, EEG Clin Neurophysiol 44:83; Schoppenhorst 1980, 48:25) have no abstracts on Europe PMC and were not opened."
+  },
+  {
+    "id": "t10-22",
+    "claim": "With independent component analysis, mu rhythms are found with scalp EEG in most if not all healthy adults.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Pineda JA",
+      "year": 2005,
+      "title": "The functional significance of mu rhythms: translating \"seeing\" and \"hearing\" into \"doing\"",
+      "journal": "Brain Research Reviews",
+      "volume_pages": "50:57-68",
+      "doi": "10.1016/j.brainresrev.2005.04.005",
+      "url": "https://bci.ucsd.edu/Papers_files/Pineda,%20J.A.%C2%A0%20The%20functional%20significance%20of%20mu%20rhythms.pdf"
+    },
+    "evidence_location": "Section 1.1 of the review (author copy PDF)",
+    "quote": "mu rhythms are found with scalp EEG in most, if not all, healthy adults",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Read from the author's PDF copy via a fetch tool. Earlier in the same section: mu 'was thought to occur infrequently and only in a small percentage of the population'."
+  },
+  {
+    "id": "t10-23",
+    "claim": "Mu and posterior alpha share the alpha band and are told apart by topography and reactivity: the glossary restricts 'alpha rhythm' to posterior, eyes-closed reactive activity and says alpha-band activity differing in topography or reactivity needs its own name, such as mu.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Kane N, Acharya J, Benickzy S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM",
+      "year": 2017,
+      "title": "A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017",
+      "journal": "Clinical Neurophysiology Practice",
+      "volume_pages": "2:170-185",
+      "doi": "10.1016/j.cnp.2017.07.002",
+      "url": "https://europepmc.org/article/PMC/PMC6123891"
+    },
+    "evidence_location": "Glossary entry 'Alpha rhythm', Comment",
+    "quote": "Activities in the alpha band which differ from the alpha rhythm as regards their topography and/or reactivity, should either have specific appellations",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC full-text XML of the open-access glossary); quote checked word for word. The sentence continues '(for instance: the mu rhythm and alpha coma) or should be referred to as rhythms of alpha frequency or alpha activity.'"
+  },
+  {
+    "id": "t10-24",
+    "claim": "Mu and alpha are independent phenomena, differing in source generation, sensitivity to sensory events, bilateral coherence, frequency and power.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Pineda JA",
+      "year": 2005,
+      "title": "The functional significance of mu rhythms: translating \"seeing\" and \"hearing\" into \"doing\"",
+      "journal": "Brain Research Reviews",
+      "volume_pages": "50:57-68",
+      "doi": "10.1016/j.brainresrev.2005.04.005",
+      "url": "https://bci.ucsd.edu/Papers_files/Pineda,%20J.A.%C2%A0%20The%20functional%20significance%20of%20mu%20rhythms.pdf"
+    },
+    "evidence_location": "Abstract",
+    "quote": "mu and other alpha-like rhythms are independent phenomena because of differences in source generation, sensitivity to sensory events, bilateral coherence, frequency, and power",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Abstract verified on Europe PMC; the same text is in the author PDF."
+  },
+  {
+    "id": "t10-25",
+    "claim": "The mu rhythm was named the rolandic wicket rhythm (rythme rolandique en arceau) by Gastaut for its arch-like or wicket-like wave shape, at about 7 to 11 per second; contemporary work defines mu as 8 to 13 Hz.",
+    "value": null,
+    "units": "Hz",
+    "range": [
+      8,
+      13
+    ],
+    "source": {
+      "authors": "Hobson HM, Bishop DVM",
+      "year": 2017,
+      "title": "The interpretation of mu suppression as an index of mirror neuron activity: past, present and future",
+      "journal": "Royal Society Open Science",
+      "volume_pages": "4:160662",
+      "doi": "10.1098/rsos.160662",
+      "url": "https://europepmc.org/article/PMC/PMC5383811"
+    },
+    "evidence_location": "Section 2.1",
+    "quote": "was termed the rolandic wicket rhythm, or the rythme rolandique en arceau, due to the waves' arch-like or wicket-like shape",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC XML). Also: 'in contemporary work, the mu frequency band is commonly defined as 8–13 Hz'. The Kane 2017 glossary likewise says 'composed of arch-shaped waves' (t10-05)."
+  },
+  {
+    "id": "t10-26",
+    "claim": "Mu waves have two spectral components with peaks near 10 and 20 Hz (alpha and beta); MEG in four subjects found major peaks around 10 and 21 Hz in all subjects.",
+    "value": 20,
+    "units": "Hz",
+    "range": [
+      10,
+      21
+    ],
+    "source": {
+      "authors": "Tiihonen J, Kajola M, Hari R",
+      "year": 1989,
+      "title": "Magnetic mu rhythm in man",
+      "journal": "Neuroscience",
+      "volume_pages": "32:793-800",
+      "doi": "10.1016/0306-4522(89)90299-6",
+      "url": "https://doi.org/10.1016/0306-4522(89)90299-6"
+    },
+    "evidence_location": "Abstract",
+    "quote": "The frequency spectrum of the mu had major peaks around 10 and 21 Hz in all subjects.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Hobson & Bishop 2017 (full text): mu waves 'have characteristic peaks at approximately 10 and approximately 20 Hz'. Pineda 2005 (Section 2.3): 'the most reactive beta-like components (~20 Hz) may be a first harmonic of the mu rhythm'."
+  },
+  {
+    "id": "t10-27",
+    "claim": "Mu is suppressed not only by the person's own movements but also by observing the movements of others, which is the basis of mu-suppression studies of the mirror neuron system.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Hobson HM, Bishop DVM",
+      "year": 2017,
+      "title": "The interpretation of mu suppression as an index of mirror neuron activity: past, present and future",
+      "journal": "Royal Society Open Science",
+      "volume_pages": "4:160662",
+      "doi": "10.1098/rsos.160662",
+      "url": "https://europepmc.org/article/PMC/PMC5383811"
+    },
+    "evidence_location": "Section 2.2 'Mu suppression and the discovery of mirror neurons'",
+    "quote": "mu is suppressed by observing the movements of others",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC XML). Full sentence: 'As well as reacting to participants' own movements, mu is suppressed by observing the movements of others.' The review's main point is that such studies have largely failed to give robust evidence about mirror neurons."
+  },
+  {
+    "id": "t10-28",
+    "claim": "Present-day BCIs use slow cortical potentials, P300 potentials and mu or beta rhythms from the scalp (plus implanted neuronal activity), with maximum information transfer rates of 10 to 25 bits per minute (2002).",
+    "value": 25,
+    "units": "bits/min",
+    "range": [
+      10,
+      25
+    ],
+    "source": {
+      "authors": "Wolpaw JR, Birbaumer N, McFarland DJ, Pfurtscheller G, Vaughan TM",
+      "year": 2002,
+      "title": "Brain-computer interfaces for communication and control",
+      "journal": "Clinical Neurophysiology",
+      "volume_pages": "113:767-791",
+      "doi": "10.1016/s1388-2457(02)00057-3",
+      "url": "https://doi.org/10.1016/s1388-2457(02)00057-3"
+    },
+    "evidence_location": "Abstract",
+    "quote": "These signals include slow cortical potentials, P300 potentials, and mu or beta rhythms recorded from the scalp, and cortical neuronal activity recorded by implanted electrodes.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Of these, slow cortical potentials and mu/beta rhythms are self-generated; P300 (and steady-state visual evoked potentials) need an external stimulus. 'Current BCIs have maximum information transfer rates up to 10-25bits/min.'"
+  },
+  {
+    "id": "t10-29",
+    "claim": "Two-dimensional cursor control from scalp EEG used weighted amplitudes of a mu (8 to 12 Hz) or beta (18 to 26 Hz) band at C3 and C4 over left and right sensorimotor cortex in four users, two with spinal cord injury.",
+    "value": null,
+    "units": "Hz",
+    "range": [
+      8,
+      26
+    ],
+    "source": {
+      "authors": "Wolpaw JR, McFarland DJ",
+      "year": 2004,
+      "title": "Control of a two-dimensional movement signal by a noninvasive brain-computer interface in humans",
+      "journal": "Proceedings of the National Academy of Sciences of the USA",
+      "volume_pages": "101:17849-17854",
+      "doi": "10.1073/pnas.0403504101",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC535103/"
+    },
+    "evidence_location": "Methods, 'Control of Cursor Movement' (full text, PMC)",
+    "quote": "a weighted combination of the amplitudes in a mu (8-12 Hz) or beta (18-26 Hz) rhythm frequency band over the right and left sensorimotor cortices",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read on PMC (open access). Four users: a man 41, a woman 27, a man 31, a man 23; user A had a complete T7 and user D an incomplete C6 spinal cord injury. Electrodes 'C3 and C4 over sensorimotor cortex', large Laplacian filter, 400 ms autoregressive spectra."
+  },
+  {
+    "id": "t10-30",
+    "claim": "People can learn to control the 8 to 12 Hz mu and/or 18 to 25 Hz beta rhythm over sensorimotor cortex; in 33 untrained adults both actual and imagined hand movement produced mu and beta desynchronization, and imagery was not merely attenuated movement.",
+    "value": 33,
+    "units": "subjects",
+    "range": null,
+    "source": {
+      "authors": "McFarland DJ, Miner LA, Vaughan TM, Wolpaw JR",
+      "year": 2000,
+      "title": "Mu and beta rhythm topographies during motor imagery and actual movements",
+      "journal": "Brain Topography",
+      "volume_pages": "12:177-186",
+      "doi": "10.1023/a:1023437823106",
+      "url": "https://doi.org/10.1023/a:1023437823106"
+    },
+    "evidence_location": "Abstract",
+    "quote": "Both movement and imagery were associated with mu and beta rhythm desynchronization.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Also: 'People can learn to control the 8-12 Hz mu rhythm and/or the 18-25 Hz beta rhythm in the EEG recorded over sensorimotor cortex'. Mu desynchronization foci were bilateral over sensorimotor cortices; beta peak desynchronization was over the vertex."
+  },
+  {
+    "id": "t10-31",
+    "claim": "During hand motor imagery the hand-area mu rhythm desynchronized in all nine subjects, whereas foot or tongue imagery enhanced hand-area mu in most subjects; the most reactive component was 11.7 plus or minus 0.4 Hz.",
+    "value": 11.7,
+    "units": "Hz",
+    "range": null,
+    "source": {
+      "authors": "Pfurtscheller G, Brunner C, Schlögl A, Lopes da Silva FH",
+      "year": 2006,
+      "title": "Mu rhythm (de)synchronization and EEG single-trial classification of different motor imagery tasks",
+      "journal": "NeuroImage",
+      "volume_pages": "31:153-159",
+      "doi": "10.1016/j.neuroimage.2005.12.003",
+      "url": "https://doi.org/10.1016/j.neuroimage.2005.12.003"
+    },
+    "evidence_location": "Abstract",
+    "quote": "During hand motor imagery, the hand mu rhythm blocked or desynchronized in all subjects",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Nine able-bodied subjects, 60 electrodes. Desynchronized components centred at 10.9 plus or minus 0.9 Hz; synchronized components narrow-band at 12.0 plus or minus 1.0 Hz. Proposed for a four-class motor-imagery BCI."
+  },
+  {
+    "id": "t10-32",
+    "claim": "Humans learn to control mu-rhythm amplitude volitionally, within 3 to 10 hours of training, gaining control of suppression faster than enhancement.",
+    "value": null,
+    "units": "hours",
+    "range": [
+      3,
+      10
+    ],
+    "source": {
+      "authors": "Pineda JA",
+      "year": 2005,
+      "title": "The functional significance of mu rhythms: translating \"seeing\" and \"hearing\" into \"doing\"",
+      "journal": "Brain Research Reviews",
+      "volume_pages": "50:57-68",
+      "doi": "10.1016/j.brainresrev.2005.04.005",
+      "url": "https://bci.ucsd.edu/Papers_files/Pineda,%20J.A.%C2%A0%20The%20functional%20significance%20of%20mu%20rhythms.pdf"
+    },
+    "evidence_location": "Section 3.3 of the review (author copy PDF)",
+    "quote": "Overall, subjects learned to control mu rhythms within 3–10 h of training",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Read from the author's PDF copy via a fetch tool. The abstract (verified on Europe PMC) says 'individuals can learn to control mu rhythms volitionally in a very short period of time'."
+  },
+  {
+    "id": "t10-33",
+    "claim": "Slow cortical potentials (SCPs) of the EEG, which patients learn to self-regulate, drove a spelling device for completely paralysed (locked-in) patients.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Birbaumer N, Ghanayim N, Hinterberger T, Iversen I, Kotchoubey B, Kübler A, Perelmouter J, Taub E, Flor H",
+      "year": 1999,
+      "title": "A spelling device for the paralysed",
+      "journal": "Nature",
+      "volume_pages": "398:297-298",
+      "doi": "10.1038/18581",
+      "url": "https://www.nature.com/articles/18581"
+    },
+    "evidence_location": "First paragraph (Nature scientific correspondence, preview on the journal page)",
+    "quote": "uses slow cortical potentials (SCPs) of the electro-encephalogram to drive an electronic spelling device",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Only the opening paragraph shown on the Nature landing page was read (the rest is paywalled); the accuracy figures (Figure 1) were not seen."
+  },
+  {
+    "id": "t10-34",
+    "claim": "Posterior alpha can serve as a no-training on/off switch: the system detects the rise in alpha amplitude when the eyes are closed for more than 1 s, and perhaps over 90 percent of adults can operate it.",
+    "value": 90,
+    "units": "percent",
+    "range": null,
+    "source": {
+      "authors": "Kirkup L, Searle A, Craig A, McIsaac P, Moses P",
+      "year": 1997,
+      "title": "EEG-based system for rapid on-off switching without prior learning",
+      "journal": "Medical & Biological Engineering & Computing",
+      "volume_pages": "35:504-509",
+      "doi": "10.1007/bf02525531",
+      "url": "https://doi.org/10.1007/bf02525531"
+    },
+    "evidence_location": "Abstract",
+    "quote": "utilises increases in the amplitude of the alpha component of the EEG spectrum that occur when people close their eyes for more than 1 s",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. 'a majority, perhaps in excess of 90%, of the adult population can demonstrate the control necessary'. Note eye closure is itself a muscular act, so this is not a pure brain-only signal for locked-in users."
+  },
+  {
+    "id": "t10-35",
+    "claim": "Posterior alpha modulated by covert spatial attention (left, right, up, down, no stimulus-locked response) was classified in single MEG trials up to 69 percent correct against a 25 percent chance level, in 15 subjects without training.",
+    "value": 69,
+    "units": "percent",
+    "range": null,
+    "source": {
+      "authors": "van Gerven M, Jensen O",
+      "year": 2009,
+      "title": "Attention modulations of posterior alpha as a control signal for two-dimensional brain-computer interfaces",
+      "journal": "Journal of Neuroscience Methods",
+      "volume_pages": "179:78-84",
+      "doi": "10.1016/j.jneumeth.2009.01.016",
+      "url": "https://doi.org/10.1016/j.jneumeth.2009.01.016"
+    },
+    "evidence_location": "Abstract",
+    "quote": "The four orientations of covert attention could be reliably classified up to a maximum of 69% correctly classified trials (25% chance level)",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. MEG, not EEG. 'Low classification performance in some subjects was explained by a low alpha signal.'"
+  },
+  {
+    "id": "t10-36",
+    "claim": "During complete neuromuscular blockade, scalp EEG power above 20 Hz fell 10- to 200-fold, so most scalp EEG above 20 Hz in unparalysed people is of electromyographic (muscle) origin.",
+    "value": null,
+    "units": "fold",
+    "range": [
+      10,
+      200
+    ],
+    "source": {
+      "authors": "Whitham EM, Pope KJ, Fitzgibbon SP, Lewis T, Clark CR, Loveless S, Broberg M, Wallace A, DeLosAngeles D, Lillie P, Hardy A, Fronsko R, Pulbrook A, Willoughby JO",
+      "year": 2007,
+      "title": "Scalp electrical recording during paralysis: quantitative evidence that EEG frequencies above 20 Hz are contaminated by EMG",
+      "journal": "Clinical Neurophysiology",
+      "volume_pages": "118:1877-1888",
+      "doi": "10.1016/j.clinph.2007.04.027",
+      "url": "https://doi.org/10.1016/j.clinph.2007.04.027"
+    },
+    "evidence_location": "Abstract (Results, Conclusions)",
+    "quote": "Most of the scalp EEG recording above 20 Hz is of EMG origin.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Two subjects, cisatracurium paralysis sparing the dominant arm. Results sentence: 'with 10- to 200-fold differences in the power of frequencies above 20 Hz during paralysis'."
+  },
+  {
+    "id": "t10-37",
+    "claim": "Muscle activity spans about 20 to 300 Hz and overlaps the gamma band entirely; the paralysis studies showed that even 'clean' resting EEG is heavily contaminated with broadband muscle activity at high frequencies.",
+    "value": null,
+    "units": "Hz",
+    "range": [
+      20,
+      300
+    ],
+    "source": {
+      "authors": "Muthukumaraswamy SD",
+      "year": 2013,
+      "title": "High-frequency brain activity and muscle artifacts in MEG/EEG: a review and recommendations",
+      "journal": "Frontiers in Human Neuroscience",
+      "volume_pages": "7:138",
+      "doi": "10.3389/fnhum.2013.00138",
+      "url": "https://europepmc.org/article/PMC/PMC3625857"
+    },
+    "evidence_location": "Abstract and section on neuromuscular blockade studies (full text)",
+    "quote": "the neuromuscular blockade studies demonstrated that even “clean” resting EEG was heavily contaminated in the high-frequency range with broadband muscle activity",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC XML). Abstract: 'high-frequency neural activity overlaps entirely with the spectral bandwidth of muscle activity (~20-300 Hz)'. Review recommends against trusting scalp gamma without artefact controls."
+  },
+  {
+    "id": "t10-38",
+    "claim": "The broadband transient induced gamma-band response 200 to 300 ms after a stimulus in scalp EEG reflects the spike potential of involuntary miniature saccades, not neuronal oscillations.",
+    "value": null,
+    "units": "ms",
+    "range": [
+      200,
+      300
+    ],
+    "source": {
+      "authors": "Yuval-Greenberg S, Tomer O, Keren AS, Nelken I, Deouell LY",
+      "year": 2008,
+      "title": "Transient induced gamma-band response in EEG as a manifestation of miniature saccades",
+      "journal": "Neuron",
+      "volume_pages": "58:429-441",
+      "doi": "10.1016/j.neuron.2008.03.027",
+      "url": "https://doi.org/10.1016/j.neuron.2008.03.027"
+    },
+    "evidence_location": "Abstract",
+    "quote": "the broadband transient iGBR recorded by scalp EEG reflects properties of miniature saccade dynamics rather than neuronal oscillations",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Concomitant EEG and eye tracking, single-trial analysis. Muthukumaraswamy 2013 adds that Laplacian montages heavily attenuate this spike-potential artefact."
+  },
+  {
+    "id": "t10-39",
+    "claim": "Movement-related high gamma (60 to 90 Hz) from sensorimotor cortex can nonetheless be detected non-invasively with EEG optimised for it, with the same pattern as electrocorticography; a 27-channel EEG montage with source mapping localised 83 to 101 Hz activity to contralateral motor cortex before finger movement.",
+    "value": null,
+    "units": "Hz",
+    "range": [
+      60,
+      101
+    ],
+    "source": {
+      "authors": "Ball T, Demandt E, Mutschler I, Neitzel E, Mehring C, Vogt K, Aertsen A, Schulze-Bonhage A",
+      "year": 2008,
+      "title": "Movement related activity in the high gamma range of the human EEG",
+      "journal": "NeuroImage",
+      "volume_pages": "41:302-310",
+      "doi": "10.1016/j.neuroimage.2008.02.032",
+      "url": "https://doi.org/10.1016/j.neuroimage.2008.02.032"
+    },
+    "evidence_location": "Abstract",
+    "quote": "In both cases, HGB activity increased around movement onset in the 60-90 Hz range and became most pronounced at reaching movement end.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Darvas et al. 2010 (NeuroImage 49:930, abstract verified): 'We show here that a 27 channel EEG (electroencephalography) montage provides high-quality spatially localized signals non-invasively for HG frequencies ranging from 83 to 101 Hz.' Both are trial-averaged group effects, not single-trial control signals, and both predate the artefact caveats being widely applied."
+  },
+  {
+    "id": "t10-40",
+    "claim": "Beta-range (10 to 45 Hz) oscillations in monkey primary motor and dorsal premotor cortex propagate as waves along dominant spatial axes, and information about the reach target is encoded in the latency and amplitude of evoked waves.",
+    "value": null,
+    "units": "Hz",
+    "range": [
+      10,
+      45
+    ],
+    "source": {
+      "authors": "Rubino D, Robbins KA, Hatsopoulos NG",
+      "year": 2006,
+      "title": "Propagating waves mediate information transfer in the motor cortex",
+      "journal": "Nature Neuroscience",
+      "volume_pages": "9:1549-1557",
+      "doi": "10.1038/nn1802",
+      "url": "https://doi.org/10.1038/nn1802"
+    },
+    "evidence_location": "Abstract",
+    "quote": "information about the visual target to be reached was encoded in terms of both latency and amplitude of evoked waves",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Multielectrode local field potentials (LFP) in Macaca mulatta, instructed-delay reaching. This is encoding (decodable in principle), not a deployed decoder."
+  },
+  {
+    "id": "t10-41",
+    "claim": "In a tetraplegic human, beta waves recorded by a 100-electrode Utah array in the hand area of primary motor cortex propagated at 15 to 35 cm/s in two dominant directions about 180 degrees apart, along a medial-to-lateral axis, whether engaged in a task or at rest.",
+    "value": null,
+    "units": "cm/s",
+    "range": [
+      15,
+      35
+    ],
+    "source": {
+      "authors": "Takahashi K, Saleh M, Penn RD, Hatsopoulos NG",
+      "year": 2011,
+      "title": "Propagating waves in human motor cortex",
+      "journal": "Frontiers in Human Neuroscience",
+      "volume_pages": "5:40",
+      "doi": "10.3389/fnhum.2011.00040",
+      "url": "https://europepmc.org/article/PMC/PMC3084448"
+    },
+    "evidence_location": "Results and Discussion (full text)",
+    "quote": "The dominant axis was oriented along the medial to lateral directions on the knob hand area of motor cortex",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC XML, open access). 'the wave propagation speed ranged between 15 and 35 cm/s' (abstract says 10 to 35 cm/s for the earlier monkey work). Single human subject (BrainGate-type array, 'implanted in the arm/hand area of the primary motor cortex')."
+  },
+  {
+    "id": "t10-42",
+    "claim": "Motor-cortex spiking is spatially organised along the beta-wave axis and sequential spike timing carries target-direction information, but current brain-machine-interface decoders ignore this spatial organisation; wave-based decoding is proposed, not demonstrated.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Takahashi K, Kim S, Coleman TP, Brown KA, Suminski AJ, Best MD, Hatsopoulos NG",
+      "year": 2015,
+      "title": "Large-scale spatiotemporal spike patterning consistent with wave propagation in motor cortex",
+      "journal": "Nature Communications",
+      "volume_pages": "6:7169",
+      "doi": "10.1038/ncomms8169",
+      "url": "https://europepmc.org/article/PMC/PMC4443713"
+    },
+    "evidence_location": "Discussion (full text)",
+    "quote": "Current decoding algorithms for brain machine interfaces have ignored the spatial organization of cortical neurons and their functional interactions.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC XML, open access). Three rhesus monkeys; LFP beta wave speeds 'with means and medians ranging from 23.2 to 26.7 and from 10.1 to 13.5 cm s-1'. The authors only say their models 'could' be inverted to decode movement."
+  },
+  {
+    "id": "t10-43",
+    "claim": "Travelling waves come in two classes: mesoscopic waves within one area at 0.1 to 0.8 m/s (seen with microelectrode arrays or voltage-sensitive dyes) and macroscopic whole-brain waves at 1 to 10 m/s (seen with EEG or ECoG, whose spatial resolution is only centimetres).",
+    "value": null,
+    "units": "m/s",
+    "range": [
+      0.1,
+      10
+    ],
+    "source": {
+      "authors": "Muller L, Chavane F, Reynolds J, Sejnowski TJ",
+      "year": 2018,
+      "title": "Cortical travelling waves: mechanisms and computational principles",
+      "journal": "Nature Reviews Neuroscience",
+      "volume_pages": "19:255-268",
+      "doi": "10.1038/nrn.2018.20",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5933075/"
+    },
+    "evidence_location": "Section 'Travelling waves in neural systems' (author manuscript on PMC)",
+    "quote": "Mesoscopic waves generally have propagation speeds from 0.1 to 0.8 metres per second",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Author manuscript read on PMC. Macroscopic: 'These waves generally have propagation speeds from 1 to 10 metres per second'; EEG/ECoG 'record potentials from neural populations with high temporal (millisecond) resolution but low spatial (centimetre) resolution'."
+  },
+  {
+    "id": "t10-44",
+    "claim": "Signal distortion by cranial tissues and volume conduction are substantial confounds for detecting travelling waves in EEG, and the origin and interpretation of waves seen only in EEG is problematic.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Muller L, Chavane F, Reynolds J, Sejnowski TJ",
+      "year": 2018,
+      "title": "Cortical travelling waves: mechanisms and computational principles",
+      "journal": "Nature Reviews Neuroscience",
+      "volume_pages": "19:255-268",
+      "doi": "10.1038/nrn.2018.20",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5933075/"
+    },
+    "evidence_location": "Section 'Macroscopic travelling waves' (author manuscript on PMC)",
+    "quote": "Signal distortion by cranial tissues and volume conduction, however, pose substantial possible confounds for detection of travelling waves in EEG.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Author manuscript read on PMC; the sentence carries reference number 46 after 'tissues' in the original. Following sentence: 'in the absence of a general physical theory, the origin and interpretation of travelling waves observed solely in EEG is problematic'. The review does not mention brain-computer interfaces at all."
+  },
+  {
+    "id": "t10-45",
+    "claim": "In human EEG, alpha-band waves along the midline (Oz to Fz) travel forward (occipital to frontal) during visual stimulation and backward with the eyes closed: in 48 resting participants 41.1 percent of 1 s epochs showed backward waves versus 8.8 percent forward.",
+    "value": 41.1,
+    "units": "percent of epochs",
+    "range": [
+      8.8,
+      41.1
+    ],
+    "source": {
+      "authors": "Alamia A, VanRullen R",
+      "year": 2019,
+      "title": "Alpha oscillations and traveling waves: Signatures of predictive coding?",
+      "journal": "PLoS Biology",
+      "volume_pages": "17:e3000487",
+      "doi": "10.1371/journal.pbio.3000487",
+      "url": "https://europepmc.org/article/PMC/PMC6776260"
+    },
+    "evidence_location": "Results, 'BW traveling waves in resting-state EEG data' (full text)",
+    "quote": "a preponderance of BW over FW waves (respectively 41.1% and 8.8% of the tested 1-s EEG epochs)",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read (Europe PMC XML, open access). INPUT dataset: 20 participants watching a luminance white-noise sequence, mostly forward (FW) waves; CLOSED EYES dataset: 48 participants, 1 min. Waves quantified from the 2D FFT of 7 midline electrodes (Oz, POz, Pz, CPz, Cz, FCz, Fz), 64-channel BioSemi. Direction changes with state, but this is not under deliberate control."
+  },
+  {
+    "id": "t10-46",
+    "claim": "The apparent speed of scalp-level alpha waves (about 2.2 m/s) is inflated by cortical source mixing: each electrode picks up distal as well as local cortex, so scalp waves look faster than the underlying cortical wave (about 0.6 m/s in the model).",
+    "value": 2.2,
+    "units": "m/s",
+    "range": [
+      0.6,
+      2.2
+    ],
+    "source": {
+      "authors": "Alamia A, VanRullen R",
+      "year": 2019,
+      "title": "Alpha oscillations and traveling waves: Signatures of predictive coding?",
+      "journal": "PLoS Biology",
+      "volume_pages": "17:e3000487",
+      "doi": "10.1371/journal.pbio.3000487",
+      "url": "https://europepmc.org/article/PMC/PMC6776260"
+    },
+    "evidence_location": "Discussion, 'Speed of traveling waves' (full text)",
+    "quote": "we should expect an apparently faster speed at the scalp level than the true underlying speed of the traveling wave over the cortex",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Full text read. Model with 2 cm level spacing gave about 0.6 m/s; after weighted averaging to simulate scalp mixing, about 2.2 m/s, 'comparable with the one observed in our experimental human EEG dataset (approximately 2.2 m/s'. Mixing did not change the detected direction."
+  },
+  {
+    "id": "t10-47",
+    "claim": "Alpha-band perceptual echoes in EEG propagate as travelling waves from posterior to frontal sensors, and two stimuli in opposite hemifields produce two superimposed waves travelling in opposite directions, with wave phase encoding stimulus position.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Lozano-Soldevilla D, VanRullen R",
+      "year": 2019,
+      "title": "The Hidden Spatial Dimension of Alpha: 10-Hz Perceptual Echoes Propagate as Periodic Traveling Waves in the Human Brain",
+      "journal": "Cell Reports",
+      "volume_pages": "26:374-380.e4",
+      "doi": "10.1016/j.celrep.2018.12.058",
+      "url": "https://doi.org/10.1016/j.celrep.2018.12.058"
+    },
+    "evidence_location": "Abstract",
+    "quote": "A single stimulation in the upper visual field produced an \"echo traveling wave\" propagating from posterior to frontal sensors.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Stimulus driven, not volitional. 'The simultaneous presentation of two independent stimuli in separate visual hemifields produced two superimposed traveling waves propagating in opposite directions.'"
+  },
+  {
+    "id": "t10-48",
+    "claim": "Direct (intracranial) human recordings show theta and alpha (2 to 15 Hz) oscillations as travelling waves at about 0.25 to 0.75 m/s whose propagation correlates with task events and is more consistent when the task is performed well.",
+    "value": null,
+    "units": "m/s",
+    "range": [
+      0.25,
+      0.75
+    ],
+    "source": {
+      "authors": "Zhang H, Watrous AJ, Patel A, Jacobs J",
+      "year": 2018,
+      "title": "Theta and Alpha Oscillations Are Traveling Waves in the Human Neocortex",
+      "journal": "Neuron",
+      "volume_pages": "98:1269-1281.e4",
+      "doi": "10.1016/j.neuron.2018.05.019",
+      "url": "https://doi.org/10.1016/j.neuron.2018.05.019"
+    },
+    "evidence_location": "Abstract",
+    "quote": "These oscillatory clusters displayed spatial phase gradients, indicating that they formed traveling waves that propagated at ∼0.25-0.75 m/s.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Electrocorticography in neurosurgical patients during a memory task; the speeds sit between Muller's mesoscopic and macroscopic classes."
+  },
+  {
+    "id": "t10-49",
+    "claim": "In intracranial recordings, theta/alpha travelling waves run posterior-to-anterior during successful memory encoding and anterior-to-posterior during recall: wave direction changes with the cognitive process, but as a correlate, not a deliberately controlled signal.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Mohan UR, Zhang H, Ermentrout B, Jacobs J",
+      "year": 2024,
+      "title": "The direction of theta and alpha travelling waves modulates human memory processing",
+      "journal": "Nature Human Behaviour",
+      "volume_pages": "8:1124-1135",
+      "doi": "10.1038/s41562-024-01838-3",
+      "url": "https://doi.org/10.1038/s41562-024-01838-3"
+    },
+    "evidence_location": "Abstract",
+    "quote": "travelling waves tended to propagate in a posterior-to-anterior direction during successful memory encoding and in an anterior-to-posterior direction during recall",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Nature Human Behaviour 2024; direct human brain recordings (epilepsy patients)."
+  },
+  {
+    "id": "t10-50",
+    "claim": "The only demonstration found of deliberate control of a cortical travelling wave is in mice: a widefield optical brain-machine interface detected and rewarded individual waves of a chosen direction in somatosensory cortex, and trained mice learned to generate these conditioned waves (preprint).",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Dogadov A, Shulz DE, Ego-Stengel V, Ferezou I, Estebanez L",
+      "year": 2024,
+      "title": "Goal-directed shaping of cortical waves (first version titled: Operant conditioning of cortical waves through a brain-machine interface)",
+      "journal": "bioRxiv (preprint, not peer reviewed; version 4 dated 2025-11-22)",
+      "volume_pages": null,
+      "doi": "10.1101/2024.09.10.612344",
+      "url": "https://www.biorxiv.org/content/10.1101/2024.09.10.612344"
+    },
+    "evidence_location": "Abstract (bioRxiv, all four versions carry the same abstract)",
+    "quote": "Our work demonstrates that traveling cortical waves of neuronal activity can be subject to operant control.",
+    "verified_in_source": true,
+    "confidence": "low",
+    "notes": "Preprint, not peer reviewed as of the record (published: NA); abstract only, read via the bioRxiv API. Mice, optical imaging, mesoscopic waves; the conditioned waves came from reshaped limb-movement activity. No human study, and no scalp EEG study, demonstrating deliberate control of a travelling wave was found in Europe PMC searches (traveling/travelling wave AND brain-computer interface, neurofeedback, operant, closed-loop, volitional; motor imagery) or web search."
+  },
+  {
+    "id": "t10-51",
+    "claim": "The only BCI decoding use of 'travelling waves' found for scalp EEG is a 2024 preprint that adds a 'traveling-wave based time embedding' as a pseudo channel to neural-network motor-imagery decoders; it is an engineered time embedding inspired by waves, not a measured wave direction or speed feature.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Miao Z, Zhao M",
+      "year": 2024,
+      "title": "Pseudo Channel: Time Embedding for Motor Imagery Decoding",
+      "journal": "arXiv (preprint, not peer reviewed)",
+      "volume_pages": "2405.15812",
+      "doi": null,
+      "url": "https://arxiv.org/abs/2405.15812"
+    },
+    "evidence_location": "Abstract (arXiv API)",
+    "quote": "a novel time embedding technique, termed traveling-wave based time embedding, utilized as a pseudo channel to enhance the decoding accuracy of MI-EEG signals",
+    "verified_in_source": true,
+    "confidence": "low",
+    "notes": "arXiv preprint 2405.15812, abstract only, not peer reviewed; reports improved classification accuracy without numbers in the abstract. No peer-reviewed scalp-EEG BCI using measured travelling-wave direction as a control feature was found."
+  },
+  {
+    "id": "t10-52",
+    "claim": "The poorly conducting skull spatially low-pass filters the scalp EEG so that uncorrelated cortical sources make electrodes within about 10 to 12 cm appear correlated (four-sphere head model, stochastic field theory).",
+    "value": null,
+    "units": "cm",
+    "range": [
+      10,
+      12
+    ],
+    "source": {
+      "authors": "Srinivasan R, Nunez PL, Silberstein RB",
+      "year": 1998,
+      "title": "Spatial filtering and neocortical dynamics: estimates of EEG coherence",
+      "journal": "IEEE Transactions on Biomedical Engineering",
+      "volume_pages": "45:814-826",
+      "doi": "10.1109/10.686789",
+      "url": "https://doi.org/10.1109/10.686789"
+    },
+    "evidence_location": "Abstract",
+    "quote": "predicting that electrodes within 10-12 cm can appear correlated",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Also: 'The scalp EEG is spatially low-pass filtered by the poorly conducting skull, introducing artificial correlation between the electrodes.' The surface Laplacian band-pass filters spatially and reduces this."
+  },
+  {
+    "id": "t10-53",
+    "claim": "Measured spatial spectra of scalp EEG (64 electrodes 3 mm apart) show smearing by dura, skull and scalp that distorts spatial far more than temporal spectra; spatial spectral peaks at 0.1 to 0.4 cycles per cm suggest about 1 cm electrode spacing to capture gyral-scale structure.",
+    "value": 1,
+    "units": "cm",
+    "range": [
+      0.1,
+      0.4
+    ],
+    "source": {
+      "authors": "Freeman WJ, Holmes MD, Burke BC, Vanhatalo S",
+      "year": 2003,
+      "title": "Spatial spectra of scalp EEG and EMG from awake humans",
+      "journal": "Clinical Neurophysiology",
+      "volume_pages": "114:1053-1068",
+      "doi": "10.1016/s1388-2457(03)00045-2",
+      "url": "https://doi.org/10.1016/s1388-2457(03)00045-2"
+    },
+    "evidence_location": "Abstract (Results, Conclusions)",
+    "quote": "Spatial spectral peaks suggest that optimal scalp electrode spacing might be approximately 1cm to capture non-local EEG components having the texture of gyri.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Nine subjects. 'Smearing by dura-skull-scalp distorts PSD(x) more than PSD(t) of scalp EEG from 1/f(alpha) scaling at the pia.' The range field holds the spatial spectral peak in cycles per cm."
+  },
+  {
+    "id": "t10-54",
+    "claim": "Derived: motor-cortex beta waves travelling at 15 to 35 cm/s at about 20 Hz have wavelengths of roughly 0.75 to 1.75 cm (wavelength = speed / frequency), comparable to or smaller than one 10-20 electrode spacing and an order of magnitude below the 10 to 12 cm over which scalp electrodes are blurred together, so scalp EEG cannot resolve them; only whole-head (macroscopic) waves with 1 to 10 m/s speeds, that is wavelengths of 10 cm to 1 m at 10 Hz, are seen in EEG.",
+    "value": null,
+    "units": "cm",
+    "range": [
+      0.75,
+      1.75
+    ],
+    "source": {
+      "authors": "Takahashi K, Saleh M, Penn RD, Hatsopoulos NG",
+      "year": 2011,
+      "title": "Propagating waves in human motor cortex",
+      "journal": "Frontiers in Human Neuroscience",
+      "volume_pages": "5:40",
+      "doi": "10.3389/fnhum.2011.00040",
+      "url": "https://europepmc.org/article/PMC/PMC3084448"
+    },
+    "evidence_location": "Derived from the abstract speeds (15 to 35 cm/s, Results) with Srinivasan 1998 and Muller 2018",
+    "quote": "the wave propagation speed ranged between 15 and 35 cm/s",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Computation: 0.15 m/s / 20 Hz = 7.5 mm; 0.35 m/s / 20 Hz = 17.5 mm. Macroscopic: 1 m/s / 10 Hz = 10 cm; 10 m/s / 10 Hz = 1 m. The 10-20 spacing on an adult head is a few centimetres (not from a cited source here). Blur figure from Srinivasan et al. 1998 (t10-52); speed classes from Muller et al. 2018 (t10-43). The Utah array that recorded the human waves spans about 4 mm (standard geometry, not stated in the paper's text read here)."
+  },
+  {
+    "id": "t10-55",
+    "claim": "Alpha-band activity has three main components (occipital alpha, rolandic mu, the temporal 'third rhythm'); animal and human imaging work supports a strong thalamic influence, with high-threshold bursting in a subset of thalamocortical neurons coupled by gap junctions generating locally synchronised alpha.",
+    "value": null,
+    "units": "Hz",
+    "range": [
+      8,
+      13
+    ],
+    "source": {
+      "authors": "Hughes SW, Crunelli V",
+      "year": 2005,
+      "title": "Thalamic mechanisms of EEG alpha rhythms and their pathological implications",
+      "journal": "The Neuroscientist",
+      "volume_pages": "11:357-372",
+      "doi": "10.1177/1073858405277450",
+      "url": "https://doi.org/10.1177/1073858405277450"
+    },
+    "evidence_location": "Abstract",
+    "quote": "a novel form of rhythmic burst firing, termed high-threshold (HT) bursting, which occurs in a specialized subset of thalamocortical (TC) neurons",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. 'the long-held belief that alpha rhythms are strongly influenced by the thalamus has been confirmed in several animal models'. HT bursting runs 2 to 13 Hz, giving theta when the cells are less depolarised."
+  },
+  {
+    "id": "t10-56",
+    "claim": "Intracortical and thalamic recordings in humans show alpha propagating from higher-order to lower-order cortex (anterosuperior areas toward the occipital pole), dominated by supragranular layers, and cortical alpha leading pulvinar alpha, which complicates the thalamic pacemaker view.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Halgren M, Ulbert I, Bastuji H, Fabó D, Erőss L, Rey M, Devinsky O, Doyle WK, Mak-McCully R, Halgren E, Wittner L, Chauvel P, Heit G, Eskandar E, Mandell A, Cash SS",
+      "year": 2019,
+      "title": "The generation and propagation of the human alpha rhythm",
+      "journal": "Proceedings of the National Academy of Sciences of the USA",
+      "volume_pages": "116:23772-23782",
+      "doi": "10.1073/pnas.1913092116",
+      "url": "https://doi.org/10.1073/pnas.1913092116"
+    },
+    "evidence_location": "Abstract",
+    "quote": "Several analyses suggest that this cortical alpha leads pulvinar alpha, complicating prevailing theories of a thalamic pacemaker.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Also: 'In posterior cortex, alpha propagates from higher-order anterosuperior areas toward the occipital pole'. So the honest mechanism note is: thalamocortical loops contribute, but human alpha is also a cortical, propagating phenomenon."
+  },
+  {
+    "id": "t10-57",
+    "claim": "Gamma oscillations (30 to 90 Hz) arise from perisomatic inhibition by fast-spiking, parvalbumin-expressing interneurons; a network of mutually inhibiting interneurons alone (I-I model) or reciprocally coupled excitatory and inhibitory populations (E-I model) can generate them.",
+    "value": null,
+    "units": "Hz",
+    "range": [
+      30,
+      90
+    ],
+    "source": {
+      "authors": "Buzsáki G, Wang XJ",
+      "year": 2012,
+      "title": "Mechanisms of gamma oscillations",
+      "journal": "Annual Review of Neuroscience",
+      "volume_pages": "35:203-225",
+      "doi": "10.1146/annurev-neuro-062111-150444",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4049541/"
+    },
+    "evidence_location": "Abstract and section 'Cellular-network mechanisms of gamma oscillations' (author manuscript on PMC)",
+    "quote": "First, gamma-band rhythmogenesis is inextricably tied to perisomatic inhibition.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Author manuscript read on PMC. 'We refer to periodic events in the 30–90-Hz band as gamma oscillations'; 'Only three requirements are needed for gamma oscillations to emerge, as illustrated by a “stripped-down” network model consisting of only inhibitory interneurons'. Figure 3 is titled 'A critical role of parvalbumin (PV) basket cells in gamma oscillations'."
+  },
+  {
+    "id": "t10-58",
+    "claim": "The 10 Hz component of the mu rhythm arises predominantly in primary somatosensory hand cortex, whereas the 20 Hz sources lie slightly more anterior (motor cortex); the authors hypothesise the 10 Hz signal is a true somatosensory rhythm and the 20 Hz activity somatomotor in origin.",
+    "value": null,
+    "units": "Hz",
+    "range": [
+      10,
+      20
+    ],
+    "source": {
+      "authors": "Salmelin R, Hari R",
+      "year": 1994,
+      "title": "Spatiotemporal characteristics of sensorimotor neuromagnetic rhythms related to thumb movement",
+      "journal": "Neuroscience",
+      "volume_pages": "60:537-550",
+      "doi": "10.1016/0306-4522(94)90263-1",
+      "url": "https://doi.org/10.1016/0306-4522(94)90263-1"
+    },
+    "evidence_location": "Abstract",
+    "quote": "The 10-Hz rhythmic oscillations occurred predominantly at the primary somatosensory hand cortex; the sources of the 20-Hz signals were slightly more anterior.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. MEG, four subjects; reactive source areas 6 to 8 cm2 along the central sulcus. The same point in Hari et al. 1997 (Int J Psychophysiol 26:51, abstract): 'The 10-Hz component seems to be mainly somatosensory in origin whereas the 20-Hz signal also receives contributions from the motor cortex', with 'motorotopy' of the 20 Hz reactivity."
+  },
+  {
+    "id": "t10-59",
+    "claim": "Sources of the rolandic mu rhythm cluster in areas 3 to 5 cm across near the hand area of the primary somatomotor cortex, while posterior alpha has a large contribution from the parieto-occipital fissure (whole-head MEG, 7 adults).",
+    "value": null,
+    "units": "cm",
+    "range": [
+      3,
+      5
+    ],
+    "source": {
+      "authors": "Salmelin R, Hari R",
+      "year": 1994,
+      "title": "Characterization of spontaneous MEG rhythms in healthy adults",
+      "journal": "Electroencephalography and Clinical Neurophysiology",
+      "volume_pages": "91:237-248",
+      "doi": "10.1016/0013-4694(94)90187-2",
+      "url": "https://doi.org/10.1016/0013-4694(94)90187-2"
+    },
+    "evidence_location": "Abstract",
+    "quote": "concentrated in restricted areas of 3-5 cm in diameter, close to the hand projection area in the first somatomotor cortex",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. Hari et al. 1997 (abstract): posterior alpha sources 'clustered mainly around the parieto-occipital sulcus and, to a lesser extent, around the calcarine sulci'."
+  },
+  {
+    "id": "t10-60",
+    "claim": "The roughly 20 Hz sensorimotor beta rhythm is generated near the hand area of primary sensorimotor (motor) cortex and depends on GABAergic inhibition: benzodiazepines raise its power and lower its frequency, and in a conductance-based model inhibitory synapses onto interneurons mattered most for beta synchronisation.",
+    "value": 20,
+    "units": "Hz",
+    "range": [
+      13,
+      35
+    ],
+    "source": {
+      "authors": "Jensen O, Goel P, Kopell N, Pohja M, Hari R, Ermentrout B",
+      "year": 2005,
+      "title": "On the human sensorimotor-cortex beta rhythm: sources and modeling",
+      "journal": "NeuroImage",
+      "volume_pages": "26:347-355",
+      "doi": "10.1016/j.neuroimage.2005.02.008",
+      "url": "https://doi.org/10.1016/j.neuroimage.2005.02.008"
+    },
+    "evidence_location": "Abstract",
+    "quote": "Benzodiazepine increased the power and decreased the frequency of beta oscillations over rolandic areas.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. MEG with minimum current estimates; 'an increase in IPSCs onto inhibitory neurons was more important for generating neuronal synchronization in the beta band'."
+  },
+  {
+    "id": "t10-61",
+    "claim": "Event-related desynchronization (ERD) and synchronization (ERS) are non-phase-locked changes of ongoing EEG/MEG band power with an event; they are highly frequency-band specific, and the same or different scalp sites can show ERD and ERS at the same time.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Pfurtscheller G, Lopes da Silva FH",
+      "year": 1999,
+      "title": "Event-related EEG/MEG synchronization and desynchronization: basic principles",
+      "journal": "Clinical Neurophysiology",
+      "volume_pages": "110:1842-1857",
+      "doi": "10.1016/s1388-2457(99)00141-8",
+      "url": "https://doi.org/10.1016/s1388-2457(99)00141-8"
+    },
+    "evidence_location": "Abstract",
+    "quote": "the ERD/ERS is highly frequency band-specific, whereby either the same or different locations on the scalp can display ERD and ERS simultaneously",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Abstract only (Europe PMC); full text not opened. This is the standard reference for mu/beta ERD with movement and imagery and post-movement beta ERS; the full text (paywalled) was not opened, so its specific numbers are not quoted here."
+  }
+]

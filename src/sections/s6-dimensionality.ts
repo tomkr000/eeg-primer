@@ -15,33 +15,36 @@ function decodeLeadfield(): Float32Array {
   return new Float32Array(buf);
 }
 
-interface Patch { center: number; radiusMm: number; }
+interface Patch { center: number; radiusMm: number; name?: string; }
 
 export function mountDimensionality(root: HTMLElement) {
-  const sec = section(root, 'dimensionality', '6', 'How many independent signals can scalp EEG carry?');
+  const sec = section(root, 'dimensionality', '6', 'A head with EEG can operate only a few dimensions');
   prose(sec.text, `
-<p>Think of a synchronous cortical patch as one source. Two patches are two sources; a third population
-confined to their overlap is a third source, and it adds a dimension only if its scalp pattern can be told
-apart from the other two. The skull blurs every pattern into a smooth blob several centimetres wide
-${c('spatial-lowpass')}, so patches that are close together, or nested inside one another, produce nearly
-the same pattern and their difference sinks below the noise. The number of usable dimensions is therefore
-not the number of patches but the number of distinguishable patterns above the noise, which is a property
-of the lead field: its singular values, scaled by source strength and noise ${c('svd-method')}.</p>
-<p>The figure lets you place patches on a real head, the fsaverage template with a three-layer
-boundary-element model and 128 electrodes ${c('fsaverage-bem')}${c('mne-bem')}${c('montages')}, and counts
-how many are separable at the chosen noise. The ceiling, if every point of the cortex were its own source,
-is a few dozen with the default settings; adding electrodes beyond the skull’s resolution only samples
-the same blur again ${c('spatial-nyquist')}${c('ryynanen')}. For independent sources 21–23 components
-carry 99% of the scalp variance on this head ${c('svd-counts')}; Iivanainen et al. find 26 with a
-four-compartment model ${c('iivanainen-eigen')}, and blind decomposition of real 71-channel EEG yields about
-34 near-dipolar components ${c('ica-dipolar')}.</p>
-<p>Time adds bandwidth to each dimension, but what fills it is limited by section 2: only populations of
-10⁴–10⁵ synchronous cells register ${c('cells-for-10nam')}, organised by rhythms whose period
-scales with the size of the pool ${c('oscillations-synchrony')}. In practice, volitional control from
-sensorimotor rhythms has reached three independent dimensions ${c('dof-control')}, the fastest spellers
-manage about 5 bits/s by decoding responses to flickering targets chosen by gaze ${c('itr-ssvep')}${c('itr-2002')},
-and attempts to read limb trajectories from EEG did not beat chance ${c('kinematics-chance')}. Intracortical
-arrays, for comparison, decode handwriting at 90 characters/min and speech at 62 words/min ${c('intracortical')}.</p>`);
+<p>How many independent signals, or dimensions of control, can a head with EEG on it operate? Three limits
+stack up, and the answer is a handful. The first is blur: the skull smears every source into a blob several
+centimetres wide ${c('spatial-lowpass')}, so only about 20 to 26 distinct scalp patterns exist at all,
+however many electrodes you add ${c('svd-counts')}${c('iivanainen-eigen')}${c('spatial-nyquist')}. The second
+is noise: a pattern counts only if it stands above the noise floor, and two patches closer than a few
+centimetres, or one nested inside another, produce patterns too alike to separate ${c('svd-method')}. The
+third is will: a person cannot modulate arbitrary patches of cortex on demand. What can be modulated at will
+and still seen from outside are the sensorimotor rhythms of a few body parts: the hands, the feet and the
+tongue, the four motor-imagery classes used in brain–computer interface (BCI) competitions ${c('mi-classes')}.
+Their cortical areas are not spread evenly: the hand areas sit on a knob of the precentral gyrus either side
+of the midline, the foot areas next to the midline, and the mouth areas low on the side of the head
+${c('motor-map')}, so only a few of them give separable scalp patterns.</p>
+<p>The figure places patches on a real head, the fsaverage template with a three-layer boundary-element
+model and 128 electrodes ${c('fsaverage-bem')}${c('mne-bem')}${c('montages')}, and counts how many are
+separable at the chosen noise. The default preset puts them at the hand, foot and tongue areas. The ceiling,
+if every point of the cortex were its own source, is a few dozen with the default settings; adding electrodes
+beyond the skull’s resolution only samples the same blur again ${c('ryynanen')}, and blind decomposition
+of real 71-channel EEG yields about 34 near-dipolar components ${c('ica-dipolar')}.</p>
+<p>The record agrees with the count. Volitional control from sensorimotor rhythms has reached three
+independent dimensions ${c('dof-control')}; the fastest spellers manage about 5 bits/s only by decoding
+responses to flickering targets chosen by gaze, which is a selection, not a dimension of control
+${c('itr-ssvep')}${c('itr-2002')}; attempts to read limb trajectories from EEG did not beat chance
+${c('kinematics-chance')}. Each dimension is also read from about a second of signal (section 7).
+Intracortical arrays, for comparison, decode handwriting at 90 characters/min and speech at 62 words/min
+${c('intracortical')}.</p>`);
 
   const L = decodeLeadfield();
   const nCh = head.leadfield.shape[0], nSrc = head.leadfield.shape[1];
@@ -76,7 +79,7 @@ arrays, for comparison, decode handwriting at 90 characters/min and speech at 62
   const rCeil = readout('Ceiling, every cortical point a source');
   const rVar = readout('Components for 99% of the variance', c('svd-counts'));
 
-  const fig = figure(sec.fig, 'A real head (the fsaverage template) from above, nose up. Left: the cortex, each synchronous patch a coloured disc; a third population can live where two discs overlap. Click to add a patch, click a patch to remove it. Right: the scalp potential of all patches together (red positive, blue negative; dots are the electrodes seen from above). The bars rank the independent scalp patterns; each one above the noise line is a dimension a decoder could recover. The ceiling repeats the count with every cortical point as its own source.');
+  const fig = figure(sec.fig, 'A real head (the fsaverage template) from above, nose up. Left: the cortex, each synchronous patch a coloured disc; the default preset puts five patches on the areas a person can modulate at will: left hand (1), right hand (2), feet (3) and the left and right tongue areas (4, 5). Click to add a patch, click a patch to remove it; a third population can live where two discs overlap. Right: the scalp potential of all patches together (red positive, blue negative; dots are the electrodes seen from above). The bars rank the independent scalp patterns; each one above the noise line is a dimension a decoder could recover, and the count is the answer to the section’s question. The ceiling repeats the count with every cortical point as its own source.');
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
@@ -105,6 +108,12 @@ arrays, for comparison, decode handwriting at 90 characters/min and speech at 62
   const nearestSource = (x: number, y: number, z: number) => { let best = 0, bd = Infinity; srcPos.forEach((p, i) => { const d = Math.hypot(p[0] - x, p[1] - y, p[2] - z); if (d < bd) { bd = d; best = i; } }); return best; };
   const at = (x: number, y: number, z: number, r?: number): Patch => ({ center: nearestSource(x, y, z), radiusMm: r ?? sRadius.value });
   const VENN = () => [at(-16, 0, 112, 20), at(16, 0, 112, 20), at(0, 0, 115, 9)];
+  // motor areas in fsaverage head coordinates (mm), converted from approximate MNI coordinates with MNE (claim motor-map)
+  const MOTOR = (): Patch[] => [
+    { ...at(-38.8, 9.6, 98.9, 10), name: 'left hand' }, { ...at(35.2, 9.3, 98.9, 10), name: 'right hand' }, { ...at(-1.9, 5.2, 113.2, 10), name: 'feet' },
+    { ...at(-56.8, 25.3, 76.0, 10), name: 'tongue' }, { ...at(53.2, 25.0, 76.0, 10), name: 'tongue' },
+  ];
+  mk('Motor areas: hands, feet, tongue', () => { patches = MOTOR(); });
   mk('One patch', () => { patches = [at(-38, 0, 105)]; });
   mk('Two patches', () => { patches = [at(-38, 0, 105), at(38, 0, 105)]; });
   mk('Two + their overlap', () => { patches = VENN(); });
@@ -201,6 +210,7 @@ arrays, for comparison, decode handwriting at 90 characters/min and speech at 62
       const [x0, y0] = srcXY[p.center];
       cctx.font = 'bold 14px system-ui, sans-serif'; cctx.fillStyle = '#1a1a1a'; cctx.textAlign = 'center';
       cctx.fillText(String(idx + 1), x0, y0 + 5);
+      if (p.name) { cctx.font = '12px system-ui, sans-serif'; cctx.fillText(p.name, x0, y0 + Math.max(4, p.radiusMm * s) + 14); }
     });
     headOutline(cctx);
   }
@@ -298,7 +308,7 @@ arrays, for comparison, decode handwriting at 90 characters/min and speech at 62
   });
   sRadius.onChange((v) => { patches = patches.map((p) => ({ ...p, radiusMm: v })); update(); });
   [sQ, sNoise].forEach((sl) => sl.onChange(update));
-  patches = VENN();
+  patches = MOTOR();
   update();
 }
 

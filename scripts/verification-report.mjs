@@ -11,7 +11,7 @@ const claims = eval(claimsSrc.slice(claimsSrc.indexOf('[', claimsSrc.indexOf('CL
 const esc = (s) => String(s ?? '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
 const counts = {};
 for (const r of results) counts[r.verdict] = (counts[r.verdict] ?? 0) + 1;
-const sections = ['', 'Neuron', 'Population', 'Head', 'Noise', 'Electrodes', 'Dimensionality'];
+const sections = ['', 'Neuron', 'Population', 'Head', 'Noise', 'Electrodes', 'Dimensionality', 'Delays'];
 let md = `# Verification log
 
 Every claim on the site was fact-checked by an auditor that had not seen the site, the research notes, or the

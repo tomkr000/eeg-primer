@@ -9,9 +9,12 @@ under an "In depth" toggle:
 3. Only large, multi-neuron signals reach outside the skull: the same patch at a chosen depth in the analytic multi-shell head, with the potential profile drawn vertically beside the cross-section
 4. The signal that gets outside the skull is noisy: the alpha amplitude derived from N and synchrony through the section 3 head, buried in muscle, blink, skin, mains and amplifier noise
 5. Different electrode types result in different signals: the scalp signal through wet gel on abraded skin, wet gel, a dry plate and a plate over hair, each with an illustration
-6. How many independent signals scalp EEG can carry: place synchronous patches (and patches inside their overlap) on a
-   realistic head and count the scalp patterns that stand above the noise, using a precomputed lead field for the
-   fsaverage boundary-element head (MNE-Python); plus the full lead-field singular-value ceiling
+6. A head with EEG can operate only a few dimensions: patches on a realistic head (default: the hand, foot and tongue
+   motor areas a person can modulate at will) and a count of the scalp patterns that stand above the noise, using a
+   precomputed lead field for the fsaverage boundary-element head (MNE-Python); plus the full lead-field ceiling
+7. EEG signals have inherent delays: a simulated imagined movement, the mu rhythm fading on a cited time course and a
+   sliding-window power estimate whose length is a slider, with a cited timeline of where the time goes (rhythm,
+   window, P300 repetitions, flicker plus gaze shift, readiness potential)
 
 Every number and physical statement carries a citation marker; hovering it shows the claim and its
 verification status. The verification log and reference list are generated from `src/data/claims.ts`

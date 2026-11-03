@@ -18,6 +18,8 @@ export interface NoiseParams {
   ampUvRms: number; // amplifier input-referred white noise
   skinUvRms: number; // 1/f-like electrode–skin noise
   seed: number;
+  /** optional multiplier on the alpha amplitude as a function of time (default: a slow waxing and waning) */
+  envelope?: (t: number) => number;
 }
 
 /** Simple 2nd-order Butterworth band-pass via two cascaded biquads (bilinear transform). */
@@ -86,7 +88,7 @@ export function synthesize(p: NoiseParams): Synth {
     const ti = i / p.fs;
     t[i] = ti;
     // alpha burst: amplitude-modulated 10 Hz (waxing and waning), as in real alpha
-    const env = 0.6 + 0.4 * Math.sin(2 * Math.PI * 0.4 * ti);
+    const env = p.envelope ? p.envelope(ti) : 0.6 + 0.4 * Math.sin(2 * Math.PI * 0.4 * ti);
     signal[i] = p.signalUv * env * Math.sin(2 * Math.PI * p.signalHz * ti);
     let v = emg[i] + pink[i] + p.ampUvRms * gaussian(rng) + mainsUv * Math.sin(2 * Math.PI * mainsHz * ti + 0.3);
     for (const tb of blinkTimes) v += p.blinkUv * Math.exp(-0.5 * Math.pow((ti - tb) / 0.08, 2));

@@ -27,6 +27,9 @@ export const P = {
   cellsFor10nAm: [10000, 50000] as [number, number], // 'cells-for-10nam'
   patchDefaultN: 2e5, // default patch size shared by sections 2 to 4: with a tenth in step it is the typical 10 nA·m source
   patchDefaultSync: 0.1, // default synchronous fraction shared by sections 2 to 4
+  erdOnsetS: 0.3, // delay from the intention to the start of the mu-rhythm fade, 'erd-timecourse' (provisional)
+  erdRampS: 0.7, // time for the fade to complete, 'erd-timecourse' (provisional)
+  erdDepth: 0.3, // amplitude left after the fade (fraction), 'erd-timecourse' (provisional)
   patchMaxN: 2e6, // top of the N sliders: about 17 mm² of cortex; with every cell in step a 1 µA·m seizure-sized source
   neuronsPerMm2: 147000, // 'neuron-density'
   pyramidalFraction: 0.8, // 'pyramidal-fraction'

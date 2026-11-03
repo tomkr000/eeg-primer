@@ -1,0 +1,77 @@
+[
+  {
+    "id": "mi-classes",
+    "statement": "Imagined movements of the left hand, right hand, both feet and the tongue produce distinguishable sensorimotor-rhythm changes and are the four motor-imagery classes used in EEG brain–computer interfaces (BCI Competition IV dataset 2a).",
+    "sources": [
+      "Pfurtscheller G, Brunner C, Schlögl A, Lopes da Silva FH (2006). Mu rhythm (de)synchronization and EEG single-trial classification of different motor imagery tasks. NeuroImage 31(1):153–159 doi:10.1016/j.neuroimage.2005.12.003",
+      "Tangermann M, Müller K-R, Aertsen A, Birbaumer N, Braun C, Brunner C, Leeb R, Mehring C, Miller KJ, Müller-Putz GR, Nolte G, Pfurtscheller G, Preissl H, Schalk G, Schlögl A, Vidaurre C, Waldert S, Blankertz B (2012). Review of the BCI Competition IV. Frontiers in Neuroscience 6:55 doi:10.3389/fnins.2012.00055"
+    ],
+    "note_for_auditor": "Check that Pfurtscheller et al. 2006 used left hand, right hand, foot and tongue motor imagery, and that BCI Competition IV dataset 2a (Tangermann 2012) has those four classes."
+  },
+  {
+    "id": "motor-map",
+    "statement": "The hand area of primary motor cortex lies on the precentral “knob” about 4 cm lateral to the midline (approximate MNI coordinates ±37, −25, 58 mm, under electrodes C3 and C4), the foot area on the medial wall of the paracentral lobule next to the midline (under Cz), and the mouth/tongue area low on the lateral convexity (about ±55, −8, 36 mm); the drawing’s patch positions are these coordinates converted to the fsaverage head frame.",
+    "sources": [
+      "Yousry TA, Schmid UD, Alkadhi H, Schmidt D, Peraud A, Buettner A, Winkler P (1997). Localization of the motor hand area to a knob on the precentral gyrus. A new landmark. Brain 120(1):141–157 doi:10.1093/brain/120.1.141",
+      "Fox PT, Huang A, Parsons LM, Xiong J-H, Zamarippa F, Rainey L, Lancaster JL (2001). Location-probability profiles for the mouth region of human primary motor–sensory cortex: model and validation. NeuroImage 13(1):196–209 doi:10.1006/nimg.2000.0659",
+      "Homan RW, Herman J, Purdy P (1987). Cerebral location of international 10–20 system electrode placement. Electroencephalography and Clinical Neurophysiology 66(4):376–382 doi:10.1016/0013-4694(87)90206-9",
+      "Penfield W, Boldrey E (1937). Somatic motor and sensory representation in the cerebral cortex of man as studied by electrical stimulation. Brain 60(4):389–443 doi:10.1093/brain/60.4.389"
+    ],
+    "note_for_auditor": "The MNI coordinates are approximate centres chosen by the site; check that each cited source supports the location statements attributed to it (hand knob on the precentral gyrus: Yousry; mouth region coordinates: Fox 2001; C3/C4 over the precentral/central region and Cz at the vertex: Homan 1987; foot on the medial surface: Penfield & Boldrey). Report whether the specific coordinates appear in Fox 2001 or Yousry 1997, and what those sources actually give."
+  },
+  {
+    "id": "erd-timecourse",
+    "statement": "Before a self-paced finger movement the upper-alpha (mu) rhythm over the contralateral sensorimotor area begins to desynchronise about 1.75 ± 0.61 s before movement onset, beta power is attenuated in the 2.0 to 0.5 s before it, and after a brisk movement the beta rhythm recovers and shows a short-lasting synchronisation within 1 s. In cue-paced left/right hand motor imagery the cue-triggered motor-cortex activation starts about 300 ms after the cue and single-trial discrimination peaks about 1 s after it; the original Graz imagery BCI returned its classification within 1.5 s, and adaptive autoregressive classification carried a delay of around 1 s.",
+    "sources": [
+      "Pfurtscheller G, Berghold A (1989). Patterns of cortical activation during planning of voluntary movement. Electroencephalography and Clinical Neurophysiology 72(3):250–258 doi:10.1016/0013-4694(89)90250-2",
+      "Stancák A Jr, Pfurtscheller G (1996). Event-related desynchronisation of central beta-rhythms during brisk and slow self-paced finger movements of dominant and nondominant hand. Cognitive Brain Research 4(3):171–183 doi:10.1016/S0926-6410(96)00031-6",
+      "Pfurtscheller G, Stancák A Jr, Neuper C (1996). Post-movement beta synchronization. A correlate of an idling motor area?. Electroencephalography and Clinical Neurophysiology 98(4):281–293 doi:10.1016/0013-4694(95)00258-8",
+      "Pfurtscheller G, Allison BZ, Brunner C, Bauernfeind G, Solis-Escalante T, Scherer R, Zander TO, Müller-Putz G, Neuper C, Birbaumer N (2010). The hybrid BCI. Frontiers in Neuroscience 4:30 doi:10.3389/fnpro.2010.00003",
+      "Pfurtscheller G, Neuper C, Flotzinger D, Pregenzer M (1997). EEG-based discrimination between imagination of right and left hand movement. Electroencephalography and Clinical Neurophysiology 103(6):642–651 doi:10.1016/S0013-4694(97)00080-1",
+      "Pfurtscheller G, Neuper C, Schlögl A, Lugger K (1998). Separability of EEG signals recorded during right and left motor imagery using adaptive autoregressive parameters. IEEE Transactions on Rehabilitation Engineering 6(3):316–325 doi:10.1109/86.712230"
+    ],
+    "note_for_auditor": ""
+  },
+  {
+    "id": "spectral-window",
+    "statement": "A periodogram of N samples cannot resolve spectral details closer than 1/N cycles per sample (1/T in hertz for a record of duration T), and its variance is high and does not fall as the record lengthens; averaging the periodograms of L shorter segments (the Bartlett method; Welch’s method with windowed, overlapping segments) reduces the variance by a factor L and the resolution by the same factor, so the choice of window trades resolution against variance.",
+    "sources": [
+      "Stoica P, Moses R (2005). Spectral Analysis of Signals. Prentice Hall Ch. 2 (periodogram resolution limit 1/N, p. 31; variance, p. 22; Bartlett and Welch methods, pp. 49–50)",
+      "Welch PD (1967). The use of fast Fourier transform for the estimation of power spectra: a method based on time averaging over short, modified periodograms. IEEE Transactions on Audio and Electroacoustics 15(2):70–73 doi:10.1109/TAU.1967.1161901"
+    ],
+    "note_for_auditor": ""
+  },
+  {
+    "id": "bci-windows",
+    "statement": "In the fastest flicker (SSVEP) spellers each selection takes 1 s, 0.5 s of stimulation plus 0.5 s for the gaze shift (60 characters/min, up to 5.32 bits/s), or 0.8 s with 0.3 s of stimulation (75 characters/min); the EEG epoch starts 0.14 s after the stimulus because of the visual pathway’s latency. The sensorimotor-rhythm BCI that reached three-dimensional control recomputed its spectrum every 50 ms from the previous 400 ms of EEG, and cue-paced motor-imagery competition data allotted 4 s of imagery per trial. Self-paced movement intention can be detected from the readiness potential about 500 ms before the movement.",
+    "sources": [
+      "Chen X, Wang Y, Nakanishi M, Gao X, Jung T-P, Gao S (2015). High-speed spelling with a noninvasive brain–computer interface. Proceedings of the National Academy of Sciences USA 112(44):E6058–E6067 doi:10.1073/pnas.1508080112",
+      "Nakanishi M, Wang Y, Chen X, Wang Y-T, Gao X, Jung T-P (2018). Enhancing detection of SSVEPs for a high-speed brain speller using task-related component analysis. IEEE Transactions on Biomedical Engineering 65(1):104–112 doi:10.1109/TBME.2017.2694818",
+      "McFarland DJ, Sarnacki WA, Wolpaw JR (2010). Electroencephalographic (EEG) control of three-dimensional movement. Journal of Neural Engineering 7(3):036007 doi:10.1088/1741-2560/7/3/036007",
+      "Tangermann M, Müller K-R, Aertsen A, Birbaumer N, Braun C, Brunner C, Leeb R, Mehring C, Miller KJ, Müller-Putz GR, Nolte G, Pfurtscheller G, Preissl H, Schalk G, Schlögl A, Vidaurre C, Waldert S, Blankertz B (2012). Review of the BCI Competition IV. Frontiers in Neuroscience 6:55 doi:10.3389/fnins.2012.00055",
+      "Lew E, Chavarriaga R, Silvoni S, Millán JdR (2012). Detection of self-paced reaching movement intention from EEG signals. Frontiers in Neuroengineering 5:13 doi:10.3389/fneng.2012.00013"
+    ],
+    "note_for_auditor": ""
+  },
+  {
+    "id": "p300-timing",
+    "statement": "The P300 is the largest positive peak within about 250 to 500 ms after a stimulus, about 300 ms after an infrequent target; in a row/column P300 speller with 100 ms flashes and 60 ms gaps, 15 repetitions of each row and column take 28.8 s per character, and the original Farwell–Donchin speller managed 2.3 characters per minute; averaging repetitions buys accuracy at the cost of speed.",
+    "sources": [
+      "Polich J (2007). Updating P300: an integrative theory of P3a and P3b. Clinical Neurophysiology 118(10):2128–2148 doi:10.1016/j.clinph.2007.04.019",
+      "Fazel-Rezai R, Allison BZ, Guger C, Sellers EW, Kleih SC, Kübler A (2012). P300 brain computer interface: current challenges and emerging trends. Frontiers in Neuroengineering 5:14 doi:10.3389/fneng.2012.00014",
+      "Farwell LA, Donchin E (1988). Talking off the top of your head: toward a mental prosthesis utilizing event-related brain potentials. Electroencephalography and Clinical Neurophysiology 70(6):510–523 doi:10.1016/0013-4694(88)90149-6",
+      "Nakanishi M, Wang Y, Chen X, Wang Y-T, Gao X, Jung T-P (2018). Enhancing detection of SSVEPs for a high-speed brain speller using task-related component analysis. IEEE Transactions on Biomedical Engineering 65(1):104–112 doi:10.1109/TBME.2017.2694818"
+    ],
+    "note_for_auditor": ""
+  },
+  {
+    "id": "readiness-potential",
+    "statement": "The early readiness potential (Bereitschaftspotential) begins about 2 s before a self-initiated movement and its steeper late phase about 400 ms before; in Libet’s experiment the onset of the readiness potential preceded the reported moment of conscious intention by about 350 ms for fully spontaneous acts (about 800 ms with some preplanning), and that reported moment lies only about 200 ms before the movement.",
+    "sources": [
+      "Shibasaki H, Hallett M (2006). What is the Bereitschaftspotential?. Clinical Neurophysiology 117(11):2341–2356 doi:10.1016/j.clinph.2006.04.025",
+      "Libet B, Gleason CA, Wright EW, Pearl DK (1983). Time of conscious intention to act in relation to onset of cerebral activity (readiness-potential). The unconscious initiation of a freely voluntary act. Brain 106(3):623–642 doi:10.1093/brain/106.3.623",
+      "Schurger A, Hu P’B, Pak J, Roskies AL (2021). What is the readiness potential?. Trends in Cognitive Sciences 25(7):558–570 doi:10.1016/j.tics.2021.04.001"
+    ],
+    "note_for_auditor": ""
+  }
+]

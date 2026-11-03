@@ -1,0 +1,105 @@
+[
+  {
+    "id": "mi-classes",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Pfurtscheller et al. 2006 NeuroImage 31(1):153-159 (abstract via Europe PMC REST; full text paywalled)",
+      "Tangermann et al. 2012 Front Neurosci 6:55 (full text XML via Europe PMC, PMC3396284)"
+    ],
+    "evidence_location": "Pfurtscheller 2006: abstract, first and penultimate sentences ('imagination of right hand, left hand, foot, and tongue movement'; 'discrimination between the four motor imagery tasks based on classification of single EEG trials'). Tangermann 2012: Section 5.2 'Data set 2a', 5.2.1 Experimental paradigm, first paragraph; trial timing in 5.2.2 Protocol.",
+    "quote": "left hand (class 1), right hand (class 2), both feet (class 3), and tongue (class 4)",
+    "discrepancy": "None of substance. Pfurtscheller 2006 says 'foot' (not 'both feet'); 'both feet' is the dataset-2a wording. Pfurtscheller 2006 also reports that hand-area mu desynchronises during hand imagery but is enhanced (ERS) during foot/tongue imagery, which is what makes the classes distinguishable; the claim's 'distinguishable sensorimotor-rhythm changes' is a fair gloss.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None. Both DOIs resolve; authors, journal, volume, issue, pages and year match Europe PMC records."
+  },
+  {
+    "id": "motor-map",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Yousry et al. 1997 Brain 120(1):141-157 (abstract only: Europe PMC REST and academic.oup.com page; PDF subscriber-only)",
+      "Fox et al. 2001 NeuroImage 13(1):196-209 (abstract only via Europe PMC and Univ. Iowa repository record; full text paywalled)",
+      "Homan et al. 1987 EEG Clin Neurophysiol 66(4):376-382 (abstract only via Europe PMC; full text paywalled)",
+      "Penfield & Boldrey 1937 Brain 60(4):389-443 (NO ACCESS: OUP returns 403 to fetches and there is no abstract; bibliographic record confirmed via OpenAlex)"
+    ],
+    "evidence_location": "Yousry 1997 abstract (knob on precentral gyrus, faces/forms the 'middle knee' of the central sulcus, at the cross point of precentral and central sulci). Fox 2001 abstract (weighted-mean M1-mouth location computed from 7 group-mean studies, 71 subjects; intersubject SD 5.6 mm; 'standardized coordinates' but no x,y,z values given in the abstract). Homan 1987 abstract (CT correlation of 10-20 markers with cortex and Brodmann map; no electrode-specific statements in the abstract). Penfield & Boldrey: nothing readable.",
+    "quote": "neural elements involved in motor hand function are located in a characteristic 'precentral knob'",
+    "discrepancy": "Only the 'hand knob on the precentral gyrus' part (Yousry) is verified. NOT found in any accessible text: (a) 'about 4 cm lateral to the midline' and the MNI coordinates +/-37, -25, 58 (Yousry's abstract gives no distances or coordinates); (b) the mouth coordinates +/-55, -8, 36 (Fox 2001's abstract confirms a coordinate-referenced mean location exists but states no values, and it is unclear whether the site's numbers are Fox's Talairach values or an MNI conversion); (c) C3/C4 over the central region and Cz at the vertex (not in Homan's abstract); (d) foot representation on the medial wall of the paracentral lobule (Penfield & Boldrey inaccessible). No contradiction found, but the specific numbers could not be confirmed against the sources.",
+    "suggested_fix": "State explicitly on the page that the coordinates are the site's own approximate centres (the auditor note already says so) and, for the mouth centre, either quote Fox 2001's actual weighted-mean coordinates with their coordinate space (Talairach vs MNI) or cite the source the numbers were actually taken from. Attribute 'about 4 cm lateral' to the chosen x-coordinate rather than to Yousry unless the full text gives such a distance.",
+    "bibliographic_issues": "None found. All four DOIs resolve (Europe PMC/OpenAlex); journals, volumes, issues, pages and years match (Yousry is indexed as vol '120 (Pt 1)'; Penfield & Boldrey confirmed as Brain 60(4):389-443)."
+  },
+  {
+    "id": "erd-timecourse",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Pfurtscheller & Berghold 1989 (abstract via Europe PMC)",
+      "Stancak & Pfurtscheller 1996 (abstract via Europe PMC)",
+      "Pfurtscheller, Stancak & Neuper 1996 (abstract via Europe PMC)",
+      "Pfurtscheller et al. 2010 The hybrid BCI (full text via Europe PMC, PMC2891647)",
+      "Pfurtscheller et al. 1997 (abstract via Europe PMC)",
+      "Pfurtscheller et al. 1998 (abstract via Europe PMC)"
+    ],
+    "evidence_location": "1989 abstract: 'first significant ERD ... 1.75 sec +/- 0.61 before the movement, most prominent over the contralateral sensorimotor area' (upper alpha, self-paced finger movements). Stancak 1996 abstract: 'Beta-band power attenuation in the preparatory period (2.0-0.5 s before movement onset)'. 1996 beta abstract: 'after a brisk finger movement the desynchronized beta rhythm displayed a fast recovery and a short-lasting synchronization within 1 sec'. Hybrid BCI, Discussion (paragraph before Figure 9): 'maximum of the discrimination peak ... ~1 s after visual cue onset' and 'cue-triggered motor cortex activation starting about 300 ms after cue-onset'. 1997 abstract: discrimination result 'given within 1.5 s by means of a visual feedback'. 1998 abstract: AAR on-line classification 'with a classification delay around 1 s'.",
+    "quote": "A first significant ERD (P less than 0.01, sign test) was found 1.75 sec +/- 0.61 before the movement",
+    "discrepancy": "All numbers match. Two small nuances: (1) the 1989 paper speaks of 'upper alpha components', the site adds the gloss 'mu'; (2) the 1998 abstract presents the ~1 s AAR delay as an expectation for on-line use ('an improvement ... can be expected, however, with a classification delay around 1 s'), the AAR results in that paper being off-line. The hybrid-BCI 300 ms / 1 s figures are that paper's summary of Muller-Gerking 2000, Pfurtscheller 2008c and Allison 2010 data.",
+    "suggested_fix": "Optionally: 'adaptive autoregressive classification was expected to carry a delay of around 1 s'.",
+    "bibliographic_issues": "None. All six DOIs resolve with matching journal/volume/issue/pages. The hybrid BCI DOI 10.3389/fnpro.2010.00003 looks odd (fnpro prefix) but is the registered DOI for Front Neurosci 4:30."
+  },
+  {
+    "id": "spectral-window",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Stoica & Moses 2005, Spectral Analysis of Signals, Prentice Hall (author-hosted PDF, user.it.uu.se/~ps/SAS-new.pdf; printed page numbers checked)",
+      "Welch 1967 IEEE Trans Audio Electroacoust 15(2):70-73 (abstract only via OpenAlex; IEEE full text paywalled)"
+    ],
+    "evidence_location": "Stoica & Moses: Ch. 2 intro p. 22 ('their variance is high and does not decrease with increasing data length'); Sec. 2.4.1 p. 31 (resolution limit 1/N 'in cycles per sampling interval'); Sec. 2.4.2 p. 36 ('inconsistent spectral estimator'); Sec. 2.6.1 p. 40 'Resolution-Variance Tradeoffs in Window Design'; Sec. 2.7.1 Bartlett p. 49 ('resolution ... reduced by a factor L', 'reduces the variance of the periodogram by the same factor L'); Sec. 2.7.2 Welch p. 50 (segments 'allowed to overlap', 'each data segment is windowed'). Welch 1967 abstract: 'sectioning the record and averaging modified periodograms of the sections'.",
+    "quote": "cannot resolve details in the studied spectrum that are separated by less than 1/N in cycles per sampling interval",
+    "discrepancy": "None. The '1/T in hertz for a record of duration T' restatement is the site's unit conversion (not stated in those words by the book) and is correct. Welch's overlapping/windowed segments are explicit in Stoica & Moses p. 50; Welch's own abstract only says 'modified periodograms'.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None. Page numbers cited by the site (22, 31, 49-50) match the printed pagination of the 2005 Prentice Hall edition; Welch 1967 volume/issue/pages confirmed via OpenAlex."
+  },
+  {
+    "id": "bci-windows",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Chen et al. 2015 PNAS 112(44):E6058-E6067 (abstract only via Europe PMC; PNAS and PMC full text blocked, 403/CAPTCHA)",
+      "Nakanishi et al. 2018 IEEE TBME 65(1):104-112 (abstract only via Europe PMC; IEEE/PMC full text not reachable)",
+      "McFarland, Sarnacki & Wolpaw 2010 J Neural Eng 7(3):036007 (full-text PDF from neurotechcenter.org)",
+      "Tangermann et al. 2012 (full text via Europe PMC)",
+      "Lew et al. 2012 Front Neuroeng 5:13 (full text via Europe PMC, PMC3458432)"
+    ],
+    "evidence_location": "Chen 2015 abstract: 'ITRs up to 5.32 bits per second' and '40 characters with 0.5-s-long flickering signals'. McFarland 2010, Sec. 2 Methods p. 2: 'Every 50 ms, the frequency spectrum of the previous 400 ms segment ... 16th-order autoregressive algorithm'. Tangermann 2012 Sec. 5.2.2: cue at t = 2 s, imagery until fixation cross disappears at t = 6 s (also data sets 1 and 2b: 4 s cue/imagery). Lew 2012 abstract and Discussion: 'movement intention was detected around 500 ms before actual onset'. Nakanishi 2018 abstract: online ITR 325.33 +/- 38.17 bits/min (cue-guided).",
+    "quote": "Every 50 ms, the frequency spectrum of the previous 400 ms segment from each electrode was computed",
+    "discrepancy": "Verified: 0.5 s stimulation, 5.32 bits/s (Chen); 50 ms / 400 ms (McFarland); 4 s imagery (Tangermann); ~500 ms (Lew). NOT verifiable from any text I could open (no contradiction found): the 0.5 s gaze-shift and 1 s per selection, 60 characters/min, and the 0.14 s visual-latency epoch offset attributed to Chen 2015; and the 0.3 s stimulation / 0.8 s per selection / 75 characters/min attributed to Nakanishi 2018. Internal consistency check: Nakanishi's abstract ITR of 325.33 bits/min exceeds the 319 bits/min ceiling for 40 targets at 1 s per selection, so selections must have been shorter than 1 s, consistent with 0.8 s.",
+    "suggested_fix": "None required unless full-text check of Chen 2015 (Methods: trial structure and data-epoch extraction) and Nakanishi 2018 (online speller: 0.3 s stimulation + 0.5 s gaze shift) shows otherwise; these four numbers remain unaudited here.",
+    "bibliographic_issues": "None. All five DOIs resolve; journal, volume, issue and page data match Europe PMC/OpenAlex (Nakanishi 2018 appeared online in 2017; the vol. 65(1) January 2018 citation is correct)."
+  },
+  {
+    "id": "p300-timing",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Polich 2007 Clin Neurophysiol 118(10):2128-2148 (abstract only via Europe PMC; PMC author manuscript blocked by CAPTCHA, Europe PMC full-text endpoint returns HTTP 500)",
+      "Fazel-Rezai et al. 2012 Front Neuroeng 5:14 (full text via Europe PMC, PMC3398470)",
+      "Farwell & Donchin 1988 EEG Clin Neurophysiol 70(6):510-523 (abstract via Europe PMC)",
+      "Nakanishi et al. 2018 IEEE TBME 65(1):104-112 (abstract via Europe PMC)"
+    ],
+    "evidence_location": "Fazel-Rezai 2012 Introduction para. 2: 'The P300 is the largest ERP component ... The infrequent event generates the P300 peak about 300 ms after stimulus onset'; Section 'Paradigms' (single-character vs row/column paragraph): 100 ms flash, 60 ms between flashes, 28.8 s for 30 flashes of each character = 15 flashes per column and row; Section on applications/flash number: 'number of flashes for each classification can be selected by the user to improve speed and accuracy'. Farwell & Donchin abstract, last sentence: 'subjects can communicate 12.0 bits, or 2.3 characters, per min'. Polich 2007 abstract: no latency numbers.",
+    "quote": "with a 100 ms flash and 60 ms between flashes, the RC requires only 28.8 s to present 30 flashes",
+    "discrepancy": "(1) The '250 to 500 ms' window attributed to Polich 2007 could not be verified: the abstract contains no latency figures and the full text was inaccessible; the '~300 ms after an infrequent target' and 'largest' statements are supported by Fazel-Rezai instead. (2) Fazel-Rezai phrases the 28.8 s figure as '30 flashes of each character' (each character is flashed once per row and once per column per sequence); the site's '15 repetitions of each row and column' is equivalent but not the source's wording. (3) Nakanishi 2018 is an SSVEP paper; nothing in its abstract bears on any P300 statement in this claim, so its citation here appears misplaced.",
+    "suggested_fix": "Either verify '250-500 ms' against Polich 2007 (measurement section) or attribute the latency statement to Fazel-Rezai 2012 ('about 300 ms after stimulus onset'). Consider '15 sequences of 12 row/column flashes (30 flashes of each character) at 160 ms per flash = 28.8 s'. Drop Nakanishi 2018 from this claim or state what it is meant to support.",
+    "bibliographic_issues": "None. All four DOIs resolve with matching journal/volume/issue/pages."
+  },
+  {
+    "id": "readiness-potential",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Shibasaki & Hallett 2006 Clin Neurophysiol 117(11):2341-2356 (abstract via Europe PMC)",
+      "Libet et al. 1983 Brain 106(3):623-642 (abstract via Europe PMC; OUP full text returns 403)",
+      "Schurger et al. 2021 Trends Cogn Sci 25(7):558-570 (full text via Europe PMC, PMC8192467)"
+    ],
+    "evidence_location": "Shibasaki & Hallett abstract: early BP 'begins about 2 s before the movement onset'; 'About 400 ms before the movement onset, the steeper negative slope, called late BP'. Libet 1983 abstract: type II (all acts 'spontaneously') RP onset preceded W 'by an average of about 350 ms'; type I (preplanning in some acts) 'by an average of about 800 ms'. Schurger 2021, Introduction/Libet paragraph: 'average W-time is only approximately 200 ms before movement onset, hundreds of ms after the apparent onset of the RP'.",
+    "quote": "RP preceded the corresponding mean W value by an average of about 350 ms",
+    "discrepancy": "None. Minor nuances dropped: Libet's 800 ms applies to series in which preplanning occurred in some of the 40 acts (500 ms if RP onset is taken at 90% of its area), and the ~200 ms W time is relative to EMG/movement onset; the -200 ms value was verified in Schurger 2021 rather than in Libet's full text.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None. All three DOIs resolve; journal, volume, issue, pages and years match Europe PMC records (Libet indexed as vol '106 (Pt 3)')."
+  }
+]

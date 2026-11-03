@@ -40,7 +40,7 @@ export function stripPlot(container: HTMLElement, cfg: { xLabel: string; xDomain
   let strips: Strip[] = [], markers: StripMarker[] = [];
 
   function render() {
-    const width = container.clientWidth || 600;
+    const width = Math.max(container.clientWidth || 600, M.left + M.right + 40);
     const height = M.top + strips.length * sh + M.bottom;
     svg.attr('width', width).attr('height', height).attr('viewBox', `0 0 ${width} ${height}`);
     const iw = width - M.left - M.right;

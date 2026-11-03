@@ -1,0 +1,49 @@
+[
+ {
+  "id": "rhythm-alpha",
+  "statement": "The alpha rhythm is 8–13 Hz, occurs during wakefulness over the posterior head with its largest amplitude over the occipital areas, is mostly below 50 µV in adults, is best seen with the eyes closed during relaxation, and is blocked or attenuated by attention (especially visual) and mental effort.",
+  "sources": [
+   "Kane N, Acharya J, Beniczky S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM (2017). A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017. Clinical Neurophysiology Practice 2:170–185. doi:10.1016/j.cnp.2017.07.002"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "rhythm-mu",
+  "statement": "The mu rhythm is 7–11 Hz, composed of arch-shaped waves over the central or centro-parietal scalp during wakefulness, mostly below 50 µV, and is blocked most clearly by contralateral movement, the thought of movement, readiness to move or tactile stimulation; it is reduced by self-initiated, imagined and observed movement, has spectral peaks near 10 and 20 Hz, and, unlike posterior alpha, is not affected by opening the eyes (its 20 Hz component is blocked by clenching the fist but not by opening the eyes).",
+  "sources": [
+   "Kane N, Acharya J, Beniczky S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM (2017). A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017. Clinical Neurophysiology Practice 2:170–185. doi:10.1016/j.cnp.2017.07.002",
+   "Pineda JA (2005). The functional significance of mu rhythms: translating “seeing” and “hearing” into “doing”. Brain Research Reviews 50(1):57–68. doi:10.1016/j.brainresrev.2005.04.005",
+   "Tiihonen J, Kajola M, Hari R (1989). Magnetic mu rhythm in man. Neuroscience 32(3):793–800. doi:10.1016/0306-4522(89)90299-6"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "rhythm-beta",
+  "statement": "The beta rhythm is 14–30 Hz, most characteristically fronto-central, mostly below 30 µV; the sensorimotor (rolandic) rhythm has components at about 10 and 20 Hz, both suppressed during a thumb movement and rebounding 0.5–2.5 s after it, the 10 Hz component arising predominantly in the primary somatosensory hand cortex and the 20 Hz sources lying slightly more anterior, in motor cortex; the 20 Hz rhythm depends on GABAergic inhibition (benzodiazepines raise its power and lower its frequency).",
+  "sources": [
+   "Kane N, Acharya J, Beniczky S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM (2017). A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017. Clinical Neurophysiology Practice 2:170–185. doi:10.1016/j.cnp.2017.07.002",
+   "Salmelin R, Hari R (1994). Spatiotemporal characteristics of sensorimotor neuromagnetic rhythms related to thumb movement. Neuroscience 60(2):537–550. doi:10.1016/0306-4522(94)90263-1",
+   "Jensen O, Goel P, Kopell N, Pohja M, Hari R, Ermentrout B (2005). On the human sensorimotor-cortex beta rhythm: sources and modeling. NeuroImage 26(2):347–355. doi:10.1016/j.neuroimage.2005.02.008"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "rhythm-theta",
+  "statement": "Frontal midline theta (4 to under 8 Hz) is a normal variant located on the midline just anterior to the vertex, appearing during psychological stress and cognitive tasks such as problem solving, particularly in young adults; its magnetoencephalographic source lies in bilateral medial prefrontal cortex including the anterior cingulate.",
+  "sources": [
+   "Kane N, Acharya J, Beniczky S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM (2017). A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017. Clinical Neurophysiology Practice 2:170–185. doi:10.1016/j.cnp.2017.07.002",
+   "Ishii R, Shinosaki K, Ukai S, Inouye T, Ishihara T, Yoshimine T, Hirabuki N, Asada H, Kihara T, Robinson SE, Takeda M (1999). Medial prefrontal cortex generates frontal midline theta rhythm. NeuroReport 10(4):675–679. doi:10.1097/00001756-199903170-00003"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "gamma-scalp",
+  "statement": "Gamma rhythms (above 30 Hz) are most commonly recorded with intracranial electrodes; at the scalp, neural gamma can be below 1 µV while muscle activity at temporal electrodes reaches about 100 µV over the same band, and during complete neuromuscular blockade scalp EEG power above 20 Hz fell 10- to 200-fold, so most scalp EEG above 20 Hz in unparalysed people is of muscle origin.",
+  "sources": [
+   "Kane N, Acharya J, Beniczky S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM (2017). A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017. Clinical Neurophysiology Practice 2:170–185. doi:10.1016/j.cnp.2017.07.002",
+   "Muthukumaraswamy SD (2013). High-frequency brain activity and muscle artifacts in MEG/EEG: a review and recommendations. Frontiers in Human Neuroscience 7:138. doi:10.3389/fnhum.2013.00138",
+   "Whitham EM, Pope KJ, Fitzgibbon SP, Lewis T, Clark CR, Loveless S, Broberg M, Wallace A, DeLosAngeles D, Lillie P, Hardy A, Fronsko R, Pulbrook A, Willoughby JO (2007). Scalp electrical recording during paralysis: quantitative evidence that EEG frequencies above 20 Hz are contaminated by EMG. Clinical Neurophysiology 118(8):1877–1888. doi:10.1016/j.clinph.2007.04.027"
+  ],
+  "note_for_auditor": ""
+ }
+]

@@ -22,7 +22,7 @@ export function verticalProfile(container: HTMLElement, cfg: { height: number; y
   let pts: [number, number][] = [], bands: { from: number; to: number; label: string; color: string }[] = [], markers: { value: number; label: string }[] = [], source: number | undefined, muteAbove = Infinity;
 
   function render() {
-    const width = container.clientWidth || 300;
+    const width = Math.max(container.clientWidth || 300, M.left + M.right + 40);
     const H = cfg.height;
     svg.attr('width', width).attr('viewBox', `0 0 ${width} ${H + M.bottom}`);
     const iw = width - M.left - M.right;

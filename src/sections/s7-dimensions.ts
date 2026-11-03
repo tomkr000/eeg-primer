@@ -31,8 +31,9 @@ export function mountDimensions(root: HTMLElement) {
   const sec = section(root, 'dimensions', '7', 'A head with EEG can operate only a few dimensions', 'Few rhythms can be changed at will, their changes overlap, and each hides in the rhythm’s own fluctuation');
   prose(sec.text, `
 <p>A dimension of control is a signal a person can move at will, independently of the others. With EEG the
-signals are the sensorimotor rhythms, and the way to move one is to imagine a movement: the mu rhythm over
-that body part's area loses part of its power (event-related desynchronization, ERD), about half of it on
+signals are the sensorimotor rhythms (the mu rhythm and its 20 Hz partner; the aside after section 4 maps the
+scalp's rhythms), and the way to move one is to imagine a movement: the mu rhythm over that body part's area
+loses part of its power (event-related desynchronization, ERD), about half of it on
 average in one study and about 85% in the most reactive band in another, both averaged over many trials
 ${c('erd-depth')}. The body parts with areas large enough and far enough apart to show up from outside are
 few: the two hands, the feet and the tongue, the four classes of the imagery competitions

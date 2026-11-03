@@ -91,8 +91,9 @@ previous 400 ms, and competition imagery trials allotted 4 s each ${c('bci-windo
 are no faster: the P300 peaks about 300 ms after its stimulus and spellers repeat each flash many times,
 up to 29 s per character ${c('p300-timing')}, and the quickest flicker spellers still need 0.3 to 0.5 s of
 stimulus plus 0.5 s for the eyes to move per character ${c('bci-windows')}.</p>
-<p>The figure follows the decoder's chain for one imagined movement. The mu rhythm of section 5 starts to
-fade 0.3 s after the intention and settles within about a second, losing half its power ${c('erd-depth')};
+<p>The figure follows the decoder's chain for one imagined movement. A mu rhythm as strong as section 5's alpha
+(an upper bound: mu is usually the weaker of the two, see the aside after section 4 ${c('mu-vs-alpha')}) starts
+to fade 0.3 s after the intention and settles within about a second, losing half its power ${c('erd-depth')};
 like every rhythm it also waxes and wanes by itself (section 7), so the fade is invisible in the raw trace.
 The decoder first filters out everything but the 8 to 13 Hz band, then averages the band's power over a
 sliding window, and fires when the estimate crosses halfway to the suppressed level. The window is the
@@ -125,7 +126,7 @@ remove.</p>`);
   const arm = robotArm(fig.panel, () => { seed++; run(); return trial; });
   fig.viz.append(readouts(rDelay.el, rMoved.el, rEarly.el, rMissed.el));
   assumptions(fig.el, [
-    { what: 'Rhythm', value: `the 20 µV mu rhythm of section 5 made a narrowband random process (a ${P.decoderBandHz} Hz band round 10 Hz, waxing and waning by itself as in section 7) over the same noise, without blinks; its power falls by the ERD fraction (${Math.round(P.erdPowerDrop * 100)}% by default) along a linear ramp that starts ${P.erdOnsetS} s after the intention and lasts ${P.erdRampS} s (adjustable); every press of the button draws new rhythm and noise`, cite: c('erd-depth') + c('erd-timecourse') + c('alpha-source-chain') },
+    { what: 'Rhythm', value: `a mu rhythm at the strength of section 5's alpha (an upper bound, mu being usually the weaker) made a narrowband random process (a ${P.decoderBandHz} Hz band round 10 Hz, waxing and waning by itself as in section 7) over the same noise, without blinks; its power falls by the ERD fraction (${Math.round(P.erdPowerDrop * 100)}% by default) along a linear ramp that starts ${P.erdOnsetS} s after the intention and lasts ${P.erdRampS} s (adjustable); every press of the button draws new rhythm and noise`, cite: c('erd-depth') + c('erd-timecourse') + c('alpha-source-chain') + c('mu-vs-alpha') },
     { what: 'Estimator', value: 'the signal is band-passed to 8–13 Hz and its mean square over the trailing window is taken as the power, relative to the expected resting level; the threshold is halfway between the resting and the fully suppressed level', cite: c('spectral-window') },
     { what: 'Outcomes', value: `the first downward crossing of the threshold after the intention, within ${DEADLINE} s, moves the arm; a crossing in the ${EARLY_S} s before the intention is a false start; no crossing within ${DEADLINE} s is a miss. The rates are the shares of ${MC} random trials at the current settings`, cite: '<span class="assumption-tag">model definition</span>' },
   ]);

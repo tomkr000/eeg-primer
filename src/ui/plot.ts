@@ -90,7 +90,7 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
   const mkScale = (a: AxisCfg) => (a.scale === 'log' ? d3.scaleLog() : d3.scaleLinear());
 
   function render() {
-    const width = container.clientWidth || 600;
+    const width = Math.max(container.clientWidth || 600, MARGIN.left + MARGIN.right + 40); // a container mid-layout can be narrower than the margins
     svg.attr('width', width).attr('viewBox', `0 0 ${width} ${height}`);
     const iw = width - MARGIN.left - MARGIN.right, ih = height - MARGIN.top - MARGIN.bottom;
     clipRect.attr('x', MARGIN.left).attr('y', MARGIN.top - 2).attr('width', iw).attr('height', ih + 2);

@@ -8,6 +8,7 @@ import { mountBlur } from './sections/s4-blur';
 import { mountSynchrony } from './sections/synchrony';
 import { mountDimensions } from './sections/s7-dimensions';
 import { mountDelay } from './sections/s8-delay';
+import { mountCount } from './sections/s9-count';
 import { mountMethod, mountReferences, mountVerification } from './sections/s7-references';
 import { inDepth } from './ui/layout';
 import { claimById } from './data/claims';
@@ -22,11 +23,11 @@ hero.innerHTML = `
 const standfirst = document.createElement('div');
 standfirst.className = 'standfirst';
 standfirst.innerHTML = `<p>Scalp electroencephalography (EEG) listens to the brain from the far side of a
-  resistive bone, through fluid that shorts the signal sideways and skin that adds noise of its own. Eight
+  resistive bone, through fluid that shorts the signal sideways and skin that adds noise of its own. Nine
   models with sliders show why one neuron is invisible from outside, what it takes for a population to be
-  seen, how much the head attenuates and blurs, how patches of cortex blur together from outside, how noise and electrodes intervene, how many independent
-  signals a non-invasive brain\u2013computer interface (BCI) can hope to extract, and why every one of them
-  arrives late. Every number carries a
+  seen, how much the head attenuates and blurs, how patches of cortex blur together from outside, how noise and
+  electrodes intervene, how many independent signals a non-invasive brain\u2013computer interface (BCI) can hope
+  to control, why every one of them arrives late, and how little more electrodes add. Every number carries a
   citation, and every citation was checked by an independent auditor (see the verification log).</p>`;
 hero.append(inDepth(standfirst));
 const toc = document.createElement('nav');
@@ -41,6 +42,7 @@ toc.innerHTML = `
     <a href="#electrodes"><b>6</b> Different electrode types result in different signals</a>
     <a href="#dimensions"><b>7</b> A head with EEG can operate only a few dimensions</a>
     <a href="#delay"><b>8</b> EEG signals have inherent delays</a>
+    <a href="#count"><b>9</b> Adding electrodes gives diminishing returns</a>
     <a href="#method">Method and caveats</a>
     <a href="#verification">Verification log</a>
     <a href="#references">References</a>`;
@@ -58,6 +60,7 @@ mountNoise(main);
 mountElectrodes(main);
 mountDimensions(main);
 mountDelay(main);
+mountCount(main);
 mountMethod(main);
 mountVerification(main);
 mountReferences(main);

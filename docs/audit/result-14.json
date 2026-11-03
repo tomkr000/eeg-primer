@@ -1,0 +1,84 @@
+[
+ {
+  "id": "mi-overlap",
+  "verdict": "PARTIAL",
+  "checked_sources": [
+   "Pfurtscheller et al. 2006 NeuroImage, full published PDF (copy on pub.ista.ac.at/~schloegl), including the Table 1 image and Table 2",
+   "McFarland et al. 2000 Brain Topography, abstract only (Europe PMC)"
+  ],
+  "evidence_location": "Pfurtscheller 2006: Table 1, 9-subject means. Right hand: C3 -84.7, C4 -71.6. Left hand: C4 -86.7, C3 -64.6. Every subject is negative at both C3 and C4 for both hand tasks. Results p.156, intertask-variability (ITV) paragraph: low ITV means event-related desynchronization (ERD) at all central sites in all tasks, e.g. subject s4. p.157, Fig. 3 paragraph: 'nearly impossible'. Conclusion p.158: 'more than two mental states'. Abstract: foot/tongue event-related synchronization (ERS) of the hand-area mu rhythm in the majority of subjects. McFarland 2000: abstract (33 adults, untrained, bilateral mu desynchronization foci).",
+  "quote": "it would be nearly impossible to discriminate ... if every task displayed very similar centrally localized ERD patterns",
+  "discrepancy": "(1) 'which makes the tasks nearly impossible to tell apart' turns the authors' hypothetical into an observed outcome. Only 1 of the 9 subjects (s4) shows ERD at C3, Cz and C4 in all four tasks (Table 1). That subject had the lowest four-class kappa, 0.298 (about 47% accuracy against 25% chance): harder to discriminate, not nearly impossible. (2) The percentages are 9-subject means of each subject's most reactive band, and the contralateral dominance holds for those means, not for every subject. Ipsilateral ERD is as large or larger for s5 and s6 (left hand) and for s9 (right hand). Side note: in the source's Table 2, rows s7-s9 duplicate rows s1-s3 (s7 is listed with mean 29 and ITV 127.93, identical to s1, whereas Table 1 gives s7 a mean of -28.4), so the ITV-kappa relation in Fig. 3 rests partly on mis-tabulated values. All other numbers and statements (-85/-87/-72/-65, all nine subjects, foot/tongue ERS, 'more than two mental states', 33 untrained adults, bilateral mu desynchronization) are correct.",
+  "suggested_fix": "... some people (one of nine in this study) desynchronize every central site during all four tasks, which makes the tasks much harder to tell apart (that subject had the lowest four-class kappa, 0.30); the authors note discrimination would be nearly impossible if every task produced very similar central ERD ...; contralateral dominance holds on average, not in every subject.",
+  "bibliographic_issues": "None. NeuroImage 31(1):153-159, DOI 10.1016/j.neuroimage.2005.12.003, authors match. McFarland: Brain Topography 12(3):177-186, DOI 10.1023/A:1023437823106, authors match."
+ },
+ {
+  "id": "task-limit",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Obermaier et al. 2001 IEEE Transactions on Neural Systems and Rehabilitation Engineering, abstract only (Europe PMC); no open full text found",
+   "Yong & Menon 2015 PLoS ONE, full text (Europe PMC, PMC4382224)"
+  ],
+  "evidence_location": "Obermaier 2001: abstract (three subjects; four motor imagery tasks plus mental calculation; subsets of 2, 3, 4 and 5 tasks; 0.42-0.81 bits/trial; upper limit three; best from three-task combinations in each subject). Yong & Menon 2015: Introduction, second paragraph.",
+  "quote": "reveal that the upper limit of different mental tasks for a BCI system is three",
+  "discrepancy": "Minor only. (1) The full text of Obermaier 2001 could not be opened, so I could not check whether 0.42-0.81 bits/trial spans all subsets or only the per-subject optima; the claim mirrors the abstract's own wording. (2) Yong & Menon make the low-dimensional-control statement about 'existing BCI systems' in general (context: controlling devices such as exoskeletons) as background, not as a finding about motor-imagery BCIs. The same paragraph cites four- and six-class motor-imagery BCIs that achieved 3-D control.",
+  "suggested_fix": "Optional: 'Brain-computer interfaces give low-dimensional control because they can recognise only a limited number of mental tasks as separate commands.'",
+  "bibliographic_issues": "None. IEEE TNSRE 9(3):283-288, DOI 10.1109/7333.948456; PLoS ONE 10(4):e0121896, DOI 10.1371/journal.pone.0121896; authors match."
+ },
+ {
+  "id": "bci-inefficiency",
+  "verdict": "PARTIAL",
+  "checked_sources": [
+   "Vidaurre & Blankertz 2010 Brain Topography, full text (Europe PMC, PMC2874052)",
+   "Blankertz et al. 2010 NeuroImage, authors' preprint full text (doc.ml.tu-berlin.de/bbci) plus the published abstract (Europe PMC)",
+   "Allison & Neuper 2010 chapter, abstract (Springer chapter page)",
+   "Lee et al. 2019 GigaScience, full text (Europe PMC, PMC6501944)"
+  ],
+  "evidence_location": "Vidaurre & Blankertz: abstract and Introduction (15-30%, citing Dickhaus et al. 2009). Blankertz 2010: abstract (about 20% of potential users); Introduction (15-30%); Results 'BBCI Feedback' and Fig. 5 (N = 80, mean 74.4% +/- 16.5%); Conclusion. Allison & Neuper: chapter abstract. Lee 2019: abstract; Results 'BCI illiteracy' (70% threshold; 55.6% and 51.9% by session; 53.7% average); Methods (binary-class motor imagery, left vs right hand).",
+  "quote": "For about 20% of potential users the obtained accuracy does not reach the level criterion",
+  "discrepancy": "'about 20% of 80 naive users missed the accuracy criterion in one study' is not in Blankertz 2010. Its 20% is a general background statement about 'potential users', not a result from its N = 80 sample. For those 80 participants the paper reports only feedback accuracy: mean 74.4% +/- 16.5%, ranging from chance (50%) to 100% (Fig. 5). It gives no criterion and no failure fraction for the sample, and neither does Vidaurre & Blankertz's description of the same screening study. Minor: the 15-30% is stated for brain-computer interface (BCI) control in EEG-based BCIs generally (Vidaurre & Blankertz cite Dickhaus et al. 2009), not as a sensorimotor-rhythm-specific estimate. Lee's 53.7% is the average of two sessions (30/54 = 55.6% in session 1, 28/54 = 51.9% in session 2) with a 70% threshold on binary left/right-hand imagery decoded by common spatial patterns; the claim is consistent with this. Allison & Neuper's 'about 20% of subjects are not proficient with a typical BCI system' is verbatim.",
+  "suggested_fix": "BCI control fails for an estimated 15-30% of users; one group puts the share of potential users whose accuracy misses the criterion at about 20% (among its own 80 BCI-naive users, first-session feedback accuracy averaged 74% +/- 17%, ranging from chance to 100%); a review puts the share not proficient with a typical BCI at about 20%; in 54 subjects, 53.7% (average of two sessions) fell below 70% on two-class motor imagery.",
+  "bibliographic_issues": "None. Brain Topography 23(2):194-198; NeuroImage 51(4):1303-1309; Springer, London 2010, pp. 35-54, DOI 10.1007/978-1-84996-272-8_3 (stray period after the question mark in the chapter title); GigaScience 8(5):giz002. All DOIs and authors match."
+ },
+ {
+  "id": "erd-detect",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Condon & Ransom, Essential Radio Astronomy, chapter 3, National Radio Astronomy Observatory online text (sections 3.6 and 3.6.2)",
+   "Shannon 1949 Proceedings of the IRE, scan of pp. 10-21 (MIT course copy)",
+   "Toriyama et al. 2018 Frontiers in Human Neuroscience 12:295, full text (Europe PMC, PMC6079198), checking the 3 Hz band",
+   "Kay 1998: NOT opened (book). The gamma/chi-square statement was checked analytically and by simulation instead."
+  ],
+  "evidence_location": "Condon & Ransom section 3.6, opening paragraphs (2*dnu*tau independent samples; fractional uncertainty (dnu*tau)^-1/2) and section 3.6.2, eqs. 3.153 (sigma_T = 2^1/2 T_s / N^1/2) and 3.154 (sigma_T ~ T_s / sqrt(dnu*tau)). Shannon 1949, section II and the text before eq. 17 ('in time T there are 2TW independent amplitudes'). Toriyama 2018, Methods (ERD analysis) and Table 1.",
+  "quote": "N = (2 dnu tau) of independent noise samples ... fractional uncertainty as small as (N/2)^-1/2 = (dnu tau)^-1/2",
+  "discrepancy": "No attribution errors. Arithmetic is correct: 1/sqrt(3) = 0.577, i.e. +/-58%. The mean of N = 2BT independent squared zero-mean Gaussian samples is (sigma^2/N) times chi-square with N degrees of freedom, i.e. Gamma(shape BT, scale sigma^2/BT), with coefficient of variation 1/sqrt(BT); this is correct. Caveats: (1) The radiometer equation is approximate (eq. 3.154 uses '≈', the section says 'as small as', and its Gaussian limit assumes dnu*tau >> 1). At BT = 3, the exact value for an ideal 3 Hz band averaged over a 1 s boxcar is about +/-53% (moment-matched gamma shape about 3.5, not 3). Analytic integral: 0.531; 20,000-trial simulation: 0.529. So +/-58% is a slightly conservative approximation. (2) Kay 1998 could not be opened. (3) Toriyama 2018 did use a 3 Hz band ('the 3 Hz of frequency-band showing the largest ERD'). That band is an analysis window slid over 7-35 Hz and chosen from the motor-execution (contraction) data, not a measured ERD bandwidth. Pfurtscheller 2006 describes ERD components as broad-banded.",
+  "suggested_fix": "Optional: '... carries a fractional uncertainty of approximately 1/sqrt(BT) (the radiometer equation; for continuous averaging at BT = 3 the exact value for an ideal band is about +/-53%) ...' and 'B = 3 Hz, the width of the analysis band in which Toriyama et al. located the most reactive frequencies'.",
+  "bibliographic_issues": "Shannon DOI 10.1109/JRPROC.1949.232969 resolves (IEEE Xplore 1697831; Crossref: Proc. IRE 37(1):10-21, January 1949). Condon & Ransom chapter 3 title 'Radio Telescopes and Radiometers' confirmed; eqs. 3.153-3.154 are in section 3.6.2 (subsection of 3.6). Kay 1998 details not verified (no access)."
+ },
+ {
+  "id": "brain-noise",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Scheer et al. 2006 Physiological Measurement, abstract only (Europe PMC; the IOP Publishing page blocks fetching, and Semantic Scholar was rate-limited)",
+   "de Munck et al. 1992 IEEE Transactions on Biomedical Engineering, abstract (Europe PMC)",
+   "Huizenga et al. 2002 IEEE Transactions on Biomedical Engineering, abstract (Europe PMC)"
+  ],
+  "evidence_location": "Scheer 2006: abstract, last sentence. de Munck 1992: abstract sentences 1-2 (randomly distributed dipoles representing cortical neurons), 4 (variance a function of electrode distance only) and 8 (spatial covariance matrix of the background noise). Huizenga 2002: abstract (spatial covariance as a function of sensor distance; 'the noise model fits the data very well').",
+  "quote": "up to 100 Hz S/N practically depends only on cortical generated background noise",
+  "discrepancy": "Minor only. (1) Scheer et al. attribute the high-frequency noise to 'amplifier and thermal noise of interelectrode resistance', shown experimentally with their own high-resolution EEG setup; the claim generalizes this to scalp recordings. (2) de Munck's distance-only result is stated for the variance of a differentially measured EEG signal, with dipoles in a spherical volume conductor and no preferred orientation. The same abstract finds the alpha rhythm better modelled as a single fixed-position dipole with fluctuating amplitude, so not all background behaves like random distributed dipoles. (3) Huizenga's well-fitting model is a Kronecker product of a distance-dependent spatial covariance and a lag-dependent temporal covariance. Full texts were not opened.",
+  "suggested_fix": "Optional: '... randomly distributed cortical dipoles in a spherical head model, giving a spatial covariance that depends on electrode distance (the alpha rhythm is better described by a fixed dipole) ...'",
+  "bibliographic_issues": "None. Physiological Measurement 27(2):109-117; IEEE TBME 39(8):791-804; IEEE TBME 49(6):533-539. DOIs and authors match Europe PMC."
+ },
+ {
+  "id": "grover-nyquist",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Grover & Venkatesh, authors' preprint PDF (praveenv253.github.io, LaTeX file dated May 2016). The final published text was not accessible; bibliographic details were checked via Crossref."
+  ],
+  "evidence_location": "Section on Nyquist rates for the 4-sphere model, with the Fig. 6 text (99% energy: l = 19 gives 361 for conductivity ratio 1/15; l = 17 gives 289 for 1/30) and the following paragraph (1.5-2x oversampling raises the 1/30 bound to 578). Fig. 8 caption and text: point-spread-function width for 92, 252, 492, 1212 and 6252 sensors, noiseless. Fig. 9 text: 10,000 electrodes at about 3 mm.",
+  "quote": "10,000 electrodes, the required inter-sensor separation is approximately 3 mm",
+  "discrepancy": "Minor only. 361 is the worst case (skull/brain conductivity ratio 1/15) and 289 the 1/30 case. The 578 is the oversampled bound for the 289 case only (the authors cite 1.5-2x oversampling; doubling 361 would give 722). 'Kept improving up to 6,252 sensors' matches the noiseless Fig. 8 ('PSF-width reduces as the number of sensors is increased to even a few thousand'). The 3 mm spacing assumes an icosahedron-based layout on a sphere. All numbers were checked against the authors' May 2016 preprint, not the final published version.",
+  "suggested_fix": "Optional: '... at least 289 to 361 sensors (578 for the 289-sensor case with twofold oversampling) ...'",
+  "bibliographic_issues": "None. Crossref confirms 'An Information-Theoretic View of EEG Sensing', Grover & Venkatesh, Proceedings of the IEEE 105(2):367-384, February 2017; the DOI resolves. Not indexed in Europe PMC (expected for this journal)."
+ }
+]

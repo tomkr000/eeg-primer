@@ -1,0 +1,59 @@
+[
+ {
+  "id": "mi-overlap",
+  "statement": "The imagery classes are not independent: imagining one hand lowered the mu rhythm over both hemispheres in all nine subjects, more on the opposite side (opposite −85% and −87%, same side −72% and −65%); foot or tongue imagery tended to raise the hand-area mu instead; some people desynchronize every central site during all four tasks, which makes the tasks nearly impossible to tell apart, and more than two mental states are very hard to discriminate with imagery-induced desynchronization alone. Group topographies of 33 untrained adults also showed bilateral mu desynchronization.",
+  "sources": [
+   "Pfurtscheller G, Brunner C, Schlögl A, Lopes da Silva FH (2006). Mu rhythm (de)synchronization and EEG single-trial classification of different motor imagery tasks. NeuroImage 31(1):153–159. doi:10.1016/j.neuroimage.2005.12.003",
+   "McFarland DJ, Miner LA, Vaughan TM, Wolpaw JR (2000). Mu and beta rhythm topographies during motor imagery and actual movements. Brain Topography 12(3):177–186. doi:10.1023/A:1023437823106"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "task-limit",
+  "statement": "Combining four motor-imagery tasks and mental arithmetic into sets of 2 to 5 classes, information transfer rates in 3 subjects were 0.42–0.81 bits per trial and the best came from three-task sets, adding a fourth or fifth task did not help; the authors put the upper limit of different mental tasks for a BCI at three. Motor-imagery BCIs give low-dimensional control because only a limited number of mental tasks can be recognised as separate commands.",
+  "sources": [
+   "Obermaier B, Neuper C, Guger C, Pfurtscheller G (2001). Information transfer rate in a five-classes brain–computer interface. IEEE Transactions on Neural Systems and Rehabilitation Engineering 9(3):283–288. doi:10.1109/7333.948456",
+   "Yong X, Menon C (2015). EEG classification of different imaginary movements within the same limb. PLoS ONE 10(4):e0121896. doi:10.1371/journal.pone.0121896"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "bci-inefficiency",
+  "statement": "Sensorimotor-rhythm BCI control fails for an estimated 15–30% of users; about 20% of 80 naive users missed the accuracy criterion in one study, and a review puts the share not proficient with a typical BCI at about 20%; in 54 subjects, 53.7% fell below 70% on two-class motor imagery.",
+  "sources": [
+   "Vidaurre C, Blankertz B (2010). Towards a cure for BCI illiteracy. Brain Topography 23(2):194–198. doi:10.1007/s10548-009-0121-6",
+   "Blankertz B, Sannelli C, Halder S, Hammer EM, Kübler A, Müller K-R, Curio G, Dickhaus T (2010). Neurophysiological predictor of SMR-based BCI performance. NeuroImage 51(4):1303–1309. doi:10.1016/j.neuroimage.2010.03.022",
+   "Allison BZ, Neuper C (2010). Could anyone use a BCI?. In: Tan DS, Nijholt A (eds), Brain–Computer Interfaces, Springer, London 35–54. doi:10.1007/978-1-84996-272-8_3",
+   "Lee M-H, Kwon O-Y, Kim Y-J, Kim H-K, Lee Y-E, Williamson J, Fazli S, Lee S-W (2019). EEG dataset and OpenBMI toolbox for three BCI paradigms: an investigation into BCI illiteracy. GigaScience 8(5):giz002. doi:10.1093/gigascience/giz002"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "erd-detect",
+  "statement": "Model of the decision: the power of band-limited Gaussian noise of bandwidth B averaged over a time T comes from 2BT independent samples and carries a fractional uncertainty of 1/√(BT), whatever its level (the radiometer equation); the estimate is gamma distributed with shape BT. Rest and imagery windows are modelled this way, with the noise in the channel added to both, and the decoder calls imagery below the threshold where the two distributions cross. The site takes B = 3 Hz, the width of the most reactive band in the measurements of claim erd-depth; for B = 3 Hz and T = 1 s the scatter is ±58% of the mean.",
+  "sources": [
+   "Condon JJ, Ransom SM (2016). Essential Radio Astronomy, chapter 3: Radio telescopes and radiometers. Princeton University Press; online text of the National Radio Astronomy Observatory section 3.6, eqs. 3.153–3.154. https://www.cv.nrao.edu/~sransom/web/Ch3.html",
+   "Shannon CE (1949). Communication in the presence of noise. Proceedings of the IRE 37(1):10–21. doi:10.1109/JRPROC.1949.232969",
+   "Kay SM (1998). Fundamentals of Statistical Signal Processing, Volume II: Detection Theory. Prentice Hall."
+  ],
+  "note_for_auditor": "Model statement. Check that the radiometer-equation result (fractional uncertainty (Δν·τ)^-1/2 from 2Δν·τ independent samples) is in Condon & Ransom section 3.6, that 2BT independent samples is Shannon 1949, that a mean of squared Gaussian samples is gamma (scaled chi-square) distributed with the stated shape, and the arithmetic (1/√3 ≈ 0.58). The 3 Hz choice is attributed to the band used in the sources of claim erd-depth (Toriyama 2018 used the most reactive 3 Hz band); check that if you can."
+ },
+ {
+  "id": "brain-noise",
+  "statement": "Below about 100 Hz the signal-to-noise ratio of scalp recordings depends practically only on background activity generated by the cortex; amplifier noise and the thermal noise of the electrode resistance dominate only at a few hundred hertz and above. The background can be modelled as randomly distributed cortical dipoles, giving a spatial covariance that depends on electrode distance, and measured background is well fitted by such distance-dependent covariance models.",
+  "sources": [
+   "Scheer HJ, Sander T, Trahms L (2006). The influence of amplifier, interface and biological noise on signal quality in high-resolution EEG recordings. Physiological Measurement 27(2):109–117. doi:10.1088/0967-3334/27/2/002",
+   "de Munck JC, Vijn PCM, Lopes da Silva FH (1992). A random dipole model for spontaneous brain activity. IEEE Transactions on Biomedical Engineering 39(8):791–804. doi:10.1109/10.148387",
+   "Huizenga HM, de Munck JC, Waldorp LJ, Grasman RPPP (2002). Spatiotemporal EEG/MEG source analysis based on a parametric noise covariance model. IEEE Transactions on Biomedical Engineering 49(6):533–539. doi:10.1109/TBME.2002.1001967"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "grover-nyquist",
+  "statement": "Re-deriving the spatial Nyquist analysis, Grover & Venkatesh estimate that capturing 99% of the scalp signal’s energy needs at least 289 to 361 sensors (578 with twofold oversampling), and in noiseless simulations source resolution kept improving up to 6,252 sensors; 10,000 electrodes on the head sit about 3 mm apart.",
+  "sources": [
+   "Grover P, Venkatesh P (2017). An information-theoretic view of EEG sensing. Proceedings of the IEEE 105(2):367–384. doi:10.1109/JPROC.2016.2615179"
+  ],
+  "note_for_auditor": ""
+ }
+]

@@ -11,7 +11,7 @@ const claims = eval(claimsSrc.slice(claimsSrc.indexOf('[', claimsSrc.indexOf('CL
 const esc = (s) => String(s ?? '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
 const counts = {};
 for (const r of results) counts[r.verdict] = (counts[r.verdict] ?? 0) + 1;
-const sections = ['', 'Neuron', 'Population', 'Head', 'Blur', 'Noise', 'Electrodes', 'Dimensions', 'Delays'];
+const sections = ['', 'Neuron', 'Population', 'Head', 'Blur', 'Noise', 'Electrodes', 'Dimensions', 'Delays', 'Electrode count'];
 let md = `# Verification log
 
 Every claim on the site was fact-checked by an auditor that had not seen the site, the research notes, or the
@@ -22,7 +22,7 @@ with the evidence location and any discrepancy. Where a discrepancy was found, t
 corrected statement.
 
 Auditor verdicts on the original statements (${results.length} claims with sources): ${Object.entries(counts).map(([k, v]) => `${k} ${v}`).join(', ')}.
-Two NO_ACCESS claims were re-verified by hand afterwards (see their rows). Resolved statuses:
+Claims checked by hand after an auditor could not open the source say so in their rows. Resolved statuses:
 ${Object.entries(claims.reduce((a, c) => ((a[c.status] = (a[c.status] ?? 0) + 1), a), {})).map(([k, v]) => `${k} ${v}`).join(', ')}.
 
 | Claim | Section | Auditor verdict | Evidence | Discrepancy found | Resolution |
@@ -30,7 +30,7 @@ ${Object.entries(claims.reduce((a, c) => ((a[c.status] = (a[c.status] ?? 0) + 1)
 `;
 for (const c of claims) {
   const r = byId.get(c.id);
-  md += `| \`${c.id}\` | ${sections[c.section]} | ${r ? r.verdict : '— (assumption, no source)'} | ${esc(r?.evidence_location ?? '').slice(0, 220)} | ${esc(r?.discrepancy ?? '').slice(0, 400)} | **${c.status}**${c.note ? ' — ' + esc(c.note) : ''} |\n`;
+  md += `| \`${c.id}\` | ${sections[c.section]} | ${r ? r.verdict : '(assumption, no source)'} | ${esc(r?.evidence_location ?? '').slice(0, 220)} | ${esc(r?.discrepancy ?? '').slice(0, 400)} | **${c.status}**${c.note ? ': ' + esc(c.note) : ''} |\n`;
 }
 md += `
 ## Bibliographic corrections made after the audit

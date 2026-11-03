@@ -1,0 +1,1409 @@
+[
+  {
+    "id": "t8-01",
+    "claim": "In an offline analysis of 80 novice users of a sensorimotor-rhythm (SMR) brain-computer interface (BCI) recorded with 119 channels and classified with common spatial patterns (CSP), the best of 13 fixed montages had 48 channels; the full 119-channel montage was not the best.",
+    "value": 48,
+    "units": "channels",
+    "range": null,
+    "source": {
+      "authors": "Sannelli C, Dickhaus T, Halder S, Hammer EM, Müller KR, Blankertz B",
+      "year": 2010,
+      "title": "On optimal channel configurations for SMR-based brain-computer interfaces",
+      "journal": "Brain Topography",
+      "volume_pages": "23(2):186-193",
+      "doi": "10.1007/s10548-010-0135-0",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20162347/"
+    },
+    "evidence_location": "Abstract (PubMed record of the published article)",
+    "quote": "The configuration with 48 channels results to be the best one",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Per the earlier manuscript, classifiers were trained on one calibration session (75 trials per class) and tested on the feedback session. That manuscript version (typeset.io copy, not the published text) reports median test errors of 15.20% and 11.75% for the 48-channel set (two band-selection modes) and says better-performing subjects preferred more channels; those details were not checked against the published article."
+  },
+  {
+    "id": "t8-02",
+    "claim": "In the same 80-subject study, fixed montages with 8 to 32 channels were not significantly worse than the best (48-channel) montage when only few training trials were available.",
+    "value": null,
+    "units": "channels",
+    "range": [
+      8,
+      32
+    ],
+    "source": {
+      "authors": "Sannelli C, Dickhaus T, Halder S, Hammer EM, Müller KR, Blankertz B",
+      "year": 2010,
+      "title": "On optimal channel configurations for SMR-based brain-computer interfaces",
+      "journal": "Brain Topography",
+      "volume_pages": "23(2):186-193",
+      "doi": "10.1007/s10548-010-0135-0",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20162347/"
+    },
+    "evidence_location": "Abstract (PubMed record of the published article)",
+    "quote": "configurations with less channels, from 32 to 8, performed not significantly worse than the best configuration in cases where only few training trials are available",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "The earlier manuscript defines the small-training condition as 50, 40 or 30 calibration trials and explains the preference for more channels with more data by CSP overfitting, noting that the number of parameters grows quadratically with channel count (manuscript text, not checked in the published version)."
+  },
+  {
+    "id": "t8-03",
+    "claim": "A stepwise channel selection run across all 80 subjects converged on 22 of 119 channels, centred over the motor areas.",
+    "value": 22,
+    "units": "channels",
+    "range": null,
+    "source": {
+      "authors": "Sannelli C, Dickhaus T, Halder S, Hammer EM, Müller KR, Blankertz B",
+      "year": 2010,
+      "title": "On optimal channel configurations for SMR-based brain-computer interfaces",
+      "journal": "Brain Topography",
+      "volume_pages": "23(2):186-193",
+      "doi": "10.1007/s10548-010-0135-0",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20162347/"
+    },
+    "evidence_location": "Abstract (PubMed record of the published article)",
+    "quote": "in the second approach a setting with 22 channels centered over the motor areas was selected",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "The earlier manuscript version says 17 channels (median test error 12.79%); the published abstract says 22. Use 22."
+  },
+  {
+    "id": "t8-04",
+    "claim": "On Brain-Computer Interface (BCI) Competition III dataset IVa (5 subjects, 118 channels, right hand versus foot imagery), sparse common spatial pattern (SCSP) selection averaged 82.28% test accuracy with 22.6 channels, against 73.56% with all 118 channels and 69.28% with C3, C4 and Cz only; a sparser setting kept 79.28% with 7.6 channels.",
+    "value": 22.6,
+    "units": "channels (mean of subject-specific selections)",
+    "range": [
+      7.6,
+      22.6
+    ],
+    "source": {
+      "authors": "Arvaneh M, Guan C, Ang KK, Quek C",
+      "year": 2011,
+      "title": "Optimizing the channel selection and classification accuracy in EEG-based BCI",
+      "journal": "IEEE Transactions on Biomedical Engineering",
+      "volume_pages": "58(6):1865-1873",
+      "doi": "10.1109/TBME.2011.2131142",
+      "url": "https://personal.ntu.edu.sg/ctguan/Publications/2011_Mahnaz_IEEE_TBME.pdf"
+    },
+    "evidence_location": "Section IV-B text and Table IV (p. 1870); Fig. 6 (p. 1871)",
+    "quote": "improvement of 8.6% in the classification accuracy with the use of only 22.6 from 118 channels",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "140 training and 140 test trials per subject. Table IV accuracies were read from the rendered table image. All 118 channels did not significantly beat the three-electrode set (paired t-test p = 0.535 in Table IV), whereas the selected subsets did (p = 0.043 and 0.023). Fig. 6 (log axis) shows accuracy rising from 3 to about 10 selected channels and drifting down towards 118. The authors attribute the gain from selection to removing 'noisy and redundant' channels; overfitting of CSP covariance estimates with 140 trials is a further likely factor (interpretation here, not stated in the paper)."
+  },
+  {
+    "id": "t8-05",
+    "claim": "On Brain-Computer Interface (BCI) Competition IV dataset IIa (9 subjects, 22 channels, left versus right hand imagery, tested on a different day), sparse common spatial pattern (SCSP) selection averaged 81.63% with 13.22 channels and 79.07% with 8.55 channels, against 79.23% with all 22 channels and 70.90% with C3, C4 and Cz.",
+    "value": 8.55,
+    "units": "channels (mean of subject-specific selections)",
+    "range": [
+      8.55,
+      22
+    ],
+    "source": {
+      "authors": "Arvaneh M, Guan C, Ang KK, Quek C",
+      "year": 2011,
+      "title": "Optimizing the channel selection and classification accuracy in EEG-based BCI",
+      "journal": "IEEE Transactions on Biomedical Engineering",
+      "volume_pages": "58(6):1865-1873",
+      "doi": "10.1109/TBME.2011.2131142",
+      "url": "https://personal.ntu.edu.sg/ctguan/Publications/2011_Mahnaz_IEEE_TBME.pdf"
+    },
+    "evidence_location": "Section IV-B text and Table III (p. 1870)",
+    "quote": "reduced on average 61.2% of the channels with only 0.16% drop in the classification accuracy",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "The 2.4-point gain with 13.22 channels was not significant (p = 0.08). Table III accuracies were read from the rendered table image."
+  },
+  {
+    "id": "t8-06",
+    "claim": "Subject-specific channel subsets beat the three classic motor imagery electrodes (C3, C4, Cz) by about 10 percentage points on average across both datasets.",
+    "value": 10,
+    "units": "percentage points of accuracy",
+    "range": null,
+    "source": {
+      "authors": "Arvaneh M, Guan C, Ang KK, Quek C",
+      "year": 2011,
+      "title": "Optimizing the channel selection and classification accuracy in EEG-based BCI",
+      "journal": "IEEE Transactions on Biomedical Engineering",
+      "volume_pages": "58(6):1865-1873",
+      "doi": "10.1109/TBME.2011.2131142",
+      "url": "https://personal.ntu.edu.sg/ctguan/Publications/2011_Mahnaz_IEEE_TBME.pdf"
+    },
+    "evidence_location": "Abstract; Section V (Conclusion)",
+    "quote": "also yielded an average improvement of 10% in classification accuracy compared to the use of three channels (C3, C4, and Cz)",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "9.45 points on the 22-channel dataset and 11.5 points on the 118-channel dataset (Section IV-B). The paper writes '%' for percentage points."
+  },
+  {
+    "id": "t8-07",
+    "claim": "Removing channels one at a time from full-cap motor imagery recordings (5 subjects) kept the predicted common spatial patterns (CSP) classification error near 3% from 52 channels down to about 14, after which it rose to about 6% at 10 channels, 9 to 10% at 6, 12% at 5 and 20% at 4 (values read from Figure 2a).",
+    "value": null,
+    "units": "% predicted classification error (subject average)",
+    "range": [
+      2.7,
+      20
+    ],
+    "source": {
+      "authors": "Popescu F, Fazli S, Badower Y, Blankertz B, Müller KR",
+      "year": 2007,
+      "title": "Single trial classification of motor imagination using 6 dry EEG electrodes",
+      "journal": "PLoS ONE",
+      "volume_pages": "2(7):e637",
+      "doi": "10.1371/journal.pone.0000637",
+      "url": "https://doi.org/10.1371/journal.pone.0000637"
+    },
+    "evidence_location": "Figure 2a and its caption; values digitised from the published figure image",
+    "quote": "Predicted error rates vs. number of channels for different subjects (colored lines) and average (black line).",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Values come from pixel measurements of the black average curve (treat as plus or minus 1 percentage point); only the caption is quoted. The least-weighted channel was removed and the CSP plus linear discriminant analysis (LDA) pipeline re-run at each step. Error with all channels was only about 3%, so these were proficient users (characterisation here)."
+  },
+  {
+    "id": "t8-08",
+    "claim": "An online motor imagery brain-computer interface (BCI) with only 6 dry electrodes over motor cortex reached a peak information transfer rate (ITR) of 36.5 bits/min and on average ran 30.8% slower than earlier 64-electrode wet-cap sessions with the same 5 subjects.",
+    "value": 30.8,
+    "units": "% lower ITR than 64 wet electrodes",
+    "range": null,
+    "source": {
+      "authors": "Popescu F, Fazli S, Badower Y, Blankertz B, Müller KR",
+      "year": 2007,
+      "title": "Single trial classification of motor imagination using 6 dry EEG electrodes",
+      "journal": "PLoS ONE",
+      "volume_pages": "2(7):e637",
+      "doi": "10.1371/journal.pone.0000637",
+      "url": "https://doi.org/10.1371/journal.pone.0000637"
+    },
+    "evidence_location": "Discussion, first paragraph",
+    "quote": "is on average 30.8% slower than previous experiments with 64 wet electrode caps on the same subjects",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Electrode count is confounded with electrode type (dry versus gel) and recording session. The abstract rounds this to 'about 30% slower'."
+  },
+  {
+    "id": "t8-09",
+    "claim": "A review of common spatial patterns (CSP) reports that sparse (L1-regularised) CSP showed that the electrode count for motor imagery can be reduced to 10 to 20 without a significant drop in performance.",
+    "value": null,
+    "units": "electrodes",
+    "range": [
+      10,
+      20
+    ],
+    "source": {
+      "authors": "Blankertz B, Tomioka R, Lemm S, Kawanabe M, Müller KR",
+      "year": 2008,
+      "title": "Optimizing spatial filters for robust EEG single-trial analysis",
+      "journal": "IEEE Signal Processing Magazine",
+      "volume_pages": "25(1):41-56",
+      "doi": "10.1109/MSP.2008.4408441",
+      "url": "https://doc.ml.tu-berlin.de/bbci/publications/BlaTomLemKawMue08.pdf"
+    },
+    "evidence_location": "Section on regularizing CSP (authors' draft, paragraph d)",
+    "quote": "Their results have shown that the number of electrodes can be reduced to 10-20 without significant drop in the performance.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Secondary statement citing Farquhar J, Hill NJ, Lal TN, Schölkopf B (2006), Regularised CSP for sensor selection in BCI, Proc. 3rd Int. BCI Workshop, Graz, pp. 14-15 (primary source not checked). Quote taken from the authors' draft PDF, not the typeset article."
+  },
+  {
+    "id": "t8-10",
+    "claim": "In motor imagery brain-computer interfaces (BCIs) based on common spatial patterns (CSP), only 2 to 6 spatial filters are typically used for classification, compared with 32 to 128 recorded channels, so the informative signal occupies a few spatial dimensions.",
+    "value": null,
+    "units": "CSP spatial filters",
+    "range": [
+      2,
+      6
+    ],
+    "source": {
+      "authors": "Blankertz B, Tomioka R, Lemm S, Kawanabe M, Müller KR",
+      "year": 2008,
+      "title": "Optimizing spatial filters for robust EEG single-trial analysis",
+      "journal": "IEEE Signal Processing Magazine",
+      "volume_pages": "25(1):41-56",
+      "doi": "10.1109/MSP.2008.4408441",
+      "url": "https://doc.ml.tu-berlin.de/bbci/publications/BlaTomLemKawMue08.pdf"
+    },
+    "evidence_location": "Section on feedback with CSP filters (authors' draft)",
+    "quote": "the number of selected CSP filters is typically low (2–6) compared to the number of EEG channels (32–128)",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "The authors find 6 filters 'often satisfactory' and warn that the classifier 'could severely overfit' if too many are used. Quote from the authors' draft PDF."
+  },
+  {
+    "id": "t8-11",
+    "claim": "For five chronic stroke patients using motor imagery to drive functional electrical stimulation over 20 sessions, 8 to 36 channels were needed to keep accuracy above 90%, and 12 electrodes gave the best balance between channel count and accuracy.",
+    "value": 12,
+    "units": "electrodes",
+    "range": [
+      8,
+      36
+    ],
+    "source": {
+      "authors": "Tam WK, Tong KY, Meng F, Gao S",
+      "year": 2011,
+      "title": "A minimal set of electrodes for motor imagery BCI to control an assistive device in chronic stroke subjects: a multi-session study",
+      "journal": "IEEE Transactions on Neural Systems and Rehabilitation Engineering",
+      "volume_pages": "19(6):617-627",
+      "doi": "10.1109/TNSRE.2011.2168542",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21984520/"
+    },
+    "evidence_location": "Abstract (PubMed)",
+    "quote": "Generally, 8-36 channels were required to maintain accuracy higher than 90% in 20 BCI training sessions for chronic stroke patients.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Subject-specific selection with the Fisher criterion or support vector machine recursive feature elimination (SVM-RFE). The size of the starting montage is not given in the abstract; the full text was not checked."
+  },
+  {
+    "id": "t8-12",
+    "claim": "On a 128-electrode movement dataset (20 subjects, executed movements), decoding from the 44 sensors over motor cortex beat using all electrodes, for both convolutional networks and filter-bank common spatial patterns (FBCSP).",
+    "value": 44,
+    "units": "sensors",
+    "range": null,
+    "source": {
+      "authors": "Schirrmeister RT, Springenberg JT, Fiederer LDJ, Glasstetter M, Eggensperger K, Tangermann M, Hutter F, Burgard W, Ball T",
+      "year": 2017,
+      "title": "Deep learning with convolutional neural networks for EEG decoding and visualization",
+      "journal": "Human Brain Mapping",
+      "volume_pages": "38(11):5391-5420",
+      "doi": "10.1002/hbm.23730",
+      "url": "https://arxiv.org/abs/1703.05051v5"
+    },
+    "evidence_location": "Supplementary Materials A, data preprocessing paragraph (arXiv:1703.05051v5)",
+    "quote": "Interestingly, using all electrodes led to worse accuracies for both the ConvNets and FBCSP",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Executed rather than imagined movements. No accuracy figures are given for the all-electrode case. The sentence was read in the arXiv v5 text; the Europe PMC version of the journal article does not include the supplement, so the published wording was not checked."
+  },
+  {
+    "id": "t8-13",
+    "claim": "Linear spatial filters and classifiers for single-trial event-related potential (ERP) decoding need an accurate channel-by-channel covariance matrix, which is hard to estimate in high-dimensional sensor spaces; the authors use shrinkage regularisation. This is a mechanism by which extra channels stop helping, or hurt, when calibration data are limited.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Blankertz B, Lemm S, Treder M, Haufe S, Müller KR",
+      "year": 2011,
+      "title": "Single-trial analysis and classification of ERP components: a tutorial",
+      "journal": "NeuroImage",
+      "volume_pages": "56(2):814-825",
+      "doi": "10.1016/j.neuroimage.2010.06.048",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20600976/"
+    },
+    "evidence_location": "Abstract (PubMed)",
+    "quote": "they require an accurate covariance matrix estimation in high dimensional sensor spaces which is a highly intricate problem",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Mechanism statement, not a measured saturation point. Stated for ERP decoding; common spatial patterns for motor imagery also rest on estimated channel covariance matrices (Blankertz et al. 2008), the Sannelli et al. manuscript attributes the preference for fewer channels with little training data to CSP overfitting, and Arvaneh et al. 2011 say large channel sets 'may include noisy and redundant signals that degrade the BCI performance'."
+  },
+  {
+    "id": "t8-14",
+    "claim": "In a 40-target steady-state visual evoked potential (SSVEP) speller decoded from parieto-occipital electrodes (15 subjects), sets of 9, 21, 32 and 66 electrodes all exceeded 95% accuracy once more than 0.2 s of data was used, with no significant differences; the 66-electrode set was better only at 0.2 s or less.",
+    "value": 95,
+    "units": "% accuracy (all four electrode sets, data length above 0.2 s)",
+    "range": null,
+    "source": {
+      "authors": "Ming G, Pei W, Tian S, Chen X, Gao X, Wang Y",
+      "year": 2026,
+      "title": "A High-Speed Visual BCI Based on Hybrid Frequency–Phase–Space Encoding and High-Density EEG Decoding",
+      "journal": "Cyborg and Bionic Systems",
+      "volume_pages": "7:0555",
+      "doi": "10.34133/cbsystems.0555",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13018654/"
+    },
+    "evidence_location": "Results, classification accuracy under different electrode densities (Fig. 2B, Fig. S3B)",
+    "quote": "For data lengths that exceeded 0.2 s, all electrode configurations achieved classification accuracies above 95%, with no significant differences observed",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "All sets are subsets of one 256-channel cap: 66 parieto-occipital electrodes at 1.5 cm mean spacing (256-channel layout), 32 at 2.0 cm (128-channel layout), 21 at 2.8 cm (64-channel layout), and the common 9-electrode montage. Preprint arXiv:2507.17242 reports the same results."
+  },
+  {
+    "id": "t8-15",
+    "claim": "For decoding flicker frequency and phase alone, 66 parieto-occipital electrodes beat 9, 21 and 32 electrodes by 22.19, 8.01 and 3.58 percentage points with 0.1 s of data, but by only 1.32, 0.12 (not significant) and 0.04 (not significant) points with 0.5 s.",
+    "value": 0.04,
+    "units": "percentage points (66 versus 32 electrodes, 0.5 s)",
+    "range": [
+      0.04,
+      22.19
+    ],
+    "source": {
+      "authors": "Ming G, Pei W, Tian S, Chen X, Gao X, Wang Y",
+      "year": 2026,
+      "title": "A High-Speed Visual BCI Based on Hybrid Frequency–Phase–Space Encoding and High-Density EEG Decoding",
+      "journal": "Cyborg and Bionic Systems",
+      "volume_pages": "7:0555",
+      "doi": "10.34133/cbsystems.0555",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13018654/"
+    },
+    "evidence_location": "Results, Fig. 5D-E and the paragraph that follows",
+    "quote": "In contrast, with regard to frequency information decoding capability, no significant differences were observed among most electrode configurations once a certain data length was reached.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Same task-discriminant component analysis (TDCA) spatiotemporal filter for all sets. Shows saturation of frequency-tagged (SSVEP) information by about 21 to 32 parieto-occipital electrodes once 0.5 s of data is available."
+  },
+  {
+    "id": "t8-16",
+    "claim": "When targets were also coded by where the user fixated relative to the flicker (spatial information), 66 electrodes still beat 9, 21 and 32 electrodes by 15.53, 5.65 and 2.76 percentage points with 0.5 s of data: the gain shrinks with each doubling of density but stays significant.",
+    "value": 2.76,
+    "units": "percentage points (66 versus 32 electrodes, 0.5 s)",
+    "range": [
+      2.76,
+      15.53
+    ],
+    "source": {
+      "authors": "Ming G, Pei W, Tian S, Chen X, Gao X, Wang Y",
+      "year": 2026,
+      "title": "A High-Speed Visual BCI Based on Hybrid Frequency–Phase–Space Encoding and High-Density EEG Decoding",
+      "journal": "Cyborg and Bionic Systems",
+      "volume_pages": "7:0555",
+      "doi": "10.34133/cbsystems.0555",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13018654/"
+    },
+    "evidence_location": "Results, Fig. 5D and the following paragraph",
+    "quote": "The enhancement in spatial information decoding capability remained significant across all data lengths as electrode density increased",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Five-fixation-point classification; the numbers are in the sentences after the quoted one."
+  },
+  {
+    "id": "t8-17",
+    "claim": "Theoretical information transfer rate (ITR) gains over the standard 9-electrode montage were 55.50% (21 electrodes), 79.99% (32) and 83.66% (66) for the classic 40-target steady-state visual evoked potential (SSVEP) speller, but 103.07%, 153.08% and 195.56% for a 200-target paradigm that also codes fixation position.",
+    "value": 83.66,
+    "units": "% theoretical ITR increase over 9 electrodes (40 targets, 66 electrodes)",
+    "range": [
+      55.5,
+      195.56
+    ],
+    "source": {
+      "authors": "Ming G, Pei W, Tian S, Chen X, Gao X, Wang Y",
+      "year": 2026,
+      "title": "A High-Speed Visual BCI Based on Hybrid Frequency–Phase–Space Encoding and High-Density EEG Decoding",
+      "journal": "Cyborg and Bionic Systems",
+      "volume_pages": "7:0555",
+      "doi": "10.34133/cbsystems.0555",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13018654/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "the 66/256, 32/128, and 21/64 electrode configurations brought theoretical ITR increases of 83.66%, 79.99%, and 55.50% over the traditional 9/64 setup",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Going from 32 to 66 electrodes adds 3.67 points in the classic paradigm (diminishing) but 42.48 points when spatial coding is used (differences computed here)."
+  },
+  {
+    "id": "t8-18",
+    "claim": "Peak actual information transfer rate (ITR) (including gaze-shift time, parameters personalised per subject) averaged 484.76 bits/min with 66 parieto-occipital electrodes, against 460.75 (32), 433.14 (21) and 375.78 (9).",
+    "value": 484.76,
+    "units": "bits/min",
+    "range": [
+      375.78,
+      484.76
+    ],
+    "source": {
+      "authors": "Ming G, Pei W, Tian S, Chen X, Gao X, Wang Y",
+      "year": 2026,
+      "title": "A High-Speed Visual BCI Based on Hybrid Frequency–Phase–Space Encoding and High-Density EEG Decoding",
+      "journal": "Cyborg and Bionic Systems",
+      "volume_pages": "7:0555",
+      "doi": "10.34133/cbsystems.0555",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13018654/"
+    },
+    "evidence_location": "Results, Fig. 3B and text",
+    "quote": "the actual ITR for the 66/256 configuration reached a peak of 484.76 ± 12.68 bpm",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Successive gains: +57.36 (9 to 21), +27.61 (21 to 32), +24.01 (32 to 66) bits/min (computed here). The online system averaged 472.72 bits/min."
+  },
+  {
+    "id": "t8-19",
+    "claim": "Greedy removal of electrodes from the 66-electrode set peaked at 52 electrodes (93.07% versus 92.59% with all 66; 80 targets, 0.2 s); within the 32- and 21-electrode sets the optimum kept nearly all of them (30 and 20).",
+    "value": 52,
+    "units": "electrodes",
+    "range": null,
+    "source": {
+      "authors": "Ming G, Pei W, Tian S, Chen X, Gao X, Wang Y",
+      "year": 2026,
+      "title": "A High-Speed Visual BCI Based on Hybrid Frequency–Phase–Space Encoding and High-Density EEG Decoding",
+      "journal": "Cyborg and Bionic Systems",
+      "volume_pages": "7:0555",
+      "doi": "10.34133/cbsystems.0555",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13018654/"
+    },
+    "evidence_location": "Results, Fig. 6A-D",
+    "quote": "In the 66/256 configuration, the accuracy peaked at 52 electrodes",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Selection averaged over the 15 subjects; the dropped electrodes were peripheral."
+  },
+  {
+    "id": "t8-20",
+    "claim": "In a 30-target code-modulated visual evoked potential (c-VEP) brain-computer interface (BCI) (16 subjects, 0.52 s), the best electrode subsets reached 90.90%, 92.22% and 93.13% for 3-degree stimuli from layouts of 21, 32 and 66 parieto-occipital electrodes (64-, 128- and 256-channel caps), but 43.61%, 48.06% and 54.86% for 0.5-degree stimuli.",
+    "value": null,
+    "units": "% accuracy",
+    "range": [
+      43.61,
+      93.13
+    ],
+    "source": {
+      "authors": "Sun Q, Zhang S, Dong G, Pei W, Gao X, Wang Y",
+      "year": 2024,
+      "title": "High-Density Electroencephalogram Facilitates the Detection of Small Stimuli in Code-Modulated Visual Evoked Potential Brain-Computer Interfaces",
+      "journal": "Sensors",
+      "volume_pages": "24(11):3521",
+      "doi": "10.3390/s24113521",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11175152/"
+    },
+    "evidence_location": "Section 3.4 (Electrode Selection Experiment), Fig. 9",
+    "quote": "under 3° stimulus condition, 21/64: 90.90%, 32/128: 92.22%, 66/256: 93.13%",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Below 15 electrodes the three layouts performed alike, and 'the system performance stabilized' as more were added. The text places the best performance at 33-41 electrodes, but the per-stimulus numbers in the same sentence (49, 57, 58, 44) do not match that range, so treat the exact optimum as uncertain. Mean inter-electrode distances 3.1, 2.8 and 1.8 cm. Smaller stimuli gain more from density."
+  },
+  {
+    "id": "t8-21",
+    "claim": "Over occipitotemporal cortex, 128 electrodes about 14 mm apart decoded flickering (15 Hz) checkerboard stimuli in the frequency domain 3 to 6 percentage points better than subsets of the same cap about 28 mm apart (about 28 to 31 electrodes); 16 participants.",
+    "value": null,
+    "units": "percentage points of decoding accuracy",
+    "range": [
+      3,
+      6
+    ],
+    "source": {
+      "authors": "Robinson AK, Venkatesh P, Boring MJ, Tarr MJ, Grover P, Behrmann M",
+      "year": 2017,
+      "title": "Very high density EEG elucidates spatiotemporal aspects of early visual processing",
+      "journal": "Scientific Reports",
+      "volume_pages": "7:16248",
+      "doi": "10.1038/s41598-017-16377-3",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5701165/"
+    },
+    "evidence_location": "Results, frequency-domain decoding (Fig. 3c)",
+    "quote": "even when the highest classifier accuracy was chosen per set for each participant, SND still outperformed ND by 3–6%",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "SND = super-Nyquist density, ND = Nyquist density. Six-way classification of low, medium and high spatial frequency checkerboards in the left or right visual field (chance 16.66%), all flickering at 15 Hz, so the gain reflects spatial pattern information rather than frequency identity; the SND advantage was largest for high spatial frequency stimuli. The authors equate about 28 mm spacing with commercial 64 to 128 electrode systems."
+  },
+  {
+    "id": "t8-22",
+    "claim": "For steady-state visual evoked potential (SSVEP) detection with five training-free algorithms, average accuracy rose from 1 to 2 to 3 channels for every algorithm (21 participants).",
+    "value": null,
+    "units": "channels",
+    "range": [
+      1,
+      3
+    ],
+    "source": {
+      "authors": "Kim H, Im CH",
+      "year": 2021,
+      "title": "Influence of the Number of Channels and Classification Algorithm on the Performance Robustness to Electrode Shift in Steady-State Visual Evoked Potential-Based Brain-Computer Interfaces",
+      "journal": "Frontiers in Neuroinformatics",
+      "volume_pages": "15:750839",
+      "doi": "10.3389/fninf.2021.750839",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8569408/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "Our results showed that the ACA increased with an increase in the number of channels regardless of the algorithm.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "ACA = accuracy averaged over simulated electrode shifts. Only 1 to 3 channels were tested, so no saturation point."
+  },
+  {
+    "id": "t8-23",
+    "claim": "In a P300 speller (7 participants, 64-channel recordings, stepwise linear discriminant analysis), adding 13 electrodes to the 6-electrode set Fz, Cz, Pz, PO7, PO8, Oz (19 in total) gave no significant improvement.",
+    "value": 6,
+    "units": "electrodes",
+    "range": [
+      6,
+      19
+    ],
+    "source": {
+      "authors": "Krusienski DJ, Sellers EW, McFarland DJ, Vaughan TM, Wolpaw JR",
+      "year": 2008,
+      "title": "Toward enhanced P300 speller performance",
+      "journal": "Journal of Neuroscience Methods",
+      "volume_pages": "167(1):15-21",
+      "doi": "10.1016/j.jneumeth.2007.07.017",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2349091/"
+    },
+    "evidence_location": "Discussion (Section VI); Results, Fig. 3",
+    "quote": "an additional 13 electrodes (Set 4) does not produce a significant increase in performance over the performance achieved by the 6 electrodes in Set 3",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "The authors add that 'including 19 electrodes results at best in no appreciable improvement from 6 electrodes, and at worst in a small amount of overfitting.' Adding posterior PO7, PO8, Oz to the classic Fz, Cz, Pz did help significantly. NIH author manuscript (PMC2349091)."
+  },
+  {
+    "id": "t8-24",
+    "claim": "With 8 standard channels the same classifier scored 92.5% on Brain-Computer Interface (BCI) Competition III data set II (P300 speller), second only to the winner, who optimised channel selection over all 64 channels for each subject.",
+    "value": 92.5,
+    "units": "% character accuracy",
+    "range": null,
+    "source": {
+      "authors": "Krusienski DJ, Sellers EW, McFarland DJ, Vaughan TM, Wolpaw JR",
+      "year": 2008,
+      "title": "Toward enhanced P300 speller performance",
+      "journal": "Journal of Neuroscience Methods",
+      "volume_pages": "167(1):15-21",
+      "doi": "10.1016/j.jneumeth.2007.07.017",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2349091/"
+    },
+    "evidence_location": "Discussion (Section VI)",
+    "quote": "classified the data set at 92.5% accuracy, results that rank second",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "The 8 channels were Fz, Cz, Pz, PO7, PO8, Oz plus P3 and P4."
+  },
+  {
+    "id": "t8-25",
+    "claim": "In a P300 brain-computer interface (BCI) tested on disabled and able-bodied subjects, going beyond 8 electrodes (four midline electrodes plus P7, P3, P4, P8) gave only small gains with Bayesian linear discriminant analysis (BLDA) and lowered performance with Fisher's linear discriminant analysis (FLDA).",
+    "value": 8,
+    "units": "electrodes",
+    "range": [
+      4,
+      32
+    ],
+    "source": {
+      "authors": "Hoffmann U, Vesin JM, Ebrahimi T, Diserens K",
+      "year": 2008,
+      "title": "An efficient P300-based brain-computer interface for disabled subjects",
+      "journal": "Journal of Neuroscience Methods",
+      "volume_pages": "167(1):115-125",
+      "doi": "10.1016/j.jneumeth.2007.03.005",
+      "url": "https://infoscience.epfl.ch/record/101093"
+    },
+    "evidence_location": "Section 3.3 (Results) and Section 4.2 (Discussion)",
+    "quote": "Using more than eight electrodes yielded only relatively small increases in performance for BLDA and resulted in a decrease of performance for FLDA",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Text read through two separate WebFetch extractions (the journal PDF hosted at kfki.hu and the EPFL Infoscience manuscript); a local PDF download was blocked, so the quote was not machine-matched. The authors conclude that 'the eight electrode configuration represents a good compromise between suitability for daily use and classification accuracy.'"
+  },
+  {
+    "id": "t8-26",
+    "claim": "Maximum average bitrates with Bayesian linear discriminant analysis (BLDA) for 4, 8, 16 and 32 electrodes were 13.1, 15.9, 16.4 and 19.0 bits/min for 4 disabled subjects and 26.0, 29.3, 35.7 and 38.6 bits/min for 4 able-bodied subjects; with Fisher's linear discriminant analysis (FLDA) bitrates peaked at 8 electrodes (16.3 and 27.6) and fell at 32 (11.7 and 21.0).",
+    "value": null,
+    "units": "bits/min",
+    "range": [
+      11.7,
+      38.6
+    ],
+    "source": {
+      "authors": "Hoffmann U, Vesin JM, Ebrahimi T, Diserens K",
+      "year": 2008,
+      "title": "An efficient P300-based brain-computer interface for disabled subjects",
+      "journal": "Journal of Neuroscience Methods",
+      "volume_pages": "167(1):115-125",
+      "doi": "10.1016/j.jneumeth.2007.03.005",
+      "url": "https://infoscience.epfl.ch/record/101093"
+    },
+    "evidence_location": "Table 2",
+    "quote": "the eight electrode configuration represents a good compromise between suitability for daily use and classification accuracy",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Table values transcribed by WebFetch from the journal PDF and matched in a second extraction; not machine-matched locally. Large spread between subjects (for example 38.6 ± 19.7 for able-bodied BLDA-32). One disabled subject (S5) had no above-chance result and is excluded."
+  },
+  {
+    "id": "t8-27",
+    "claim": "Re-analysing 128-channel visual decoding data (gratings and natural images; 16 and 24 participants), decoding accuracy rose with electrode density from 16 to 128 channels, yet reliable above-chance decoding remained with 16 electrodes and decoding time courses were nearly identical across densities.",
+    "value": 16,
+    "units": "electrodes (smallest montage tested)",
+    "range": [
+      16,
+      128
+    ],
+    "source": {
+      "authors": "Huang L, Varlet M, Grootswagers T",
+      "year": 2026,
+      "title": "Robust neural decoding with low-density EEG",
+      "journal": "Scientific Reports",
+      "volume_pages": "16:647",
+      "doi": "10.1038/s41598-025-27703-5",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12780233/"
+    },
+    "evidence_location": "Abstract; Results",
+    "quote": "reliable above-chance decoding was still achieved with as few as 16 electrodes",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "The main text gives no accuracy differences between densities, so this documents direction rather than a saturation point. Preprint: bioRxiv 10.1101/2025.07.07.663494."
+  },
+  {
+    "id": "t8-28",
+    "claim": "Simulations with common linear inverse methods show that greater sensor density improves source localization, and that adding sensors on the inferior head surface improves accuracy at all depths.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Song J, Davey C, Poulsen C, Luu P, Turovets S, Anderson E, Li K, Tucker D",
+      "year": 2015,
+      "title": "EEG source localization: Sensor density and head surface coverage",
+      "journal": "Journal of Neuroscience Methods",
+      "volume_pages": "256:9-21",
+      "doi": "10.1016/j.jneumeth.2015.08.015",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0165027015003064"
+    },
+    "evidence_location": "Abstract (Results)",
+    "quote": "Greater sensor density improves source localization accuracy.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Authors are from Electrical Geodesics, Inc., a maker of 128 and 256 channel systems."
+  },
+  {
+    "id": "t8-29",
+    "claim": "With a minimum-norm inverse and whole-head coverage, mean localization error was 26.99 mm with 32 channels, 21.31 mm with 64, 19.73 mm with 128 and 18.42 mm with 256; the authors call the 128 to 256 step modest.",
+    "value": 18.42,
+    "units": "mm mean localization error (256 channels, minimum norm)",
+    "range": [
+      18.42,
+      26.99
+    ],
+    "source": {
+      "authors": "Song J, Davey C, Poulsen C, Luu P, Turovets S, Anderson E, Li K, Tucker D",
+      "year": 2015,
+      "title": "EEG source localization: Sensor density and head surface coverage",
+      "journal": "Journal of Neuroscience Methods",
+      "volume_pages": "256:9-21",
+      "doi": "10.1016/j.jneumeth.2015.08.015",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0165027015003064"
+    },
+    "evidence_location": "Table 1; Discussion",
+    "quote": "the improvement from 128 to 256 channels is modest",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Read through two WebFetch passes of the open-access article; no local copy, so not machine-matched. Section 3.1.1 reportedly calls the decrease asymptotic: inaccurate at 16 or 32 channels, marginal at 64, reasonably accurate at 128 (15-20 mm error). Atlas (Colin27) head model with finite-difference forward solution; upper-head-only coverage was much worse (38.50 mm at 32 channels)."
+  },
+  {
+    "id": "t8-30",
+    "claim": "Localizing interictal spikes in 5 children with epilepsy (128 recorded channels, subsampled), mean error to the resected zone fell by 4 mm from 32 to 64 electrodes, 1.3 mm from 64 to 96 and 1.0 mm from 96 to 128.",
+    "value": 4,
+    "units": "mm error reduction (32 to 64 electrodes)",
+    "range": [
+      1.0,
+      4
+    ],
+    "source": {
+      "authors": "Sohrabpour A, Lu Y, Kankirawatana P, Blount J, Kim H, He B",
+      "year": 2015,
+      "title": "Effect of EEG electrode number on epileptic source localization in pediatric patients",
+      "journal": "Clinical Neurophysiology",
+      "volume_pages": "126(3):472-480",
+      "doi": "10.1016/j.clinph.2014.05.038",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4289666/"
+    },
+    "evidence_location": "Results, Clinical Data (Fig. 3B)",
+    "quote": "improves by 4mm when going from 32 electrodes to 64 electrodes, and improves by 1.3 mm when going from 64 electrodes to 96 electrodes",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "All pairwise differences were significant against the resection. Simulations with a realistic boundary element model (signal-to-noise ratio 0 to 10 dB) showed the same flattening at every noise level. NIH author manuscript (PMC4289666)."
+  },
+  {
+    "id": "t8-31",
+    "claim": "Measured against the seizure-onset zone from intracranial recordings in the same children, every pair of electrode counts differed significantly except 96 versus 128.",
+    "value": 96,
+    "units": "electrodes",
+    "range": [
+      96,
+      128
+    ],
+    "source": {
+      "authors": "Sohrabpour A, Lu Y, Kankirawatana P, Blount J, Kim H, He B",
+      "year": 2015,
+      "title": "Effect of EEG electrode number on epileptic source localization in pediatric patients",
+      "journal": "Clinical Neurophysiology",
+      "volume_pages": "126(3):472-480",
+      "doi": "10.1016/j.clinph.2014.05.038",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4289666/"
+    },
+    "evidence_location": "Results, Clinical Data (Fig. 4B)",
+    "quote": "except for 96 and 128 electrodes, which were not significantly different",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "id": "t8-32",
+    "claim": "In a prospective series of 152 operated epilepsy patients, electric source imaging with 128 to 256 channels and the patient's own magnetic resonance imaging (MRI) head model had 84% sensitivity and 88% specificity, against 57% and 59% with fewer than 32 channels and a template head model.",
+    "value": 84,
+    "units": "% sensitivity (128-256 channels, individual MRI)",
+    "range": [
+      57,
+      88
+    ],
+    "source": {
+      "authors": "Brodbeck V, Spinelli L, Lascano AM, Wissmeier M, Vargas MI, Vulliemoz S, Pollo C, Schaller K, Michel CM, Seeck M",
+      "year": 2011,
+      "title": "Electroencephalographic source imaging: a prospective study of 152 operated epileptic patients",
+      "journal": "Brain",
+      "volume_pages": "134(10):2887-2897",
+      "doi": "10.1093/brain/awr243",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3187544/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "sensitivity of 84% and a specificity of 88% if the electroencephalogram was recorded with a large number of electrodes (128–256 channels)",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "This headline contrast mixes electrode count with head model; see the next entry for the same-patient comparison. The 84%/88% figures come from the 52 patients with high-density recordings and individual MRI. For the low-density/template variant in all 152 patients, Table 4 gives 55.6% and 58.8% rather than the abstract's 57% and 59%. Low density here means routine 19 to 29 electrode recordings."
+  },
+  {
+    "id": "t8-33",
+    "claim": "In the 52 patients who had all variants, with the individual magnetic resonance imaging (MRI) head model held fixed, high-density recordings (128 to 256 channels) raised sensitivity from 72.7% to 84.1% and specificity from 75.0% to 87.5% compared with routine 19 to 29 channel recordings.",
+    "value": null,
+    "units": "% sensitivity and specificity",
+    "range": [
+      72.7,
+      87.5
+    ],
+    "source": {
+      "authors": "Brodbeck V, Spinelli L, Lascano AM, Wissmeier M, Vargas MI, Vulliemoz S, Pollo C, Schaller K, Michel CM, Seeck M",
+      "year": 2011,
+      "title": "Electroencephalographic source imaging: a prospective study of 152 operated epileptic patients",
+      "journal": "Brain",
+      "volume_pages": "134(10):2887-2897",
+      "doi": "10.1093/brain/awr243",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3187544/"
+    },
+    "evidence_location": "Results, Table 4 (n = 52 columns) and the paragraph on statistics (43 patients)",
+    "quote": "This analysis revealed significant differences between both the high-resolution electric source imaging–individual MRI versus the low-resolution electric source imaging–individual MRI",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "P < 0.004 in the 43 patients with all imaging. Table 4 also gives high-density with a template MRI: 75.0% sensitivity, 62.5% specificity."
+  },
+  {
+    "id": "t8-34",
+    "claim": "A practical review of electrical source imaging states that arrays with fewer than 32 sensors cause severe mislocalization and blurring, while noting that even sparse arrays give useful information for focal sources such as epileptic spikes.",
+    "value": 32,
+    "units": "sensors (lower bound)",
+    "range": null,
+    "source": {
+      "authors": "Michel CM, Brunet D",
+      "year": 2019,
+      "title": "EEG Source Imaging: A Practical Review of the Analysis Steps",
+      "journal": "Frontiers in Neurology",
+      "volume_pages": "10:325",
+      "doi": "10.3389/fneur.2019.00325",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6458265/"
+    },
+    "evidence_location": "Section 'Number and Positioning of the Electrodes'",
+    "quote": "electrode arrays with < 32 sensors lead to severe mislocalizations and blurring",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Review citing Michel et al. 2004, Michel & He 2018, Brodbeck et al. 2011 and Luu et al. 2001. It also reports a recommendation to add at least 3 inferior electrodes on each side to the 10-20 system, and says infants, whose skulls are much thinner, need even more electrodes."
+  },
+  {
+    "id": "t8-35",
+    "claim": "For acute stroke, subsampling 128-channel recordings showed that 64 or more channels were needed to describe the stroke-related topography accurately; 32 channels distorted it.",
+    "value": 64,
+    "units": "channels",
+    "range": null,
+    "source": {
+      "authors": "Luu P, Tucker DM, Englander R, Lockfeld A, Lutsep H, Oken B",
+      "year": 2001,
+      "title": "Localizing acute stroke-related EEG changes: assessing the effects of spatial undersampling",
+      "journal": "Journal of Clinical Neurophysiology",
+      "volume_pages": "18(4):302-317",
+      "doi": "10.1097/00004691-200107000-00002",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11673696/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "recording densities of 64 channels or higher are required for accurate spatial characterization of focal stroke-related EEG changes",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Six patients; authors from Electrical Geodesics, Inc."
+  },
+  {
+    "id": "t8-36",
+    "claim": "In a concentric-sphere simulation, a spatial sampling error below 10% needed 64 electrodes for adults (256 for infants); adding measurement noise one tenth of the signal power raised the error to 25% for both (adults with 64, infants with 256 electrodes).",
+    "value": 25,
+    "units": "% spatial sampling error with noise",
+    "range": [
+      10,
+      25
+    ],
+    "source": {
+      "authors": "Grieve PG, Emerson RG, Isler JR, Stark RI",
+      "year": 2004,
+      "title": "Quantitative analysis of spatial sampling error in the infant and adult electroencephalogram",
+      "journal": "NeuroImage",
+      "volume_pages": "21(4):1260-1274",
+      "doi": "10.1016/j.neuroimage.2003.11.028",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15050554/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "With the addition of measurement noise, with power 10 times less than that of the EEG, the sampling error increased to 25%",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Once the count is adequate, the noise floor rather than the electrode count sets the reconstruction error."
+  },
+  {
+    "id": "t8-37",
+    "claim": "If skull resistivity is lower than earlier assumed, dense (high-resolution) arrays give a greater advantage at realistic noise levels and their spatial resolution is less sensitive to noise.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Ryynänen OR, Hyttinen JA, Malmivuo JA",
+      "year": 2006,
+      "title": "Effect of measurement noise and electrode density on the spatial resolution of cortical potential distribution with different resistivity values for the skull",
+      "journal": "IEEE Transactions on Biomedical Engineering",
+      "volume_pages": "53(9):1851-1858",
+      "doi": "10.1109/TBME.2006.873744",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16941841/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "there is then also greater advantage to be obtained with high-resolution EEG at realistic noise levels",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Complements Ryynänen et al. 2004 (already cited): the payoff from dense arrays depends on skull conductivity and noise."
+  },
+  {
+    "id": "t8-38",
+    "claim": "Re-deriving the spatial Nyquist analysis, Grover and Venkatesh estimate that capturing 99% of scalp-signal energy needs at least 289 to 361 sensors (skull-to-brain conductivity ratio 1/30 to 1/15), or 578 for the 1/30 case with 2x oversampling, so doubling current sensor counts should reconstruct the scalp potential with small error.",
+    "value": 361,
+    "units": "sensors (99% of energy, ratio 1/15)",
+    "range": [
+      289,
+      578
+    ],
+    "source": {
+      "authors": "Grover P, Venkatesh P",
+      "year": 2017,
+      "title": "An Information-Theoretic View of EEG Sensing",
+      "journal": "Proceedings of the IEEE",
+      "volume_pages": "105(2):367-384",
+      "doi": "10.1109/JPROC.2016.2615179",
+      "url": "https://praveenv253.github.io/assets/doc/papers/2016--ieee-proceedings--preprint.pdf"
+    },
+    "evidence_location": "Section III-A (Fig. 6 and text)",
+    "quote": "currently available (if rarely used) high-density systems are close, and doubling the current number of sensors should reconstruct the scalp EEG within a small error",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Quotes come from the authors' 2016 preprint hosted by the second author; the published wording was not checked. Idealised spherical head, noiseless. They describe 512 as 'the maximum number of sensors used currently'."
+  },
+  {
+    "id": "t8-39",
+    "claim": "In noiseless simulations the point-spread width of single-dipole reconstructions kept shrinking as sensors increased from 92 through 252, 492 and 1,212 to 6,252, so the authors argue that even a few thousand electrodes may not suffice for optimal source localization.",
+    "value": null,
+    "units": "sensors",
+    "range": [
+      92,
+      6252
+    ],
+    "source": {
+      "authors": "Grover P, Venkatesh P",
+      "year": 2017,
+      "title": "An Information-Theoretic View of EEG Sensing",
+      "journal": "Proceedings of the IEEE",
+      "volume_pages": "105(2):367-384",
+      "doi": "10.1109/JPROC.2016.2615179",
+      "url": "https://praveenv253.github.io/assets/doc/papers/2016--ieee-proceedings--preprint.pdf"
+    },
+    "evidence_location": "Section I and Section III-B, Fig. 8",
+    "quote": "suggesting that even a few thousand electrodes may not be sufficient for close to optimal source localization",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Simulation, not measurement; the authors stress that 'both Nyquist-rate analysis and our simulations in Fig. 8 are noiseless.' With noise, the useful count is set by where signal power drops below noise power (their Fig. 7). Preprint wording."
+  },
+  {
+    "id": "t8-40",
+    "claim": "On an icosahedral layout over the head, 10,000 electrodes correspond to about 3 mm between neighbouring sensors.",
+    "value": 3,
+    "units": "mm spacing (10,000 electrodes)",
+    "range": null,
+    "source": {
+      "authors": "Grover P, Venkatesh P",
+      "year": 2017,
+      "title": "An Information-Theoretic View of EEG Sensing",
+      "journal": "Proceedings of the IEEE",
+      "volume_pages": "105(2):367-384",
+      "doi": "10.1109/JPROC.2016.2615179",
+      "url": "https://praveenv253.github.io/assets/doc/papers/2016--ieee-proceedings--preprint.pdf"
+    },
+    "evidence_location": "Section III-B, Fig. 9(a)",
+    "quote": "The figure shows that 10,000 electrodes, the required inter-sensor separation is approximately 3 mm.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Read from their figure; the authors note rodent EEG systems already use 3-5 mm spacing. Preprint wording."
+  },
+  {
+    "id": "t8-41",
+    "claim": "Derived: since spacing on a fixed scalp area scales with the inverse square root of the electrode count, 100,000 electrodes would sit about 0.95 mm apart (3 mm × (10,000/100,000)^0.5); the same scaling gives about 9.5 mm for 1,000 and 30 mm for 100 electrodes.",
+    "value": 0.95,
+    "units": "mm spacing (100,000 electrodes, derived)",
+    "range": null,
+    "source": {
+      "authors": "Grover P, Venkatesh P",
+      "year": 2017,
+      "title": "An Information-Theoretic View of EEG Sensing",
+      "journal": "Proceedings of the IEEE",
+      "volume_pages": "105(2):367-384",
+      "doi": "10.1109/JPROC.2016.2615179",
+      "url": "https://praveenv253.github.io/assets/doc/papers/2016--ieee-proceedings--preprint.pdf"
+    },
+    "evidence_location": "Derived from Section III-B, Fig. 9(a)",
+    "quote": "The figure shows that 10,000 electrodes, the required inter-sensor separation is approximately 3 mm.",
+    "verified_in_source": false,
+    "confidence": "medium",
+    "notes": "Not stated in the source: a calculation from the 10,000-electrode point. Ignores electrode size, as the section requires."
+  },
+  {
+    "id": "t8-42",
+    "claim": "Counterpoint on noise: Grover and Venkatesh argue that the useful sensor count is set by the spatial frequency at which signal power meets the noise floor; white sensor noise sets such a cutoff, but if brain noise (filtered by the head like the signal) dominates, the count at which localization stops improving could be quite high.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Grover P, Venkatesh P",
+      "year": 2017,
+      "title": "An Information-Theoretic View of EEG Sensing",
+      "journal": "Proceedings of the IEEE",
+      "volume_pages": "105(2):367-384",
+      "doi": "10.1109/JPROC.2016.2615179",
+      "url": "https://praveenv253.github.io/assets/doc/papers/2016--ieee-proceedings--preprint.pdf"
+    },
+    "evidence_location": "Fig. 7 caption (Section III-B)",
+    "quote": "with “brain-noise” as the dominant noise source, the limiting number of sensors at which improvements in localization accuracy saturate could be quite high",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Conceptual figure, not data. It cuts against a simple rule that extra electrodes stop helping once sensor noise is below the brain background: in their model a brain-noise floor with a signal-like spatial spectrum imposes no sharp cutoff by itself, while the white sensor-noise floor does. Their Fig. 11 shows a deep brain-noise source mainly hurts localization of deep sources, while a shallow one causes large errors. Preprint wording."
+  },
+  {
+    "id": "t8-43",
+    "claim": "Of the electroencephalography (EEG) noise terms (sensor circuitry, residual artifacts, external interference, and brain activity unrelated to the task), the brain-generated term is described as the hardest to reduce.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Grover P, Venkatesh P",
+      "year": 2017,
+      "title": "An Information-Theoretic View of EEG Sensing",
+      "journal": "Proceedings of the IEEE",
+      "volume_pages": "105(2):367-384",
+      "doi": "10.1109/JPROC.2016.2615179",
+      "url": "https://praveenv253.github.io/assets/doc/papers/2016--ieee-proceedings--preprint.pdf"
+    },
+    "evidence_location": "Section III-C, 'Noise due to a brain source'",
+    "quote": "The “brain noise” term is probably the most difficult to reduce because estimating it requires solving another inverse problem.",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Preprint wording."
+  },
+  {
+    "id": "t8-44",
+    "claim": "An ultra-dense electrode patch revealed strong scalp potential variation at the 1 cm scale and gave twice the signal-to-noise ratio for brain-response classification compared with high-density systems (up to 256 electrodes, 2 to 4 cm apart).",
+    "value": 2,
+    "units": "ratio of classification signal-to-noise ratio (ultra-dense versus high-density)",
+    "range": null,
+    "source": {
+      "authors": "Petrov Y, Nador J, Hughes C, Tran S, Yavuzcetin O, Sridhar S",
+      "year": 2014,
+      "title": "Ultra-dense EEG sampling results in two-fold increase of functional brain information",
+      "journal": "NeuroImage",
+      "volume_pages": "90:140-145",
+      "doi": "10.1016/j.neuroimage.2013.12.041",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24398333/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "ud-EEG provides twice the signal to noise ratio for brain-response classification compared with contemporary hd-EEG",
+    "verified_in_source": true,
+    "confidence": "medium",
+    "notes": "Full text not checked. Robinson et al. 2017 describe the array as 'a small 4 × 4 grid of electrodes'; Ming et al. 2026 describe it as reducing spacing over parieto-occipital scalp from 3 to 1 cm. Local patch, not whole-head coverage."
+  },
+  {
+    "id": "t8-45",
+    "claim": "With up to 512 electrodes 8.6 mm apart over occipital cortex (4 subjects, 4-class visual category decoding, chance 25%), accuracy averaged 73.2% for the full ultra-high-density (uHD) array (464 electrodes used on average), against 69.9% for a 10-05 subset (143.8), 65.5% for extended 10-10 (33.0), 64.0% for 10-10 (25.5) and 57.2% for 10-20 (8.8).",
+    "value": 73.2,
+    "units": "% accuracy (uHD, mean 464 electrodes)",
+    "range": [
+      57.2,
+      73.2
+    ],
+    "source": {
+      "authors": "Schreiner L, Sieghartsleitner S, Kapeller C, Jordan M, Scharinger J, Spataro R, Pretl H, Guger C",
+      "year": 2026,
+      "title": "Increasing EEG electrode density improves decoding of visual categories and source localization: an exploratory ultra-high-density EEG study",
+      "journal": "Communications Engineering",
+      "volume_pages": "5:59",
+      "doi": "10.1038/s44172-026-00611-w",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13043922/"
+    },
+    "evidence_location": "Table 1; Discussion",
+    "quote": "The uHD EEG system consistently outperformed all configurations, achieving the highest average accuracy (73.2%) across subjects",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "A measured gain beyond 256 electrodes, but over one scalp region and in only 4 subjects (the P values are across cross-validation folds, not subjects). From about 144 to 464 electrodes added 3.3 points; from 8.8 to 25.5 added 6.8 points. Most authors work for g.tec, the system maker."
+  },
+  {
+    "id": "t8-46",
+    "claim": "In the same 512-electrode occipital setup, single-trial regression of image properties averaged Pearson r = 0.50 for the full ultra-high-density (uHD) array against 0.48 (10-05 subset), 0.44 (extended 10-10), 0.43 (10-10) and 0.37 (10-20), with gains continuing below 10 mm spacing.",
+    "value": 0.5,
+    "units": "Pearson r (full uHD array)",
+    "range": [
+      0.37,
+      0.5
+    ],
+    "source": {
+      "authors": "Sieghartsleitner S, Schreiner L, Grünwald J, Jordan M, Spataro R, Scharinger J, Guger C",
+      "year": 2025,
+      "title": "Decoding of image properties from single-trial visual evoked potentials recorded by ultra-high-density EEG",
+      "journal": "Scientific Reports",
+      "volume_pages": "15:32917",
+      "doi": "10.1038/s41598-025-18275-5",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12464266/"
+    },
+    "evidence_location": "Abstract; Table 1",
+    "quote": "Our analyses highlight the importance of electrode density with improvements in decoding performance extending even below 10 mm of inter-electrode distance.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Same group and 4 subjects. The step from the 10-05 subset to the full array adds only 0.02 in r."
+  },
+  {
+    "id": "t8-47",
+    "claim": "With 256 ultra-high-density (uHD) channels (8.6 mm spacing) over contralateral sensorimotor cortex, pairwise classification of individual executed finger movements averaged 64.8% (5 subjects, chance 50%).",
+    "value": 64.8,
+    "units": "% pairwise accuracy",
+    "range": null,
+    "source": {
+      "authors": "Lee HS, Schreiner L, Jo SH, Sieghartsleitner S, Jordan M, Pretl H, Guger C, Park HS",
+      "year": 2022,
+      "title": "Individual finger movement decoding using a novel ultra-high-density electroencephalography-based brain-computer interface system",
+      "journal": "Frontiers in Neuroscience",
+      "volume_pages": "16:1009878",
+      "doi": "10.3389/fnins.2022.1009878",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9627315/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "The average classification accuracy over subjects was 64.8 (6.3)%",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "No lower-density comparison, so it gives no evidence about saturation for motor signals beyond 256 channels; executed rather than imagined movements."
+  },
+  {
+    "id": "t8-48",
+    "claim": "Commercial high-density systems primarily use 160 to 256 channels.",
+    "value": null,
+    "units": "channels",
+    "range": [
+      160,
+      256
+    ],
+    "source": {
+      "authors": "Lee HS, Schreiner L, Jo SH, Sieghartsleitner S, Jordan M, Pretl H, Guger C, Park HS",
+      "year": 2022,
+      "title": "Individual finger movement decoding using a novel ultra-high-density electroencephalography-based brain-computer interface system",
+      "journal": "Frontiers in Neuroscience",
+      "volume_pages": "16:1009878",
+      "doi": "10.3389/fnins.2022.1009878",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9627315/"
+    },
+    "evidence_location": "Introduction",
+    "quote": "Several high-density EEG systems are available commercially, primarily using from 160 to 256 channels.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "id": "t8-49",
+    "claim": "Consumer single-channel headset: NeuroSky MindWave Mobile 2 records from one forehead electrode at FP1, with reference and ground on an ear clip.",
+    "value": 1,
+    "units": "EEG electrodes",
+    "range": null,
+    "source": {
+      "authors": "NeuroSky Inc.",
+      "year": 2026,
+      "title": "MindWave Mobile 2 product page (accessed 3 November 2026)",
+      "journal": "store.neurosky.com",
+      "volume_pages": "Technical Specs section",
+      "doi": null,
+      "url": "https://store.neurosky.com/pages/mindwave"
+    },
+    "evidence_location": "Technical Specs",
+    "quote": "the EEG electrode is on the sensor arm, resting on the forehead above the eye (FP1 position)",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Page footer reads © 2015."
+  },
+  {
+    "id": "t8-50",
+    "claim": "Consumer headband: Muse 2 records 4 electroencephalography (EEG) channels from dry electrodes at TP9, AF7, AF8 and TP10, referenced to FPz.",
+    "value": 4,
+    "units": "EEG channels",
+    "range": null,
+    "source": {
+      "authors": "InteraXon Inc.",
+      "year": 2026,
+      "title": "Muse 2 product page, technical specifications (accessed 3 November 2026)",
+      "journal": "choosemuse.com",
+      "volume_pages": "Tech specs section",
+      "doi": null,
+      "url": "https://sandbox.choosemuse.com/products/muse-2"
+    },
+    "evidence_location": "Tech specs",
+    "quote": "EEG Channels: 4 EEG channels + 2 amplified Aux channels",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Read from sandbox.choosemuse.com (InteraXon's domain); the main choosemuse.com page loads its specs dynamically. The original Muse spec sheet (https://cdn.shopify.com/s/files/1/0414/4905/t/2/assets/muse-tech-spec-sheet.pdf) says '7 sensors capable of reading 4 channels of data - two on the forehead and two behind the ears'."
+  },
+  {
+    "id": "t8-51",
+    "claim": "Consumer research headset: Emotiv EPOC X has 14 channels.",
+    "value": 14,
+    "units": "EEG channels",
+    "range": null,
+    "source": {
+      "authors": "Emotiv Inc.",
+      "year": 2026,
+      "title": "Emotiv Epoc X: 14 channel wireless EEG headset (product page, accessed 3 November 2026)",
+      "journal": "emotiv.com",
+      "volume_pages": "Product overview",
+      "doi": null,
+      "url": "https://www.emotiv.com/products/epoc-x"
+    },
+    "evidence_location": "Product overview",
+    "quote": "14-channel EEG Whole-brain sensing",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Already in the site bibliography as 'emotivepocx' (accessed 2 November 2026)."
+  },
+  {
+    "id": "t8-52",
+    "claim": "Open-hardware board: OpenBCI Cyton has 8 channels, and the Daisy add-on expands it to 16.",
+    "value": 8,
+    "units": "channels (16 with Daisy module)",
+    "range": [
+      8,
+      16
+    ],
+    "source": {
+      "authors": "OpenBCI",
+      "year": 2026,
+      "title": "Cyton Board Specs (documentation, accessed 3 November 2026)",
+      "journal": "docs.openbci.com",
+      "volume_pages": "OpenBCI Daisy Module section",
+      "doi": null,
+      "url": "https://docs.openbci.com/Cyton/CytonSpecs/"
+    },
+    "evidence_location": "OpenBCI Daisy Module section",
+    "quote": "expands the number of sensor channels from 8 to 16",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Cyton uses a Texas Instruments ADS1299 front end (8 channels); the Daisy adds a second."
+  },
+  {
+    "id": "t8-53",
+    "claim": "Research caps: BioSemi head caps come with 16, 32, 64, 128, 160 or 256 electrodes; its current ActiveThree amplifier takes up to 128+8 channels.",
+    "value": null,
+    "units": "electrodes",
+    "range": [
+      16,
+      256
+    ],
+    "source": {
+      "authors": "BioSemi B.V.",
+      "year": 2026,
+      "title": "Headcap (product page, accessed 3 November 2026)",
+      "journal": "biosemi.com",
+      "volume_pages": "Available sizes and layouts table",
+      "doi": null,
+      "url": "https://www.biosemi.com/headcap.htm"
+    },
+    "evidence_location": "Available sizes and layouts table",
+    "quote": "Medium 16,32,64,128,160,256",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Quote is a table cell (cap size M). The 256-electrode cap uses a radial ABC layout with 11 mm holders. The ActiveThree figure is from https://www.biosemi.com/ad-box_activethree.htm."
+  },
+  {
+    "id": "t8-54",
+    "claim": "Research amplifier: Brain Products actiCHamp records 32 to 160 channels in 32-channel modules.",
+    "value": null,
+    "units": "channels",
+    "range": [
+      32,
+      160
+    ],
+    "source": {
+      "authors": "Brain Products GmbH",
+      "year": 2026,
+      "title": "actiCHamp series (product page, accessed 3 November 2026)",
+      "journal": "brainproducts.com",
+      "volume_pages": "Product summary and technical data",
+      "doi": null,
+      "url": "https://www.brainproducts.com/solutions/actichamp/"
+    },
+    "evidence_location": "Product summary",
+    "quote": "Up to 160 channels: Maximum scalability with 32-channel modules",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "id": "t8-55",
+    "claim": "High-density nets: Electrical Geodesics, Inc. (EGI; this sheet is published by Philips) systems come with 32, 64, 128 or 256 channels (HydroCel Geodesic Sensor Net).",
+    "value": 256,
+    "units": "channels (maximum)",
+    "range": [
+      32,
+      256
+    ],
+    "source": {
+      "authors": "Philips (Electrical Geodesics, Inc.)",
+      "year": 2018,
+      "title": "Geodesic EEG System (GES) 400/410 with MR and MEG compatibility (product sheet)",
+      "journal": "documents.philips.com",
+      "volume_pages": "2-page product sheet",
+      "doi": null,
+      "url": "https://www.documents.philips.com/assets/20180709/f8a9431a610745f195a0a918017da09d.pdf"
+    },
+    "evidence_location": "Product sheet, system description",
+    "quote": "Systems are available with 32, 64, 128, or 256 EEG channels",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "MR/MEG-compatible version sheet; the current Philips product page says the Geodesic Sensor Net 'provides fast, abrasion-free application of 32 to 256 sensors' (checked via WebFetch)."
+  },
+  {
+    "id": "t8-56",
+    "claim": "Ultra-high-density: g.tec g.Pangolin grids offer up to 1,024 channels at 8.6 mm spacing.",
+    "value": 1024,
+    "units": "channels",
+    "range": null,
+    "source": {
+      "authors": "g.tec medical engineering GmbH",
+      "year": 2024,
+      "title": "g.Pangolin: 1,024 Essential Channels, Amazing Detail (news page, 5 November 2024; accessed 3 November 2026)",
+      "journal": "gtec.at",
+      "volume_pages": "Page introduction and feature list",
+      "doi": null,
+      "url": "https://www.gtec.at/2024/11/05/g-pangolin-ultra-high-density-eeg-system/"
+    },
+    "evidence_location": "Page introduction",
+    "quote": "g.Pangolin uses ultra-high-density electrode grids with up to 1,024 channels and 8.6 mm inter-electrode distance for EEG, EMG and ECG",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Manufacturer news page. Published studies with it used 256 (motor) or 512 (occipital) channels over one region, not whole-head coverage; the page says 512 EEG channels can be recorded 'in just 30 minutes'."
+  },
+  {
+    "id": "t8-57",
+    "claim": "Measured noise budget: up to 100 Hz the signal-to-noise ratio of scalp recordings depends practically only on cortically generated background activity; amplifier noise and thermal noise of the electrode resistance dominate only at a few hundred Hz and above.",
+    "value": 100,
+    "units": "Hz (below this, brain background noise dominates)",
+    "range": null,
+    "source": {
+      "authors": "Scheer HJ, Sander T, Trahms L",
+      "year": 2006,
+      "title": "The influence of amplifier, interface and biological noise on signal quality in high-resolution EEG recordings",
+      "journal": "Physiological Measurement",
+      "volume_pages": "27(2):109-117",
+      "doi": "10.1088/0967-3334/27/2/002",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16400198/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "up to 100 Hz S/N practically depends only on cortical generated background noise",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "The sentence continues: 'while at a few hundred Hz or more amplifier and thermal noise of interelectrode resistance are the major sources.' The motor imagery, SSVEP and P300 signals discussed here lie below 100 Hz. Full text not checked."
+  },
+  {
+    "id": "t8-58",
+    "claim": "For single-trial event-related potential (ERP) decoding such as P300, the noise is artifacts plus ongoing neural background activity, giving an unfavourable signal-to-noise ratio.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Blankertz B, Lemm S, Treder M, Haufe S, Müller KR",
+      "year": 2011,
+      "title": "Single-trial analysis and classification of ERP components: a tutorial",
+      "journal": "NeuroImage",
+      "volume_pages": "56(2):814-825",
+      "doi": "10.1016/j.neuroimage.2010.06.048",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20600976/"
+    },
+    "evidence_location": "Abstract (published); Section 2 of the authors' preprint",
+    "quote": "the unfavorable ratio between signal (ERP) and noise (artifacts and neural background activity)",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "The preprint (https://doc.ml.tu-berlin.de/bbci/publications/BlaLemTreHauMue10.pdf) models each trial as the ERP plus noise whose covariance is 'the covariance of ongoing background EEG' and says ERP variations 'are typically small compared to the background noise'."
+  },
+  {
+    "id": "t8-59",
+    "claim": "Background activity can be modelled as randomly distributed cortical dipoles; for isotropic random dipoles in a spherical head the variance of a bipolar (differential) signal depends only on electrode distance, which gives a spatial covariance matrix for background noise in evoked-potential recordings.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "de Munck JC, Vijn PC, Lopes da Silva FH",
+      "year": 1992,
+      "title": "A random dipole model for spontaneous brain activity",
+      "journal": "IEEE Transactions on Biomedical Engineering",
+      "volume_pages": "39(8):791-804",
+      "doi": "10.1109/10.148387",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1505993/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "the variance of a differentially measured EEG-signal is only a function of the electrode distance",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Basis for treating brain background as spatially correlated noise whose correlation falls with distance."
+  },
+  {
+    "id": "t8-60",
+    "claim": "Measured background noise in real recordings is well fitted by a model whose spatial covariance is a function of inter-sensor distance.",
+    "value": null,
+    "units": null,
+    "range": null,
+    "source": {
+      "authors": "Huizenga HM, de Munck JC, Waldorp LJ, Grasman RP",
+      "year": 2002,
+      "title": "Spatiotemporal EEG/MEG source analysis based on a parametric noise covariance model",
+      "journal": "IEEE Transactions on Biomedical Engineering",
+      "volume_pages": "49(6):533-539",
+      "doi": "10.1109/TBME.2002.1001967",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12046698/"
+    },
+    "evidence_location": "Abstract",
+    "quote": "The spatial matrix models the spatial covariances by a function dependent on sensor distance.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "The abstract adds that 'the noise model fits the data very well' for real recordings and that, in simulations, modelling the correlated noise made source estimates more precise than ignoring it."
+  },
+  {
+    "id": "t8-61",
+    "claim": "Median Pearson correlation between neighbouring electrodes rose from 0.43 at 35.4 mm (10-10 layout) to 0.57 at 23.6 mm (extended 10-10) and 0.66 at 8.6 mm (ultra-high-density grid); at 8.6 mm neighbours still share only 44% of variance (R² = 0.44).",
+    "value": 0.66,
+    "units": "median r between neighbours (8.6 mm)",
+    "range": [
+      0.43,
+      0.66
+    ],
+    "source": {
+      "authors": "Lee HS, Schreiner L, Jo SH, Sieghartsleitner S, Jordan M, Pretl H, Guger C, Park HS",
+      "year": 2022,
+      "title": "Individual finger movement decoding using a novel ultra-high-density electroencephalography-based brain-computer interface system",
+      "journal": "Frontiers in Neuroscience",
+      "volume_pages": "16:1009878",
+      "doi": "10.3389/fnins.2022.1009878",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9627315/"
+    },
+    "evidence_location": "Results, Table 2",
+    "quote": "The median correlation between neighboring electrodes increases with their median Euclidean distance decreasing.",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "Correlation of the recorded signal (brain activity plus background plus sensor noise) during a finger task. Neighbours 8.6 mm apart are correlated but not redundant; part of the decorrelation at 8.6 mm may be independent electrode noise rather than brain signal (interpretation here, not tested in the paper)."
+  },
+  {
+    "id": "t8-62",
+    "claim": "Across 66 parieto-occipital electrodes (6 to 90 Hz band, steady-state visual evoked potential (SSVEP) task), pairwise correlation fell with inter-electrode distance; mean correlation was 0.77 within the 9-electrode set and 0.68 to 0.70 within the 21-, 32- and 66-electrode sets.",
+    "value": 0.7,
+    "units": "mean pairwise r (66-electrode set)",
+    "range": [
+      0.68,
+      0.77
+    ],
+    "source": {
+      "authors": "Ming G, Pei W, Tian S, Chen X, Gao X, Wang Y",
+      "year": 2026,
+      "title": "A High-Speed Visual BCI Based on Hybrid Frequency–Phase–Space Encoding and High-Density EEG Decoding",
+      "journal": "Cyborg and Bionic Systems",
+      "volume_pages": "7:0555",
+      "doi": "10.34133/cbsystems.0555",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13018654/"
+    },
+    "evidence_location": "Results, Fig. 5B-C",
+    "quote": "the 9/64 configuration exhibited the highest mean correlation coefficient of 0.77",
+    "verified_in_source": true,
+    "confidence": "high",
+    "notes": "The text adds: 'The correlation decreased as the interelectrode distance increased.' Pairs with r below 0.6: 2 (9 electrodes), 68 (21), 140 (32), 610 (66)."
+  }
+]

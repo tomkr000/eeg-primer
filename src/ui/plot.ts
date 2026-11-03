@@ -9,6 +9,8 @@ export interface Series {
   dashed?: boolean;
   /** draw as dots instead of a line */
   dots?: boolean;
+  /** shade the area between the line and the bottom of the plot */
+  fill?: boolean;
   width?: number;
 }
 export interface Marker {
@@ -19,6 +21,16 @@ export interface Marker {
   color?: string;
   /** x markers only: draw the label as a boxed callout near the top of the plot instead of at the foot of the line */
   callout?: boolean;
+}
+/** a boxed note with a pointer to a data point: the box sits dx, dy pixels from the point, or at the data position `at` */
+export interface Note {
+  x: number;
+  y: number;
+  text: string;
+  dx?: number;
+  dy?: number;
+  at?: [number, number];
+  align?: 'start' | 'end';
 }
 export interface AxisCfg {
   label: string;
@@ -34,18 +46,21 @@ export interface PlotCfg {
   height?: number;
   /** shaded x-band regions */
   bands?: { from: number; to: number; label: string; color: string }[];
-  /** draw the legend inside the plot area (top left) instead of below it */
-  legendInside?: boolean;
+  /** draw the legend inside the plot area (top left, or top right with 'right') instead of below it */
+  legendInside?: boolean | 'right';
+  /** override the default margins, e.g. more room on the right for the last tick label */
+  margin?: Partial<typeof BASE_MARGIN>;
 }
 
 export interface Plot {
-  update(series: Series[], markers?: Marker[], bands?: PlotCfg['bands']): void;
+  update(series: Series[], markers?: Marker[], bands?: PlotCfg['bands'], notes?: Note[]): void;
 }
 
-const MARGIN = { top: 14, right: 18, bottom: 44, left: 58 };
+const BASE_MARGIN = { top: 14, right: 18, bottom: 44, left: 58 };
 
 export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
   const height = cfg.height ?? 300;
+  const MARGIN = { ...BASE_MARGIN, ...cfg.margin };
   const root = d3.select(container).append('div').attr('class', 'plot');
   const svg = root.append('svg').attr('class', 'plot-svg').attr('height', height);
   const clipId = `clip-${Math.random().toString(36).slice(2, 9)}`;
@@ -54,6 +69,7 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
   const gBands = svg.append('g');
   const gSeries = svg.append('g').attr('clip-path', `url(#${clipId})`);
   const gMarkers = svg.append('g');
+  const gNotes = svg.append('g');
   const gX = svg.append('g').attr('class', 'axis');
   const gY = svg.append('g').attr('class', 'axis');
   const xLabel = svg.append('text').attr('class', 'axis-label').attr('text-anchor', 'middle');
@@ -62,10 +78,11 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
   const hoverLine = gHover.append('line').attr('class', 'crosshair');
   const tip = root.append('div').attr('class', 'tooltip').style('display', 'none');
   const legend = root.append('div').attr('class', 'legend' + (cfg.legendInside ? ' legend-inside' : ''));
-  if (cfg.legendInside) legend.style('left', `${MARGIN.left + 10}px`).style('top', `${MARGIN.top + 6}px`);
+  if (cfg.legendInside === 'right') legend.style('right', `${MARGIN.right + 10}px`).style('top', `${MARGIN.top + 6}px`);
+  else if (cfg.legendInside) legend.style('left', `${MARGIN.left + 10}px`).style('top', `${MARGIN.top + 6}px`);
   const overlay = svg.append('rect').attr('fill', 'transparent');
 
-  let series: Series[] = [], markers: Marker[] = [], bands = cfg.bands ?? [];
+  let series: Series[] = [], markers: Marker[] = [], bands = cfg.bands ?? [], notes: Note[] = [];
   const mkScale = (a: AxisCfg) => (a.scale === 'log' ? d3.scaleLog() : d3.scaleLinear());
 
   function render() {
@@ -115,6 +132,10 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
         gSeries.selectAll(null).data(s.points.filter((p) => line.defined()(p, 0, s.points))).join('circle')
           .attr('cx', (p) => x(p[0])).attr('cy', (p) => y(p[1])).attr('r', 4.5).attr('fill', s.color).attr('stroke', 'var(--surface-1)').attr('stroke-width', 2);
       } else {
+        if (s.fill) {
+          const area = d3.area<Pt>().defined(line.defined()).x((p) => x(p[0])).y0(MARGIN.top + ih).y1((p) => y(p[1]));
+          gSeries.append('path').datum(s.points).attr('d', area).attr('fill', s.color).attr('opacity', 0.16);
+        }
         gSeries.append('path').datum(s.points).attr('d', line).attr('fill', 'none').attr('stroke', s.color)
           .attr('stroke-width', s.width ?? 2).attr('stroke-dasharray', s.dashed ? '6 4' : null).attr('stroke-linejoin', 'round');
       }
@@ -142,6 +163,21 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
         }
       }
     }
+    gNotes.selectAll('*').remove();
+    for (const n of notes) {
+      if (!isFinite(n.x) || !isFinite(n.y)) continue;
+      const px = x(n.x), py = y(n.y), g = gNotes.append('g').attr('class', 'callout');
+      const tx = n.at ? x(n.at[0]) : px + (n.dx ?? 0), ty = n.at ? y(n.at[1]) : py + (n.dy ?? 0);
+      const anchor = n.align ?? ((n.dx ?? 0) < 0 ? 'end' : 'start');
+      const txt = g.append('text').attr('class', 'callout-text').attr('x', tx).attr('y', ty).attr('text-anchor', anchor);
+      n.text.split('\n').forEach((line, i) => txt.append('tspan').attr('x', tx).attr('dy', i ? '1.2em' : 0).text(line));
+      const bb = (txt.node() as SVGTextElement).getBBox();
+      g.insert('rect', 'text').attr('x', bb.x - 6).attr('y', bb.y - 3).attr('width', bb.width + 12).attr('height', bb.height + 6).attr('rx', 4).attr('class', 'callout-box');
+      // pointer from the nearest edge of the box to the point
+      const ex = Math.max(bb.x - 6, Math.min(px, bb.x + bb.width + 6)), ey = Math.max(bb.y - 3, Math.min(py, bb.y + bb.height + 3));
+      g.append('line').attr('x1', ex).attr('y1', ey).attr('x2', px).attr('y2', py).attr('class', 'callout-line');
+      g.append('circle').attr('cx', px).attr('cy', py).attr('r', 3).attr('fill', '#1a1a1a');
+    }
     // legend (only for ≥ 2 series)
     legend.selectAll('*').remove();
     if (series.length >= 2) {
@@ -168,6 +204,6 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
   const ro = new ResizeObserver(() => render());
   ro.observe(container);
   return {
-    update(s, m = [], b) { series = s; markers = m; if (b) bands = b; render(); },
+    update(s, m = [], b, n = []) { series = s; markers = m; if (b) bands = b; notes = n; render(); },
   };
 }

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "area-sizes",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Roux et al. 2020, J Physiol: author accepted manuscript, full text (University of Milano-Bicocca repository, boa.unimib.it) plus Europe PMC abstract",
+      "Willoughby et al., Front Neurosci 14:598482: full text incl. Table 1 (Europe PMC, PMC7817621)",
+      "Catani 2017, Brain: full text (Europe PMC, PMC5841206)"
+    ],
+    "evidence_location": "Roux: Abstract (100 patients); Methods 'Exclusion criteria' (patients under general anaesthesia excluded; awake-craniotomy protocol); Discussion 'Thirdly...' paragraph (hand and face/mouth 'proportionally much larger than their body volume'; tongue 'at least as large as that of the hand'). The Results give counts of positive sites (e.g. tongue 35) and MNI coordinates; I found no measured hand-versus-tongue area. Willoughby: Methods 2.1 and 2.5 (7 recruited, 1 excluded, 6 analysed, ages 19-34); Results paragraph on cortical magnification ('(12 ± 5) cm2' = total area of ROI surface elements correlated with fingertip stimulation); Table 1 largest foot cluster per subject A 200, B 161, C 33.3, D 7.79, E 9.74, F 39 mm2; largest fingertip cluster A 1010, B 494, C 766, D 664, E 1340, F 335 mm2; Discussion 4.3 (finger 'on the order of 10 cm2', participant D 'only 3 cm2'). Catani: main text near Fig. 2D and Fig. 4 (vertical-length scaling; textbooks misread it as area; tongue exaggerated in the first homunculus, corrected in Penfield and Rasmussen 1950); innervation-not-size statement in the 'disproportionate body parts' paragraph.",
+    "quote": "\"found to be (12 ± 5) cm2\" (Willoughby); \"tongue was clearly exaggerated in the first homunculus\" (Catani)",
+    "discrepancy": "(1) Mismatched metrics. Willoughby's (12 ± 5) cm2 for the fingertip is the TOTAL activated area of all fingertip-correlated surface elements, whereas 7.8-200 mm2 (Table 1, correctly transcribed: 7.79-200) is the LARGEST SINGLE foot cluster. Like-for-like from Table 1, the largest clusters are fingertip 335-1340 mm2 against foot 7.79-200 mm2. The paper is itself inconsistent: Discussion says about 10 cm2, and only 3 cm2 in participant D. (2) Catani attributes the exaggerated tongue to Penfield and Boldrey's FIRST (1937) homunculus, which Penfield corrected in 1950. Catani says it was this 1937 figure that was scaled by vertical length along the pericentral cortex, and that textbooks then wrongly read its proportions as areas. 'The textbook homunculus ... exaggerates the tongue' therefore conflates the 1937 drawing with later textbook versions. (3) Minor: Roux's 'tongue at least as large as the hand' is a Discussion assertion, not a measured area. The Roux numbers (100 awake patients, precentral gyrus) and Catani's innervation point are correct.",
+    "suggested_fix": "\"...in primary somatosensory cortex the largest fingertip activation cluster per subject was 335-1340 mm2 against 7.8-200 mm2 for the foot (fMRI, six adults; the total fingertip-correlated area was (12 ± 5) cm2). Penfield and Boldrey's original 1937 homunculus was scaled by vertical length along the central sulcus, not by area (textbooks later read its proportions as areas), and that first version exaggerated the tongue, which Penfield corrected in 1950.\"",
+    "bibliographic_issues": "None material. Willoughby et al. was published online 7 Jan 2021 in volume 14 (2020 collection; Europe PMC lists the year as 2020), so '(2021) 14:598482' is acceptable. Roux: J Physiol 598(23):5487-5504 matches, read from the accepted manuscript rather than the typeset version. Catani: Brain 140(11):3055-3061 matches."
+  },
+  {
+    "id": "own-rhythm",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Arroyo et al. 1993: abstract (Europe PMC; full text not open)",
+      "Salmelin et al. 1995: abstract (Europe PMC; full text not open)",
+      "Pfurtscheller et al. 1997: abstract (Europe PMC; full text not open)"
+    ],
+    "evidence_location": "Arroyo abstract: subdural grids in 9 epilepsy patients; 7-11 Hz mu in 5-16 electrodes; 'both the presence and blocking of mu rhythm are specific to the somatic representation'. Salmelin abstract (MEG): suppression and rebound of the 20-Hz rhythm followed the finger, toe and mouth representations; the 10-Hz origin was stable near the hand somatosensory cortex. Pfurtscheller 1997 abstract: hand-area ERD (event-related desynchronization) with finger movement, foot-area ERD with toe movement; ERS (event-related synchronization) as a correlate of idling; 'it can be speculated that each primary sensorimotor area has its own intrinsic rhythm'.",
+    "quote": "\"The former was observed in every subject, the latter was more difficult to find\"; \"it can be speculated\"",
+    "discrepancy": "(1) Pfurtscheller 1997 says hand-area ERD with finger movement was seen in every subject, but foot-area ERD with toe movement 'was more difficult to find'. The claim presents the two as equally established. (2) That each area has its own intrinsic rhythm is offered as speculation in the source. (3) The 10/20 Hz segregation result (Salmelin) comes from MEG (magnetoencephalography), not subdural or scalp EEG; the claim leaves the modality implicit. (4) Arroyo: mu was also blocked by ipsilateral arm movements, but the authors still conclude that presence and blocking are specific to the somatic representation, so that part holds. The rest matches the abstracts.",
+    "suggested_fix": "\"Each sensorimotor area may carry its own rhythm (as Pfurtscheller et al. propose): ...; in MEG the movement-related suppression and rebound of the 20 Hz rhythm follow ...; on the scalp, desynchronization appears over the hand area with finger movement in every subject and, less consistently, over the foot area with toe movement.\"",
+    "bibliographic_issues": "None. All three DOIs resolve to the cited papers, and journal, volume, issue, pages and year match: EEG Clin Neurophysiol 87(3):76-87; NeuroImage 2(4):237-243; Int J Psychophysiol 26(1-3):121-135."
+  },
+  {
+    "id": "blink-width",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Guttmann-Flury et al. 2025, Sci Data 12:587: full text incl. Table 3 (Europe PMC, PMC11978869)"
+    ],
+    "evidence_location": "Methods 'Participants' (31 healthy volunteers); acquisition section (62 EEG electrodes on a 65-channel cap; reference on the right mastoid); Table 3 'Blink potential distribution parameters per subject'. The Mean row gives FP1 peak 160.1 ± 56.4 µV and FP1 width 0.197 ± 0.041 s. Subject means: peak 83.8 µV (S29) to 306.1 µV (S20); width 0.099 s (S06) to 0.279 s (S11). Blink width appears only as Table 3 column headers and is never defined; blink detection is deferred to ref. 21.",
+    "quote": "\"The reference electrode is situated on the right mastoid (M1)\"; \"Blink width on FP1 Mean ± SD (in sec)\"",
+    "discrepancy": "None. The paper labels the right-mastoid reference 'M1', which in standard 10-20 naming usually denotes the left mastoid. This ambiguity is in the source, not the site. The sample-size section separately quotes '160 ± 50 μV', consistent with the claim.",
+    "suggested_fix": "",
+    "bibliographic_issues": "None. Sci Data 12:587 (2025), and the DOI resolves to this paper."
+  },
+  {
+    "id": "erd-depth",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Toriyama et al. 2018, Front Hum Neurosci: full text incl. Table 1 (Europe PMC, PMC6079198); I computed ranges and means from Table 1",
+      "Pfurtscheller et al. 2006, NeuroImage: author preprint PDF hosted by co-author Schlögl (pub.ista.ac.at/~schloegl/publications/pfurtscheller2006.pdf; NeuroImage layout, pp. 153-159), incl. Table 1 image and Methods"
+    ],
+    "evidence_location": "Toriyama: Participants (20 healthy, aged 18-25); EEG analysis (small-Laplacian C3; 3-Hz band of largest ERD chosen within 7-35 Hz using the CONTRACTION tasks; peak of trial-averaged ERD). Table 1: imagery ERD 20.80-88.88%, means 54.4% (10% of maximal voluntary contraction) and 52.4% (40%); contraction ERD 38.62-91.72%, means 69.1% and 72.1%. Pfurtscheller 2006 Table 1: right-hand imagery at C3 −54 to −99%, mean −84.7%; left-hand imagery at C4 −64 to −96%, mean −86.7% (9 subjects). Methods: ERD averaged over trials and sample points, relative to a 1-s reference.",
+    "quote": "\"the 3 Hz of frequency-band showing the largest ERD was determined within alpha and beta bands (7–35 Hz)\"",
+    "discrepancy": "All numbers match. (1) Mislabel: Toriyama's most reactive 3-Hz band was mostly beta, not mu. Per Table 1 it lay at or above 13 Hz for 14 of 20 participants in the 10% task and 13 of 20 in the 40% task; only 4 and 6 respectively lay within 8-13 Hz. So 'how much power the mu rhythm loses' does not describe the Toriyama values. (2) Toriyama chose the band from the execution (contraction) task, not the imagery task, so for imagery it is not necessarily the 'best band'. (3) Pfurtscheller's 'about 85% (54-99%)' holds when the two contralateral cases are pooled: C3 for right-hand imagery (mean 84.7%, 54-99%) and C4 for left-hand imagery (mean 86.7%, 64-96%).",
+    "suggested_fix": "\"How much sensorimotor-rhythm power is lost during imagery: in 20 young adults the peak desynchronization at C3 (Laplacian; most reactive 3 Hz band within 7-35 Hz, chosen on the contraction task and mostly in the beta range) during kinesthetic imagery of a wrist contraction was 21-89% ...; in nine subjects the most reactive mu band over the hand area opposite the imagined hand lost on average about 85% of its power (single subjects 54-99%).\"",
+    "bibliographic_issues": "None. Front Hum Neurosci 12:295 (2018) and NeuroImage 31(1):153-159 (2006) match. Pfurtscheller 2006 was read from the author-hosted preprint, not the publisher PDF."
+  },
+  {
+    "id": "rhythm-fluctuation",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "Maltez et al. 2004: abstract and MeSH indexing (Europe PMC; full text not reachable: Elsevier paywall, and the Karolinska thesis record has no PDF)",
+      "Freyer et al. 2009: abstract (Europe PMC) and full text (PMC6665653 HTML page)"
+    ],
+    "evidence_location": "Maltez abstract: 57 normal subjects (MeSH 'Adult' only); 10-min resting protocol of 5 s eyes open and 55 s eyes closed; CV (coefficient of variation) of 4-s-epoch alpha power 0.58-0.76; CV 'inversely proportional to the square root of the sample size'; CV rose 36% (alpha) when recording length increased from 40 to 400 s. Freyer abstract: alpha bistability, compared against Gaussian phase-randomized surrogates. Freyer Results ('Examples of bimodal exponential distributions'): clear bimodality of 8-12 Hz power in 13 of 16 subjects.",
+    "quote": "\"0.58-0.76 (alpha)\"; \"inversely proportional to the square root of the sample size\"; \"bursting between high- and low-amplitude modes\"",
+    "discrepancy": "No misquote; all attributed statements are in the sources. Caveats the claim drops: (1) Maltez's CV includes slow non-stationarity. Alpha power fell over the recording, and the CV of 4-s epochs rose 36% between 40 s and 400 s recordings, so the value depends on recording length and part of the excess over a stationary Gaussian is drift. (2) The 0.29 benchmark is the site's own calculation, with correct arithmetic: 1/sqrt(3 Hz × 4 s) = 0.289. Maltez's alpha band limits are not visible in the abstract; for an 8-13 Hz band the same-bandwidth value would be 0.22, which strengthens the point. (3) Freyer found the alpha bimodality in 13 of 16 subjects, not all; the heavy-tailed 'extremal' non-Gaussian events were reported for beta.",
+    "suggested_fix": "Optional: \"...(a stationary Gaussian rhythm in a 3 Hz band would give 0.29; part of the measured excess reflects slow drift over the 10-min recording) ...; in most subjects (13 of 16) alpha power bursts between high- and low-amplitude modes, a non-Gaussian fluctuation.\"",
+    "bibliographic_issues": "None. Neurophysiol Clin 34(5):195-202 (2004) and J Neurosci 29(26):8512-8524 (2009) match their DOIs."
+  },
+  {
+    "id": "window-accuracy",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Miladinović et al. 2024, Sensors: full text (Europe PMC, PMC11435735) and Figure 3 image (PMC content-delivery file; MD5 matches the XML record), LDA cross-validation panel enlarged and read",
+      "McFarland et al. 2003: abstract (Europe PMC; full text not open)",
+      "Schlögl et al. 2002: author-hosted scan (pub.ista.ac.at/~schloegl/publications/schloegl2002.pdf), read via OCR"
+    ],
+    "evidence_location": "Miladinović: Methods (nine subjects A01T-A09T; left vs right hand; CSP (common spatial patterns) with LDA (linear discriminant analysis)); Results paragraph on the 'BCI IVa' dataset (cross-validated LDA 55-70% at 0.5 s, 75-85% at 4 s; 70/30-split values 55-85% and 80-95%). Figure 3, bottom-left panel (LDA cross-validation), per subject: 0.5 s ≈55.9-76.8% (median ≈60); 1 s median ≈65.5; 2 s median ≈71.2; 4 s ≈58.3-97.2% (median ≈74.2). McFarland abstract: movement time 1-4 s; accuracy increased with movement time; 8 users. Schlögl section 2 (4 subjects, sessions 6-10, 2 bipolar channels, adaptive autoregressive features with LDA, offline) and the end of section 3 (optimal times 5.75, 6.0, ~4.75 and 6.5 s; imagery starts ~3.5 s).",
+    "quote": "\"At 4 s, LDA accuracy improved to 75–85%\" (Miladinović); \"approx. 0.3-0.4 bits per second\" (Schlögl)",
+    "discrepancy": "(1) The claim copies Miladinović's text ranges (cross-validated LDA: 55-70% at 0.5 s, 75-85% at 4 s), but these contradict the paper's own Figure 3. Per subject the values are ≈56-77% at 0.5 s and ≈58-97% at 4 s; at 4 s five of nine subjects are below 75% and three are above 85%. The site's own figure-read 4 s median (74%) falls below its quoted 4 s range. The medians ≈60/65/71/74% are confirmed for the cross-validation panel (training-panel medians are ≈61/68/73/76.5%). The claim should say the values are cross-validated. (2) The last sentence merges two studies. The 1-4 s result is McFarland's cursor task (8 users). The 'four trained users' are Schlögl's offline analysis of cue-based Graz BCI sessions, not the cursor task; 'trained' is inferred from session numbers 6-10. (3) Schlögl's values are the mutual information at the time of minimum classification error, not necessarily its peak (f76 showed larger values near 7 s). Per-subject rates are 0.27-0.49 bits/s (1.1/2.25 s = 0.49); the paper rounds these to 'approx. 0.3-0.4 bits per second'.",
+    "suggested_fix": "\"...accuracy (cross-validated LDA) rose from a median of about 60% (≈56-77% across the 9 subjects) with 0.5 s windows to about 74% (≈58-97%) with 4 s windows, with medians of about 65% at 1 s and 71% at 2 s (read from Figure 3). In a separate cursor task accuracy rose as trials lengthened from 1 to 4 s (McFarland et al.). In an offline analysis of four Graz-BCI users (Schlögl et al.), information at the best classification time was 0.4-1.1 bits per trial 1.25-3 s after imagery began, about 0.3-0.4 bits/s (0.27-0.49 per user).\"",
+    "bibliographic_issues": "DOIs and details match: Sensors 24(18):6125; Biol Psychol 63(3):237-251; Biomed Tech 47(1-2):3-8. Miladinović mostly calls the dataset 'BCI IVa' (the name of BCI Competition III dataset IVa), but its subjects A01T-A09T and its link point to Competition IV dataset 2a, so the site's 'dataset 2a' is correct. Schlögl was read from an author-hosted scan via OCR (one optimal time reads '4.74', clearly 4.75 given the stated 1.25 s)."
+  }
+]

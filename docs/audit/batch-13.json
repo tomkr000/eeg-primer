@@ -1,0 +1,58 @@
+[
+ {
+  "id": "area-sizes",
+  "statement": "Body-part areas of sensorimotor cortex differ in size, following innervation rather than body size: direct stimulation of the precentral gyrus in 100 awake patients found the hand and face/mouth zones proportionally much larger than their body volume, the tongue’s representation at least as large as the hand’s; in primary somatosensory cortex one fingertip occupied (12 ± 5) cm² against 7.8–200 mm² for the largest foot cluster per subject (fMRI, six adults). The textbook homunculus was scaled by length along the central sulcus, not by area, and exaggerates the tongue.",
+  "sources": [
+   "Roux FE, Niare M, Charni S, Giussani C, Durand JB (2020). Functional architecture of the motor homunculus detected by electrostimulation. The Journal of Physiology 598(23):5487–5504. doi:10.1113/JP280156",
+   "Willoughby WR, Thoenes K, Bolding M (2021). Somatotopic arrangement of the human primary somatosensory cortex derived from functional magnetic resonance imaging. Frontiers in Neuroscience 14:598482. doi:10.3389/fnins.2020.598482",
+   "Catani M (2017). A little man of some importance. Brain 140(11):3055–3061. doi:10.1093/brain/awx270"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "own-rhythm",
+  "statement": "Each sensorimotor area can carry its own rhythm: with subdural grids the 7–11 Hz mu rhythm and its blocking were specific to the body part represented under each electrode; the movement-related suppression and rebound of the 20 Hz rhythm follow the finger, toe and mouth representations, while the 10 Hz component stays near the hand area; on the scalp, desynchronization appears over the hand area with finger movement and over the foot area with toe movement. The rhythms mark idling cortex: they fall when the body part moves.",
+  "sources": [
+   "Arroyo S, Lesser RP, Gordon B, Uematsu S, Jackson D, Webber R (1993). Functional significance of the mu rhythm of human cortex: an electrophysiologic study with subdural electrodes. Electroencephalography and Clinical Neurophysiology 87(3):76–87. doi:10.1016/0013-4694(93)90114-b",
+   "Salmelin R, Hämäläinen M, Kajola M, Hari R (1995). Functional segregation of movement-related rhythmic activity in the human brain. NeuroImage 2(4):237–243. doi:10.1006/nimg.1995.1031",
+   "Pfurtscheller G, Neuper C, Andrew C, Edlinger G (1997). Foot and hand area mu rhythms. International Journal of Psychophysiology 26(1–3):121–135. doi:10.1016/S0167-8760(97)00760-5"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "blink-width",
+  "statement": "In 31 subjects (62-channel EEG, right-mastoid reference) the blink peak at FP1 averaged about 160 µV (subject means 84–306 µV) and the mean blink width at FP1 was 0.197 s (subject means 0.099–0.279 s); the paper does not define how width was measured.",
+  "sources": [
+   "Guttmann-Flury E, Sheng X, Zhu X (2025). Dataset combining EEG, eye-tracking, and high-speed video for ocular activity analysis across BCI paradigms. Scientific Data 12:587. doi:10.1038/s41597-025-04861-9"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "erd-depth",
+  "statement": "How much power the mu rhythm loses during imagery: in 20 adults the peak desynchronization at C3 (most reactive 3 Hz band) during kinesthetic imagery of a wrist contraction was 21–89% across subjects, mean about 52–54% (actual contraction 39–92%, mean about 69–72%); in nine subjects the most reactive mu band over the hand area opposite the imagined hand lost on average about 85% of its power (single subjects 54–99%). Both are trial-averaged values in the best band, upper bounds for single windows; the site takes 50% as typical.",
+  "sources": [
+   "Toriyama H, Ushiba J, Ushiyama J (2018). Subjective vividness of kinesthetic motor imagery is associated with the similarity in magnitude of sensorimotor event-related desynchronization between motor execution and motor imagery. Frontiers in Human Neuroscience 12:295. doi:10.3389/fnhum.2018.00295",
+   "Pfurtscheller G, Brunner C, Schlögl A, Lopes da Silva FH (2006). Mu rhythm (de)synchronization and EEG single-trial classification of different motor imagery tasks. NeuroImage 31(1):153–159. doi:10.1016/j.neuroimage.2005.12.003"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "rhythm-fluctuation",
+  "statement": "Real rhythms fluctuate more than a Gaussian process of the same bandwidth: in 57 healthy adults at rest the coefficient of variation of alpha-band power across 4 s epochs was 0.58–0.76 (a Gaussian rhythm in a 3 Hz band would give 0.29), the scatter falling as the inverse square root of the amount of data averaged; alpha power bursts between high- and low-amplitude modes, a non-Gaussian fluctuation. The site’s model is therefore optimistic.",
+  "sources": [
+   "Maltez J, Hyllienmark L, Nikulin VV, Brismar T (2004). Time course and variability of power in different frequency bands of EEG during resting conditions. Neurophysiologie Clinique / Clinical Neurophysiology 34(5):195–202. doi:10.1016/j.neucli.2004.09.003",
+   "Freyer F, Aquino K, Robinson PA, Ritter P, Breakspear M (2009). Bistability and non-Gaussian fluctuations in spontaneous cortical activity. Journal of Neuroscience 29(26):8512–8524. doi:10.1523/JNEUROSCI.0754-09.2009"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "window-accuracy",
+  "statement": "Accuracy grows with the window: classifying left- versus right-hand imagery in BCI Competition IV dataset 2a (9 subjects, common spatial patterns with linear discriminant analysis), accuracy rose from 55–70% with 0.5 s windows to 75–85% with 4 s windows; read from the paper’s figure, the median subject scores about 60% at 0.5 s, 65% at 1 s, 71% at 2 s and 74% at 4 s. In a cursor task accuracy rose as trials lengthened from 1 to 4 s, and four trained users peaked at 0.4–1.1 bits per trial 1.25–3 s after imagery began, about 0.3–0.4 bits/s.",
+  "sources": [
+   "Miladinović A, Accardo A, Jarmolowska J, Marusic U, Ajčević M (2024). Optimizing real-time MI-BCI performance in post-stroke patients: impact of time window duration on classification accuracy and responsiveness. Sensors 24(18):6125. doi:10.3390/s24186125",
+   "McFarland DJ, Sarnacki WA, Wolpaw JR (2003). Brain–computer interface (BCI) operation: optimizing information transfer rates. Biological Psychology 63(3):237–251. doi:10.1016/S0301-0511(03)00073-5",
+   "Schlögl A, Neuper C, Pfurtscheller G (2002). Estimating the mutual information of an EEG-based brain–computer interface. Biomedizinische Technik 47(1–2):3–8. doi:10.1515/bmte.2002.47.1-2.3"
+  ],
+  "note_for_auditor": "Some figures were read from a figure in Miladinović et al. 2024; check them against the figure if you can open it, and the text ranges against the text."
+ }
+]

@@ -22,6 +22,8 @@ export interface NoiseParams {
   envelope?: (t: number) => number;
   /** fixed blink times in seconds, instead of random ones drawn from blinksPerMinute */
   blinkAtS?: number[];
+  /** the rhythm's waveform at unit power (a narrowband random process), instead of a steady sine */
+  rhythm?: Float64Array;
 }
 
 /** Simple 2nd-order Butterworth band-pass via two cascaded biquads (bilinear transform). */
@@ -91,7 +93,7 @@ export function synthesize(p: NoiseParams): Synth {
     t[i] = ti;
     // alpha burst: amplitude-modulated 10 Hz (waxing and waning), as in real alpha
     const env = p.envelope ? p.envelope(ti) : 0.6 + 0.4 * Math.sin(2 * Math.PI * 0.4 * ti);
-    signal[i] = p.signalUv * env * Math.sin(2 * Math.PI * p.signalHz * ti);
+    signal[i] = p.signalUv * env * (p.rhythm ? p.rhythm[i] * Math.SQRT1_2 : Math.sin(2 * Math.PI * p.signalHz * ti)); // same mean power either way
     let v = emg[i] + pink[i] + p.ampUvRms * gaussian(rng) + mainsUv * Math.sin(2 * Math.PI * mainsHz * ti + 0.3);
     for (const tb of blinkTimes) v += p.blinkUv * Math.exp(-0.5 * Math.pow((ti - tb) / 0.08, 2));
     noise[i] = v;

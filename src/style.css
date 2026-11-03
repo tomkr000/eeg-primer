@@ -102,7 +102,11 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .figure-wide .controls { grid-template-columns: repeat(4, 1fr); gap: 6px 24px; }
 .figure-wide .controls:has(> :nth-child(3):last-child) { grid-template-columns: repeat(3, 1fr); }
 .figure-wide .controls:has(> :nth-child(5)) { grid-template-columns: repeat(5, 1fr); gap: 6px 18px; }
-.head-drag { cursor: grab; touch-action: none; }
+.arm-box { margin-top: 6px; }
+.arm-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.btn.arm-btn { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; padding: 5px 16px; }
+.btn.arm-btn:hover { background: #1f63b5; border-color: #1f63b5; color: #fff; }
+.btn.arm-btn:disabled { opacity: 0.55; cursor: default; }
 .dim-controls { display: flex; align-items: flex-start; gap: 24px; }
 .dim-controls .controls { flex: 1; }
 .dim-controls .choice-group { order: 2; margin-top: 24px; }
@@ -126,7 +130,7 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .plot-svg .axis path, .plot-svg .axis line { stroke: var(--rule); }
 .plot-svg .grid line { stroke: var(--grid); }
 .plot-svg .axis-label { fill: var(--ink); font-size: 14px; }
-.plot-svg .marker-label, .plot-svg .band-label { font-size: 13px; fill: var(--ink-2); }
+.plot-svg .marker-label, .plot-svg .band-label { font-size: 13px; fill: var(--ink-2); paint-order: stroke; stroke: var(--surface-1); stroke-width: 4px; stroke-linejoin: round; }
 .plot-svg .crosshair { stroke: var(--ink-3); stroke-dasharray: 2 2; }
 .plot-svg .callout-text { font-size: 13px; fill: var(--ink); }
 .plot-svg .callout-box { fill: rgba(252, 252, 251, 0.92); stroke: var(--rule); }
@@ -175,10 +179,8 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .readouts { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 8px 16px; border-top: 1px solid var(--grid); padding-top: 8px; }
 .readout { font-family: var(--sans); display: flex; flex-direction: column; gap: 1px; }
 .readout-value { font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; line-height: 1.2; }
+.readout-aside { font-weight: 400; color: var(--ink-2); }
 .readout-label { font-size: 13px; color: var(--ink-2); line-height: 1.3; }
-.readouts.verdict { grid-template-columns: 1fr; flex: 0 0 300px; align-content: start; border-top: none; padding-top: 0; gap: 12px; }
-.readouts.verdict .readout-value { font-size: 22px; }
-.dims-row { align-items: flex-start; gap: 20px; }
 .assumptions { font-family: var(--sans); font-size: 13.5px; }
 .assumptions summary { cursor: pointer; color: var(--ink-2); }
 .assumptions table { border-collapse: collapse; width: 100%; margin-top: 6px; }

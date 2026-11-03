@@ -568,7 +568,7 @@
   },
   {
     "id": "t3-25",
-    "claim": "Rule of thumb: roughly 6-10 cm^2 of contiguous, synchronously active cortex (about 300 macrocolumns) is required to produce a potential recognisable at the scalp (citing Cooper et al. 1965).",
+    "claim": "Rule of thumb: something like 6-10 cm^2 of contiguous cortex (about 200-300 macrocolumns) must be synchronously active to be recorded as EEG (citing Cooper et al. 1965).",
     "value": null,
     "units": "cm^2",
     "range": [
@@ -585,10 +585,10 @@
       "url": "https://www.biorxiv.org/content/10.1101/391318v2.full-text"
     },
     "evidence_location": "Section 6.2 (bioRxiv v2 full text)",
-    "quote": "about 6 to 10 cm2 of contiguous, synchronously active tissue",
+    "quote": "something like 6–10 cm2 of contiguous tissue (about 200–300 macrocolumns) must be synchronously active to be recorded as EEG",
     "verified_in_source": true,
     "confidence": "high",
-    "notes": "Section 6.4 also estimates maximum human scalp potentials from large synchronous dipole layers at roughly 100 microvolts, and mm-scale dipole layers producing below a few microvolts."
+    "notes": "Section 6.4 also estimates maximum human scalp potentials from large synchronous dipole layers at roughly 100 microvolts, and mm-scale dipole layers producing below a few microvolts. Quote corrected in a later check (topic 9): the earlier quote did not match the published or preprint wording."
   },
   {
     "id": "t3-26",

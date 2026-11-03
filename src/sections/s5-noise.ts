@@ -15,14 +15,15 @@ export const RAW_DEFAULTS: NoiseParams = {
 // scalp potential per unit dipole moment for the default head of section 3 (radial source 2 mm below the cortex)
 const head = defaultHead();
 const scalpUvPerNam = surfacePotential(solveShells(head.shells, head.sourceRadius, 1, 'radial', 120), 0) * 1e6 * 1e-9;
-const momentNam = (N: number, f: number) => netDipole(Math.round(N), f, 1, P.singleCellMomentPAm * 1e-12).total * 1e9;
+/** Net moment (nA·m) of N cells with a fraction f in step: the chain of section 2. */
+export const momentNam = (N: number, f: number) => netDipole(Math.round(N), f, 1, P.singleCellMomentPAm * 1e-12).total * 1e9;
 /** Alpha amplitude at the scalp (µV) for N cells with a fraction f in step: the chain of sections 2 and 3. */
 export const alphaUv = (N: number, f: number) => momentNam(N, f) * scalpUvPerNam;
 /** The patch that gives the textbook 20 µV alpha rhythm with a tenth of its cells in step. */
 export const ALPHA_N = RAW_DEFAULTS.signalUv / (scalpUvPerNam * P.patchDefaultSync * P.singleCellMomentPAm * 1e-3);
 /** The two sliders of the shared source model, used by sections 4 to 7. */
 export const sourceSliders = (defaultN = ALPHA_N) => ({
-  sN: slider({ label: 'Neurons in the patch, N', min: 1e5, max: P.patchMaxN, value: defaultN, log: true, format: (v) => fmt(Math.round(v), 2), marks: [{ value: P.patchDefaultN, label: 'Typical source' }, { value: ALPHA_N, label: 'Alpha rhythm' }], note: c('alpha-source-chain') }),
+  sN: slider({ label: 'Neurons in the patch, N', min: 1e5, max: P.patchMaxN, value: defaultN, log: true, format: (v) => fmt(Math.round(v), 2), marks: [{ value: P.patchDefaultN, label: 'Typical' }, { value: ALPHA_N, label: 'Alpha' }], note: c('alpha-source-chain') }),
   sF: slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Seizure' }] }),
 });
 
@@ -63,7 +64,7 @@ spends waiting.</p>`);
   fig.viz.append(readouts(rAlpha.el, rSnr.el, rRms.el));
   assumptions(fig.el, [
     { what: 'Alpha rhythm', value: `a pure 10 Hz sine whose amplitude is the scalp potential of the patch in the section 3 head (${fmt(scalpUvPerNam, 2)} µV per nA·m, source 2 mm below the cortex); 20 µV is the textbook scalp amplitude`, cite: c('alpha-source-chain') + c('eeg-amplitude') },
-    { what: 'Blinks', value: `${RAW_DEFAULTS.blinkUv} µV, ${RAW_DEFAULTS.blinksPerMinute} per minute, 160 ms wide (reported values, not adjustable)`, cite: c('blink-amplitude') + c('blink-rate') },
+    { what: 'Blinks', value: `${RAW_DEFAULTS.blinkUv} µV, ${RAW_DEFAULTS.blinksPerMinute} per minute, about 190 ms wide at half height (reported values, not adjustable)`, cite: c('blink-amplitude') + c('blink-rate') + c('blink-width') },
     { what: 'Mains (50/60 Hz) interference', value: `${RAW_DEFAULTS.mainsUvcm / 1e3} mV of common-mode mains voltage on the body, rejected by ${RAW_DEFAULTS.cmrrDb} dB, with an electrode-impedance imbalance of 1 in ${fmt(1 / RAW_DEFAULTS.imbalanceRatio, 2)} letting a further fraction through (potential-divider effect): about 1.3 µV is left, so it is kept in the trace but not adjustable`, cite: c('common-mode') + c('cmrr-customary') + c('potential-divider') },
     { what: 'Amplifier noise', value: `${RAW_DEFAULTS.ampUvRms} µV rms, white`, cite: c('ads1299') },
     { what: 'Spectra', value: 'muscle noise band-limited to 20–300 Hz; skin noise with a 1/f spectrum', cite: c('emg-band') + c('skin-noise') },

@@ -29,7 +29,8 @@ export const P = {
   patchDefaultSync: 0.1, // default synchronous fraction shared by sections 2 to 4
   erdOnsetS: 0.3, // delay from the intention to the start of the mu-rhythm fade, 'erd-timecourse' (provisional)
   erdRampS: 0.7, // time for the fade to complete, 'erd-timecourse' (provisional)
-  erdDepth: 0.3, // amplitude left after the fade (fraction), 'erd-timecourse' (provisional)
+  erdPowerDrop: 0.5, // fraction of mu-band power lost during motor imagery, 'erd-depth'
+  decoderBandHz: 3, // width of the rhythm's band, which sets the B·T degrees of freedom of a power estimate, 'erd-detect'
   patchMaxN: 2e6, // top of the N sliders: about 17 mm² of cortex; with every cell in step a 1 µA·m seizure-sized source
   neuronsPerMm2: 147000, // 'neuron-density'
   pyramidalFraction: 0.8, // 'pyramidal-fraction'

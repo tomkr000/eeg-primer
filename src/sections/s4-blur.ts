@@ -3,7 +3,7 @@ import { mulberry32 } from '../physics/population';
 import { fmt } from '../ui/slider';
 import { section, figure, prose, assumptions } from '../ui/layout';
 import { CANVAS_FONT } from '../ui/field';
-import { state, subscribe, dimControls, patchPattern, miniValues, scalpValue, MOTOR, patchColour, patchLabel, visible, inHead, R, x0, y0, ax, by, sigmaMm, nCh, nSrc, G, miniIn, POS, NEG } from './dim-model';
+import { state, subscribe, dimControls, patchPattern, miniValues, scalpValue, MOTOR, patchColour, visible, inHead, R, x0, y0, ax, by, sigmaMm, nCh, nSrc, G, miniIn, POS, NEG } from './dim-model';
 import { headGeometry, titledCanvas, footnote, drawCortex } from './head-view';
 
 const W = 360, H = 360, FOOT = 46; // the head view, with a band of notes under it
@@ -12,7 +12,7 @@ const { cx, cy, s, elXY } = geo;
 const FLOOR = 0.1, CEIL = 50; // µV: the colour scale of the summed map
 const RED = '#e34948', BLUE = '#2a78d6';
 export function mountBlur(root: HTMLElement) {
-  const sec = section(root, 'blur', '4', 'From outside, patches of cortex blur into broad blobs', 'Only a few areas can be controlled at will, and their blobs overlap');
+  const sec = section(root, 'blur', '4', 'From outside, patches of cortex blur into broad blobs', 'Cortical areas have functional patches of different sizes, and each can carry its own rhythm');
   prose(sec.text, `
 <p>The skull smears every source into a blob several centimetres wide ${c('spatial-lowpass')}, so two
 patches closer than a few centimetres, or one nested inside another, produce scalp patterns that look
@@ -21,7 +21,10 @@ on demand: what can be modulated at will and still seen from outside are the sen
 body parts, the hands, the feet and the tongue, the four motor-imagery classes used in brain–computer
 interface (BCI) competitions ${c('mi-classes')}. Their cortical areas are not spread evenly: the hand areas
 sit on a knob of the precentral gyrus either side of the midline, the foot areas next to the midline, and the
-mouth areas low on the side of the head ${c('motor-map')}. The maps below are snapshots of one instant: a
+mouth areas low on the side of the head ${c('motor-map')}. The areas differ in size, the hand and mouth
+areas far larger than the foot area ${c('area-sizes')}, and each can carry its own rhythm, strongest while the
+area idles and fading when its body part moves or the movement is imagined ${c('own-rhythm')}; section 7 is
+about that fading. The figure gives all five patches one radius, so that only their position differs. The maps below are snapshots of one instant: a
 rhythm such as alpha is this same pattern reversing sign every half-cycle, its shape fixed and only its
 amplitude swinging. The tissue does not filter in time ${c('quasistatic')}, so faster rhythms such as gamma
 reach the scalp in principle; they are smaller, and muscle activity occupies the same 20 to 300 Hz band
@@ -47,7 +50,7 @@ them can be told apart.</p>`);
   const mctx = mini.getContext('2d')!, mimg = mctx.createImageData(G, G);
   const half = document.createElement('canvas'); half.width = W / 2; half.height = H / 2;
   const hctx = half.getContext('2d')!, himg = hctx.createImageData(half.width, half.height);
-  fig.panel.append(dimControls({ noise: false })); // the noise of one contact is set in section 7
+  fig.panel.append(dimControls());
   assumptions(fig.el, [
     { what: 'Head', value: `fsaverage three-layer BEM (0.3 / 0.006 / 0.3 S/m), ${nSrc.toLocaleString('en-US')} cortical sources with dipoles normal to the cortex, BioSemi-128 electrodes, average reference`, cite: c('fsaverage-bem') + c('mne-bem') + c('montages') },
     { what: 'A patch', value: `N cells with a fraction in step (N × fraction × ${P.singleCellMomentPAm} pA·m plus the √N random part, as in sections 2 and 3), shared equally by all cortical sources within the radius of a centre point; a disc of the default radius holds about ${fmt(Math.PI * 100 * P.neuronsPerMm2 / 1e6, 2)} million cells, so N is a small fraction of them; overlapping patches are separate sources`, cite: c('single-cell-moment') + c('variances-add') + c('neuron-density') },
@@ -56,7 +59,7 @@ them can be told apart.</p>`);
 
   function drawCortexView() {
     cctx.clearRect(0, 0, W, H + FOOT);
-    footnote(cctx, H, [['a representative set: the motor areas for the hands, feet and'], ['tongue, which a person can modulate at will'], [`each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]]);
+    footnote(cctx, H, [['five representative patches of synchronous cortex,'], ['placed on motor areas a person can modulate at will'], [`each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]]);
     drawCortex(cctx, geo, state.patches);
   }
 
@@ -85,7 +88,7 @@ them can be told apart.</p>`);
       ectx.beginPath(); ectx.ellipse(ox, oy, rx, ry, 0, 0, 2 * Math.PI); ectx.stroke();
       ectx.beginPath(); ectx.moveTo(ox - 5, oy - ry + 1); ectx.lineTo(ox, oy - ry - 6); ectx.lineTo(ox + 5, oy - ry + 1); ectx.stroke();
       ectx.fillStyle = '#1a1a1a'; ectx.textAlign = 'center'; ectx.font = '13px system-ui, sans-serif';
-      ectx.fillText(patchLabel(state.patches[k], k), ox, oy + ry + 14);
+      ectx.fillText(`patch ${k + 1}`, ox, oy + ry + 14);
       ectx.fillStyle = '#52514e'; ectx.fillText(`peak ${fmt(vmax, 2)} µV`, ox, oy + ry + 28);
     });
   }

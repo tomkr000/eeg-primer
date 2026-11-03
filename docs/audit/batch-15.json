@@ -1,0 +1,65 @@
+[
+ {
+  "id": "snr-electrodes",
+  "statement": "Computed here (src/physics/control.ts): the best linear (matched-filter) estimate of one patch’s activity from N electrodes spread evenly over the four-shell sphere of section 3, against the brain’s background (independent radial dipoles over the cortex sphere, seen through the same head) and white electrode noise, has SNR² = tᵀC⁻¹t. It is solved exactly in electrode space up to 128 electrodes and per spherical-harmonic degree above that, the degrees finer than the array resolves (l > √N − 1) counted as noise; the two agree within 1% at 128 to 256 electrodes. With 1 µV of electrode noise and 10 µV of background, a 10 nA·m patch of 10 mm radius reaches 0.43 with 64 electrodes, 0.69 with 256 and 0.90 with 100,000, against 4.9, 10 and 197 with the electrode noise alone.",
+  "sources": [
+   "Kay SM (1998). Fundamentals of Statistical Signal Processing, Volume II: Detection Theory. Prentice Hall.",
+   "de Munck JC, Vijn PCM, Lopes da Silva FH (1992). A random dipole model for spontaneous brain activity. IEEE Transactions on Biomedical Engineering 39(8):791–804. doi:10.1109/10.148387"
+  ],
+  "note_for_auditor": "The numbers are computed by the site’s own code (not checkable against a source). Check that the method is standard: matched-filter SNR² = tᵀC⁻¹t for a known pattern t in Gaussian noise of covariance C (Kay 1998), N samples on a sphere resolving spherical-harmonic degrees up to about √N − 1 because there are (L+1)² coefficients up to degree L, and a background of independent random dipoles (de Munck et al. 1992). Say whether the cited sources support what is attributed to them."
+ },
+ {
+  "id": "electrode-ceiling",
+  "statement": "Computed here: with the whole scalp potential known exactly, the head’s transfer cancels, because the patch and the background pass through the same head, and the SNR reaches a ceiling set by the background sources under the patch’s own footprint, SNR² = Q² Σ (2l+1) g_l² / β (g_l the disc’s smoothing per degree, β the background density). For 10 nA·m over a 10 mm radius against 10 µV of background the ceiling is 0.99, and halving the radius doubles it. Grover & Venkatesh argue that when brain noise dominates, the sensor count at which localization stops improving could be quite high; in this model the approach to the ceiling is slow when the electrode noise is low.",
+  "sources": [
+   "Grover P, Venkatesh P (2017). An information-theoretic view of EEG sensing. Proceedings of the IEEE 105(2):367–384. doi:10.1109/JPROC.2016.2615179"
+  ],
+  "note_for_auditor": "Derived. If the patch and the background reach the scalp through the same per-degree transfer c_l, the per-degree SNR² is v_l²/C_l with v_l ∝ Q c_l g_l and C_l ∝ β c_l², so c_l cancels; check this reasoning and whether Grover & Venkatesh (2017) say what is attributed to them about brain noise and the number of sensors."
+ },
+ {
+  "id": "evoked-channels",
+  "statement": "Evoked responses: a P300 speller gained nothing significant from 13 electrodes added to a set of 6, and more than 8 electrodes gave small gains or losses depending on the classifier; flicker-frequency decoding saturated with 9 to 32 parieto-occipital electrodes once more than 0.2 s of data was used, while decoding where the user fixated kept gaining up to 66; over occipital cortex, four-class visual-category decoding rose from 57% with about 9 electrodes to 73% with 464 (4 subjects); source-localization error fell from 27 mm with 32 channels to 21, 20 and 18 mm with 64, 128 and 256, the last step called modest.",
+  "sources": [
+   "Krusienski DJ, Sellers EW, McFarland DJ, Vaughan TM, Wolpaw JR (2008). Toward enhanced P300 speller performance. Journal of Neuroscience Methods 167(1):15–21. doi:10.1016/j.jneumeth.2007.07.017",
+   "Hoffmann U, Vesin J-M, Ebrahimi T, Diserens K (2008). An efficient P300-based brain–computer interface for disabled subjects. Journal of Neuroscience Methods 167(1):115–125. doi:10.1016/j.jneumeth.2007.03.005",
+   "Ming G, Pei W, Tian S, Chen X, Gao X, Wang Y (2026). A high-speed visual BCI based on hybrid frequency–phase–space encoding and high-density EEG decoding. Cyborg and Bionic Systems 7:0555. doi:10.34133/cbsystems.0555",
+   "Schreiner L, Sieghartsleitner S, Kapeller C, Jordan M, Scharinger J, Spataro R, Pretl H, Guger C (2026). Increasing EEG electrode density improves decoding of visual categories and source localization: an exploratory ultra-high-density EEG study. Communications Engineering 5:59. doi:10.1038/s44172-026-00611-w",
+   "Song J, Davey C, Poulsen C, Luu P, Turovets S, Anderson E, Li K, Tucker D (2015). EEG source localization: sensor density and head surface coverage. Journal of Neuroscience Methods 256:9–21. doi:10.1016/j.jneumeth.2015.08.015"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "mi-channels",
+  "statement": "Motor-imagery decoders peak with 10 to 50 well-placed channels: in 80 users recorded with 119 channels the best of 13 fixed montages had 48 channels, and montages of 8 to 32 were not significantly worse when few training trials were available; on a 118-channel dataset 22.6 selected channels scored 82.3% against 73.6% with all 118; predicted error stayed near 3% from 52 channels down to about 14; a review puts the number that can be dropped to without significant loss at 10 to 20.",
+  "sources": [
+   "Sannelli C, Dickhaus T, Halder S, Hammer EM, Müller K-R, Blankertz B (2010). On optimal channel configurations for SMR-based brain–computer interfaces. Brain Topography 23(2):186–193. doi:10.1007/s10548-010-0135-0",
+   "Arvaneh M, Guan C, Ang KK, Quek C (2011). Optimizing the channel selection and classification accuracy in EEG-based BCI. IEEE Transactions on Biomedical Engineering 58(6):1865–1873. doi:10.1109/TBME.2011.2131142",
+   "Popescu F, Fazli S, Badower Y, Blankertz B, Müller K-R (2007). Single trial classification of motor imagination using 6 dry EEG electrodes. PLoS ONE 2(7):e637. doi:10.1371/journal.pone.0000637",
+   "Blankertz B, Tomioka R, Lemm S, Kawanabe M, Müller K-R (2008). Optimizing spatial filters for robust EEG single-trial analysis. IEEE Signal Processing Magazine 25(1):41–56. doi:10.1109/MSP.2008.4408441"
+  ],
+  "note_for_auditor": ""
+ },
+ {
+  "id": "calibration-cost",
+  "statement": "A decoder that learns its spatial weights needs the channel covariance, which is hard to estimate in high-dimensional sensor spaces, so shrinkage regularisation is used; for an adaptive array that estimates the covariance from K independent samples of N channels, the expected output SNR relative to the optimum is (K + 2 − N)/(K + 1), so about 2N samples are needed to come within a factor of two (3 dB). In a band B hertz wide independent samples arrive at 2B per second, so 2N samples take N/B seconds.",
+  "sources": [
+   "Blankertz B, Lemm S, Treder M, Haufe S, Müller K-R (2011). Single-trial analysis and classification of ERP components: a tutorial. NeuroImage 56(2):814–825. doi:10.1016/j.neuroimage.2010.06.048",
+   "Reed IS, Mallett JD, Brennan LE (1974). Rapid convergence rate in adaptive arrays. IEEE Transactions on Aerospace and Electronic Systems AES-10(6):853–863. doi:10.1109/TAES.1974.307893",
+   "Shannon CE (1949). Communication in the presence of noise. Proceedings of the IRE 37(1):10–21. doi:10.1109/JRPROC.1949.232969"
+  ],
+  "note_for_auditor": "Check the Reed–Mallett–Brennan result (mean normalised output SNR (K + 2 − N)/(K + 1) for K samples and N array elements; K ≈ 2N for a 3 dB loss), the Blankertz 2011 statement about covariance estimation and shrinkage, and that 2B independent samples per second for a band B wide is Shannon 1949."
+ },
+ {
+  "id": "eeg-systems",
+  "statement": "Electrode counts of real systems: the International 10–20 system places 19 electrodes on the scalp (21 with two ear references); research caps go up to 256 electrodes (BioSemi 16 to 256; EGI nets 32 to 256), commercial high-density systems mostly using 160 to 256 channels; ultra-high-density grids reach 1,024 channels 8.6 mm apart; consumer headsets use 1 to 14.",
+  "sources": [
+   "Oostenveld R, Praamstra P (2001). The five percent electrode system for high-resolution EEG and ERP measurements. Clinical Neurophysiology 112(4):713–719. doi:10.1016/S1388-2457(00)00527-7",
+   "BioSemi B.V. (2026). Headcap (product page, sizes and layouts). biosemi.com. https://www.biosemi.com/headcap.htm",
+   "Philips (Electrical Geodesics, Inc.) (2018). Geodesic EEG System (GES) 400/410 with MR and MEG compatibility (product sheet). documents.philips.com. https://www.documents.philips.com/assets/20180709/f8a9431a610745f195a0a918017da09d.pdf",
+   "Lee HS, Schreiner L, Jo S-H, Sieghartsleitner S, Jordan M, Pretl H, Guger C, Park H-S (2022). Individual finger movement decoding using a novel ultra-high-density electroencephalography-based brain–computer interface system. Frontiers in Neuroscience 16:1009878. doi:10.3389/fnins.2022.1009878",
+   "g.tec medical engineering GmbH (2024). g.Pangolin: 1,024 essential channels, amazing detail (product news page). gtec.at. https://www.gtec.at/2024/11/05/g-pangolin-ultra-high-density-eeg-system/",
+   "Emotiv Inc. (2026). EPOC X: 14 channel wireless EEG headset (product page, accessed 2 November 2026). emotiv.com Refillable saline sensors. https://www.emotiv.com/products/epoc-x"
+  ],
+  "note_for_auditor": "Product pages are cited for system channel counts; check each against its page, and check whether Oostenveld & Praamstra 2001 support the 19 (or 21) positions of the 10–20 system."
+ }
+]

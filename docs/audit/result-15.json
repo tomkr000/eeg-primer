@@ -1,0 +1,90 @@
+[
+ {
+  "id": "snr-electrodes",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "de Munck JC, Vijn PCM, Lopes da Silva FH (1992): abstract and bibliographic record via the Europe PubMed Central (Europe PMC) REST API (PMID 1505993); full text not accessible",
+   "Kay SM (1998), Volume II: book not accessible online; only a library catalogue record was seen (PTR Prentice-Hall, 1998, xiv + 560 p.)"
+  ],
+  "evidence_location": "de Munck 1992: abstract (closing sentences on the background-noise covariance). Kay 1998: not opened; the method was checked analytically instead.",
+  "quote": "The theory can be used to obtain a (spatial) covariance matrix of the background noise",
+  "discrepancy": "No error found. The site computes the numbers itself, so they cannot be checked against a source. The method is standard. For data x = a·t + n with n ~ N(0, C), the optimal linear statistic (the generalized matched filter for detection, or the best linear unbiased estimator (BLUE) for the amplitude) gives a squared signal-to-noise ratio of SNR² = a²·tᵀC⁻¹t. The sum over l from 0 to L of (2l+1) is (L+1)², so N samples resolve degrees up to about √N − 1. Counting unresolved degrees as noise is a modelling approximation, and the claim says so. The numbers are internally consistent: electrode-noise-only SNR scales as √N (4.9 × 2 = 9.8 ≈ 10 at 256; 4.9 × √(100000/64) ≈ 194 against the stated 197), and 0.43, 0.69 and 0.90 stay below the 0.99 ceiling of the next claim. Caveats: (1) Kay Volume II (Detection Theory) gives tᵀC⁻¹t as the deflection coefficient of a detector. The word 'estimate' corresponds to the BLUE result in Kay Volume I (Estimation Theory, 1993), which yields the same quantity. (2) The de Munck abstract describes dipoles in a spherical volume conductor with 'no preference for any direction'. The site's independent radial dipoles on a cortex shell are a variant of that model; the full text was not available to check whether de Munck treats the radial case.",
+  "suggested_fix": "Optional: write 'matched-filter detectability SNR² = tᵀC⁻¹t', or add Kay Volume I (BLUE) to support the word 'estimate'. Describe the background as 'a radial-dipole variant of the random-dipole model of de Munck et al. (1992)'.",
+  "bibliographic_issues": "None. Europe PMC confirms IEEE Transactions on Biomedical Engineering 39(8):791–804, August 1992, and the DOI resolves. Kay: Prentice Hall 1998, Volume II Detection Theory, confirmed by a library catalogue record."
+ },
+ {
+  "id": "electrode-ceiling",
+  "verdict": "NO_ACCESS",
+  "checked_sources": [
+   "Grover P, Venkatesh P (2017): full abstract (OpenAlex) and Crossref metadata. The full text is paywalled at Institute of Electrical and Electronics Engineers (IEEE) Xplore (article number 7782724), and no open copy was found (searched CMU pages, BibBase and the authors' blog)."
+  ],
+  "evidence_location": "Abstract only. The derivation in the note was checked analytically.",
+  "quote": "the main obstacle in understanding the required number of EEG sensors is the lack of ultra-high-density systems",
+  "discrepancy": "The derivation is correct. If the patch and the background share the per-degree transfer c_l, then v_lm = c_l·Q·g_l·Y_lm(centre) and C_l = c_l²·β, so c_l cancels and SNR² = Q²·Σ(2l+1)g_l²/(4πβ). The 4π is absorbed in how β is normalized; the claim's formula omits it. By Parseval, Σ(2l+1)g_l²/(4π) = 1/Ω_disc, so SNR² = Q²/(β·Ω_disc): the patch moment against the background fluctuation within the patch's own footprint, as the claim says. Halving the radius quarters Ω_disc, which doubles the SNR and quadruples SNR², so 'it' must mean the SNR. The 0.99 ceiling is consistent with 0.90 at 100,000 electrodes in the previous claim. The Grover & Venkatesh attribution could not be verified. The abstract argues that the spatial-Nyquist case against ultra-high-density electroencephalography (EEG) ignores noise, and that ultra-high-density systems are needed to test how many sensors are required. It says nothing about brain noise dominating, or about the sensor count at which localization stops improving being 'quite high'.",
+  "suggested_fix": "Check the full text for the brain-noise and sensor-count statement and give a section or page. If it is not there, attribute only what the abstract supports: 'Grover & Venkatesh (2017) argue that the spatial-Nyquist argument ignores noise and that the number of sensors needed for source imaging is still open.' Also write 'halving the radius doubles the ceiling SNR'.",
+  "bibliographic_issues": "None. Crossref confirms Proceedings of the IEEE 105(2):367–384, February 2017, and the DOI resolves. OpenAlex lists 2016 (online-first date), which is not an error."
+ },
+ {
+  "id": "evoked-channels",
+  "verdict": "PARTIAL",
+  "checked_sources": [
+   "Krusienski et al. 2008: full text (PubMed Central (PMC) author manuscript PMC2349091)",
+   "Hoffmann et al. 2008: full text (author copy, EPFL Infoscience)",
+   "Ming et al. 2026: full text (Europe PMC, PMC13018654)",
+   "Schreiner et al. 2026: full text (Europe PMC, PMC13043922)",
+   "Song et al. 2015: open-access full text on ScienceDirect (Table 1 and Discussion)"
+  ],
+  "evidence_location": "Krusienski: Results (analysis of variance (ANOVA): no difference between sets 3 and 4) and Discussion. Hoffmann: Results 3.3 (Figs. 4–5, Table 2). Ming: Results paragraph on Fig. 2B (40-target system versus 80- to 200-target systems). Schreiner: Table 1 (10–20 subset: 8.8 electrodes, 57.2%; ultra-high-density (uHD): 464.0 electrodes, 73.2%; subjects S1–S4). Song: Table 1 (minimum-norm (MN), whole-head coverage: 26.99 / 21.31 / 19.73 / 18.42 mm for 32 / 64 / 128 / 256 channels) and Discussion.",
+  "quote": "additional 13 electrodes (Set 4) does not produce a significant increase … improvement from 128 to 256 channels is modest",
+  "discrepancy": "Every number matches, but the claim drops the condition behind the localization errors. 27, 21, 20 and 18 mm are minimum-norm (MN) errors for whole-head montages, averaged over 7,341 simulated sources in an atlas head model. In the same Table 1, standardized low-resolution brain electromagnetic tomography (sLORETA) gives 1.45, 0.66, 0.32 and 0.20 mm, so the absolute mm values depend on the inverse method. Minor point on Ming: beyond 0.2 s, all four configurations (9, 21, 32 and 66 electrodes) exceeded 95% with no significant differences. The 40-target code (frequency plus phase) had therefore saturated already at 9 electrodes. At 0.2 s or less, 66 electrodes were significantly better. Hoffmann matches: beyond 8 electrodes there were small gains with Bayesian linear discriminant analysis (BLDA) and losses with Fisher's linear discriminant analysis (FLDA). Krusienski matches: 6 versus 19 electrodes.",
+  "suggested_fix": "'…minimum-norm source-localization error in simulations fell from 27 mm with 32 channels to 21, 20 and 18 mm with 64, 128 and 256 (whole-head montages), the last step called modest.' Optionally: 'flicker (frequency–phase) decoding no longer differed between 9 and 66 parieto-occipital electrodes once more than 0.2 s of data was used.'",
+  "bibliographic_issues": "None. All five DOIs resolve, and volumes and pages match: J Neurosci Methods 167(1):15–21 and 167(1):115–125 (online 2007, 2008 issue); Cyborg and Bionic Systems 7:0555 (2026); Communications Engineering 5:59 (2026); J Neurosci Methods 256:9–21 (2015)."
+ },
+ {
+  "id": "mi-channels",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Sannelli et al. 2010: abstract (Europe PMC); full text not accessible",
+   "Arvaneh et al. 2011: full text (author copy, personal.ntu.edu.sg/ctguan); Table IV, page 1870",
+   "Popescu et al. 2007: full text (Europe PMC, PMC1914378) and the Figure 2 image (PLOS)",
+   "Blankertz et al. 2008: authors' draft (doc.ml.tu-berlin.de), section on regularizing common spatial patterns (CSP)"
+  ],
+  "evidence_location": "Sannelli: abstract. Arvaneh: Table IV (Dataset IVa, brain–computer interface (BCI) Competition III: mean with all channels 73.56%; sparse CSP (SCSP1) 82.28% with 22.6 channels; 5 subjects) and the text beside it. Popescu: Fig. 2a (predicted error against number of channels, from 52 down to 2; the black line is the mean of 5 subjects). Blankertz 2008: subsection 'd) Regularizing CSP', which reports the result of its reference [16].",
+  "quote": "configurations with less channels, from 32 to 8, performed not significantly worse … reduced to 10-20 without significant drop",
+  "discrepancy": "No material error. Popescu Fig. 2a, read from the plot: the mean predicted error is about 2.7–3.3% from 52 down to about 20 channels, about 3.5–4% at 16 to 14, about 6% at 10 and 28% at 3. 'Near 3% … down to about 14' is therefore slightly generous (about 4% at 14). Arvaneh: 22.6 is the mean over 5 subjects (standard deviation 11.05; range 7–36). Blankertz 2008 relays another study's result (ℓ1-regularized CSP, its reference [16]), not its own analysis. It was checked in the authors' draft, not the typeset version.",
+  "suggested_fix": "Optional: 'predicted error stayed at 3–4% from 52 channels down to about 14'.",
+  "bibliographic_issues": "None. All DOIs resolve and match: Brain Topography 23(2):186–193 (2010); IEEE Transactions on Biomedical Engineering 58(6):1865–1873 (2011), confirmed by the page header; PLoS ONE 2(7):e637 (2007); IEEE Signal Processing Magazine 25(1):41–56 (2008)."
+ },
+ {
+  "id": "calibration-cost",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Blankertz et al. 2011: abstract (Europe PMC)",
+   "Reed, Mallett & Brennan (RMB) 1974: abstract (OpenAlex) and Crossref metadata; full text paywalled",
+   "Besson O (2021), 'A short overview of adaptive multichannel filters SNR loss analysis', arXiv:2102.01421: secondary source used only to check the RMB formula, which it attributes to RMB 1974",
+   "Shannon 1949: full-text scan (fab.cba.mit.edu), Sections II, III and VII"
+  ],
+  "evidence_location": "Blankertz 2011: abstract. RMB 1974: abstract (weights computed directly from a sample covariance matrix of the noise field; convergence independent of the eigenvalue spread). Besson 2021, eqs. 19–21: SNR loss ρ ~ Beta(N−1, K−N+2), mean (K−N+2)/(K+1), equal to 0.5 when K = 2N−3, named there as the Reed–Mallett–Brennan rule. Shannon 1949: Theorem 1 (samples spaced 1/2W s); remark that the same holds for a band not starting at zero frequency; independent samples under white thermal noise.",
+  "quote": "As a remedy, we propose to use shrinkage estimators … Since in time T there are 2TW independent amplitudes",
+  "discrepancy": "No numerical error, and the arithmetic is right (2N samples at 2B per second take N/B s). The original RMB text could not be opened, so the formula was confirmed through a secondary review that cites RMB. The claim drops two nuances. (1) The RMB rule assumes K independent and identically distributed (i.i.d.) Gaussian training samples containing noise or interference only. If the signal of interest is present in the training data, more samples are needed, and the number grows with SNR (Besson, minimum power distortionless response (MPDR) case). The exact average-3 dB point is K = 2N − 3. (2) Shannon's samples are independent for white noise across the band. EEG background has a coloured spectrum, so 2B per second is an upper bound on independent samples and N/B seconds is a lower bound on the time needed.",
+  "suggested_fix": "'…estimates the noise covariance from K independent, signal-free samples of N channels … (K = 2N − 3 for an average 3 dB loss) … a band B hertz wide gives at most 2B independent samples per second (exactly 2B for white noise), so 2N samples take at least N/B seconds.'",
+  "bibliographic_issues": "None. Crossref confirms IEEE Transactions on Aerospace and Electronic Systems AES-10(6):853–863 (November 1974) and Proceedings of the IRE 37(1):10–21 (January 1949). Europe PMC confirms NeuroImage 56(2):814–825 (2011)."
+ },
+ {
+  "id": "eeg-systems",
+  "verdict": "PARTIAL",
+  "checked_sources": [
+   "Oostenveld & Praamstra 2001: abstract only (Europe PMC; University of Birmingham research portal). Full text refused by ScienceDirect, clinph-journal.com and the Radboud repository; Europe PMC lists it as subscription-only",
+   "BioSemi headcap page (biosemi.com/headcap.htm), fetched 2026-11-03",
+   "Philips / Electrical Geodesics, Inc. (EGI) Geodesic EEG System (GES) 400/410 product sheet (2-page PDF)",
+   "Lee et al. 2022: full text (Europe PMC, PMC9627315)",
+   "g.tec g.Pangolin news page (gtec.at, dated 2024-11-05)",
+   "Emotiv EPOC X product page"
+  ],
+  "evidence_location": "BioSemi: cap-size ordering table (16, 32, 64, 128, 160 and 256 electrodes; 256 only for medium and larger caps) and the layouts table. Philips sheet: system description and specification table (channel counts 32, 64, 128 or 256). Lee 2022: Introduction (commercial high-density (HD) systems) and Methods (8.6 mm grids; 1,024-electrode layout, of which 256 were used). g.tec: opening paragraph and FAQ. Emotiv: page header (14-channel headset). Oostenveld abstract: the extended 10–20 system of 74 electrodes, extended to 345 locations.",
+  "quote": "up to 1,024 channels and 8.6 mm inter-electrode distance … primarily using from 160 to 256 channels",
+  "discrepancy": "(1) 'Consumer headsets use 1 to 14': only the 14 is supported, by the EPOC X page, and Emotiv markets that headset as 'research-grade' rather than consumer. No cited source supports a lower bound of 1 channel. (2) The 19 (21) positions of the 10–20 system could not be verified. The Oostenveld & Praamstra abstract gives only the 74-electrode extended 10–20 system and the 345-location 10–5 system, and the full text was not accessible. All other numbers match their sources: BioSemi 16–256; EGI 32–256; commercial HD systems 160–256 (Lee 2022); 1,024 channels at 8.6 mm (g.tec page). Lee 2022 also describes the 1,024-electrode layout with 8.6 mm spacing but used 256 electrodes.",
+  "suggested_fix": "For the lower bound, cite a single-channel consumer device, or write 'consumer headsets use a few to 14 channels (e.g., Emotiv EPOC X, 14)'. Confirm the 19 + 2 count in the Oostenveld & Praamstra full text (Introduction), or cite Jasper (1958) or another accessible source that states it.",
+  "bibliographic_issues": "The Emotiv reference contains a stray fragment ('emotiv.com Refillable saline sensors.'), page text pasted into the citation; delete it. The g.tec URL is dated 2024-11-05, but the page has since been updated (its menus list 2026/2027 events); the cited title matches the page's HTML title. The Philips PDF was created in March 2018, so 2018 is correct. Oostenveld: Clinical Neurophysiology 112(4):713–719, and the DOI resolves."
+ }
+]

@@ -49,7 +49,7 @@ ${c('intracortical')}.</p>`);
   const holder = document.createElement('div');
   holder.className = 'viz-box'; holder.style.flex = '1 1 600px';
   const title = document.createElement('div'); title.className = 'viz-title';
-  title.textContent = 'Each patch in turn, strongest first: the new signal it adds that the earlier ones cannot mimic';
+  title.textContent = 'Scalp signal each patch adds beyond what the earlier patches account for, strongest first';
   const canvas = document.createElement('canvas'); canvas.className = 'glow'; canvas.height = 320;
   holder.append(title, canvas);
   const verdict = readouts(rD.el, rCeil.el, rRecord.el);

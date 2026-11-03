@@ -81,7 +81,7 @@ per finger ${c('fingered')}.</p>`);
   const C_IN_PF = 20, V_CM_MV = RAW_DEFAULTS.mainsUvcm / 1e3, I_NOISE_FA = 1; // fixed amplifier and mains values (assumptions table)
 
   const fig = figure(sec.fig, `Top strip: the scalp signal before any electrode touches it: the alpha rhythm of N cells with a fraction in step (sections 2 to 4) in the noise of section 4, two seconds without a blink. Below it, what reaches the amplifier through each electrode: the signal after the impedance divider, plus the contact’s skin noise, mains pickup from a 50% impedance mismatch between a pair, and the amplifier’s current noise through the contact impedance. The table gives the impedance at 10 Hz, the signal kept, the noise added, and the signal-to-noise ratio (SNR) of the alpha rhythm against everything else. Most consumer headsets use dry contacts ${c('consumer-electrodes')}.`, { panelWidth: '410px' });
-  fig.viz.append(vizTitle('What each electrode type hands to the amplifier'));
+  fig.viz.append(vizTitle('Signal at the amplifier input for four electrode–skin interfaces'));
   const plot = stripPlot(fig.viz, { xLabel: 'Time (s)', xDomain: [0, 2], stripHeight: 82 });
   const table = document.createElement('table');
   table.className = 'mini-table';

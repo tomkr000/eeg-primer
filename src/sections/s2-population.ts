@@ -45,7 +45,7 @@ hide much. Only coherent, aligned current counts.</p>`);
   const W = 620, H = 400;
   const xr: [number, number] = [-5e-3, 5e-3], yr: [number, number] = [-1.2e-3, -1.2e-3 + 10e-3 * H / W];
   const surface = P.somaDepthMm * 1e-3, csf = P.thicknessCsfMm * 1e-3, dura = P.thicknessDuraMm * 1e-3;
-  fig.viz.append(vizTitle('The summed field of a patch of neurons, in cross-section'));
+  fig.viz.append(vizTitle('Summed potential of a patch of N pyramidal neurons (cortical cross-section)'));
   const gz = glow(fig.viz, { width: W, height: H, scale: 2, xRange: xr, yRange: yr, floor: 1e-7, ceiling: 1e-2, grid: { step: 0.5e-3, factor: 1e3, unit: 'mm', labelEvery: 2, note: 'each grid square = 0.5 mm' } });
   gz.canvas.style.width = `${W}px`;
   glowLegend(fig.viz, '0.1 µV', '10 mV');

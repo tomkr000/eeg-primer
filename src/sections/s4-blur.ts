@@ -98,7 +98,7 @@ them can be told apart.</p>`);
   const mctx = mini.getContext('2d')!, mimg = mctx.createImageData(G, G);
   const half = document.createElement('canvas'); half.width = W / 2; half.height = H / 2;
   const hctx = half.getContext('2d')!, himg = hctx.createImageData(half.width, half.height);
-  fig.panel.append(dimControls());
+  fig.panel.append(dimControls({ noise: false })); // the noise of one contact is set in section 7
   assumptions(fig.el, [
     { what: 'Head', value: `fsaverage three-layer BEM (0.3 / 0.006 / 0.3 S/m), ${nSrc.toLocaleString('en-US')} cortical sources with dipoles normal to the cortex, BioSemi-128 electrodes, average reference`, cite: c('fsaverage-bem') + c('mne-bem') + c('montages') },
     { what: 'A patch', value: `N cells with a fraction in step (N × fraction × ${P.singleCellMomentPAm} pA·m plus the √N random part, as in sections 2 and 3), shared equally by all cortical sources within the radius of a centre point; a disc of the default radius holds about ${fmt(Math.PI * 100 * P.neuronsPerMm2 / 1e6, 2)} million cells, so N is a small fraction of them; overlapping patches are separate sources`, cite: c('single-cell-moment') + c('variances-add') + c('neuron-density') },

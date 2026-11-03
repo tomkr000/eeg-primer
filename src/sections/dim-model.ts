@@ -170,8 +170,8 @@ export function greedyOrder(vecs: Float64Array[]): { idx: number; rest: number }
   return out;
 }
 
-/** The four sliders, bound to the shared state; every section gets its own copy and they move together. */
-export function dimControls(): HTMLElement {
+/** The shared sliders, bound to the shared state; every section gets its own copy and they move together. */
+export function dimControls(opts: { noise?: boolean } = {}): HTMLElement {
   const wrap = document.createElement('div');
   wrap.className = 'dim-controls';
   const { sN, sF } = sourceSliders(state.N);
@@ -182,7 +182,7 @@ export function dimControls(): HTMLElement {
     subscribe(() => { if (s.value !== state[key]) s.set(state[key]); });
   };
   bind(sN, 'N'); bind(sF, 'f'); bind(sRadius, 'radiusMm'); bind(sNoise, 'noiseUv');
-  wrap.append(controls(sN.el, sF.el, sRadius.el, sNoise.el));
+  wrap.append(controls(sN.el, sF.el, sRadius.el, ...(opts.noise === false ? [] : [sNoise.el])));
   return wrap;
 }
 

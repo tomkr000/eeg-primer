@@ -1,0 +1,43 @@
+[
+ {
+  "id": "brain-background",
+  "statement": "Modelling choice: the brain’s own activity in the decoder’s band is taken as 10 µV rms per electrode by default (adjustable 1 to 30 µV), spatially correlated as independent cortical sources seen through the same lead field; scalp EEG as a whole is of the order of 10 to 100 µV, so the in-band share is an assumption.",
+  "sources": [
+   "Chi YM, Jung T-P, Cauwenberghs G (). Dry-contact and noncontact biopotential electrodes: methodological review.   doi:10.1109/RBME.2010.2084078",
+   "Malmivuo J, Plonsey R (). Bioelectromagnetism: Principles and Applications of Bioelectric and Biomagnetic Fields.    https://www.bem.fi/book/"
+  ],
+  "note_for_auditor": "The band share of the background is not taken from a source; the slider spans the plausible range and the figure shows how the count moves with it. Status on the site: derived or assumption; check the arithmetic and whether the cited sources support what is attributed to them, and say if the derivation is standard."
+ },
+ {
+  "id": "whitened-snr",
+  "statement": "For a known scalp pattern a in Gaussian noise of covariance C, the best linear detector (the matched filter in whitened coordinates) has single-sample signal-to-noise ratio √(aᵀC⁻¹a); taking the patches in turn with column-pivoted QR on the whitened patterns gives, for each, the SNR of the part of its pattern that the earlier patches cannot produce.",
+  "sources": [],
+  "note_for_auditor": "Standard detection theory applied to the lead field; C is the background covariance plus the contact noise. Status on the site: derived or assumption; check the arithmetic and whether the cited sources support what is attributed to them, and say if the derivation is standard."
+ },
+ {
+  "id": "window-samples",
+  "statement": "A band of width B observed for T seconds yields about 2BT independent samples, so averaging over the window raises the detector’s SNR by about √(2BT): √6 ≈ 2.4 for a 3 Hz band over 1 s, consistent with the periodogram resolution of 1/T and the fact that its variance does not fall with record length without such averaging.",
+  "sources": [
+   "Stoica P, Moses R (). Spectral Analysis of Signals.",
+   "Welch PD (). The use of fast Fourier transform for the estimation of power spectra: a method based on time averaging over short, modified periodograms.   doi:10.1109/TAU.1967.1161901"
+  ],
+  "note_for_auditor": "The 2BT count of degrees of freedom is the standard time-bandwidth result; the site applies it as a √(2BT) gain. Status on the site: derived or assumption; check the arithmetic and whether the cited sources support what is attributed to them, and say if the derivation is standard."
+ },
+ {
+  "id": "channel-bits",
+  "statement": "A Gaussian channel at signal-to-noise ratio SNR (amplitude ratio) carries at most 0.5·log₂(1 + SNR²) bits per independent sample; per window of T seconds that is the bits per second used here.",
+  "sources": [
+   "Wolpaw JR, Birbaumer N, McFarland DJ, Pfurtscheller G, Vaughan TM (). Brain–computer interfaces for communication and control.   doi:10.1016/S1388-2457(02)00057-3"
+  ],
+  "note_for_auditor": "Shannon capacity; Wolpaw et al. 2002 is cited for the bit-rate framing of BCI performance, not for the formula. Status on the site: derived or assumption; check the arithmetic and whether the cited sources support what is attributed to them, and say if the derivation is standard."
+ },
+ {
+  "id": "mi-bitrate",
+  "statement": "Four-class motor imagery in BCI Competition IV dataset 2a reached a mean kappa of about 0.57, an accuracy of about 0.68, on 4 s trials; Wolpaw’s information-transfer formula gives about 0.59 bits per trial, about 0.15 bits/s.",
+  "sources": [
+   "Tangermann M, Müller K-R, Aertsen A, Birbaumer N, Braun C, Brunner C, Leeb R, Mehring C, Miller KJ, Müller-Putz GR, Nolte G, Pfurtscheller G, Preissl H, Schalk G, Schlögl A, Vidaurre C, Waldert S, Blankertz B (). Review of the BCI Competition IV.   doi:10.3389/fnins.2012.00055",
+   "Wolpaw JR, Birbaumer N, McFarland DJ, Pfurtscheller G, Vaughan TM (). Brain–computer interfaces for communication and control.   doi:10.1016/S1388-2457(02)00057-3"
+  ],
+  "note_for_auditor": "Derived from the competition’s winning kappa and Wolpaw’s formula; the kappa is the winner’s, not an average user. Status on the site: derived or assumption; check the arithmetic and whether the cited sources support what is attributed to them, and say if the derivation is standard."
+ }
+]

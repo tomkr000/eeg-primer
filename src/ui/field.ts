@@ -278,12 +278,12 @@ export function scaleBar(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], x0: 
 }
 
 /** Legend for the glow colours. */
-/** The legend of a glow, collapsed under a "Legend" toggle. */
+/** The legend of a glow: colour swatches with their meaning, always visible. */
 export function glowLegend(container: HTMLElement, floor: string, ceiling: string, note?: string): void {
-  const el = document.createElement('details');
-  el.className = 'legend-toggle';
-  el.innerHTML = `<summary>Legend</summary><div class="glow-legend"><span class="sw" style="background:linear-gradient(90deg,rgba(42,120,214,0),rgba(42,120,214,0.92))"></span><span>negative</span>
+  const el = document.createElement('div');
+  el.className = 'glow-legend';
+  el.innerHTML = `<span class="sw" style="background:linear-gradient(90deg,rgba(42,120,214,0),rgba(42,120,214,0.92))"></span><span>negative</span>
     <span class="sw" style="background:linear-gradient(90deg,rgba(227,73,72,0),rgba(227,73,72,0.92))"></span><span>positive</span>
-    <span class="note">faint = ${floor}, solid = ${ceiling}${note ? `; ${note}` : ''}</span></div>`;
+    <span class="note">faint = ${floor}, solid = ${ceiling}${note ? `; ${note}` : ''}</span>`;
   container.append(el);
 }

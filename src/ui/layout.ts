@@ -74,7 +74,14 @@ export function figure(target: HTMLElement, caption: string, opts: { panelWidth?
   panel.className = 'panel';
   const cap = document.createElement('figcaption');
   cap.innerHTML = caption;
-  el.append(viz, panel, cap);
+  if (caption) {
+    // the long description is fine print: collapsed by default, with its citations inside
+    const d = document.createElement('details');
+    d.className = 'caption-toggle';
+    d.innerHTML = '<summary>Figure description</summary>';
+    d.append(cap);
+    el.append(viz, panel, d);
+  } else el.append(viz, panel, cap);
   target.append(el);
   return { el, viz, panel, caption: cap };
 }

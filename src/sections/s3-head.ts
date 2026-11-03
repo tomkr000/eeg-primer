@@ -120,9 +120,6 @@ far too weak to use what is there.</p>`);
       const t = (i: number) => shells[i].outerRadius - shells[i - 1].outerRadius;
       drawCortexLayers(ctx, toPx, { xRange, yTop: yRange[1], surface: 0, csf: t(1), dura: t(2), skull: t(3), scalp: t(4), greyLabelY: -0.012 });
       ctx.font = CANVAS_FONT; ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'left';
-      const [lx, ly] = toPx(xRange[0] + 0.0065, yRange[1] - 0.006);
-      ctx.fillText('the field continues into the air,', lx, ly);
-      ctx.fillText('but nothing can read it without contact', lx, ly + 16);
       if (reach > 0) {
         // the black bar along the scalp; arrowheads where it runs past the edge of the picture
         const [x1, y1] = toPx(-reach, scalpY), [x2] = toPx(reach, scalpY), a = Math.max(x1, 10), z = Math.min(x2, 380);

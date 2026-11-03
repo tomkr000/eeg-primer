@@ -140,9 +140,9 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .sw-patch { width: 12px; height: 12px; border-radius: 2px; }
 .sw-line { width: 20px; height: 0; vertical-align: 3px; }
 .sw-glow { width: 26px; height: 11px; border: 1px solid var(--grid); }
-.legend-toggle { font-family: var(--sans); font-size: 13.5px; }
-.legend-toggle summary { cursor: pointer; color: var(--ink-2); }
-.legend-toggle[open] summary { margin-bottom: 4px; }
+.caption-toggle { grid-column: 1 / -1; font-family: var(--sans); font-size: 13.5px; border-top: 1px solid var(--grid); padding-top: 8px; }
+.caption-toggle summary { cursor: pointer; color: var(--ink-2); }
+.caption-toggle figcaption { border-top: none; padding-top: 6px; }
 .glow-legend { display: flex; align-items: center; gap: 6px 8px; flex-wrap: wrap; font-family: var(--sans); font-size: 13.5px; color: var(--ink-2); }
 .glow-legend .sw { display: inline-block; width: 54px; height: 10px; border: 1px solid var(--grid); }
 .glow-legend .note { margin-left: 6px; }

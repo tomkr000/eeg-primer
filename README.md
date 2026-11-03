@@ -1,4 +1,4 @@
-# EEG primer: an in-depth look at the physics of non-invasive BCI
+# EEG primer: the physics of a non-invasive BCI
 
 An interactive, fully cited explorer of the physics that limits scalp electroencephalography (EEG) for
 non-invasive brain–computer interfaces (BCI). Six slider-driven models, each with its long-form text folded

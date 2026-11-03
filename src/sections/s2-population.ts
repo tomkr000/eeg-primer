@@ -3,7 +3,7 @@ import { solveShells, surfacePotential } from '../physics/sphere';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { glow, drawNeuron, drawCortexLayers, glowLegend, CANVAS_FONT } from '../ui/field';
 import { P, claimCite as c, defaultHead } from '../data/params';
-import { section, figure, prose, readouts, assumptions, inDepth } from '../ui/layout';
+import { section, figure, prose, readouts, assumptions, inDepth, sw } from '../ui/layout';
 
 export function mountPopulation(root: HTMLElement) {
   const sec = section(root, 'population', '2', 'Many neurons must fire synchronously to create larger signal');
@@ -44,7 +44,7 @@ hide much. Only coherent, aligned current counts.</p>`);
   const rArea = readout('Cortical area of the patch', c('neuron-density') + c('pyramidal-fraction'));
   const rScalp = readout('Peak scalp potential (section 3 head)');
 
-  const fig = figure(sec.fig, 'A patch of pyramidal cells in the cortex, with the layers above it to scale as in section 1 (each grid square is 0.5 mm). Each glyph stands for many cells; the glow is their summed field, red where positive, blue where negative. Cells firing out of step make a patchwork that cancels; cells in step merge into one large dipole whose field spreads further. The field is drawn as if the layers above were grey matter; what the skull does to it is section 3. The carets mark typical values: 200,000 cells with a tenth in step make the 10 nA·m source that is typically measured from outside, and a seizure drives nearly all of them together.');
+  const fig = figure(sec.fig, `A patch of pyramidal cells in the cortex, with the layers above it to scale as in section 1 (each grid square is 0.5 mm). Each glyph stands for many cells; the glow is their summed field (${sw('#e34948', 'glow')} positive, ${sw('#2a78d6', 'glow')} negative). Cells firing out of step make a patchwork that cancels; cells in step merge into one large dipole whose field spreads further. The field is drawn as if the layers above were grey matter; what the skull does to it is section 3. The carets mark typical values: 200,000 cells with a tenth in step make the 10 nA·m source that is typically measured from outside, and a seizure drives nearly all of them together.`);
   const W = 620, H = 400;
   const xr: [number, number] = [-5e-3, 5e-3], yr: [number, number] = [-1.2e-3, -1.2e-3 + 10e-3 * H / W];
   const surface = P.somaDepthMm * 1e-3, csf = P.thicknessCsfMm * 1e-3, dura = P.thicknessDuraMm * 1e-3;

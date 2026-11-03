@@ -106,6 +106,22 @@ export function glow(container: HTMLElement, cfg: GlowCfg): Glow {
 
 export const CANVAS_FONT = '14px system-ui, sans-serif';
 
+export type TextPart = string | { sw: string };
+/** Draw a line of text in which colour swatches stand in for colour names; returns the x where it ends. */
+export function textWithSwatches(ctx: CanvasRenderingContext2D, parts: TextPart[], x: number, y: number, size = 12): number {
+  ctx.save(); ctx.textAlign = 'left';
+  for (const p of parts) {
+    if (typeof p === 'string') { ctx.fillText(p, x, y); x += ctx.measureText(p).width; }
+    else { const f = ctx.fillStyle; ctx.fillStyle = p.sw; ctx.fillRect(x + 1, y - size + 1, size - 1, size - 1); ctx.fillStyle = f; x += size + 4; }
+  }
+  ctx.restore();
+  return x;
+}
+/** width of such a line in the current font */
+export function partsWidth(ctx: CanvasRenderingContext2D, parts: TextPart[], size = 12): number {
+  return parts.reduce((w, p) => w + (typeof p === 'string' ? ctx.measureText(p).width : size + 4), 0);
+}
+
 /** Faint grid with numbered ticks so the scale of a field drawing is explicit. */
 function drawGrid(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], cfg: GlowCfg): void {
   const g = cfg.grid!;

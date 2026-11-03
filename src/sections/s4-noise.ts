@@ -4,7 +4,7 @@ import { controls, readout, slider, fmt } from '../ui/slider';
 import { linePlot } from '../ui/plot';
 import { P, claimCite as c, defaultHead } from '../data/params';
 import { solveShells, surfacePotential } from '../physics/sphere';
-import { section, figure, prose, readouts, assumptions } from '../ui/layout';
+import { section, figure, prose, readouts, assumptions, sw } from '../ui/layout';
 
 /** Shared defaults so section 5 can reuse the same raw scalp signal. */
 export const RAW_DEFAULTS: NoiseParams = {
@@ -56,7 +56,7 @@ spends waiting.</p>`);
   const rSnr = readout('Signal-to-noise ratio (alpha vs the rest)');
   const rRms = readout('Total rms of the recording');
 
-  const fig = figure(sec.fig, 'Four seconds of a synthetic scalp channel: the idealized 10 Hz alpha rhythm (blue) and the same rhythm buried in muscle, blink, skin, mains and amplifier noise (orange). The alpha amplitude is not a free number: it comes from the patch of sections 2 and 3 through the same head, and the textbook 20 µV needs about 740,000 cells with a tenth in step, more than the typical evoked source. The large deflections are eye blinks at their reported size and rate. This is the raw signal at the scalp: whatever the electrode type, this is what it is trying to pick up.');
+  const fig = figure(sec.fig, `Four seconds of a synthetic scalp channel: the idealized 10 Hz alpha rhythm (${sw('#2a78d6', 'line')}) and the same rhythm buried in muscle, blink, skin, mains and amplifier noise (${sw('#eb6834', 'line')}). The alpha amplitude is not a free number: it comes from the patch of sections 2 and 3 through the same head, and the textbook 20 µV needs about 740,000 cells with a tenth in step, more than the typical evoked source. The large deflections are eye blinks at their reported size and rate. This is the raw signal at the scalp: whatever the electrode type, this is what it is trying to pick up.`);
   const plot = linePlot(fig.viz, { x: { label: 'Time (s)', domain: [0, 4] }, y: { label: 'Potential (µV)' }, height: 360, legendInside: true });
   fig.panel.append(controls(sN.el, sF.el, sEmg.el, sSkin.el));
   fig.viz.append(readouts(rAlpha.el, rSnr.el, rRms.el));

@@ -2,7 +2,7 @@ import { detectionRadius, twoMonopole } from '../physics/dipole';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { glow, drawNeuron, drawCortexLayers, glowLegend, CANVAS_FONT } from '../ui/field';
 import { P, claimCite as c } from '../data/params';
-import { section, figure, prose, readouts, assumptions } from '../ui/layout';
+import { section, figure, prose, readouts, assumptions, sw } from '../ui/layout';
 
 export function mountNeuron(root: HTMLElement) {
   const sec = section(root, 'neuron', '1', 'Neurons make very small electric fields');
@@ -34,7 +34,7 @@ outside.</p>`);
   const rMeasured = readout('Measured: a single spike vanishes beyond', c('henze-140um'));
   rMeasured.set('140 µm');
 
-  const fig = figure(sec.fig, 'One pyramidal cell in the cortex, seen in cross-section with the tissue layers above it to scale. Current enters at the dendritic tuft (blue, negative) and leaves at the cell body (red, positive); the colour fades with the logarithm of the potential, and it is below 0.1 µV before it reaches the cortical surface. Each grid square is 0.25 mm; the field is computed as in uniform grey matter.');
+  const fig = figure(sec.fig, `One pyramidal cell in the cortex, seen in cross-section with the tissue layers above it to scale. Current enters at the dendritic tuft (${sw('#2a78d6', 'glow')} negative) and leaves at the cell body (${sw('#e34948', 'glow')} positive); the colour fades with the logarithm of the potential, and it is below 0.1 µV before it reaches the cortical surface. Each grid square is 0.25 mm; the field is computed as in uniform grey matter.`);
   const W = 620, H = 400;
   const xr: [number, number] = [-3.1e-3, 3.1e-3], yr: [number, number] = [-0.9e-3, 3.1e-3];
   const surface = P.somaDepthMm * 1e-3, csf = P.thicknessCsfMm * 1e-3, dura = P.thicknessDuraMm * 1e-3;

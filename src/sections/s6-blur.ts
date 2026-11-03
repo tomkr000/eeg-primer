@@ -1,7 +1,7 @@
 import { claimCite as c, P } from '../data/params';
 import { fmt } from '../ui/slider';
 import { section, figure, prose, assumptions } from '../ui/layout';
-import { CANVAS_FONT } from '../ui/field';
+import { CANVAS_FONT, textWithSwatches, type TextPart } from '../ui/field';
 import { state, subscribe, notify, dimControls, patchPattern, miniValues, scalpValue, MOTOR, patchColour, patchLabel, visible, inHead, srcPos, elPos, centre, R, x0, y0, ax, by, sigmaMm, nCh, nSrc, G, miniIn, POS, NEG, type Patch } from './dim-model';
 
 const W = 360, H = 300, cx = W / 2, cy = H / 2 + 4, FOOT = 32; // the head view, with a band for notes under it
@@ -54,12 +54,13 @@ function titledCanvas(parent: HTMLElement, title: string, w: number, h: number, 
   parent.append(box);
   return cv;
 }
-/** one or two lines of notes in the band under the head view */
-function footnote(ctx: CanvasRenderingContext2D, lines: string[]) {
-  ctx.save(); ctx.font = '12px system-ui, sans-serif'; ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'left';
-  lines.forEach((l, i) => ctx.fillText(l, 6, H + 13 + i * 15));
+/** one or two lines of notes in the band under the head view; colours appear as swatches, never as words */
+function footnote(ctx: CanvasRenderingContext2D, lines: TextPart[][]) {
+  ctx.save(); ctx.font = '12px system-ui, sans-serif'; ctx.fillStyle = '#1a1a1a';
+  lines.forEach((l, i) => textWithSwatches(ctx, l, 6, H + 13 + i * 15));
   ctx.restore();
 }
+const RED = '#e34948', BLUE = '#2a78d6';
 export function mountBlur(root: HTMLElement) {
   const sec = section(root, 'blur', '6', 'From outside, patches of cortex blur into broad blobs', 'Only a few areas can be controlled at will, and their blobs overlap');
   prose(sec.text, `
@@ -99,7 +100,7 @@ Section 7 counts how many of them can be told apart.</p>`);
 
   function drawCortex() {
     cctx.clearRect(0, 0, W, H + FOOT);
-    footnote(cctx, ['click to add a patch, click one to remove it', `each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]);
+    footnote(cctx, [['click to add a patch, click one to remove it'], [`each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]]);
     drawGridHead(cctx);
     cctx.fillStyle = 'rgba(26,26,26,0.22)';
     for (const [x, y, z] of srcXY) { if (!visible(z)) continue; cctx.beginPath(); cctx.arc(x, y, 1.3, 0, 2 * Math.PI); cctx.fill(); }
@@ -142,7 +143,7 @@ Section 7 counts how many of them can be told apart.</p>`);
 
   function drawEach(pats: { a: Float64Array }[]) {
     ectx.clearRect(0, 0, W, H + FOOT);
-    footnote(ectx, ['red = positive voltage, blue = negative', 'each map is scaled to its own peak, to compare shapes']);
+    footnote(ectx, [[{ sw: RED }, 'positive voltage, ', { sw: BLUE }, 'negative'], ['each map is scaled to its own peak, to compare shapes']]);
     ectx.font = CANVAS_FONT; ectx.fillStyle = '#52514e'; ectx.textAlign = 'center';
     if (!pats.length) { ectx.fillText('no patches placed', W / 2, H / 2); return; }
     const cols = Math.ceil(Math.sqrt(pats.length)), rows = Math.ceil(pats.length / cols);
@@ -165,7 +166,7 @@ Section 7 counts how many of them can be told apart.</p>`);
   /** the scalp voltage of all patches together on an absolute log colour scale, with a colour bar and a note on the blue */
   function drawSummed(total: Float64Array) {
     sctx.clearRect(0, 0, W, H + FOOT);
-    footnote(sctx, ['red = above the average of all 128 electrodes, blue = below it', 'far from the patches the voltage dips below that average']);
+    footnote(sctx, [[{ sw: RED }, 'above the average of all 128 electrodes, ', { sw: BLUE }, 'below it'], ['far from the patches the voltage dips below that average']]);
     let vmax = 0, vmin = 0, minAt: [number, number] = [cx, cy];
     const hw = half.width, hh = half.height, d = himg.data, lf = Math.log10(FLOOR), lc = Math.log10(CEIL);
     for (let j = 0; j < hh; j++) for (let i = 0; i < hw; i++) {

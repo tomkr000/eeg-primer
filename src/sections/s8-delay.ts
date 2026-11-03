@@ -2,7 +2,7 @@ import { synthesize } from '../physics/noise';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { linePlot } from '../ui/plot';
 import { P, claimCite as c } from '../data/params';
-import { section, figure, prose, readouts, assumptions } from '../ui/layout';
+import { section, figure, prose, readouts, assumptions, sw } from '../ui/layout';
 import { RAW_DEFAULTS } from './s4-noise';
 
 /** 2nd-order Butterworth band-pass (two biquads) for the mu band. */
@@ -53,7 +53,7 @@ per decision that no electrode can remove.</p>`);
   const rCycles = readout('Cycles of the 10 Hz rhythm in the window');
   const rFalse = readout('False detections before the intention');
 
-  const fig = figure(sec.fig, 'One imagined movement. Top: the scalp signal of section 4 (orange) with the mu rhythm alone (blue); the intention is at t = 0 and the rhythm fades after it (event-related desynchronisation, ERD). Bottom: the rhythm’s power as a decoder would estimate it from a sliding window of the chosen length (blue), the true envelope (grey) and the detection threshold (dashed); the decoder fires where the estimate first crosses the threshold after the intention. Drag the window shorter and the estimate gets jumpy and fires early by accident; drag it longer and the detection slides later.');
+  const fig = figure(sec.fig, `One imagined movement. Top: the scalp signal of section 4 (${sw('#eb6834', 'line')}) with the mu rhythm alone (${sw('#2a78d6', 'line')}); the intention is at t = 0 and the rhythm fades after it (event-related desynchronisation, ERD). Bottom: the rhythm’s power as a decoder would estimate it from a sliding window of the chosen length (${sw('#2a78d6', 'line')}), the true envelope (${sw('#898781', 'dash')}) and the detection threshold (${sw('#52514e', 'dash')}); the decoder fires where the estimate first crosses the threshold after the intention. Drag the window shorter and the estimate gets jumpy and fires early by accident; drag it longer and the detection slides later.`);
   const top = linePlot(fig.viz, { x: { label: 'Time from the intention (s)', domain: [-2, 4] }, y: { label: 'Potential (µV)' }, height: 200, legendInside: true });
   const bottom = linePlot(fig.viz, { x: { label: 'Time from the intention (s)', domain: [-2, 4] }, y: { label: 'Mu power (relative)', domain: [0, 1.6] }, height: 200, legendInside: true });
   fig.panel.append(controls(sWin.el, sOnset.el, sRamp.el));

@@ -2,12 +2,13 @@ import { claimCite as c } from '../data/params';
 import { fmt, readout } from '../ui/slider';
 import { section, figure, prose, assumptions, readouts } from '../ui/layout';
 import { state, subscribe, dimControls, patchPattern, greedyOrder, fullSv, momentNam, patchColour, patchLabel, COMPONENTS_99 } from './dim-model';
+import { textWithSwatches, partsWidth, type TextPart } from '../ui/field';
 
-/** a boxed note with a pointer line to a spot */
-function callout(ctx: CanvasRenderingContext2D, lines: string[], x: number, y: number, tx: number, ty: number, align: 'left' | 'right' = 'left') {
+/** a boxed note with a pointer line to a spot; colours in the text appear as swatches */
+function callout(ctx: CanvasRenderingContext2D, lines: TextPart[][], x: number, y: number, tx: number, ty: number, align: 'left' | 'right' = 'left') {
   ctx.save();
   ctx.font = '13px system-ui, sans-serif';
-  const w = Math.max(...lines.map((l) => ctx.measureText(l).width)) + 14, h = lines.length * 16 + 8;
+  const w = Math.max(...lines.map((l) => partsWidth(ctx, l, 13))) + 14, h = lines.length * 16 + 8;
   const bx = align === 'right' ? x - w : x;
   const ax = Math.min(Math.max(tx, bx + 8), bx + w - 8), ay = ty > y + h ? y + h : y;
   ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 1.2;
@@ -15,8 +16,8 @@ function callout(ctx: CanvasRenderingContext2D, lines: string[], x: number, y: n
   ctx.fillStyle = '#1a1a1a'; ctx.beginPath(); ctx.arc(tx, ty, 3, 0, 2 * Math.PI); ctx.fill();
   ctx.fillStyle = 'rgba(252,252,251,0.95)'; ctx.strokeStyle = '#898781'; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.roundRect(bx, y, w, h, 4); ctx.fill(); ctx.stroke();
-  ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'left';
-  lines.forEach((l, i) => ctx.fillText(l, bx + 7, y + 17 + i * 16));
+  ctx.fillStyle = '#1a1a1a';
+  lines.forEach((l, i) => textWithSwatches(ctx, l, bx + 7, y + 17 + i * 16, 13));
   ctx.restore();
 }
 
@@ -98,16 +99,16 @@ ${c('intracortical')}.</p>`);
     });
     // callouts in two rows above the plot, each pointing straight down at its bar or at the noise line
     const right = DW - mr;
-    const boxW = (lines: string[]) => { ctx.font = '13px system-ui, sans-serif'; return Math.max(...lines.map((l) => ctx.measureText(l).width)) + 14; };
-    const above = (lines: string[], x: number) => Math.min(Math.max(x - boxW(lines) / 2, ml), right - boxW(lines));
-    callout(ctx, [`noise of one electrode contact: ${fmt(noise, 2)} µV`, 'a bar below this line is a mix of the others'], right, 6, right - 4, y(noise), 'right');
+    const boxW = (lines: TextPart[][]) => { ctx.font = '13px system-ui, sans-serif'; return Math.max(...lines.map((l) => partsWidth(ctx, l, 13))) + 14; };
+    const above = (lines: TextPart[][], x: number) => Math.min(Math.max(x - boxW(lines) / 2, ml), right - boxW(lines));
+    callout(ctx, [[`noise of one electrode contact: ${fmt(noise, 2)} µV`], ['a ', { sw: '#c3c2b7' }, 'bar below this line is a mix of the others']], right, 6, right - 4, y(noise), 'right');
     if (firstBlue >= 0) {
-      const o = order[firstBlue], lines = [`${fmt(o.rest, 2)} µV that no other patch can mimic:`, 'counts as one dimension'];
+      const o = order[firstBlue], lines: TextPart[][] = [[`${fmt(o.rest, 2)} µV that no other patch can mimic:`], ['counts as one dimension']];
       callout(ctx, lines, above(lines, xc(firstBlue)), 6, xc(firstBlue), y(o.rest) - 24);
     }
     if (firstGrey >= 0) {
       const o = order[firstGrey], p = state.patches[o.idx];
-      const lines = [`${p.name ?? `patch ${o.idx + 1}`}: only ${fmt(o.rest, 2)} µV is new, less than the noise,`, 'so from outside it looks like a mix of the others'];
+      const lines: TextPart[][] = [[`${p.name ?? `patch ${o.idx + 1}`}: only ${fmt(o.rest, 2)} µV is new, less than the noise,`], ['so from outside it looks like a mix of the others']];
       callout(ctx, lines, above(lines, xc(firstGrey)), 52, xc(firstGrey), y(o.rest) - 24);
     }
   }

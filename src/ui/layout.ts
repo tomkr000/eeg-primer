@@ -23,6 +23,13 @@ export function section(root: HTMLElement, id: string, number: string, title: st
 }
 
 /** Collapsible wrapper for the long-form text. */
+/** An inline colour swatch for captions and legends: show the colour, never name it. */
+export function sw(color: string, kind: 'patch' | 'line' | 'dash' | 'thick' | 'glow' = 'patch'): string {
+  if (kind === 'patch') return `<i class="sw-i sw-patch" style="background:${color}"></i>`;
+  if (kind === 'glow') return `<i class="sw-i sw-glow" style="background:linear-gradient(90deg,${color}00,${color})"></i>`;
+  return `<i class="sw-i sw-line" style="border-top:${kind === 'thick' ? '5px solid' : kind === 'dash' ? '2px dashed' : '2.5px solid'} ${color}"></i>`;
+}
+
 export function inDepth(content: HTMLElement): HTMLElement {
   const d = document.createElement('details');
   d.className = 'in-depth';

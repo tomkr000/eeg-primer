@@ -17,7 +17,7 @@ const hero = document.createElement('header');
 hero.className = 'hero';
 hero.innerHTML = `
   <p class="kicker">An interactive, cited walk through the physics</p>
-  <h1>EEG primer: an in-depth look at the physics of non-invasive BCI</h1>`;
+  <h1>EEG primer: the physics of a non-invasive BCI</h1>`;
 const standfirst = document.createElement('div');
 standfirst.className = 'standfirst';
 standfirst.innerHTML = `<p>Scalp electroencephalography (EEG) listens to the brain from the far side of a

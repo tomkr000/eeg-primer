@@ -19,7 +19,7 @@ export interface StripPlot {
   update(strips: Strip[]): void;
 }
 
-const M = { top: 6, right: 14, bottom: 36, left: 262 };
+const M = { top: 6, right: 14, bottom: 36, left: 300 };
 const ICON = 52; // icon column width
 
 /**

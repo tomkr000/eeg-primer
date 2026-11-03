@@ -110,7 +110,7 @@ per finger ${c('fingered')}.</p>`);
     const Zin = (f: number) => inputImpedance(sRin.value, C_IN_PF * 1e-12, f);
     const strips: Strip[] = [];
     const t = raw.t;
-    strips.push({ name: 'Neural signal at the scalp', sub: 'before any electrode touches it', icon: HEAD_ICON, points: Array.from(raw.total, (v, i) => [t[i], v] as [number, number]), color: '#898781', note: `${fmt(Math.round(sN.value), 2)} cells, ${fmt(sF.value, 2)} in step: ${fmt(alpha, 3)} µV alpha + muscle, mains and skin noise` });
+    strips.push({ name: 'Ground truth neural signal at scalp', sub: 'before any electrode touches it', icon: HEAD_ICON, points: Array.from(raw.total, (v, i) => [t[i], v] as [number, number]), color: '#898781', note: `${fmt(Math.round(sN.value), 2)} cells, ${fmt(sF.value, 2)} in step: ${fmt(alpha, 3)} µV alpha + muscle, mains and skin noise` });
     const rows: string[] = [];
     KINDS.forEach((k, idx) => {
       // divider as a frequency response

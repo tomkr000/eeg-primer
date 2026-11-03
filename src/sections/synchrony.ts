@@ -33,7 +33,8 @@ attention ${c('rhythm-alpha')}. The mu rhythm (${sw(MU)}), 7 to 11 Hz with a par
 strip under electrodes C3, Cz and C4, ignores the eyes, and fades when the person moves, imagines moving or watches a movement
 ${c('rhythm-mu')}${c('rhythm-beta')}. Frontal midline theta (${sw(THETA)}), 4 to 8 Hz, appears just in front of the vertex during
 problem solving and stress ${c('rhythm-theta')}. Gamma, above 30 Hz, barely reaches the scalp: under 1 µV from the brain against
-about 100 µV of muscle (${sw(MUSCLE)}) in the same band at the temples, which is why scalp gamma is mostly muscle ${c('gamma-scalp')}.
+about 100 µV of muscle (${sw(MUSCLE)}) at the temples, whose spectrum covers the whole gamma band, which is why scalp gamma is mostly
+muscle ${c('gamma-scalp')}.
 Mu and alpha share a band and are told apart by place and by what switches them; mu is usually the weaker of the two and is seen
 by eye in only a minority of adults, so sections 7 to 9, which run the mu rhythm at the strength of section 5's alpha, take an
 upper bound ${c('mu-vs-alpha')}. Of these rhythms, the sensorimotor ones are what a person can change at will without a stimulus
@@ -51,7 +52,7 @@ the slower the rhythm ${c('oscillations-synchrony')}.</p>
 run within motor cortex at 15 to 35 cm/s, which at 20 Hz makes them about a centimetre long, an order of magnitude below the
 10 cm or so over which the skull blurs neighbouring electrodes together; decoding from them has been proposed with implanted
 arrays, and the only deliberate control of cortical waves so far is in mice. The waves EEG does see are the metres-per-second
-kind, whose direction changes with the eyes open or closed ${c('waves-control')}.</p>`;
+kind, whose direction reverses between watching a stimulus and resting with the eyes closed ${c('waves-control')}.</p>`;
 }
 
 /** The head from above with the regions of the rhythms, labelled at the right with leader lines. */
@@ -86,7 +87,7 @@ function drawRhythmMap(ctx: CanvasRenderingContext2D) {
   };
   label(28, THETA, 'frontal midline theta', ['4 to 8 Hz, on the midline just', 'in front of the vertex; problem', 'solving and stress'], theta);
   label(96, MU, 'mu (with beta near 20 Hz)', ['7 to 11 Hz, under 50 \u00b5V, over', 'the sensorimotor strip (C3, Cz,', 'C4); fades with real, imagined', 'or observed movement; usually', 'weaker than alpha'], mu);
-  label(190, MUSCLE, 'muscle (jaw and temples)', ['about 100 \u00b5V above 30 Hz; the', 'brain\u2019s own gamma reaches the', 'scalp at under 1 \u00b5V'], temple);
+  label(190, MUSCLE, 'muscle (jaw and temples)', ['about 100 \u00b5V, 20 to 300 Hz; the', 'brain\u2019s own gamma reaches the', 'scalp at under 1 \u00b5V'], temple);
   label(258, ALPHA, 'alpha rhythm', ['8 to 13 Hz, under 50 \u00b5V, over', 'the back of the head; largest', 'with the eyes closed, fades', 'with attention'], alpha);
 }
 

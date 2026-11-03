@@ -1,0 +1,69 @@
+[
+ {
+  "id": "rhythm-alpha",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Kane et al. 2017 (full text, Europe PMC PMC6123891)"
+  ],
+  "evidence_location": "Kane 2017, glossary entry 'Alpha rhythm' (section 'Glossary of terms', under A), full text",
+  "quote": "Rhythm at 8–13 Hz inclusive occurring during wakefulness over the posterior regions of the head, generally with maximum amplitudes",
+  "discrepancy": "",
+  "suggested_fix": "",
+  "bibliographic_issues": "None. Clin Neurophysiol Pract 2:170-185 (2017), doi 10.1016/j.cnp.2017.07.002 all confirmed. Note only: PubMed/Europe PMC index the third author as 'Benickzy S' (the journal byline's misspelling); the article XML and the batch use the correct 'Beniczky'. Every element of the claim is in the entry: 8-13 Hz, wakefulness, posterior regions with maximum over the occipital areas, 'mostly below 50 µV in the adult' (the glossary adds 'often much higher in children'), best seen eyes closed 'during physical relaxation and relative mental inactivity', 'Blocked or attenuated by attention, especially visual, and mental effort'."
+ },
+ {
+  "id": "rhythm-mu",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Kane et al. 2017 (full text, Europe PMC PMC6123891)",
+   "Pineda 2005 (full text PDF at bci.ucsd.edu, read via WebFetch; sections 2.1, 2.2, 2.3, 3.3, 3.4)",
+   "Tiihonen, Kajola, Hari 1989 (abstract via Europe PMC; full text not open)"
+  ],
+  "evidence_location": "Kane 2017 glossary entry 'Mu rhythm' (7-11 Hz, arch-shaped, central or centro-parietal, wakefulness, mostly below 50 µV, blocked by contralateral movement, thought of movement, readiness to move or tactile stimulation). Pineda 2005 section 2.3 ('mu rhythms are not affected by opening or closing of the eyes'; 'classical alpha is desynchronized and attenuated when eyes are open') and section 3.4 ('is reduced in normal adults by self-initiated movement, imagined movement, and observed movement'). Tiihonen 1989 abstract (peaks 'around 10 and 21 Hz in all subjects'; high-frequency activity 'blocked by clenching of the fist, but not by opening of the eyes').",
+  "quote": "The high-frequency activity was blocked by clenching of the fist, but not by opening of the eyes",
+  "discrepancy": "Minor, not an error: Tiihonen et al. give the upper spectral peak as 'around 21 Hz' (magnetic mu rhythm, MEG, four subjects), which the claim rounds to 20 Hz; the eye-opening test in that abstract concerns only the high-frequency component, as the claim's parenthesis says. Pineda defines mu as 8-13 Hz (with a 15-25 Hz band), not the glossary's 7-11 Hz; the claim correctly attributes 7-11 Hz to the glossary.",
+  "suggested_fix": "Optional: 'spectral peaks near 10 and 20 Hz (about 10 and 21 Hz in magnetoencephalographic recordings)'.",
+  "bibliographic_issues": "None. Pineda: Brain Res Rev 50(1):57-68 (2005), doi 10.1016/j.brainresrev.2005.04.005 confirmed on the PDF first page and Europe PMC. Tiihonen: Neuroscience 32(3):793-800 (1989), doi 10.1016/0306-4522(89)90299-6 confirmed."
+ },
+ {
+  "id": "rhythm-beta",
+  "verdict": "PARTIAL",
+  "checked_sources": [
+   "Kane et al. 2017 (full text, Europe PMC PMC6123891)",
+   "Salmelin & Hari 1994 (abstract via Europe PMC; full text not open)",
+   "Jensen et al. 2005 (abstract via Europe PMC and core.ac.uk record; ScienceDirect full text blocked)"
+  ],
+  "evidence_location": "Kane 2017 glossary entry 'Beta rhythm or activity' ('Any EEG rhythm between 14 and 30 Hz', 'Most characteristically recorded over the fronto-central regions', 'mostly below 30 µV'). Salmelin & Hari 1994 abstract ('centered at 10 and 20 Hz', 'completely suppressed during the movement and increased substantially 0.5-2.5 s after it', '10-Hz rhythmic oscillations occurred predominantly at the primary somatosensory hand cortex; the sources of the 20-Hz signals were slightly more anterior', 'We hypothesize that ... the 20-Hz activity is essentially somatomotor in origin'). Jensen 2005 abstract ('Benzodiazepine increased the power and decreased the frequency of beta oscillations over rolandic areas'; 'previous research has identified sources of the beta rhythm in the motor cortex'; model effect 'implemented as an increase in GABAergic conductance').",
+  "quote": "Benzodiazepine increased the power and decreased the frequency of beta oscillations over rolandic areas.",
+  "discrepancy": "All numbers verified (14-30 Hz, fronto-central, <30 µV; 10 and 20 Hz; thumb movement; rebound 0.5-2.5 s; S1 hand cortex; 20 Hz slightly anterior; benzodiazepines raise power and lower frequency). Two wording points: (1) 'depends on GABAergic inhibition' is stronger than the source: Jensen et al. report that beta is 'modulated by' the GABAergic agonist benzodiazepine and reproduce the effect in a model as an increase in GABAergic conductance; dependence is a model result, not a demonstrated necessity. (2) '20 Hz sources lying ... in motor cortex' is Salmelin & Hari's stated hypothesis ('essentially somatomotor in origin'), supported as a localisation only by Jensen's summary of 'previous research'. Also note Jensen define beta as 13-35 Hz, the glossary as 14-30 Hz (the claim uses the glossary's).",
+  "suggested_fix": "'the 20 Hz rhythm is modulated by GABAergic inhibition (benzodiazepines raise its power and lower its frequency, which a network model reproduces as an increase in GABAergic conductance)'; and 'the 20 Hz sources lying slightly more anterior, which Salmelin and Hari take to be motor cortex'.",
+  "bibliographic_issues": "None. Salmelin & Hari: Neuroscience 60(2):537-550 (1994), doi 10.1016/0306-4522(94)90263-1 confirmed. Jensen: NeuroImage 26(2):347-355 (2005), doi 10.1016/j.neuroimage.2005.02.008 confirmed."
+ },
+ {
+  "id": "rhythm-theta",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Kane et al. 2017 (full text, Europe PMC PMC6123891)",
+   "Ishii et al. 1999 (abstract via Europe PMC; full text not open)"
+  ],
+  "evidence_location": "Kane 2017 glossary entries 'Fronto-central theta' ('A normal variant. Theta rhythm located in the midline, just anterior to the vertex, that occurs during psychological stress and cognitive tasks, particularly problem solving. It appears predominantly in young healthy adults (<30 years of age) ... Synonyms: frontal midline theta, Ciganek rhythm') and 'Theta band: Frequency band from 4-<8 Hz'. Ishii 1999 abstract (64-channel whole-head MEG, four subjects, synthetic aperture magnetometry).",
+  "quote": "SAM analysis showed bilateral medial prefrontal cortices, including anterior cingulate cortex, as the source of Fm theta.",
+  "discrepancy": "",
+  "suggested_fix": "",
+  "bibliographic_issues": "None. NeuroReport 10(4):675-679 (1999), doi 10.1097/00001756-199903170-00003 confirmed. Notes only: the glossary's headword is 'Fronto-central theta' with 'frontal midline theta' as a synonym; the 4 to under 8 Hz figure is the glossary's theta-band definition rather than part of the Fm theta entry; the glossary specifies young adults as under 30 years; Ishii's result rests on four subjects."
+ },
+ {
+  "id": "gamma-scalp",
+  "verdict": "PARTIAL",
+  "checked_sources": [
+   "Kane et al. 2017 (full text, Europe PMC PMC6123891)",
+   "Muthukumaraswamy 2013 (full text, Europe PMC PMC3625857)",
+   "Whitham et al. 2007 (structured abstract via Europe PMC; full text not open)"
+  ],
+  "evidence_location": "Kane 2017 glossary entry 'Gamma rhythm or activity' ('An EEG rhythm above >30-80 Hz ... most commonly recorded with intracranial electrodes from actively engaged or driven neural networks'). Muthukumaraswamy 2013, section 'The characteristics of muscle artifacts in MEG/EEG', paragraph on amplitudes (muscle activity at temporal electrodes 'can be ~1000 fT and 100 μV'; high-frequency activity 'can be less than 20 fT and 1 μV in MEG and EEG, respectively (Herrmann and Demiralp, 2005)'). Whitham 2007 abstract, Results ('10- to 200-fold differences in the power of frequencies above 20 Hz during paralysis') and Conclusions ('Most of the scalp EEG recording above 20 Hz is of EMG origin').",
+  "quote": "The amplitude of muscle activity when recorded in temporal MEG/EEG electrodes and sensors can be ~1000 fT and 100 μV",
+  "discrepancy": "Minor. 'over the same band' is not in the source: the review's 100 µV is the amplitude of muscle activity at temporal electrodes with no band qualifier (it gives the muscle spectrum as about 20-300 Hz, temporal-muscle peaks 40-80 Hz), so the EMG amplitude within the gamma band alone is less than 100 µV. The 'below 1 µV' figure is the review's citation of Herrmann and Demiralp 2005, not its own measurement. The glossary bounds the gamma band at >30 to 80 Hz; the claim gives only the lower bound. Whitham's 10- to 200-fold result comes from two subjects, with the dominant arm spared from the blockade. Everything else matches: intracranial recording, 10- to 200-fold, above 20 Hz, 'most ... of EMG origin'.",
+  "suggested_fix": "'while muscle activity recorded at temporal electrodes can reach about 100 µV, with a spectrum (about 20 to 300 Hz) that covers the whole gamma band'. Optionally add 'in two paralysed volunteers' for the Whitham result.",
+  "bibliographic_issues": "None. Muthukumaraswamy: Front Hum Neurosci 7:138 (2013), doi 10.3389/fnhum.2013.00138 confirmed. Whitham: Clin Neurophysiol 118(8):1877-1888 (2007), doi 10.1016/j.clinph.2007.04.027 confirmed."
+ }
+]

@@ -31,6 +31,10 @@ A new timing-diagram reader requested explanations of flat stretches, vertical c
 
 These are language-model reader checks, not a human comprehension study.
 
+## Signals used for control
+
+The next revision replaces the overlapping command and evoked-response notes with a table: signal, what the user does, and what the computer detects. It covers movement rhythms, P300, flicker responses, and trained slow cortical potentials. Alpha switches, mental-task patterns, and error responses remain in a short supporting note. A fresh reader correctly paraphrased the action-to-measurement relationship and prompted more explicit feedback-display wording for slow potentials. The table becomes labelled, stacked rows on narrow screens; it was checked at 390 px with no internal horizontal overflow. The production build passes.
+
 ## Scientific corrections
 
 - The old sensorimotor exception to artifact rejection was removed. Facial muscle activity can contaminate even central recordings: [Goncharova et al. 2003](https://pubmed.ncbi.nlm.nih.gov/12948787/).

@@ -16,7 +16,7 @@ export function mountSynchrony(root: HTMLElement) {
   const intro = document.createElement('div');
   intro.className = 'rhythm-intro';
   intro.innerHTML = `<p>Section 4 shows the scalp voltage at one instant. As activity changes across many patches, their voltage contributions add together at each electrode. Recording that changing voltage over time gives an EEG signal ${c('superposition')}${c('quasistatic')}.</p>
-    <p>Repeating patterns in that signal are called rhythms ${c('rhythm-alpha')}${c('rhythm-mu')}. The map below shows familiar rhythms, slower voltage shifts, and interference from eyes and muscles.</p>`;
+    <p>Repeating patterns in that signal are called rhythms ${c('rhythm-alpha')}${c('rhythm-mu')}. EEG also records brief responses to events, such as a flash on a screen ${c('evoked-map')}. Below, we map the ongoing signals, then show which patterns an interface can use as commands.</p>`;
   body.append(intro);
   root.append(el);
   const fig = figure(body, '', { panelWidth: '0px' });
@@ -41,24 +41,29 @@ export function mountSynchrony(root: HTMLElement) {
   drawRhythmMap(fig.viz.querySelector('canvas')!.getContext('2d')!);
 
   fig.caption.innerHTML = `<div class="rhythm-notes">
+    <section class="rhythm-note rhythm-responses">
+      <h3>Main signals used for EEG control</h3>
+      <p>The map shows several kinds of recorded activity. These approaches turn a recognisable pattern into a command or choice:</p>
+      <table class="rhythm-control-table">
+        <thead><tr><th scope="col">Signal</th><th scope="col">What you do</th><th scope="col">What the computer detects</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">${sw(MU)}Movement rhythms<br><span>mu and beta</span></th><td data-label="What you do">Imagine moving a hand or foot.</td><td data-label="What the computer detects">A change in rhythm strength over brain areas involved in movement ${c('self-generated-signals')}.</td></tr>
+          <tr><th scope="row">P300 response</th><td data-label="What you do">Attend to a target letter while groups of letters flash.</td><td data-label="What the computer detects">A distinctive voltage response after flashes that include your target ${c('evoked-map')}.</td></tr>
+          <tr><th scope="row">Flicker response<br><span>steady-state visual evoked potential (SSVEP)</span></th><td data-label="What you do">Watch one of several targets, each flickering at a different rate.</td><td data-label="What the computer detects">A repeating response at the flicker rate of the target you watch ${c('evoked-map')}.</td></tr>
+          <tr><th scope="row">${sw(SCP)}Slow cortical potentials</th><td data-label="What you do">Use an on-screen indicator to practise shifting your recorded voltage up or down.</td><td data-label="What the computer detects">A slow voltage shift. Some trained users have used these shifts to choose between groups of letters until one letter remains ${c('scp-control')}.</td></tr>
+        </tbody>
+      </table>
+      <p class="rhythm-model-note">Movement rhythms and slow shifts can be trained for control; P300 and flicker interfaces use responses to displayed targets ${c('self-generated-signals')}${c('scp-control')}.</p>
+    </section>
     <section class="rhythm-note">
       <h3>Telling rhythms apart</h3>
       <p>Alpha and mu can repeat at similar rates; their location and response to eye closure or movement help tell them apart ${c('rhythm-alpha')}${c('rhythm-mu')}${c('mu-vs-alpha')}.</p>
       <p class="rhythm-model-note">The later control demos give mu the same voltage amplitude as alpha. Since mu is usually weaker, this can make control look easier than it may be ${c('mu-vs-alpha')}.</p>
     </section>
     <section class="rhythm-note">
-      <h3>Turning a change into a command</h3>
-      <p>A computer can detect a change, such as weaker mu during imagined movement, and use it as a command ${c('self-generated-signals')}.</p>
-      <p>For slow voltage shifts, people practise while watching feedback from their EEG. After months of training, some paralysed people learned to shift the voltage up or down. A spelling program used these two states to choose between groups of letters, repeatedly narrowing the group until one letter remained ${c('scp-control')}.</p>
-    </section>
-    <section class="rhythm-note rhythm-responses">
-      <h3>Using a response to something on screen</h3>
-      <p>These methods detect the brain’s response to an event ${c('evoked-map')}:</p>
-      <ul>
-        <li><strong>Flashing letters (P300).</strong> The computer flashes groups of letters. A characteristic voltage response when the target flashes helps it identify the letter you are attending to.</li>
-        <li><strong>Flickering targets.</strong> Each target flickers at a different rate. The computer looks for a matching rhythm in your EEG to identify which target you are watching.</li>
-        <li><strong>Noticing a mistake.</strong> Recognising that the computer made a wrong choice can produce an error-related voltage response, which can help the system detect and correct the error.</li>
-      </ul>
+      <h3>Other signals can help</h3>
+      <p>Closing the eyes can make alpha act as an on/off switch; mental tasks can also produce patterns a computer can distinguish ${c('self-generated-signals')}${c('frontal-control')}.</p>
+      <p>Recognising a wrong choice can produce an error-related response, helping an interface detect a mistake ${c('evoked-map')}.</p>
     </section>
     <section class="rhythm-note rhythm-timing">
       <h3>How neurons keep time together</h3>

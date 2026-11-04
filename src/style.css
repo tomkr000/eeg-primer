@@ -232,7 +232,13 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .rhythm-note p:last-child { margin-bottom: 0; }
 .rhythm-model-note { color: var(--ink-2); font-size: 13px; }
 .rhythm-responses, .rhythm-timing, .rhythm-waves { grid-column: 1 / -1; }
-.rhythm-responses ul { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 7px; }
+.rhythm-control-table { border-collapse: collapse; width: 100%; margin: 10px 0; font-family: var(--sans); font-size: 14px; line-height: 1.45; }
+.rhythm-control-table th, .rhythm-control-table td { text-align: left; vertical-align: top; padding: 10px 16px 10px 0; border-bottom: 1px solid var(--grid); }
+.rhythm-control-table thead th { font-size: 12.5px; color: var(--ink-2); }
+.rhythm-control-table tbody th { width: 25%; font-weight: 600; }
+.rhythm-control-table tbody th span { font-size: 12.5px; font-weight: 400; color: var(--ink-2); }
+.rhythm-control-table td { width: 37.5%; }
+.rhythm-control-table td:last-child { padding-right: 0; }
 .rhythm-sync { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 10px; max-width: 660px; width: 100%; font-family: var(--sans); font-size: 12px; fill: var(--ink-2); }
 .rhythm-sync .sync-heading { font-size: 14px; font-weight: 600; fill: var(--ink); }
 .rhythm-map-key { font-family: var(--sans); color: var(--ink-2); font-size: 12.5px; margin: 0 0 4px; }
@@ -245,4 +251,11 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 }
 @media (max-width: 430px) {
   .rhythm-map { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .rhythm-control-table, .rhythm-control-table tbody { display: block; }
+  .rhythm-control-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .rhythm-control-table tr { display: block; padding: 12px 0; border-bottom: 1px solid var(--grid); }
+  .rhythm-control-table tbody th, .rhythm-control-table td { display: block; width: auto; border: 0; padding: 0 0 6px; }
+  .rhythm-control-table td::before { content: attr(data-label) ': '; font-weight: 600; }
 }

@@ -18,10 +18,11 @@ under an "In depth" toggle:
    at rest and during imagery (gamma distributed over B·T degrees of freedom, the radiometer equation); readouts
    compare the model's left-or-right accuracy with measured medians and its four-way bit rate with the competition
    record. The rhythm's strength comes from the shared N and synchrony sliders through section 9's 64-electrode channel
-8. EEG signals have inherent delays: a simulated imagined movement, the mu rhythm (a narrowband random process) fading
-   on a cited time course and a sliding-window power estimate whose length is a slider, a robot arm that moves only
-   when that estimate crosses the threshold, and a cited timeline of where the time goes (rhythm, window, P300
-   repetitions, flicker plus gaze shift, readiness potential)
+8. EEG signals have inherent delays: a simulated imagined movement, a steady mu rhythm fading on a cited time course,
+   the decoder's band-pass and sliding-window power estimate (window length, fade depth, onset and ramp are sliders),
+   readouts that split the delay into the fade's onset, the ramp and the window's lag, a robot arm that moves when the
+   estimate crosses the threshold, and a cited timeline of where the time goes (rhythm, window, P300 repetitions,
+   flicker plus gaze shift, readiness potential)
 9. Adding electrodes gives diminishing returns: the best linear estimate of one patch from 2 to 100,000 electrodes on
    the section 3 sphere, against electrode noise alone (grows as √N) and against the brain's own background (flattens
    below a ceiling); the imagined-movement accuracy for the same counts, capped by the rhythm's own fluctuation; the

@@ -1,13 +1,11 @@
 import { synthesize } from '../physics/noise';
-const MC = 120; // random trials behind the outcome rates
-import { bandNoise } from '../physics/control';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { linePlot } from '../ui/plot';
 import { P, claimCite as c } from '../data/params';
 import { section, figure, prose, readouts, assumptions, sw, vizTitle } from '../ui/layout';
 import { RAW_DEFAULTS } from './s5-noise';
 
-/** 2nd-order Butterworth band-pass (two biquads) for the mu band. */
+/** 2nd-order band-pass (a high-pass and a low-pass biquad) for the mu band. */
 function bandpass(lo: number, hi: number, fs: number) {
   const q = Math.SQRT1_2;
   const stage = (type: 'lp' | 'hp', fc: number) => {
@@ -20,30 +18,31 @@ function bandpass(lo: number, hi: number, fs: number) {
   const hp = stage('hp', lo), lp = stage('lp', hi);
   return (x: number) => lp(hp(x));
 }
+/** Two of them in cascade: a steeper band-pass, so that muscle and mains leak less into the mu band. */
+const bandpass4 = (lo: number, hi: number, fs: number) => { const a = bandpass(lo, hi, fs), b = bandpass(lo, hi, fs); return (x: number) => b(a(x)); };
 
 export interface Trial {
   /** time from the intention (s), the raw scalp signal, its 8 to 13 Hz band, and the expected amplitude of that band */
   t: Float64Array; raw: Float64Array; mu: Float64Array; env: Float64Array;
   /** the sliding-window power estimate relative to rest, the true power, and the threshold */
   rel: Float64Array; truth: Float64Array; threshold: number;
-  /** time of the first downward crossing after the intention (NaN if none within the deadline), and of one before it (NaN if none) */
-  det: number; early: number;
+  /** when the true power reaches the threshold, and when the decoder's estimate first crosses it downwards after the intention */
+  tTrue: number; det: number;
 }
-const FS = 250, SECONDS = 8, T0 = 4, DEADLINE = 4, EARLY_S = 1.5; // the intention is 4 s into the record, shown as t = 0, so the longest window is full 1.5 s before it
+const FS = 250, SECONDS = 10, T0 = 4, SEED = 11, SKIN_UV = 1; // electrode noise at the 1 µV floor of sections 7 and 9 (claim skin-noise); // the intention is 4 s into the record, shown as t = 0, so the longest window is full 1 s before it
 
-/** One imagined movement as the decoder sees it: `seed` picks the rhythm's own waxing and waning and the noise. */
-export function simulateTrial(seed: number, onset: number, ramp: number, T: number, drop: number): Trial {
+/** One imagined movement as the decoder sees it: a steady rhythm whose power falls by `drop` along a ramp, in the noise of section 5. */
+export function simulateTrial(onset: number, ramp: number, T: number, drop: number): Trial {
   const n = FS * SECONDS, amp = Math.sqrt(1 - drop);
-  const rhythm = bandNoise(n, FS, 10, P.decoderBandHz, seed);
   const envelope = (t: number) => { const u = (t - T0 - onset) / ramp; return u <= 0 ? 1 : u >= 1 ? amp : 1 - (1 - amp) * u; };
-  const s = synthesize({ ...RAW_DEFAULTS, fs: FS, seconds: SECONDS, blinksPerMinute: 0, seed: seed + 1000, envelope, rhythm });
+  const s = synthesize({ ...RAW_DEFAULTS, fs: FS, seconds: SECONDS, blinksPerMinute: 0, skinUvRms: SKIN_UV, seed: SEED, envelope });
   // the decoder's chain: band-pass, square, trailing mean over the window, relative to the expected resting level
-  const bp = bandpass(8, 13, FS), bpr = bandpass(8, 13, FS), bpn = bandpass(8, 13, FS);
+  const bp = bandpass4(8, 13, FS), bpr = bandpass4(8, 13, FS), bpn = bandpass4(8, 13, FS);
   const mu = new Float64Array(n), sq = new Float64Array(n);
   let restPow = 0, noiseBand = 0; // the resting rhythm and the noise through the same band-pass
   for (let i = 0; i < n; i++) {
     mu[i] = bp(s.total[i]); sq[i] = mu[i] * mu[i];
-    const r = bpr(RAW_DEFAULTS.signalUv * Math.SQRT1_2 * rhythm[i]), b = bpn(s.noise[i]);
+    const r = bpr(RAW_DEFAULTS.signalUv * Math.sin(2 * Math.PI * RAW_DEFAULTS.signalHz * s.t[i])), b = bpn(s.noise[i]);
     restPow += r * r; noiseBand += b * b;
   }
   restPow /= n; noiseBand /= n;
@@ -58,21 +57,13 @@ export function simulateTrial(seed: number, onset: number, ramp: number, T: numb
     env[i] = Math.SQRT2 * Math.sqrt(restPow * pw + noiseBand); // expected amplitude of the band
   }
   const threshold = (1 + (restPow * amp * amp + noiseBand) / base) / 2; // halfway between rest and the fully suppressed level
-  let det = NaN, early = NaN;
+  let tTrue = NaN, det = NaN;
   for (let i = 1; i < n; i++) {
-    if (isNaN(rel[i]) || isNaN(rel[i - 1])) continue;
-    const crossing = rel[i] < threshold && !(rel[i - 1] < threshold);
-    if (!crossing) continue;
-    if (t[i] < 0 && t[i] > -EARLY_S && isNaN(early)) early = t[i];
-    if (t[i] >= 0 && t[i] <= DEADLINE && isNaN(det)) det = t[i];
+    if (t[i] < 0) continue;
+    if (isNaN(tTrue) && truth[i] <= threshold) tTrue = t[i];
+    if (isNaN(det) && !isNaN(rel[i - 1]) && rel[i] < threshold && !(rel[i - 1] < threshold)) det = t[i];
   }
-  return { t, raw: s.total, mu, env, rel, truth, threshold, det, early };
-}
-/** Shares of attempts that fire early, move in time and miss, from `n` random trials at the given settings. */
-export function outcomeRates(n: number, onset: number, ramp: number, T: number, drop: number): { early: number; moved: number; missed: number } {
-  let early = 0, moved = 0;
-  for (let k = 0; k < n; k++) { const tr = simulateTrial(5000 + k, onset, ramp, T, drop); if (!isNaN(tr.early)) early++; else if (!isNaN(tr.det)) moved++; }
-  return { early: early / n, moved: moved / n, missed: 1 - (early + moved) / n };
+  return { t, raw: s.total, mu, env, rel, truth, threshold, tTrue, det };
 }
 
 export function mountDelay(root: HTMLElement) {
@@ -93,49 +84,49 @@ up to 29 s per character ${c('p300-timing')}, and the quickest flicker spellers 
 stimulus plus 0.5 s for the eyes to move per character ${c('bci-windows')}.</p>
 <p>The figure follows the decoder's chain for one imagined movement. A mu rhythm as strong as section 5's alpha
 (an upper bound: mu is usually the weaker of the two, see the aside after section 4 ${c('mu-vs-alpha')}) starts
-to fade 0.3 s after the intention and settles within about a second, losing half its power ${c('erd-depth')};
-like every rhythm it also waxes and wanes by itself (section 7), so the fade is invisible in the raw trace.
-The decoder first filters out everything but the 8 to 13 Hz band, then averages the band's power over a
-sliding window, and fires when the estimate crosses halfway to the suppressed level. The window is the
-lever: a short window reacts quickly but its estimate jumps around (few cycles averaged), so it fires by
-chance about as often as by intent; a long window is steady but late. Every press of the button draws a
-fresh trial, so the arm sometimes starts early, sometimes late and sometimes not at all, at the rates the
-readouts give: fast or reliable, not both. The brain adds its own lead time too: the readiness potential that precedes a self-initiated
+to fade 0.3 s after the intention and settles within about a second, losing half its power ${c('erd-depth')}.
+To show the timing alone, the rhythm here is steady apart from that fade; section 7 showed how its own waxing
+and waning hides the fade in any one window. The decoder first filters out everything but the 8 to 13 Hz band,
+then averages the band's power over a sliding window, and fires when the estimate crosses halfway to the
+suppressed level. Each step adds time: the rhythm starts to fade only after the intention, its power takes the
+ramp to fall, and a trailing window reports the fall only once it has filled with faded signal, so the longer
+the window the later the decoder fires. A short window would be quick, but its estimate scatters (section 7),
+which is why decoders settle for about a second. The brain adds its own lead time too: the readiness potential that precedes a self-initiated
 movement begins about 2 s before it, and the moment people report deciding to move comes only about 200 ms
 before the movement, hundreds of milliseconds after the potential has started ${c('readiness-potential')}.
 Put together, typing with EEG carries a floor of roughly a second per decision that no electrode can
 remove.</p>`);
 
-  const sWin = slider({ label: 'Analysis window length', unit: 's', min: 0.2, max: 3, value: 1, step: 0.05, note: c('bci-windows'), marks: [{ value: 1, label: 'Typical' }] });
-  const sDrop = slider({ label: 'Power lost during imagery (ERD)', unit: '%', min: 10, max: 90, value: P.erdPowerDrop * 100, step: 1, note: c('erd-depth'), marks: [{ value: P.erdPowerDrop * 100, label: 'Typical' }, { value: 85, label: 'Best case' }] });
+  const sWin = slider({ label: 'Analysis window length', unit: 's', min: 0.4, max: 3, value: 1, step: 0.05, note: c('bci-windows'), marks: [{ value: 1, label: 'Typical' }] });
+  const sDrop = slider({ label: 'Power lost during imagery (ERD)', unit: '%', min: 40, max: 90, value: P.erdPowerDrop * 100, step: 1, note: c('erd-depth'), marks: [{ value: P.erdPowerDrop * 100, label: 'Typical' }, { value: 85, label: 'Best case' }] });
   const sOnset = slider({ label: 'Rhythm starts to fade after the intention', unit: 's', min: 0, max: 1.5, value: P.erdOnsetS, step: 0.05, note: c('erd-timecourse'), marks: [{ value: P.erdOnsetS, label: 'Typical' }] });
   const sRamp = slider({ label: 'Time for the rhythm to fade fully', unit: 's', min: 0.1, max: 2, value: P.erdRampS, step: 0.05, note: c('erd-timecourse'), marks: [{ value: P.erdRampS, label: 'Typical' }] });
-  const rDelay = readout('This attempt: detected after');
-  const rMoved = readout(`Fires in time (0 to ${DEADLINE} s after the intention)`);
-  const rEarly = readout(`Fires early (in the ${EARLY_S} s before it)`);
-  const rMissed = readout(`Never fires (miss)`);
+  const rOnset = readout('Rhythm starts to fade');
+  const rTrue = readout('True power reaches the threshold');
+  const rDet = readout('Decoder fires and the arm moves');
 
-  const fig = figure(sec.fig, `One imagined movement, drawn afresh at every press of the button. Top: the scalp signal of section 5 (${sw('#eb6834', 'line')}), rhythm plus noise; the intention is at t = 0 and the rhythm fades after it (event-related desynchronisation, ERD), which the raw trace does not show. Middle: the decoder's first step, the 8 to 13 Hz band of that signal (${sw('#2a78d6', 'line')}), with the amplitude it should have on average (${sw('#898781', 'dash')}): the fade is there, but the band waxes and wanes by itself. Bottom: the band's power as the decoder estimates it from a sliding window of the chosen length (${sw('#2a78d6', 'line')}), the true power (${sw('#898781', 'dash')}) and the threshold (${sw('#52514e', 'dash')}); the decoder fires where the estimate first crosses the threshold downwards after the intention. A shorter window fires early by accident; a longer one detects later or, with a shallow fade, not at all. The readouts give the shares of attempts that fire early, move in time and miss, from ${MC} random trials at the current settings.`);
+  const fig = figure(sec.fig, `One imagined movement through the decoder's chain. Top: the scalp signal of section 5 (${sw('#eb6834', 'line')}), rhythm plus noise; the intention is at t = 0 and the rhythm fades after it (event-related desynchronisation, ERD), a change the raw trace barely shows. Middle: the decoder's first step, the 8 to 13 Hz band of that signal (${sw('#2a78d6', 'line')}), with the amplitude it should have (${sw('#898781', 'dash')}): the fade is visible here. Bottom: the band's power as the decoder estimates it from a sliding window of the chosen length (${sw('#2a78d6', 'line')}), the true power (${sw('#898781', 'dash')}) and the threshold (${sw('#52514e', 'dash')}); the decoder fires where the estimate first crosses the threshold downwards after the intention, and the arm moves then. The readouts split the delay into the fade's onset, the time the true power takes to reach the threshold, and the window's lag. The rhythm is steady apart from the fade; section 7 has its real waxing and waning.`);
   fig.viz.append(vizTitle('Scalp signal at one electrode around one imagined movement'));
-  const top = linePlot(fig.viz, { x: { label: '', tip: 'Time from the intention', domain: [-2, 4] }, y: { label: 'µV', ticks: 3 }, height: 86, margin: { top: 8, bottom: 22 } });
+  const top = linePlot(fig.viz, { x: { label: '', tip: 'Time from the intention', domain: [-2, 5] }, y: { label: 'µV', domain: [-50, 50], ticks: 3 }, height: 86, margin: { top: 8, bottom: 22 } });
   fig.viz.append(vizTitle('The decoder’s first step: the 8 to 13 Hz band of that signal'));
-  const mid = linePlot(fig.viz, { x: { label: '', tip: 'Time from the intention', domain: [-2, 4] }, y: { label: 'µV', ticks: 3 }, height: 104, margin: { top: 8, bottom: 22 } });
+  const mid = linePlot(fig.viz, { x: { label: '', tip: 'Time from the intention', domain: [-2, 5] }, y: { label: 'µV', ticks: 3 }, height: 104, margin: { top: 8, bottom: 22 } });
   fig.viz.append(vizTitle('Mu-band power over the sliding window versus the threshold'));
-  const bottom = linePlot(fig.viz, { x: { label: 'Time from the intention (s)', domain: [-2, 4] }, y: { label: 'Power (rest = 1)', domain: [0, 3], ticks: 3 }, height: 132, margin: { top: 10 } });
+  const bottom = linePlot(fig.viz, { x: { label: 'Time from the intention (s)', domain: [-2, 5] }, y: { label: 'Power (rest = 1)', domain: [0, 1.6], ticks: 3 }, height: 132, margin: { top: 10 } });
   fig.panel.append(controls(sWin.el, sDrop.el, sOnset.el, sRamp.el));
-  const arm = robotArm(fig.panel, () => { seed++; run(); return trial; });
-  fig.viz.append(readouts(rDelay.el, rMoved.el, rEarly.el, rMissed.el));
+  const arm = robotArm(fig.panel, () => trial);
+  fig.viz.append(readouts(rOnset.el, rTrue.el, rDet.el));
   assumptions(fig.el, [
-    { what: 'Rhythm', value: `a mu rhythm at the strength of section 5's alpha (an upper bound, mu being usually the weaker) made a narrowband random process (a ${P.decoderBandHz} Hz band round 10 Hz, waxing and waning by itself as in section 7) over the same noise, without blinks; its power falls by the ERD fraction (${Math.round(P.erdPowerDrop * 100)}% by default) along a linear ramp that starts ${P.erdOnsetS} s after the intention and lasts ${P.erdRampS} s (adjustable); every press of the button draws new rhythm and noise`, cite: c('erd-depth') + c('erd-timecourse') + c('alpha-source-chain') + c('mu-vs-alpha') },
+    { what: 'Rhythm', value: `a steady 10 Hz rhythm at the strength of section 5's alpha (an upper bound, mu being usually the weaker) in the same noise, without blinks; its power falls by the ERD fraction (${Math.round(P.erdPowerDrop * 100)}% by default) along a linear ramp that starts ${P.erdOnsetS} s after the intention and lasts ${P.erdRampS} s (adjustable). The rhythm's own waxing and waning, which section 7 models, is left out here so that the timing stands alone`, cite: c('erd-depth') + c('erd-timecourse') + c('alpha-source-chain') + c('mu-vs-alpha') },
     { what: 'Estimator', value: 'the signal is band-passed to 8–13 Hz and its mean square over the trailing window is taken as the power, relative to the expected resting level; the threshold is halfway between the resting and the fully suppressed level', cite: c('spectral-window') },
-    { what: 'Outcomes', value: `the first downward crossing of the threshold after the intention, within ${DEADLINE} s, moves the arm; a crossing in the ${EARLY_S} s before the intention is a false start; no crossing within ${DEADLINE} s is a miss. The rates are the shares of ${MC} random trials at the current settings`, cite: '<span class="assumption-tag">model definition</span>' },
+    { what: 'Detection', value: 'the first downward crossing of the threshold by the estimate after the intention moves the arm; the true power reaches the threshold when the ramp has taken it there', cite: '<span class="assumption-tag">model definition</span>' },
+    { what: 'Slider ranges', value: 'windows from 0.4 s, the window of the sensorimotor BCI that reached three-dimensional control, to 3 s, and fades of 40 to 90% of the power, around the measured 50% average and 85% best case; below those, the estimate\u2019s own jitter crosses the threshold by itself, the problem of section 7', cite: c('bci-windows') + c('erd-depth') },
   ]);
 
-  let seed = 23, trial = simulateTrial(seed, sOnset.value, sRamp.value, sWin.value, sDrop.value / 100), ratesTimer = 0;
+  let trial = simulateTrial(sOnset.value, sRamp.value, sWin.value, sDrop.value / 100);
   const pts = (a: ArrayLike<number>) => Array.from(a, (v, i) => [trial.t[i], v] as [number, number]).filter((p) => p[0] >= -2 && !isNaN(p[1]));
   function run() {
-    trial = simulateTrial(seed, sOnset.value, sRamp.value, sWin.value, sDrop.value / 100);
-    const { det, early, threshold } = trial;
+    trial = simulateTrial(sOnset.value, sRamp.value, sWin.value, sDrop.value / 100);
+    const { det, tTrue, threshold } = trial;
     top.update([{ name: 'Scalp signal', points: pts(trial.raw), color: '#eb6834', width: 1 }], [{ axis: 'x', value: 0, label: 'intention' }]);
     mid.update([
       { name: '8 to 13 Hz band of the signal', points: pts(trial.mu), color: '#2a78d6', width: 1.2 },
@@ -148,17 +139,11 @@ remove.</p>`);
     ], [
       { axis: 'y', value: threshold, label: 'threshold' },
       { axis: 'x', value: 0, label: '' },
-      ...(isNaN(early) ? [] : [{ axis: 'x' as const, value: early, label: `fired ${fmt(-early, 2)} s early`, color: '#e34948', callout: true }]),
-      ...(isNaN(det) ? [] : [{ axis: 'x' as const, value: det, label: `detected ${fmt(det, 2)} s after the intention`, callout: true }]),
+      ...(isNaN(det) ? [] : [{ axis: 'x' as const, value: det, label: `decoder fires ${fmt(det, 2)} s after the intention`, callout: true }]),
     ]);
-    rDelay.set(isNaN(det) ? 'missed' : `${fmt(det, 2)} s`);
-    // the outcome rates take a moment: recompute once the slider settles
-    clearTimeout(ratesTimer);
-    ratesTimer = window.setTimeout(() => {
-      const r = outcomeRates(MC, sOnset.value, sRamp.value, sWin.value, sDrop.value / 100);
-      rMoved.set(`${Math.round(100 * r.moved)}%`); rEarly.set(`${Math.round(100 * r.early)}%`); rMissed.set(`${Math.round(100 * r.missed)}%`);
-      arm.setRates(r);
-    }, 120);
+    rOnset.set(`${fmt(sOnset.value, 2)} s`);
+    rTrue.set(isNaN(tTrue) ? 'never' : `${fmt(tTrue, 2)} s`);
+    rDet.set(isNaN(det) ? 'not within the record' : `${fmt(det, 2)} s`);
   }
   [sWin, sDrop, sOnset, sRamp].forEach((sl) => sl.onChange(() => { run(); arm.reset(); }));
   run();
@@ -190,12 +175,11 @@ function timelineSvg(): string {
 }
 
 /**
- * A two-link robot arm driven by the simulated decoder. Pressing the button is the intention (t = 0) and draws a fresh
- * trial (`attempt`): the arm reaches for the ball when that trial's estimate crosses the threshold, moves at once if the
- * decoder had already fired before the intention (a false start), and stays put if it never fires (a miss).
+ * A two-link robot arm driven by the simulated decoder. Pressing the button is the intention (t = 0): the arm reaches for
+ * the ball when the current trial's estimate crosses the threshold.
  */
-function robotArm(parent: HTMLElement, attempt: () => Trial): { reset(): void; setRates(r: { early: number; moved: number; missed: number }): void } {
-  const W = 380, H = 202, MOVE_S = 0.9, RED = '#e34948';
+function robotArm(parent: HTMLElement, current: () => Trial): { reset(): void } {
+  const W = 380, H = 202, MOVE_S = 0.9;
   const box = document.createElement('div');
   box.className = 'viz-box arm-box';
   const head = document.createElement('div');
@@ -216,21 +200,14 @@ function robotArm(parent: HTMLElement, attempt: () => Trial): { reset(): void; s
     return [Math.atan2(dy, dx) - Math.atan2(L2 * Math.sin(t2), L1 + L2 * Math.cos(t2)), t2];
   };
   const REST: [number, number] = [1.35, -2.55], REACH = ik(ball[0] - 16, ball[1]);
-  type Outcome = 'moved' | 'early' | 'missed';
-  let det = NaN, early = NaN, rates = { early: 0, moved: 0, missed: 0 }, phase: 'idle' | 'waiting' | 'moving' | 'done' = 'idle', t = 0, raf = 0;
-  const outcome = (): Outcome => (!isNaN(early) ? 'early' : !isNaN(det) ? 'moved' : 'missed');
-  const pct = (v: number) => `${Math.round(100 * v)}%`;
+  let det = NaN, phase: 'idle' | 'waiting' | 'moving' | 'done' = 'idle', t = 0, raf = 0;
 
   function draw(pose: [number, number]) {
     ctx.clearRect(0, 0, W, H);
-    ctx.font = '13px system-ui, sans-serif'; ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'left';
-    const o = outcome();
     const status = phase === 'idle' ? 'Press Move arm: the press is your intention (t = 0).'
       : phase === 'waiting' ? `Intention at 0 s. Decoder still unsure: ${fmt(t, 2)} s`
-      : phase === 'moving' ? (o === 'early' ? `False start: the decoder fired ${fmt(-early, 2)} s before you pressed` : `Detected at ${fmt(det, 2)} s: arm moving`)
-      : o === 'moved' ? `The arm moved ${fmt(det, 2)} s after you pressed.`
-      : o === 'early' ? `False start: the decoder fired ${fmt(-early, 2)} s before you pressed.`
-      : `Missed: the decoder never saw the drop within ${DEADLINE} s.`;
+      : phase === 'moving' ? `Detected at ${fmt(det, 2)} s: arm moving`
+      : `The arm moved ${fmt(det, 2)} s after you pressed.`;
     // table, ball, base
     ctx.strokeStyle = '#c3c2b7'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(10, TABLE); ctx.lineTo(W - 10, TABLE); ctx.stroke();
     ctx.fillStyle = '#eb6834'; ctx.beginPath(); ctx.arc(ball[0], TABLE - 12, 12, 0, 2 * Math.PI); ctx.fill();
@@ -247,56 +224,43 @@ function robotArm(parent: HTMLElement, attempt: () => Trial): { reset(): void; s
     const ang = a1 + a2, ux = Math.cos(ang), uy = -Math.sin(ang), nx = -uy, ny = ux;
     ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 3;
     for (const sgn of [1, -1]) { ctx.beginPath(); ctx.moveTo(hx + sgn * 7 * nx, hy + sgn * 7 * ny); ctx.lineTo(hx + sgn * 7 * nx + 14 * ux, hy + sgn * 7 * ny + 14 * uy); ctx.stroke(); }
-    // a missed attempt: a cross beside the ball
-    if (phase === 'done' && o === 'missed') {
-      ctx.strokeStyle = RED; ctx.lineWidth = 3;
-      const cx = ball[0] + 34, cy = TABLE - 14;
-      ctx.beginPath(); ctx.moveTo(cx - 8, cy - 8); ctx.lineTo(cx + 8, cy + 8); ctx.moveTo(cx + 8, cy - 8); ctx.lineTo(cx - 8, cy + 8); ctx.stroke();
-    }
-    // the status lines, drawn last so the arm never covers them
+    // the status line, drawn last so the arm never covers it
     ctx.font = '13px system-ui, sans-serif'; ctx.textAlign = 'left';
-    const lines: [string, string][] = [[status, phase !== 'idle' && o !== 'moved' ? RED : '#1a1a1a']];
-    if (phase === 'done') lines.push([`At these settings: in time ${pct(rates.moved)}, early ${pct(rates.early)}, missed ${pct(rates.missed)}`, '#52514e']);
-    lines.forEach(([text, color], i) => {
-      const w = ctx.measureText(text).width;
-      ctx.fillStyle = 'rgba(252,252,251,0.9)'; ctx.fillRect(5, 6 + i * 18, w + 6, 17);
-      ctx.fillStyle = color; ctx.fillText(text, 8, 18 + i * 18);
-    });
-    // timeline from 1.5 s before the intention: the intention, a false start or the detection, and the time elapsed
-    const tMax = Math.max(2, (isNaN(det) ? DEADLINE : det) + MOVE_S + 0.3), x = (s: number) => 16 + ((s + EARLY_S) / (tMax + EARLY_S)) * (W - 32), y0 = 172;
-    ctx.fillStyle = '#e8e7e1'; ctx.fillRect(x(-EARLY_S), y0, x(tMax) - x(-EARLY_S), 8);
+    const w = ctx.measureText(status).width;
+    ctx.fillStyle = 'rgba(252,252,251,0.9)'; ctx.fillRect(5, 6, w + 6, 17);
+    ctx.fillStyle = '#1a1a1a'; ctx.fillText(status, 8, 18);
+    // timeline from the intention: the detection and the time elapsed
+    const tMax = Math.max(2, (isNaN(det) ? 2 : det) + MOVE_S + 0.3), x = (s: number) => 16 + (s / tMax) * (W - 32), y0 = 172;
+    ctx.fillStyle = '#e8e7e1'; ctx.fillRect(x(0), y0, x(tMax) - x(0), 8);
     if (phase !== 'idle') { ctx.fillStyle = '#2a78d6'; ctx.fillRect(x(0), y0, x(Math.min(t, tMax)) - x(0), 8); }
     ctx.font = '12px system-ui, sans-serif'; ctx.fillStyle = '#1a1a1a';
-    const tick = (s: number, label: string, align: CanvasTextAlign, above: boolean, color = '#1a1a1a') => { ctx.fillStyle = color; ctx.fillRect(x(s) - 1, y0 - 3, 2, 14); ctx.textAlign = align; ctx.fillText(label, x(s) + (align === 'left' ? 3 : align === 'right' ? -3 : 0), above ? y0 - 5 : y0 + 23); };
-    tick(0, 'intention', 'left', false);
-    if (!isNaN(early)) tick(early, 'fired early', 'right', true, RED);
-    else if (!isNaN(det)) {
+    ctx.fillRect(x(0) - 1, y0 - 3, 2, 14); ctx.textAlign = 'left'; ctx.fillText('intention', x(0) + 3, y0 + 23);
+    if (!isNaN(det)) {
       // the detection label moves right of the intention label when the two would touch
       const wI = ctx.measureText('intention').width, label = `detected ${fmt(det, 2)} s`;
-      ctx.fillStyle = '#1a1a1a'; ctx.fillRect(x(det) - 1, y0 - 3, 2, 14);
+      ctx.fillRect(x(det) - 1, y0 - 3, 2, 14);
       const right = det / tMax > 0.6, lx = right ? x(det) - 3 : Math.max(x(det) + 3, x(0) + wI + 14);
       ctx.textAlign = right ? 'right' : 'left'; ctx.fillText(label, lx, y0 + 23);
-    } else if (phase === 'done') { ctx.fillStyle = RED; ctx.textAlign = 'right'; ctx.fillText(`no detection in ${DEADLINE} s`, x(tMax), y0 + 23); }
+    }
   }
   const ease = (u: number) => u * u * (3 - 2 * u);
   const lerp = (u: number): [number, number] => [REST[0] + (REACH[0] - REST[0]) * u, REST[1] + (REACH[1] - REST[1]) * u];
   btn.addEventListener('click', () => {
     if (phase === 'waiting' || phase === 'moving') return;
-    const tr = attempt();
-    det = tr.det; early = tr.early;
-    const o = outcome(), start = performance.now(), moveAt = o === 'early' ? 0 : det;
-    phase = o === 'early' ? 'moving' : 'waiting'; btn.disabled = true; btn.textContent = 'Move arm';
+    det = current().det;
+    if (isNaN(det)) return;
+    const start = performance.now();
+    phase = 'waiting'; btn.disabled = true; btn.textContent = 'Move arm';
     const step = (now: number) => {
       t = (now - start) / 1000;
-      if (o === 'missed' ? t >= DEADLINE : t >= moveAt + MOVE_S) { phase = 'done'; btn.disabled = false; btn.textContent = 'Try again'; draw(o === 'missed' ? REST : REACH); return; }
-      if (o !== 'missed' && t >= moveAt) { phase = 'moving'; draw(lerp(ease((t - moveAt) / MOVE_S))); } else draw(REST);
+      if (t >= det + MOVE_S) { phase = 'done'; btn.disabled = false; btn.textContent = 'Move again'; draw(REACH); return; }
+      if (t >= det) { phase = 'moving'; draw(lerp(ease((t - det) / MOVE_S))); } else draw(REST);
       raf = requestAnimationFrame(step);
     };
     raf = requestAnimationFrame(step);
   });
   draw(REST);
   return {
-    reset() { if (phase === 'waiting' || phase === 'moving') return; cancelAnimationFrame(raf); phase = 'idle'; det = NaN; early = NaN; t = 0; btn.textContent = 'Move arm'; draw(REST); },
-    setRates(r) { rates = r; if (phase === 'done') draw(outcome() === 'missed' ? REST : REACH); },
+    reset() { if (phase === 'waiting' || phase === 'moving') return; cancelAnimationFrame(raf); phase = 'idle'; det = NaN; t = 0; btn.textContent = 'Move arm'; draw(REST); },
   };
 }

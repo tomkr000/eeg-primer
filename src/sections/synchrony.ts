@@ -1,141 +1,130 @@
 import { claimCite as c } from '../data/params';
 import { figure, inDepth, sw } from '../ui/layout';
 import { MOTOR, ax, by } from './dim-model';
-import { headGeometry, titledCanvas, drawCortex } from './head-view';
+import { headGeometry, drawCortex } from './head-view';
 
 const ALPHA = '#2a78d6', MU = '#eb6834', THETA = '#1baf7a', MUSCLE = '#898781', SCP = '#6250d6', ATTN = '#eda100', EYES = '#8a6d3b';
 
-/** "Which rhythms does the scalp see, and how do neurons synchronize?": an aside with a head map, a schematic and a cited note, placed after section 4. */
+/** A signal map and short explanations, placed after section 4. */
 export function mountSynchrony(root: HTMLElement) {
   const el = document.createElement('section');
   el.className = 'section question';
   el.id = 'synchrony';
   const body = document.createElement('div');
   body.className = 'section-note';
-  el.append(inDepth(body, 'Which rhythms does the scalp see, and how do neurons synchronize?'));
+  el.append(inDepth(body, 'What can change an EEG signal?'));
   root.append(el);
   const fig = figure(body, '', { panelWidth: '0px' });
-  fig.el.classList.add('figure-note');
-  const row = document.createElement('div');
-  row.className = 'viz-row';
-  fig.viz.append(row);
-  const headBox = document.createElement('div');
-  headBox.style.flex = '0 0 800px';
-  const cv = titledCanvas(headBox, 'Sources of the scalp\u2019s signals, seen from above', 800, 360);
-  drawRhythmMap(cv.getContext('2d')!);
-  const schemBox = document.createElement('div');
-  schemBox.className = 'viz-box'; schemBox.style.flex = '1 1 576px';
-  schemBox.innerHTML = `<div class="viz-title">Three ways neurons synchronize</div>${synchronySvg()}`;
-  row.append(headBox, schemBox);
-  fig.caption.innerHTML = `<p><strong>Which rhythms.</strong> The scalp sees a handful of rhythms, each from its own region with its own switch.
-The alpha rhythm (${sw(ALPHA)}), 8 to 13 Hz, comes from the back of the head, is largest with the eyes closed and fades with
-attention ${c('rhythm-alpha')}. The mu rhythm (${sw(MU)}), 7 to 11 Hz with a partner near 20 Hz, sits over the sensorimotor
-strip under electrodes C3, Cz and C4, ignores the eyes, and fades when the person moves, imagines moving or watches a movement
-${c('rhythm-mu')}${c('rhythm-beta')}. Frontal midline theta (${sw(THETA)}), 4 to 8 Hz, appears just in front of the vertex during
-problem solving and stress ${c('rhythm-theta')}. Gamma, above 30 Hz, barely reaches the scalp: under 1 µV from the brain against
-about 100 µV of muscle (${sw(MUSCLE)}) at the temples, whose spectrum covers the whole gamma band, which is why scalp gamma is mostly
-muscle ${c('gamma-scalp')}.
-Mu and alpha share a band and are told apart by place and by what switches them; mu is usually the weaker of the two and is seen
-by eye in only a minority of adults, so sections 7 to 9, which run the mu rhythm at the strength of section 5's alpha, take an
-upper bound ${c('mu-vs-alpha')}.</p>
-<p><strong>What a person can change at will.</strong> The sensorimotor rhythms, by imagining a movement, which is why they are the
-control signal of sections 7 to 9; closing the eyes raises alpha and works as an on/off switch; the P300 and flicker responses need
-a stimulus ${c('self-generated-signals')}. The front of the head adds more: frontal midline theta rises with mental effort, and
-mental tasks that engage different areas, subtraction, word association, spatial navigation, give patterns a decoder can
-tell apart, so a four-class interface built on them ran at 61 to 72% in 8 of 14 users, where motor imagery also sits
-${c('frontal-control')}. At the vertex (${sw(SCP)}), slow shifts of the potential over seconds can be trained into a switch: locked-in
-patients spelled with them, letter by letter through binary choices, after months of training ${c('scp-control')}, and the readiness potential, the slow negativity
-that precedes a self-paced movement by about 2 s, announces an intention before the muscle moves ${c('readiness-potential')}. Over the
-parietal lobe (${sw(ATTN)}), the pattern of alpha changes with where attention goes, eyes still, and a decoder reads the direction
-at about 75% for the best pair ${c('covert-attention')}. All of these are band powers or slow shifts read over seconds, so they widen the menu of
-section 7 without escaping its scatter limit. The two biggest signals at the front are not brain at all: blinks and eye movements
-(${sw(EYES)}) at 100 to 200 µV ${c('blink-amplitude')} and the muscles, which is why frontal control signals need artefact rejection
-that the sensorimotor strip does not.</p>
-<p><strong>Responses that need a stimulus or a mistake.</strong> Not on the map because the person does not generate them, yet they run
-the fastest interfaces. The P300: a positive wave, largest over the parietal midline, 250 to 500 ms after an attended, rare stimulus;
-spellers flash rows and columns of letters and find the one the user watched. The flicker response (steady-state visual evoked
-potential, SSVEP): the occipital cortex follows a flickering target at its frequency and harmonics, so looking at one of several
-targets selects it. The error-related potential: a dip at the front of the head within a few hundred milliseconds of the user's own
-mistake or of a machine's, then a bump further back, readable on single trials and used to undo the machine's action ${c('evoked-map')}. Sections 8 and 9
-return to the first two for their speed and their electrode needs.</p>
-<p><strong>How neurons synchronize.</strong> Three ways, often together. A shared rhythmic drive: the thalamus sends the same oscillation
-to many cortical cells, which is how the alpha rhythm is paced ${c('sync-thalamic')}. Shared inhibition: networks of inhibitory
-interneurons silence a population together and release it together, so its cells can only fire in the same brief window, the
-mechanism behind gamma oscillations ${c('sync-inhibition')}, and one that also shapes the 20 Hz sensorimotor rhythm ${c('rhythm-beta')}.
-Travelling waves: activity sweeps across the cortex, so neighbours fire a little after each other rather than exactly together;
-such waves cross the cortex at roughly 0.1 to 10 metres per second ${c('sync-waves')}. The bigger the pool recruited in each cycle,
-the slower the rhythm ${c('oscillations-synchrony')}.</p>
-<p><strong>Could a travelling wave be a control signal?</strong> Not from the scalp, so far. The waves that carry movement information
-run within motor cortex at 15 to 35 cm/s, which at 20 Hz makes them about a centimetre long, an order of magnitude below the
-10 cm or so over which the skull blurs neighbouring electrodes together; decoding from them has been proposed with implanted
-arrays, and the only deliberate control of cortical waves so far is in mice. The waves EEG does see are the metres-per-second
-kind, whose direction reverses between watching a stimulus and resting with the eyes closed ${c('waves-control')}.</p>`;
+  fig.el.classList.add('figure-note', 'rhythm-guide');
+  const callout = (color: string, title: string, description: string, claims: string[]) =>
+    `<div class="rhythm-callout"><h3>${sw(color)}${title}</h3><p>${description} ${claims.map(c).join('')}</p></div>`;
+  fig.viz.innerHTML = `<div class="viz-title">Brain signals and interference, seen from above</div>
+    <div class="rhythm-map">
+      <div class="rhythm-labels rhythm-labels-left">
+        ${callout(EYES, 'Eye movements', 'Blinks and moving eyes create large voltages that can hide brain signals.', ['blink-amplitude'])}
+        ${callout(MUSCLE, 'Jaw and temple muscles', 'Tensing these muscles can overwhelm the brain’s faster rhythms.', ['gamma-scalp'])}
+        ${callout(ATTN, 'Attention (parietal alpha)', 'Shifting attention changes where alpha is strongest, even when your eyes stay still.', ['covert-attention'])}
+      </div>
+      <canvas class="rhythm-head" width="320" height="400" role="img" aria-label="Head seen from above. Eye signals are strongest at the front; muscle signals at the temples. Theta is near the front midline, mu and beta over movement areas, alpha toward the back, and an outlined electrode at the top of the head records slow voltage shifts. Regions are schematic."></canvas>
+      <div class="rhythm-labels rhythm-labels-right">
+        ${callout(THETA, 'Mental effort (theta)', 'This rhythm often strengthens during tasks such as mental arithmetic.', ['rhythm-theta', 'frontal-control'])}
+        ${callout(MU, 'Movement (mu and beta)', 'These rhythms weaken when you move or imagine moving.', ['rhythm-mu', 'rhythm-beta'])}
+        ${callout(SCP, 'Slow voltage shifts', 'This electrode records voltage changes over seconds. Some people learn to shift the voltage up or down to choose between two options.', ['scp-control'])}
+        ${callout(ALPHA, 'Eyes closed (alpha)', 'This rhythm is usually stronger with your eyes closed and weaker when you look at something.', ['rhythm-alpha'])}
+      </div>
+    </div><p class="rhythm-map-key">Shaded areas show approximate locations; the outlined ring marks a recording electrode.</p>`;
+  drawRhythmMap(fig.viz.querySelector('canvas')!.getContext('2d')!);
+
+  fig.caption.innerHTML = `<div class="rhythm-notes">
+    <section class="rhythm-note">
+      <h3>Reading the map</h3>
+      <p>A rhythm is a repeating change in voltage. Alpha and mu can repeat at similar rates; their location and response to eye closure or movement help tell them apart ${c('rhythm-alpha')}${c('rhythm-mu')}${c('mu-vs-alpha')}.</p>
+      <p class="rhythm-model-note">The later control demos give mu the same voltage amplitude as alpha. Since mu is usually weaker, this can make control look easier than it may be ${c('mu-vs-alpha')}.</p>
+    </section>
+    <section class="rhythm-note">
+      <h3>Turning a change into a command</h3>
+      <p>A computer can detect a change, such as weaker mu during imagined movement, and use it as a command ${c('self-generated-signals')}.</p>
+      <p>For slow voltage shifts, people practise while watching feedback from their EEG. After months of training, some paralysed people learned to shift the voltage up or down. A spelling program used these two states to choose between groups of letters, repeatedly narrowing the group until one letter remained ${c('scp-control')}.</p>
+    </section>
+    <section class="rhythm-note rhythm-responses">
+      <h3>Using a response to something on screen</h3>
+      <p>These methods detect the brain’s response to an event ${c('evoked-map')}:</p>
+      <ul>
+        <li><strong>Flashing letters (P300).</strong> The computer flashes groups of letters. A characteristic voltage response when the target flashes helps it identify the letter you are attending to.</li>
+        <li><strong>Flickering targets.</strong> Each target flickers at a different rate. The computer looks for a matching rhythm in your EEG to identify which target you are watching.</li>
+        <li><strong>Noticing a mistake.</strong> Recognising that the computer made a wrong choice can produce an error-related voltage response, which can help the system detect and correct the error.</li>
+      </ul>
+    </section>
+    <section class="rhythm-note rhythm-timing">
+      <h3>How neurons keep time together</h3>
+      <p>Groups of neurons can share a rhythm through common input or repeated pauses in activity. Activity can also travel from one group to the next, forming a wave ${c('sync-thalamic')}${c('sync-inhibition')}${c('sync-waves')}.</p>
+      ${synchronySvg()}
+    </section>
+    <section class="rhythm-note rhythm-waves">
+      <h3>Could a travelling wave become a command?</h3>
+      <p>Scalp EEG mixes signals from different places, making waves that cover small areas harder to distinguish ${c('waves-control')}. Detecting a wave is also different from controlling it: these studies do not show a person deliberately changing waves to steer a computer.</p>
+    </section>
+  </div>`;
 }
 
-/** The head from above with the regions of the signals, labelled on both sides with leader lines. */
+/** The same head geometry as section 4; callout text stays in HTML so it wraps and remains accessible. */
 function drawRhythmMap(ctx: CanvasRenderingContext2D) {
-  const LEFT = 240, HW = 300, geo = headGeometry(HW, 360), { cx, cy, s } = geo;
-  ctx.translate(LEFT, 0); // head coordinates: the head spans x = 0 to HW, labels sit at x < 0 and x > HW
-  drawCortex(ctx, geo, []);
+  const W = 320, H = 400, geo = headGeometry(W, H), { cx, cy, s } = geo;
+  drawCortex(ctx, { ...geo, grid: () => {} }, []);
   type Region = { x: number; y: number; rx: number; ry: number };
   const blob = (r: Region, color: string, alpha = 0.28) => {
     ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = color;
     ctx.beginPath(); ctx.ellipse(r.x, r.y, r.rx * s, r.ry * s, 0, 0, 2 * Math.PI); ctx.fill();
     ctx.globalAlpha = 1; ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
   };
-  // regions (centre in px, half-axes in mm): the back of the head, the parieto-occipital band, the sensorimotor strip through the two hand areas of section 4, the vertex (the foot area), the midline just in front of the vertex, the temples, the eyes
   const motor = MOTOR(), at = (i: number) => geo.srcXY[motor[i].center];
   const alpha: Region = { x: cx, y: cy + 0.58 * by * s, rx: 0.46 * ax, ry: 0.26 * by };
   const attn: Region = { x: cx, y: cy + 0.24 * by * s, rx: 0.42 * ax, ry: 0.1 * by };
   const mu: Region = { x: (at(0)[0] + at(1)[0]) / 2, y: (at(0)[1] + at(1)[1]) / 2, rx: Math.abs(at(1)[0] - at(0)[0]) / (2 * s) + 16, ry: 16 };
-  const vertex: Region = { x: at(2)[0], y: at(2)[1], rx: 8, ry: 8 };
+  const vertex: Region = { x: cx, y: cy, rx: 8, ry: 8 };
   const theta: Region = { x: cx, y: cy - 0.4 * by * s, rx: 14, ry: 16 };
   const temple = (sgn: number): Region => ({ x: cx + sgn * 0.88 * ax * s, y: cy - 0.05 * by * s, rx: 10, ry: 24 });
   const eye = (sgn: number): Region => ({ x: cx + sgn * 0.3 * ax * s, y: cy - 0.82 * by * s, rx: 8, ry: 6 });
   blob(alpha, ALPHA); blob(attn, ATTN); blob(mu, MU); blob(theta, THETA);
   for (const sgn of [-1, 1]) { blob(temple(sgn), MUSCLE); blob(eye(sgn), EYES, 0.5); }
-  blob(vertex, SCP, 0.55);
+  // This is a recording site, not a tiny cortical generator of all slow potentials.
+  ctx.beginPath(); ctx.arc(vertex.x, vertex.y, vertex.rx * s, 0, 2 * Math.PI);
+  ctx.fillStyle = '#fcfcfb'; ctx.fill(); ctx.strokeStyle = SCP; ctx.lineWidth = 2.5; ctx.stroke();
   geo.outline(ctx);
-  // labels: a column on each side, each with a leader from the near edge of its region
-  const label = (side: 'left' | 'right', y: number, color: string, title: string, lines: string[], r: Region) => {
-    const right = side === 'right', lx = right ? HW + 22 : -22, tx = right ? lx + 16 : lx - 6;
+  const leader = (right: boolean, y: number, color: string, r: Region) => {
     ctx.strokeStyle = color; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(r.x + (right ? 1 : -1) * r.rx * s, r.y); ctx.lineTo(right ? lx - 8 : lx + 18, y - 4); ctx.stroke();
-    ctx.fillStyle = color; ctx.fillRect(right ? lx : lx - 10 + 10, y - 9, 10, 10);
-    ctx.textAlign = right ? 'left' : 'right'; ctx.fillStyle = '#1a1a1a'; ctx.font = 'bold 13px system-ui, sans-serif'; ctx.fillText(title, tx, y);
-    ctx.font = '12px system-ui, sans-serif'; ctx.fillStyle = '#52514e';
-    lines.forEach((l, i) => ctx.fillText(l, tx, y + 16 + i * 13));
+    ctx.beginPath(); ctx.moveTo(r.x + (right ? 1 : -1) * r.rx * s, r.y);
+    ctx.lineTo(right ? W : 0, y); ctx.stroke();
   };
-  label('right', 28, THETA, 'frontal midline theta', ['4 to 8 Hz, just before the vertex;', 'raised at will by mental arithmetic', 'or word association: a BCI class'], theta);
-  label('right', 96, MU, 'mu (with beta near 20 Hz)', ['7 to 11 Hz, under 50 \u00b5V, over', 'the sensorimotor strip (C3, Cz,', 'C4); fades with real, imagined', 'or observed movement; usually', 'weaker than alpha'], mu);
-  label('right', 190, SCP, 'slow potentials at the vertex', ['months of feedback training make', 'a switch that spells, slowly; the', 'readiness potential shows a', 'move 2 s before it'], vertex);
-  label('right', 272, ALPHA, 'alpha rhythm', ['8 to 13 Hz, under 50 \u00b5V, over', 'the back of the head; largest', 'with the eyes closed, fades', 'with attention'], alpha);
-  label('left', 28, EYES, 'eyes', ['blinks and eye movements: 100 to', '200 \u00b5V at the front, bigger than', 'any rhythm'], eye(-1));
-  label('left', 120, MUSCLE, 'muscle (jaw and temples)', ['about 100 \u00b5V, 20 to 300 Hz; the', 'brain\u2019s own gamma reaches the', 'scalp at under 1 \u00b5V'], temple(-1));
-  label('left', 230, ATTN, 'parietal alpha (attention)', ['its pattern follows where attention', 'goes, eyes still; a decoder reads', 'the direction at about 75%'], attn);
-  ctx.translate(-LEFT, 0);
+  leader(false, 16, EYES, eye(-1));
+  leader(false, 149, MUSCLE, temple(-1));
+  leader(false, 282, ATTN, attn);
+  leader(true, 16, THETA, theta);
+  leader(true, 116, MU, mu);
+  leader(true, 216, SCP, vertex);
+  leader(true, 316, ALPHA, alpha);
 }
 
-/** Schematic of three synchronising mechanisms, as inline SVG. */
+/** Timing traces: one row per group of neurons, with common timing or a delay between groups. */
 function synchronySvg(): string {
-  const cell = (x: number, y: number, phase: number) => `<g transform="translate(${x},${y})"><path d="M0,0 L0,-26 M0,-26 l-9,-10 M0,-26 l9,-10 M0,-26 l0,-12" stroke="#1a1a1a" stroke-width="2" fill="none"/><path d="M0,-2 l-8,10 h16 z" fill="#fff" stroke="#1a1a1a" stroke-width="2"/><path d="M-14,34 q7,${-10 * Math.cos(phase)} 14,0 t14,0" stroke="#2a78d6" stroke-width="2" fill="none"/></g>`;
-  const text = (x: number, y: number, t: string, size = 12, extra = 'fill="#52514e"') => `<text x="${x}" y="${y}" font-size="${size}" ${extra} font-family="system-ui, sans-serif">${t}</text>`;
-  const panel = (x: number, title: string, sub: string, inner: string) => `<g transform="translate(${x},0)">${text(0, 16, title, 14, 'font-weight="600" fill="#1a1a1a"')}${text(0, 32, sub)}${inner}</g>`;
-  const XS = [30, 70, 110, 150];
-  const drive = panel(0, 'Shared rhythmic drive', 'paces the alpha rhythm', `
-    <rect x="50" y="44" width="80" height="26" rx="6" fill="#fcfcfb" stroke="#1a1a1a" stroke-width="1.5"/>
-    ${text(90, 62, 'thalamus', 12, 'text-anchor="middle" fill="#1a1a1a"')}
-    ${XS.map((cx) => `<path d="M90,70 L${cx},100" stroke="#898781" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>`).join('')}
-    ${XS.map((cx) => cell(cx, 138, 0)).join('')}`);
-  const inhib = panel(192, 'Shared inhibition', 'gamma, and the 20 Hz beta', `
-    <circle cx="90" cy="57" r="13" fill="#eb6834" stroke="#1a1a1a" stroke-width="1.5"/>
-    ${text(90, 61, '\u2212', 11, 'text-anchor="middle" fill="#fff"')}
-    ${text(112, 61, 'interneuron', 12, 'fill="#1a1a1a"')}
-    ${XS.map((cx) => `<path d="M90,70 L${cx},100" stroke="#eb6834" stroke-width="1.5" fill="none"/><circle cx="${cx}" cy="102" r="3" fill="#eb6834"/>`).join('')}
-    ${XS.map((cx) => cell(cx, 138, 0)).join('')}`);
-  const wave = panel(384, 'Travelling wave', '0.1 to 10 m/s across the cortex', `
-    <path d="M20,60 L170,60" stroke="#898781" stroke-width="1.5" marker-end="url(#arr)"/>
-    ${XS.map((cx, i) => cell(cx, 138, i * 0.9)).join('')}
-    ${['in motor cortex they are about', '1 cm long, below the skull\u2019s blur:', 'no scalp control signal so far'].map((t, i) => text(90, 200 + 14 * i, t, 12, 'text-anchor="middle" fill="#52514e"')).join('')}`);
-  return `<svg class="sync-svg" viewBox="0 0 576 236" width="576" height="236" role="img" aria-label="Three ways neurons synchronise"><defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#898781"/></marker></defs>${drive}${inhib}${wave}</svg>`;
+  const panel = (title: string, description: string, delayed: boolean, pause = false) => {
+    const traces = [0, 1, 2].map((row) => {
+      const shift = delayed ? row * 18 : 0;
+      const points = Array.from({ length: 151 }, (_, i) => {
+        const phase = (i - shift) * Math.PI / 30;
+        const amplitude = pause ? Math.max(0, Math.sin(phase)) : Math.sin(phase);
+        return `${20 + i},${77 + row * 24 - amplitude * 7}`;
+      }).join(' ');
+      return `<polyline points="${points}" fill="none" stroke="#2a78d6" stroke-width="2"/>`;
+    }).join('');
+    const guides = delayed
+      ? '<path d="M35,65 L71,137 M95,65 L131,137" stroke="#898781" stroke-dasharray="3 3"/>'
+      : '<path d="M35,65 V137 M95,65 V137 M155,65 V137" stroke="#898781" stroke-dasharray="3 3"/>';
+    return `<svg class="sync-svg" viewBox="0 0 210 158" width="210" height="158" role="img" aria-label="${title}: ${description}"><text x="0" y="18" class="sync-heading">${title}</text><text x="0" y="40">${description}</text>${guides}${traces}</svg>`;
+  };
+  return `<div class="rhythm-sync">
+    ${panel('Common input', 'One signal sets the timing.', false)}
+    ${panel('Shared inhibition', 'Cells suppress activity together.', false, true)}
+    ${panel('Travelling wave', 'Peaks arrive later in each group.', true)}
+  </div><p class="rhythm-trace-key">Illustration: each line shows a group’s activity over time, from left to right. Dashed guides follow the peaks; flat stretches show shared pauses.</p>`;
 }

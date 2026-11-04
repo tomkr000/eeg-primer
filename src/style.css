@@ -210,3 +210,34 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .references li { margin-bottom: 5px; }
 .references li:target { background: rgba(42, 120, 214, 0.1); }
 .site-foot { font-family: var(--sans); font-size: 13px; color: var(--ink-2); margin-top: 28px; }
+
+/* The rhythm aside: short callouts beside a shared head, then one idea per note. */
+.rhythm-guide { grid-template-columns: minmax(0, 1fr); }
+.rhythm-guide figcaption, .rhythm-note { min-width: 0; }
+.rhythm-map { display: grid; grid-template-columns: minmax(0, 1fr) 320px minmax(0, 1fr); gap: 16px; max-width: 1040px; width: 100%; margin: 8px auto; }
+.rhythm-head { display: block; width: 320px; height: 400px; }
+.rhythm-labels { display: grid; min-width: 0; height: 400px; }
+.rhythm-labels-left { grid-template-rows: repeat(3, 1fr); text-align: right; }
+.rhythm-labels-right { grid-template-rows: repeat(4, 1fr); }
+.section .rhythm-callout h3 { font-family: var(--sans); font-size: 14.5px; line-height: 1.4; margin: 6px 0 3px; }
+.rhythm-callout p { font-family: var(--sans); font-size: 14px; line-height: 1.4; margin: 0; color: var(--ink-2); }
+.rhythm-notes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 32px; border-top: 1px solid var(--rule); padding-top: 14px; }
+.section .rhythm-note h3 { font-family: var(--sans); font-size: 16px; line-height: 1.35; margin: 0 0 7px; }
+.rhythm-note p { margin: 0 0 8px; }
+.rhythm-note p:last-child { margin-bottom: 0; }
+.rhythm-model-note { color: var(--ink-2); font-size: 13px; }
+.rhythm-responses, .rhythm-timing, .rhythm-waves { grid-column: 1 / -1; }
+.rhythm-responses ul { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 7px; }
+.rhythm-sync { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 10px; max-width: 660px; width: 100%; font-family: var(--sans); font-size: 12px; fill: var(--ink-2); }
+.rhythm-sync .sync-heading { font-size: 14px; font-weight: 600; fill: var(--ink); }
+.rhythm-map-key { font-family: var(--sans); color: var(--ink-2); font-size: 12.5px; margin: 0 0 4px; }
+.rhythm-trace-key { color: var(--ink-2); font-size: 12.5px; }
+@media (max-width: 780px) {
+  .rhythm-map { grid-template-columns: 1fr 1fr; gap: 18px; }
+  .rhythm-head { grid-column: 1 / -1; grid-row: 1; justify-self: center; max-width: 100%; height: auto; }
+  .rhythm-labels { height: auto; display: flex; flex-direction: column; gap: 16px; text-align: left; }
+  .rhythm-notes { grid-template-columns: 1fr; }
+}
+@media (max-width: 430px) {
+  .rhythm-map { grid-template-columns: 1fr; }
+}

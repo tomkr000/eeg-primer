@@ -212,6 +212,11 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .site-foot { font-family: var(--sans); font-size: 13px; color: var(--ink-2); margin-top: 28px; }
 
 /* The rhythm aside: short callouts beside a shared head, then one idea per note. */
+.rhythm-intro, .rhythm-next { font-family: var(--sans); font-size: 15px; line-height: 1.5; }
+.rhythm-intro { max-width: 92ch; margin: 4px 0 14px; }
+.rhythm-intro p { margin: 0 0 8px; }
+.rhythm-next { margin: 12px 0 0; }
+.rhythm-next a { font-weight: 600; }
 .rhythm-guide { grid-template-columns: minmax(0, 1fr); }
 .rhythm-guide figcaption, .rhythm-note { min-width: 0; }
 .rhythm-map { display: grid; grid-template-columns: minmax(0, 1fr) 320px minmax(0, 1fr); gap: 16px; max-width: 1040px; width: 100%; margin: 8px auto; }

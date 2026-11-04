@@ -28,7 +28,7 @@ export const sourceSliders = (defaultN = ALPHA_N, defaultF = P.patchDefaultSync)
 });
 
 export function mountNoise(root: HTMLElement) {
-  const sec = section(root, 'noise', '5', 'The signal that gets outside the skull is noisy');
+  const sec = section(root, 'noise', '5', 'The signal that gets outside the skull is noisy', 'Follow one alpha rhythm over time, mixed with other signals and recording noise');
   prose(sec.text, `
 <p>What arrives at the scalp is tens of microvolts ${c('eeg-amplitude')}. The alpha rhythm in the figure
 comes from the same chain as the earlier sections: its textbook 20 µV takes a source of about 40 nA·m in

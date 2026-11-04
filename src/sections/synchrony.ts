@@ -12,7 +12,12 @@ export function mountSynchrony(root: HTMLElement) {
   el.id = 'synchrony';
   const body = document.createElement('div');
   body.className = 'section-note';
-  el.append(inDepth(body, 'What can change an EEG signal?'));
+  el.append(inDepth(body, 'From patches to EEG signals'));
+  const intro = document.createElement('div');
+  intro.className = 'rhythm-intro';
+  intro.innerHTML = `<p>Section 4 shows the scalp voltage at one instant. As activity changes across many patches, their voltage contributions add together at each electrode. Recording that changing voltage over time gives an EEG signal ${c('superposition')}${c('quasistatic')}.</p>
+    <p>Repeating patterns in that signal are called rhythms ${c('rhythm-alpha')}${c('rhythm-mu')}. The map below shows familiar rhythms, slower voltage shifts, and interference from eyes and muscles.</p>`;
+  body.append(intro);
   root.append(el);
   const fig = figure(body, '', { panelWidth: '0px' });
   fig.el.classList.add('figure-note', 'rhythm-guide');
@@ -37,8 +42,8 @@ export function mountSynchrony(root: HTMLElement) {
 
   fig.caption.innerHTML = `<div class="rhythm-notes">
     <section class="rhythm-note">
-      <h3>Reading the map</h3>
-      <p>A rhythm is a repeating change in voltage. Alpha and mu can repeat at similar rates; their location and response to eye closure or movement help tell them apart ${c('rhythm-alpha')}${c('rhythm-mu')}${c('mu-vs-alpha')}.</p>
+      <h3>Telling rhythms apart</h3>
+      <p>Alpha and mu can repeat at similar rates; their location and response to eye closure or movement help tell them apart ${c('rhythm-alpha')}${c('rhythm-mu')}${c('mu-vs-alpha')}.</p>
       <p class="rhythm-model-note">The later control demos give mu the same voltage amplitude as alpha. Since mu is usually weaker, this can make control look easier than it may be ${c('mu-vs-alpha')}.</p>
     </section>
     <section class="rhythm-note">
@@ -65,6 +70,10 @@ export function mountSynchrony(root: HTMLElement) {
       <p>Scalp EEG mixes signals from different places, making waves that cover small areas harder to distinguish ${c('waves-control')}. Detecting a wave is also different from controlling it: these studies do not show a person deliberately changing waves to steer a computer.</p>
     </section>
   </div>`;
+  const next = document.createElement('p');
+  next.className = 'rhythm-next';
+  next.innerHTML = '<a href="#noise">Next: can we pick out one rhythm?</a> Section 5 follows an alpha rhythm at one electrode and adds the other signals and noise that can hide it.';
+  body.append(next);
 }
 
 /** The same head geometry as section 4; callout text stays in HTML so it wraps and remains accessible. */

@@ -11,7 +11,7 @@ const { cx, cy, s, elXY } = geo;
 const FLOOR = 0.1, CEIL = 50; // µV: the colour scale of the summed map
 const RED = '#e34948', BLUE = '#2a78d6';
 export function mountBlur(root: HTMLElement) {
-  const sec = section(root, 'blur', '4', 'From outside, patches of cortex blur into broad blobs', 'Cortical areas have functional patches of different sizes, and each can carry its own rhythm');
+  const sec = section(root, 'blur', '4', 'From outside, patches of cortex blur into broad blobs', 'A snapshot of voltage across the scalp: each patch contributes, and their voltages add together');
   prose(sec.text, `
 <p>The skull smears every source into a blob several centimetres wide ${c('spatial-lowpass')}, so two
 patches closer than a few centimetres, or one nested inside another, produce scalp patterns that look

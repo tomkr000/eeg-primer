@@ -17,8 +17,8 @@ const IFACE: Record<string, InterfaceParams> = {
 type Kind = 'abraded' | 'wet' | 'dry' | 'gap';
 const KINDS: Kind[] = ['abraded', 'wet', 'dry', 'gap'];
 const NAMES: Record<Kind, string> = { abraded: 'Wet gel, abraded skin', wet: 'Wet gel, unprepared skin', dry: 'Dry metal plate', gap: 'Dry plate over hair (gap)' };
-const COLOURS: Record<Kind, string> = { abraded: '#1baf7a', wet: '#2a78d6', dry: '#eb6834', gap: '#6250d6' };
-const SUBS: Record<Kind, string> = { abraded: 'Yes, literally abraded skin', wet: 'the clinical standard', dry: 'most common: consumer headsets', gap: 'a plate resting on hair' };
+const COLORS: Record<Kind, string> = { abraded: '#1baf7a', wet: '#2a78d6', dry: '#eb6834', gap: '#6250d6' };
+const SUBS: Record<Kind, string> = { abraded: 'skin prepared for lower impedance', wet: 'gel on intact skin', dry: 'direct skin contact', gap: 'no direct skin contact' };
 
 /** Small schematic icons (44 × 44): skin at the bottom, the electrode above it. */
 const skin = (scratched = false) => `<rect x="2" y="32" width="40" height="10" fill="#f0c9a6" stroke="#1a1a1a" stroke-width="1"/>${scratched ? '<path d="M8,32 l3,3 M15,32 l3,3 M22,32 l3,3 M29,32 l3,3 M36,32 l3,3" stroke="#b5542a" stroke-width="1.2"/>' : '<rect x="2" y="32" width="40" height="2.5" fill="#d9b48f"/>'}`;
@@ -51,54 +51,60 @@ function pink(n: number, rms: number, seed: number): Float64Array {
 }
 
 export function mountElectrodes(root: HTMLElement) {
-  const sec = section(root, 'electrodes', '8', 'Different electrode types result in different signals', 'Most electrodes are the Dry Metal Plate below, wet gel will be difficult for consumers');
+  const sec = section(root, 'electrodes', '8', 'Electrode contact affects signal loss and added noise', 'Compare gel, dry contact, and a plate separated from the scalp by hair');
   prose(sec.text, `
-<p>An electrode measures what is left of the scalp potential after a voltage divider: the contact has an
-impedance Z<sub>e</sub>, the amplifier input has Z<sub>in</sub>, and the amplifier sees
-Z<sub>in</sub> / (Z<sub>in</sub> + Z<sub>e</sub>). The dry outer skin is the bottleneck. With gel but no
-preparation, a square centimetre of skin ranges from 10 kΩ to 1 MΩ at 1 Hz ${c('rosell')}; abrading
-it gives 5–10 kΩ ${c('abrasion')}. On the same skin, a wet gel electrode behaves like 350 kΩ in
-parallel with 25 nF and a bare dry plate like 1.3 MΩ with 12 nF ${c('chi-table')}. Impedance falls with
-the area that actually touches: contact over a quarter of a plate roughly triples it, and hair and skin
-pores are why a plate never touches over its whole face ${c('area-scaling')}.</p>
-<p>Hair makes the gap explicit. Scalp hair grows at 124–200 shafts per cm², each about 60 µm thick
-${c('hair')}; a flat electrode resting on it couples through the capacitance of an air gap,
-C = ε₀ε<sub>r</sub>A/d ${c('hair-permittivity')}: about 2 pF for 1 cm² over half a millimetre,
-several gigaohms at 10 Hz. That is more than most amplifiers’ input impedance, so most of the signal is
-lost, and the amplifier’s own input capacitance forms a second divider ${c('noncontact-cap')}${c('ads1299')}.
-Non-contact sensing therefore needs extreme input impedances and shielding, and a methodological review
-concluded that research-grade EEG over hair still requires wet electrodes ${c('haired-scalp-wet')}.</p>
-<p>With a modern high-impedance amplifier the divider is forgiving up to tens of kilohms ${c('ferree')};
-what suffers is noise. Sites left at their natural impedance needed three times as many trials as abraded
-ones ${c('kappenman')}. Dry electrodes improve over minutes as sweat accumulates while gel dries over hours
-${c('dry-vs-wet-time')}${c('searle')}, and fingered dry electrodes reach the skin through hair at 14–55 kΩ
-per finger ${c('fingered')}.</p>`);
+<p>The electrode contact and amplifier input form a voltage divider. At each frequency, the fraction of
+scalp-voltage amplitude that reaches the amplifier is |Z<sub>in</sub> / (Z<sub>in</sub> + Z<sub>e</sub>)|.
+Here Z<sub>e</sub> is the contact impedance and Z<sub>in</sub> is the amplifier input impedance.
+Impedance describes opposition to alternating current. These circuit quantities depend on frequency
+${c('electrode-model-settings')}. A high input impedance can keep signal loss small even when contact
+impedance rises ${c('ferree')}.</p>
+<p>Signal loss and added noise are separate problems. In one study, raising scalp-contact impedance from
+below 10 kΩ to 40 kΩ caused no significant change in EEG amplitude ${c('ferree')}. Another study found that unprepared sites needed about three times as many trials as abraded sites
+for equally reliable detection of a brain response to an event. The extra noise was concentrated at low frequencies
+${c('kappenman')}.
+The figure models both voltage loss and added noise, with chosen noise levels for each contact type
+${c('electrode-noise-levels')}.</p>
+<p>Hair can keep a flat plate from touching the scalp. Here that separation is modeled as an air-gap
+capacitor. A wider gap gives less capacitance and greater impedance at the same frequency
+${c('hair-permittivity')}${c('electrode-model-settings')}. The amplifier's input capacitance also limits
+how much voltage gets through, so increasing input resistance alone does not remove the loss
+${c('noncontact-cap')}. Dry electrodes with pins can reach the scalp through hair and make direct contact
+${c('contact-area-hair')}. These simplified circuits compare contact conditions; they do not rank
+particular electrode products ${c('electrode-model-settings')}.</p>`);
 
   const { sN, sF } = sourceSliders(ALPHA_N, 0.13); // the same source model as sections 2 to 7, a little more in step so the rhythm stands out
   const sArea = slider({ label: 'Electrode area', unit: 'cm²', min: 0.1, max: 3, value: 0.1, log: true, note: c('area-scaling') + c('contact-area-hair'), marks: [{ value: 0.1, label: 'In hair' }, { value: 1, label: 'Forehead or gel' }] });
   const sGap = slider({ label: 'Hair / air gap thickness', unit: 'mm', min: 0.05, max: 2, value: 0.06, log: true, note: c('hair'), marks: [{ value: 0.06, label: 'One hair' }, { value: 0.5, label: 'Many hairs' }] });
-  const sRin = slider({ label: 'Amplifier input resistance', min: 1e7, max: 5e13, value: 1e9, log: true, format: (v) => fmtSI(v, 'Ω', 2), note: c('ads1299'), marks: [{ value: 1e9, label: 'Typical' }, { value: 5e13, label: 'Research amp' }] });
+  const sRin = slider({ label: 'Amplifier input resistance', min: 1e7, max: 5e13, value: 1e9, log: true, format: (v) => fmtSI(v, 'Ω', 2), note: c('ads1299') + c('electrode-model-settings'), marks: [{ value: 1e9, label: 'Typical' }, { value: 5e13, label: 'Research amp' }] });
   const BLINK_S = 0.4; // one eye blink in the two-second window (section 7's size and width)
   const C_IN_PF = 20, V_CM_MV = RAW_DEFAULTS.mainsUvcm / 1e3, I_NOISE_FA = 1; // fixed amplifier and mains values (assumptions table)
 
-  const fig = figure(sec.fig, `Top strip: the scalp signal before any electrode touches it: the alpha rhythm of N cells with a fraction in step (sections 2 to 7) in the noise of section 7, including its muscle (EMG) noise and one eye blink (a potential of the eye, not muscle), over two seconds. Below it, what reaches the amplifier through each electrode: the signal after the impedance divider, plus the contact’s skin noise, mains pickup from a 50% impedance mismatch between a pair, and the amplifier’s current noise through the contact impedance. The table gives the impedance at 10 Hz, the signal kept, the noise added, and the signal-to-noise ratio (SNR) of the alpha rhythm against everything else. Most consumer headsets use dry contacts ${c('consumer-electrodes')}.`, { panelWidth: '410px' });
+  const fig = figure(sec.fig, `<p>The top trace is the shared section 7 input: alpha activity, artifacts and baseline recording noise. Each lower trace passes it through a contact circuit and adds the extra noise specified below ${c('electrode-model-settings')}.</p><p>Trace heights use separate scales. Compare the printed amplitudes and table. Impedance and voltage kept are evaluated at 10 Hz. Added noise excludes inherited noise. The signal-to-noise ratio (SNR), in decibels (dB), compares alpha power with everything else in the output ${c('electrode-model-settings')}.</p>`, { panelWidth: '410px' });
   fig.viz.append(vizTitle('Signal at the amplifier input for four electrode–skin interfaces'));
   const plot = stripPlot(fig.viz, { xLabel: 'Time (s)', xDomain: [0, 2], stripHeight: 82 });
   const table = document.createElement('table');
   table.className = 'mini-table';
   fig.panel.append(controls(sN.el, sF.el, sArea.el, sGap.el, sRin.el), table);
   assumptions(fig.el, [
-    { what: 'Wet gel on abraded skin', value: '7.5 kΩ·cm² ∥ 25 nF/cm² + 200 Ω·cm² series', cite: c('abrasion') },
-    { what: 'Wet gel, unprepared / dry plate', value: '350 kΩ ∥ 25 nF and 1.3 MΩ ∥ 12 nF per cm²', cite: c('chi-table') },
-    { what: 'Gap coupling', value: 'C = ε₀ε<sub>r</sub>A/d (air, ε<sub>r</sub> = 1) in series with dry skin; a flat plate resting on hair touches none of the skin (fingered electrodes that reach through hair behave like the dry plate above)', cite: c('hair-permittivity') + c('fingered') },
-    { what: 'Area scaling', value: 'R ∝ 1/A, C ∝ A relative to 1 cm²', cite: c('area-scaling') },
-    { what: 'Starting values', value: 'a 0.1 cm² contact resting on one hair (0.06 mm; the 0.5 mm mark is several hair diameters), the alpha patch of section 7 with 0.13 of its cells in step, a little above the typical tenth, so the rhythm stands out of the noise, and the 1 GΩ front end', cite: c('contact-area-hair') + c('hair') + c('alpha-source-chain') + c('ads1299') },
-    { what: 'Electrode area marks', value: 'pins that reach the scalp through hair touch it over about 0.04 to 0.2 cm² (a soft 24-pin electrode that indents the scalp reaches 0.85 cm²); on the forehead, or anywhere with gel, a flat 1 cm² contact touches over its face. Measured multipin and comb electrodes through hair come in from tens of kilohms to about 600 kΩ, below the dry-plate model’s value at 0.1 cm², because the pins press into the skin and sweat accumulates within minutes', cite: c('contact-area-hair') + c('dry-vs-wet-time') },
-    { what: 'Amplifier input resistance marks', value: '1 GΩ as the ADS1299 front end; 50 TΩ as a research non-contact amplifier', cite: c('ads1299') + c('noncontact-cap') },
-    { what: 'Skin noise by contact type', value: `${SKIN_NOISE.abraded} / ${SKIN_NOISE.wet} / ${SKIN_NOISE.dry} / ${SKIN_NOISE.gap} µV rms (abraded / wet / dry / gap), 1/f spectrum, scaled by 1/√area`, cite: c('electrode-noise-levels') },
-    { what: 'Amplifier', value: `R<sub>in</sub> from the slider in parallel with ${C_IN_PF} pF; 1 µV rms voltage noise; ${I_NOISE_FA} fA/√Hz current noise`, cite: c('ads1299') + c('amp-current-noise') },
-    { what: 'Muscle (EMG) and eye blink', value: `in the scalp signal before any electrode: ${RAW_DEFAULTS.emgUvRms} µV rms of muscle noise in 20–300 Hz, and one blink at ${BLINK_S} s, a ${RAW_DEFAULTS.blinkUv} µV deflection about 190 ms wide at half height (section 7) that comes from the eye, the eyelid sliding over the cornea, not from muscle; both are potentials at the scalp, so each electrode passes them like the neural signal`, cite: c('emg-level') + c('blink-amplitude') + c('blink-rate') + c('blink-width') + c('blink-mechanism') },
-    { what: 'Mains pickup', value: `${V_CM_MV} mV of common-mode mains on the body (section 7); the two contacts of a pair differ by 50% in impedance, so it leaks in as V<sub>cm</sub> × |H(Z<sub>e</sub>) − H(1.5 Z<sub>e</sub>)| at 60 Hz, with H = Z<sub>in</sub>/(Z<sub>in</sub> + Z<sub>e</sub>)`, cite: c('common-mode') },
+    { what: 'Scope of the contact circuits', value: 'Forearm circuit fits serve as references for a chosen 1 cm² scalp contact. The source omits electrode area and skin preparation.', cite: c('chi-table') + c('electrode-model-settings') },
+    { what: 'Wet gel on abraded skin', value: 'Chosen at 1 cm²: 7.5 kΩ in parallel with 25 nF. Reported abraded-skin resistance is 5–10 kΩ.', cite: c('electrode-model-settings') + c('abrasion') },
+    { what: 'Wet gel on intact skin', value: 'Forearm fit: 350 kΩ in parallel with 25 nF. Used here as an intact-scalp approximation.', cite: c('chi-table') + c('electrode-model-settings') },
+    { what: 'Dry plate touching skin', value: '1.3 MΩ in parallel with 12 nF, from the forearm fit.', cite: c('chi-table') },
+    { what: 'Series resistance', value: 'Each reference circuit adds a chosen 200 Ω in series.', cite: c('electrode-model-settings') },
+    { what: 'Area scaling', value: 'Chosen scaling: resistance follows 1/A and capacitance follows A, where A is contact area in cm².', cite: c('electrode-model-settings') + c('area-scaling') },
+    { what: 'Electrode area marks', value: 'Illustrative marks: 0.1 cm² for “In hair,” 1 cm² for “Forehead or gel.” Actual contact depends on design, hair and pressure.', cite: c('electrode-model-settings') + c('contact-area-hair') },
+    { what: 'Gap coupling', value: 'No direct skin contact. Gap capacitance C = ε₀A/d sits in series with dry skin. A is plate area in m², d is gap thickness in m, and ε₀ is air’s approximate permittivity.', cite: c('electrode-model-settings') + c('hair-permittivity') },
+    { what: 'Hair gap marks', value: 'Chosen marks: 0.06 mm at “One hair” and 0.5 mm at “Many hairs.” These illustrate separation, not measured gaps beneath electrodes.', cite: c('electrode-model-settings') + c('hair') },
+    { what: 'Source starting point', value: 'The section 7 source has a chosen 13% of cells in step to make the rhythm visible.', cite: c('alpha-source-chain') + c('electrode-model-settings') },
+    { what: 'Shared input trace', value: 'Two seconds of section 7’s model, including baseline skin noise (3 µV rms) and amplifier voltage noise (1 µV rms).', cite: c('electrode-model-settings') },
+    { what: 'Added contact noise', value: `Chosen at 1 cm²: prepared gel ${SKIN_NOISE.abraded} µV rms; intact-skin gel ${SKIN_NOISE.wet} µV rms; dry plate ${SKIN_NOISE.dry} µV rms; plate over hair ${SKIN_NOISE.gap} µV rms. Noise grows at low frequencies (1/f) and scales as 1/√area. Dry values are extrapolated.`, cite: c('electrode-noise-levels') },
+    { what: 'Amplifier input', value: `The selected resistance is in parallel with a chosen ${C_IN_PF} pF. Resistance marks reference different devices: ADS1299 (1 GΩ) and a research amplifier (50 TΩ).`, cite: c('ads1299') + c('noncontact-cap') + c('electrode-model-settings') },
+    { what: 'Added amplifier current noise', value: `Chosen current noise: ${I_NOISE_FA} fA/√Hz. Flow through contact impedance adds voltage noise, beyond the shared baseline.`, cite: c('amp-current-noise') + c('electrode-model-settings') },
+    { what: 'Muscle activity', value: `The shared input includes ${RAW_DEFAULTS.emgUvRms} µV rms of muscle activity.`, cite: c('emg-level') + c('electrode-model-settings') },
+    { what: 'Eye blink', value: `One chosen blink at ${BLINK_S} s: ${RAW_DEFAULTS.blinkUv} µV peak, about 190 ms wide at half height. The width convention is a model choice.`, cite: c('electrode-model-settings') + c('blink-amplitude') + c('blink-width') },
+    { what: 'Mains pickup', value: `Chosen shared body voltage: ${V_CM_MV} mV peak at 60 Hz. The second contact has 1.5 times the first’s impedance, converting shared voltage into a measured difference. Peak amplitude is a model setting.`, cite: c('electrode-model-settings') + c('common-mode') + c('potential-divider') },
+    { what: 'Mains calculation', value: 'Added amplitude = V<sub>cm</sub> × |H(Z<sub>e</sub>) − H(1.5 Z<sub>e</sub>)|, with H(Z<sub>e</sub>) = Z<sub>in</sub>/(Z<sub>in</sub> + Z<sub>e</sub>). H is the voltage fraction transmitted by each contact at 60 Hz.', cite: c('electrode-model-settings') + c('potential-divider') },
   ]);
 
   function Ze(k: Kind, f: number): Complex {
@@ -113,7 +119,7 @@ per finger ${c('fingered')}.</p>`);
     const Zin = (f: number) => inputImpedance(sRin.value, C_IN_PF * 1e-12, f);
     const strips: Strip[] = [];
     const t = raw.t;
-    strips.push({ name: 'Ground truth neural signal at scalp', sub: 'before any electrode touches it', icon: HEAD_ICON, points: Array.from(raw.total, (v, i) => [t[i], v] as [number, number]), color: '#898781', note: `${fmt(alpha, 3)} µV alpha + muscle (EMG), blink, mains, skin` });
+    strips.push({ name: 'Shared input: alpha + artifacts', sub: 'includes section 7 recording noise', icon: HEAD_ICON, points: Array.from(raw.total, (v, i) => [t[i], v] as [number, number]), color: '#898781', note: `${fmt(alpha, 3)} µV alpha + artifacts + recording noise` });
     const rows: string[] = [];
     KINDS.forEach((k, idx) => {
       // divider as a frequency response
@@ -147,8 +153,8 @@ per finger ${c('fingered')}.</p>`);
       }
       const h10 = cabs(H(10));
       const snr = 10 * Math.log10(ps / Math.max(pn, 1e-30));
-      strips.push({ name: NAMES[k], sub: SUBS[k], icon: ICONS[k], highlight: k === 'dry', points: Array.from(out, (v, i) => [t[i], v] as [number, number]), color: COLOURS[k], note: `keeps ${fmt(100 * h10, 3)}% of the signal, adds ${fmt(Math.sqrt(pAdded / n), 2)} µV of noise` });
-      rows.push(`<tr><td><i style="background:${COLOURS[k]}"></i>${NAMES[k]}</td><td>${fmtSI(cabs(Ze(k, 10)), 'Ω', 2)}</td><td>${fmt(100 * h10, 3)}%</td><td>${fmt(Math.sqrt(pAdded / n), 2)} µV</td><td>${fmt(snr, 2)} dB</td></tr>`);
+      strips.push({ name: NAMES[k], sub: SUBS[k], icon: ICONS[k], highlight: k === 'dry', points: Array.from(out, (v, i) => [t[i], v] as [number, number]), color: COLORS[k], note: `keeps ${fmt(100 * h10, 3)}% of the signal, adds ${fmt(Math.sqrt(pAdded / n), 2)} µV of noise` });
+      rows.push(`<tr><td><i style="background:${COLORS[k]}"></i>${NAMES[k]}</td><td>${fmtSI(cabs(Ze(k, 10)), 'Ω', 2)}</td><td>${fmt(100 * h10, 3)}%</td><td>${fmt(Math.sqrt(pAdded / n), 2)} µV</td><td>${fmt(snr, 2)} dB</td></tr>`);
     });
     plot.update(strips, [{ t: BLINK_S, label: 'eye blink, not muscle' }]);
     table.innerHTML = `<thead><tr><th>Electrode</th><th>|Z<sub>e</sub>|</th><th>Kept</th><th>Adds</th><th>SNR</th></tr></thead><tbody>${rows.join('')}</tbody>`;

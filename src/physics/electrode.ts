@@ -46,7 +46,7 @@ export function contactImpedance(p: InterfaceParams, areaCm2: number, f: number)
 
 export const EPS0 = 8.8541878128e-12; // F/m, vacuum permittivity
 
-/** Capacitance (F) of a parallel-plate gap: area in cm², gap in metres, relative permittivity epsr. */
+/** Capacitance (F) of a parallel-plate gap: area in cm², gap in meters, relative permittivity epsr. */
 export function gapCapacitance(areaCm2: number, gapM: number, epsr: number): number {
   return (EPS0 * epsr * areaCm2 * 1e-4) / Math.max(gapM, 1e-9);
 }

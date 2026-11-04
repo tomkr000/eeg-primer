@@ -31,7 +31,7 @@ export function vizTitle(text: string): HTMLElement {
   return el;
 }
 
-/** An inline colour swatch for captions and legends: show the colour, never name it. */
+/** An inline color swatch for captions and legends: show the color, never name it. */
 export function sw(color: string, kind: 'patch' | 'line' | 'dash' | 'thick' | 'glow' = 'patch'): string {
   if (kind === 'patch') return `<i class="sw-i sw-patch" style="background:${color}"></i>`;
   if (kind === 'glow') return `<i class="sw-i sw-glow" style="background:linear-gradient(90deg,${color}00,${color})"></i>`;

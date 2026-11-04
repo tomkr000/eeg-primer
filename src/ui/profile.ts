@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 
 /** A potential-versus-height plot: height on the vertical axis (shared with a neighbouring cross-section), potential on a log x axis. */
 export interface VerticalProfile {
-  /** `muteAbove`: the part of the curve above this height is drawn grey and dashed (present but unreadable) */
+  /** `muteAbove`: the part of the curve above this height is drawn gray and dashed (present but unreadable) */
   update(points: [number, number][], bands: { from: number; to: number; label: string; color: string }[], markers: { value: number; label: string }[], source?: number, muteAbove?: number): void;
 }
 

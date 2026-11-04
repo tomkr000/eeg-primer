@@ -1,34 +1,24 @@
 # EEG primer: the physics of a non-invasive BCI
 
-An interactive, fully cited explorer of the physics that limits scalp electroencephalography (EEG) for
-non-invasive brain–computer interfaces (BCI). Nine slider-driven models, each with its long-form text folded
-under an "In depth" toggle:
+An interactive, cited guide to scalp electroencephalography (EEG) and brain–computer interfaces (BCI).
+Eleven sections combine models, diagrams and explanations:
 
-1. Neurons make very small electric fields: one cell in a to-scale cortex cross-section (grey matter, CSF, dura, skull), with a microelectrode whose tip sits at the detection distance
-2. Many neurons must fire synchronously to create larger signal: a patch of N cells with a fraction in step, in the same cross-section
-3. Only large, multi-neuron signals reach outside the skull: the same patch at a chosen depth in the analytic multi-shell head, with the potential profile drawn vertically beside the cross-section
-4. Patches of cortex blur into broad blobs at the scalp: a fixed, representative set of patches on a realistic head
-   (the hand, foot and tongue motor areas a person can modulate at will), each one's own scalp map and the summed map
-   the electrodes see, using a precomputed lead field for the fsaverage boundary-element head (MNE-Python)
-   (After section 4, an unnumbered aside, "Which rhythms does the scalp see, and how do neurons synchronize?": a head map of where the scalp's signals come from, the alpha, mu and frontal-theta rhythms, the slow potentials of the vertex, parietal attention, and the eye and muscle artefacts, with their bands, switches and amplitudes; a schematic of thalamic drive, shared inhibition and travelling waves; and a cited note on which of these a person can change at will and why travelling waves are not a scalp control signal.)
-5. The signal that gets outside the skull is noisy: the alpha amplitude derived from N and synchrony through the section 3 head, buried in muscle, blink, skin, mains and amplifier noise
-6. Different electrode types result in different signals: the scalp signal through wet gel on abraded skin, wet gel, a dry plate and a plate over hair, each with an illustration
-7. A head with EEG can operate only a few dimensions: a simulated recording in which rest and imagined movement
-   alternate, the mu-band power a decoder estimates from a sliding window, and the spread of single-window estimates
-   at rest and during imagery (gamma distributed over B·T degrees of freedom, the radiometer equation); readouts
-   compare the model's left-or-right accuracy with measured medians and its four-way bit rate with the competition
-   record. The rhythm's strength comes from the shared N and synchrony sliders through section 9's 64-electrode channel
-8. EEG signals have inherent delays: a simulated imagined movement, a steady mu rhythm fading on a cited time course,
-   the decoder's band-pass and sliding-window power estimate (window length, fade depth, onset and ramp are sliders),
-   readouts that split the delay into the fade's onset, the ramp and the window's lag, a robot arm that moves when the
-   estimate crosses the threshold, and a cited timeline of where the time goes (rhythm, window, P300 repetitions,
-   flicker plus gaze shift, readiness potential)
-9. Adding electrodes gives diminishing returns: the best linear estimate of one patch from 2 to 100,000 electrodes on
-   the section 3 sphere, against electrode noise alone (grows as √N) and against the brain's own background (flattens
-   below a ceiling); the imagined-movement accuracy for the same counts, capped by the rhythm's own fluctuation; the
-   calibration a decoder needs to learn its weights; the channel counts where measured decoders peak
+1. A single neuron's voltage falls rapidly with distance.
+2. Coordinated cell currents produce larger signals.
+3. Tissue layers weaken and spread the voltage pattern.
+4. Local cortical patches produce broad scalp maps.
+5. Patches can reinforce or cancel at an electrode.
+6. EEG rhythms and event responses have different meanings and uses.
+7. Artifacts and recording noise can hide a rhythm.
+8. Electrode contact affects voltage loss and added noise.
+9. Overlapping rhythm changes complicate independent joint commands.
+10. A brain response and its measurement both take time.
+11. More electrodes give diminishing returns in the modeled task.
 
-Every number and physical statement carries a citation marker; hovering it shows the claim and its
+The model sections keep their longer explanations, figure descriptions and assumptions under toggles.
+Sections 5 and 6 place explanations beside their diagrams.
+
+Physical claims carry citation markers; hovering it shows the claim and its
 verification status. The verification log and reference list are generated from `src/data/claims.ts`
 and `src/data/references.ts`.
 
@@ -37,7 +27,7 @@ and `src/data/references.ts`.
 ```bash
 npm install
 npm run dev        # http://localhost:5173, hot reload on every save
-npm test           # unit tests for the multi-shell sphere solver
+npm test           # unit tests for head, lead-field, channel and arm models
 npm run build      # type-check + production build into dist/
 ```
 
@@ -62,15 +52,14 @@ npm test                                    # tests/leadfield.test.ts pins the c
 
 ```
 src/physics/      models: sphere.ts (multi-shell head, including the potential in the air outside it), dipole.ts,
-                  population.ts, electrode.ts, noise.ts, fft.ts, linalg.ts, control.ts (sections 7 to 9: band power
-                  and decisions, SNR versus electrode count)
+                  population.ts, electrode.ts, noise.ts, fft.ts, linalg.ts, control.ts (channel and electrode-count estimates), arm.ts (joint-control simulation)
 src/sections/     one module per page section (text in two columns, then a laptop-width figure with its sliders)
 src/ui/           layout.ts (section/figure grid, In depth toggles), slider.ts (sliders with caret marks, readouts),
                   plot.ts (D3 line plot), profile.ts (vertical potential profile), strips.ts (small multiples),
                   field.ts (glow field renderer, grids, cortex layers, neuron and probe glyphs), citation helpers
 src/data/         references.ts (bibliography), claims.ts (every assumption + status), params.ts (defaults),
                   leadfield-svd.json (realistic-head singular values), head-leadfield.json (128 × 5,124 lead field, int16,
-                  electrode and source positions for the head of sections 4 and 7)
+                  electrode and source positions for the head views in sections 4 and 9)
 scripts/          leadfield_svd.py and export_head_leadfield.py (MNE-Python), verification-report.mjs, merge-audit.mjs
 tests/            vitest unit tests
 docs/             verification.md, the independent audit of every claim

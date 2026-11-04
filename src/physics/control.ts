@@ -29,7 +29,7 @@ function legendre(x: number, L: number): Float64Array {
   for (let k = 2; k <= L + 1; k++) P[k] = ((2 * k - 1) * x * P[k - 1] - (k - 1) * P[k - 2]) / k;
   return P;
 }
-/** smoothing of a uniform disc (cap) of angular radius α on degree l, normalised to 1 at l = 0 */
+/** smoothing of a uniform disc (cap) of angular radius α on degree l, normalized to 1 at l = 0 */
 function capFactor(alpha: number): Float64Array {
   const x = Math.cos(alpha), P = legendre(x, LMAX), g = new Float64Array(LMAX + 1);
   g[0] = 1;
@@ -216,7 +216,7 @@ export function mWayCorrect(m: number, depth: number, B: number, T: number, rho:
 }
 
 /**
- * A band-limited Gaussian process: white noise through an ideal band-pass of width B centred on f0, scaled to unit
+ * A band-limited Gaussian process: white noise through an ideal band-pass of width B centered on f0, scaled to unit
  * power. Used for the rhythm and for the in-band noise in the simulated recordings of section 9.
  */
 export function bandNoise(n: number, fs: number, f0: number, B: number, seed: number): Float64Array {

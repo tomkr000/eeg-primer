@@ -2,40 +2,32 @@ import { claimCite as c, P } from '../data/params';
 import { fmt } from '../ui/slider';
 import { section, figure, prose, assumptions } from '../ui/layout';
 import { CANVAS_FONT } from '../ui/field';
-import { state, subscribe, dimControls, patchPattern, miniValues, scalpValue, MOTOR, patchColour, visible, inHead, R, x0, y0, ax, by, sigmaMm, nCh, nSrc, G, miniIn, POS, NEG } from './dim-model';
+import { state, subscribe, dimControls, patchPattern, miniValues, scalpValue, MOTOR, patchColor, visible, inHead, R, x0, y0, ax, by, sigmaMm, nCh, nSrc, G, miniIn, POS, NEG } from './dim-model';
 import { headGeometry, titledCanvas, footnote, drawCortex } from './head-view';
 
 const W = 360, H = 360, FOOT = 46; // the head view, with a band of notes under it
 const geo = headGeometry(W, H);
 const { cx, cy, s, elXY } = geo;
-const FLOOR = 0.1, CEIL = 50; // µV: the colour scale of the summed map
+const FLOOR = 0.1, CEIL = 50; // µV: the color scale of the summed map
 const RED = '#e34948', BLUE = '#2a78d6';
 export function mountBlur(root: HTMLElement) {
   const sec = section(root, 'blur', '4', 'Patches of cortex blur into broad blobs at the scalp', 'A snapshot of voltage across the scalp: each patch contributes, and their voltages add together');
   prose(sec.text, `
-<p>The skull smears every source into a blob several centimetres wide ${c('spatial-lowpass')}, so two
-patches closer than a few centimetres, or one nested inside another, produce scalp patterns that look
-nearly the same from outside ${c('svd-method')}. A well-studied way to change these signals deliberately is to
-imagine moving a body part: the hands, the feet and the tongue are the four motor-imagery classes used in brain–computer
-interface (BCI) competitions ${c('mi-classes')}. Their cortical areas are not spread evenly: the hand areas
-sit on a knob of the precentral gyrus either side of the midline, the foot areas next to the midline, and the
-mouth areas low on the side of the head ${c('motor-map')}. The areas differ in size, the hand and mouth
-areas far larger than the foot area ${c('area-sizes')}, and each can carry its own rhythm, strongest while the
-area idles and fading when its body part moves or the movement is imagined ${c('own-rhythm')}; section 9 is
-about that fading. The figure gives all five patches one radius, so that only their position differs. The maps below are snapshots of one instant.
-One fixed patch oscillating around zero keeps its scalp pattern while its voltages reverse sign.
-Different patches can have different timing, so their combined map can change shape ${c('rhythm-snapshot')}.
-This model treats conduction through the head as effectively instantaneous ${c('quasistatic')}, so faster rhythms such as gamma
-reach the scalp in principle; they are smaller, and muscle activity occupies the same 20 to 300 Hz band
-${c('emg-level')}, which is why scalp gamma is hard to trust.</p>
-<p>The figure places patches on a real head, the fsaverage template with a three-layer boundary-element
-model and 128 electrodes ${c('fsaverage-bem')}${c('mne-bem')}${c('montages')}. Each patch is N cells with a
-fraction in step, the source of sections 2 and 3, spread over a disc. The patches are a representative set,
-the motor areas for the hands, the feet and the tongue. The middle map
-shows each patch alone from outside; the right map shows all of them together, which is the only thing
-the electrodes ever see. Noise comes in section 7, and section 9 asks what can be controlled.</p>`);
+<p>The head spreads each source's voltage over the scalp ${c('spatial-lowpass')}. Nearby patches can
+therefore produce similar scalp patterns, making them hard to distinguish ${c('svd-method')}.</p>
+<p>The figure uses five illustrative patches in movement-related areas ${c('motor-map')}. There are two
+hand patches, one foot patch and two tongue patches, one in each hemisphere. They represent four common
+imagery tasks: right hand, left hand, feet and tongue ${c('mi-classes')}${c('patch-map-model')}. Imagining
+movement can weaken the local rhythm ${c('own-rhythm')}. Section 9 explores how these changes become commands.</p>
+<p>Each patch uses the cell-group model from sections 2 and 3, spread across a disc. All patches share the
+selected cell count, fraction in step and radius. This keeps their source strengths comparable while showing
+how location changes the scalp pattern ${c('patch-map-model')}.</p>
+<p>The calculation uses the public fsaverage anatomical template, rather than an individual person's head
+${c('fsaverage-bem')}. A boundary-element model calculates the scalp voltages ${c('mne-bem')}, sampled
+at 128 electrode positions ${c('montages')}. The middle panel isolates each patch; the right panel adds them.
+These are snapshots without recording noise. Section 5 follows voltage over time, and section 7 adds noise.</p>`);
 
-  const fig = figure(sec.fig, `Left: the cortex from above, nose up, with a fixed, representative set of patches on the motor areas a person can modulate at will: the hands, the feet and the tongue ${c('mi-classes')}${c('motor-map')}. Middle: the scalp voltage each patch makes on its own, each map scaled to its own peak, so the shapes can be compared. Right: the voltage of all patches together, on a fixed scale.`, { wide: true });
+  const fig = figure(sec.fig, `<p>Left: the cortex viewed from above, with the nose at the top. The numbered patches are representative groups of cells in movement-related areas ${c('motor-map')}${c('patch-map-model')}.</p><p>Middle: the scalp voltage from each patch alone. Each small map is scaled to its own peak so you can compare shapes, not their absolute amplitudes.</p><p>Right: the sum of all patches. Its voltage scale stays fixed as you change the sliders ${c('patch-map-model')}.</p>`, { wide: true });
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
@@ -50,9 +42,11 @@ the electrodes ever see. Noise comes in section 7, and section 9 asks what can b
   const hctx = half.getContext('2d')!, himg = hctx.createImageData(half.width, half.height);
   fig.panel.append(dimControls());
   assumptions(fig.el, [
-    { what: 'Head', value: `fsaverage three-layer BEM (0.3 / 0.006 / 0.3 S/m), ${nSrc.toLocaleString('en-US')} cortical sources with dipoles normal to the cortex, BioSemi-128 electrodes, average reference`, cite: c('fsaverage-bem') + c('mne-bem') + c('montages') },
-    { what: 'A patch', value: `N cells with a fraction in step (N × fraction × ${P.singleCellMomentPAm} pA·m plus the √N random part, as in sections 2 and 3), shared equally by all cortical sources within the radius of a centre point; a disc of the default radius holds about ${fmt(Math.PI * 100 * P.neuronsPerMm2 / 1e6, 2)} million cells, so N is a small fraction of them; overlapping patches are separate sources`, cite: c('single-cell-moment') + c('variances-add') + c('neuron-density') },
-    { what: 'Drawing', value: `view from above; only cortex and electrodes above the centre of a sphere fitted to the electrodes (radius ${fmt(R / 10, 3)} cm) are drawn, and the outline is the widest extent of those electrodes; scalp maps are a Gaussian-weighted average of all ${nCh} electrode values (width ${fmt(sigmaMm, 2)} mm) on that sphere; the summed map fades from ${FLOOR} µV to solid at ${CEIL} µV on a log scale, the single-patch maps are each scaled to their own peak; patch discs are drawn at the patch radius`, cite: '<span class="assumption-tag">drawing</span>' },
+    { what: 'Head model', value: `The fsaverage template uses a three-layer boundary-element model ${c('fsaverage-bem')}${c('mne-bem')}. Conductivities are brain 0.3, skull 0.006 and scalp 0.3 S/m. There are ${nSrc.toLocaleString('en-US')} cortical source locations, with currents perpendicular to the surface.`, cite: c('patch-map-model') },
+    { what: 'Electrodes and reference', value: `BioSemi-128 electrode positions ${c('montages')}. Each voltage is measured relative to the average across those electrodes.`, cite: c('patch-map-model') },
+    { what: 'A patch', value: `N is the number of cells. Each is assigned ${P.singleCellMomentPAm} pA·m ${c('single-cell-moment')}. The fraction in step adds directly; the rest adds in squared amplitude ${c('variances-add')}. Source locations inside the radius receive equal weights, normalized for their current directions. A limit prevents extreme scaling when directions cancel. Overlapping patches remain separate sources in this calculation.`, cite: c('patch-map-model') },
+    { what: 'Cell count versus patch area', value: `At the assumed cell density, a disc of the default radius contains about ${fmt(Math.PI * 100 * P.neuronsPerMm2 / 1e6, 2)} million cells ${c('neuron-density')}. The N slider specifies how many contribute to this modeled source, rather than all cells inside the disc.`, cite: c('patch-map-model') },
+    { what: 'Drawing', value: `Only the upper cortex and electrodes are shown. The outline follows the electrode positions on a fitted sphere of radius ${fmt(R / 10, 3)} cm. Smooth maps interpolate the ${nCh} electrode values, giving more weight to closer electrodes (width ${fmt(sigmaMm, 2)} mm). The summed map uses a fixed logarithmic scale from ${FLOOR} to ${CEIL} µV. Individual maps use their own peak scales.`, cite: c('patch-map-model') },
   ]);
 
   function drawCortexView() {
@@ -82,7 +76,7 @@ the electrodes ever see. Noise comes in section 7, and section 9 asks what can b
       const ox = (k % cols) * cw + cw / 2, oy = Math.floor(k / cols) * ch + ry + 6;
       ectx.save(); ectx.beginPath(); ectx.ellipse(ox, oy, rx, ry, 0, 0, 2 * Math.PI); ectx.clip();
       ectx.imageSmoothingEnabled = true; ectx.drawImage(mini, ox - rx, oy - ry, 2 * rx, 2 * ry); ectx.restore();
-      ectx.strokeStyle = patchColour(k); ectx.lineWidth = 2;
+      ectx.strokeStyle = patchColor(k); ectx.lineWidth = 2;
       ectx.beginPath(); ectx.ellipse(ox, oy, rx, ry, 0, 0, 2 * Math.PI); ectx.stroke();
       ectx.beginPath(); ectx.moveTo(ox - 5, oy - ry + 1); ectx.lineTo(ox, oy - ry - 6); ectx.lineTo(ox + 5, oy - ry + 1); ectx.stroke();
       ectx.fillStyle = '#1a1a1a'; ectx.textAlign = 'center'; ectx.font = '13px system-ui, sans-serif';
@@ -91,7 +85,7 @@ the electrodes ever see. Noise comes in section 7, and section 9 asks what can b
     });
   }
 
-  /** the scalp voltage of all patches together, on an absolute log colour scale, with a colour bar */
+  /** the scalp voltage of all patches together, on an absolute log color scale, with a color bar */
   function drawSummed(total: Float64Array, peak: number) {
     sctx.clearRect(0, 0, W, H + FOOT);
     footnote(sctx, H, [[{ sw: RED }, 'above the average of all 128 electrodes, ', { sw: BLUE }, 'below it'], ['patches with different timing can change the shape'], [`signal peak ${fmt(peak, 2)} µV at the strongest electrode`]]);
@@ -111,7 +105,7 @@ the electrodes ever see. Noise comes in section 7, and section 9 asks what can b
     sctx.fillStyle = 'rgba(26,26,26,0.7)';
     for (const [x, y, z] of elXY) { if (!visible(z)) continue; sctx.beginPath(); sctx.arc(x, y, 2, 0, 2 * Math.PI); sctx.fill(); }
     geo.outline(sctx);
-    // colour bar: positive up, negative down
+    // color bar: positive up, negative down
     const bx = W - 28, bt = 48, bb = H - 44, bw = 12;
     for (let y = bt; y < bb; y++) {
       const u = 1 - 2 * (y - bt) / (bb - bt); // +1 at the top, −1 at the bottom

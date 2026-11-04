@@ -9,8 +9,8 @@ import { sourceSliders } from './s5-noise';
 import head from '../data/head-leadfield.json';
 
 export interface Patch { center: number; radiusMm: number; name?: string; }
-export const PATCH_COLOURS = ['#2a78d6', '#eb6834', '#1baf7a', '#6250d6', '#eda100', '#e34948', '#008383', '#8a6d3b'];
-export const patchColour = (i: number) => PATCH_COLOURS[i % PATCH_COLOURS.length];
+export const PATCH_COLORS = ['#2a78d6', '#eb6834', '#1baf7a', '#6250d6', '#eda100', '#e34948', '#008383', '#8a6d3b'];
+export const patchColor = (i: number) => PATCH_COLORS[i % PATCH_COLORS.length];
 
 function b64(s: string): ArrayBuffer {
   const bin = atob(s), u8 = new Uint8Array(bin.length);
@@ -28,7 +28,7 @@ function decodeLeadfield(): Float32Array {
 export const dist3 = (a: number[], b: number[]) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 
 /** Least-squares sphere through a set of points: x² + y² + z² = 2ax + 2by + 2cz + d. */
-function fitSphere(pts: number[][]): { centre: number[]; R: number } {
+function fitSphere(pts: number[][]): { center: number[]; R: number } {
   const M = Array.from({ length: 4 }, () => new Array(4).fill(0)), rhs = new Array(4).fill(0);
   for (const p of pts) {
     const row = [2 * p[0], 2 * p[1], 2 * p[2], 1], t = p[0] * p[0] + p[1] * p[1] + p[2] * p[2];
@@ -42,8 +42,8 @@ function fitSphere(pts: number[][]): { centre: number[]; R: number } {
   }
   const x = new Array(4).fill(0);
   for (let r = 3; r >= 0; r--) { let acc = a[r][4]; for (let k = r + 1; k < 4; k++) acc -= a[r][k] * x[k]; x[r] = acc / a[r][r]; }
-  const centre = [x[0], x[1], x[2]];
-  return { centre, R: Math.sqrt(x[3] + x[0] * x[0] + x[1] * x[1] + x[2] * x[2]) };
+  const center = [x[0], x[1], x[2]];
+  return { center, R: Math.sqrt(x[3] + x[0] * x[0] + x[1] * x[1] + x[2] * x[2]) };
 }
 
 export const L = decodeLeadfield();
@@ -52,10 +52,10 @@ export const nCh = head.leadfield.shape[0], nSrc = head.leadfield.shape[1];
 export const srcNn = new Float32Array(b64(head.sources.normal_float32_base64));
 export const srcPos = head.sources.pos_mm as number[][];
 export const elPos = head.electrodes.pos_mm as number[][];
-// sphere fitted to the electrodes → centre and radius for the top view; only what is above its centre is drawn
-export const { centre, R } = fitSphere(elPos);
+// sphere fitted to the electrodes → center and radius for the top view; only what is above its center is drawn
+export const { center, R } = fitSphere(elPos);
 export const visible = (z: number) => z > 0;
-const visEl = elPos.filter((p) => visible(p[2] - centre[2]));
+const visEl = elPos.filter((p) => visible(p[2] - center[2]));
 const xs = visEl.map((p) => p[0]), ys = visEl.map((p) => p[1]);
 /** outline: an ellipse round the electrodes seen from above (head coordinates, mm) */
 export const x0 = (Math.min(...xs) + Math.max(...xs)) / 2, y0 = (Math.min(...ys) + Math.max(...ys)) / 2;
@@ -66,10 +66,10 @@ export const sigmaMm = (() => { let nn = 0; for (let i = 0; i < nCh; i++) { let 
 
 /** Gaussian-weighted average of the electrode values at a scalp point (x, y) on the fitted sphere, in µV. */
 export function scalpValue(values: ArrayLike<number>, x: number, y: number): number {
-  const X = x - centre[0], Y = y - centre[1], Z = Math.sqrt(Math.max(0, R * R - X * X - Y * Y));
+  const X = x - center[0], Y = y - center[1], Z = Math.sqrt(Math.max(0, R * R - X * X - Y * Y));
   const twoSig = 2 * sigmaMm * sigmaMm;
   let num = 0, den = 0;
-  for (let e = 0; e < nCh; e++) { const ex = elPos[e][0] - x, ey = elPos[e][1] - y, ez = elPos[e][2] - centre[2] - Z; const w = Math.exp(-(ex * ex + ey * ey + ez * ez) / twoSig); num += w * values[e]; den += w; }
+  for (let e = 0; e < nCh; e++) { const ex = elPos[e][0] - x, ey = elPos[e][1] - y, ez = elPos[e][2] - center[2] - Z; const w = Math.exp(-(ex * ex + ey * ey + ez * ez) / twoSig); num += w * values[e]; den += w; }
   return den > 1e-12 ? num / den : 0;
 }
 
@@ -82,9 +82,9 @@ export const miniW = new Float32Array(G * G * nCh), miniIn = new Uint8Array(G * 
     const x = x0 + ((i + 0.5) / G - 0.5) * 2 * ax, y = y0 - ((j + 0.5) / G - 0.5) * 2 * by;
     if (!inHead(x, y)) continue;
     miniIn[j * G + i] = 1;
-    const X = x - centre[0], Y = y - centre[1], Z = Math.sqrt(Math.max(0, R * R - X * X - Y * Y));
+    const X = x - center[0], Y = y - center[1], Z = Math.sqrt(Math.max(0, R * R - X * X - Y * Y));
     let den = 0;
-    for (let e = 0; e < nCh; e++) { const ex = elPos[e][0] - x, ey = elPos[e][1] - y, ez = elPos[e][2] - centre[2] - Z; const w = Math.exp(-(ex * ex + ey * ey + ez * ez) / twoSig); miniW[(j * G + i) * nCh + e] = w; den += w; }
+    for (let e = 0; e < nCh; e++) { const ex = elPos[e][0] - x, ey = elPos[e][1] - y, ez = elPos[e][2] - center[2] - Z; const w = Math.exp(-(ex * ex + ey * ey + ez * ez) / twoSig); miniW[(j * G + i) * nCh + e] = w; den += w; }
     for (let e = 0; e < nCh; e++) miniW[(j * G + i) * nCh + e] /= den || 1;
   }
 }

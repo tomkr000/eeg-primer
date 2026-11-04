@@ -16,13 +16,13 @@ const rhoOf = (N: number, f: number) => (momentNam(N, f) * cap.withBrain) ** 2;
 
 /** the imagined movements in the order the joints take them, joint 1 at the base */
 const TASKS = [
-  { name: 'right hand', colour: '#2a78d6' },
-  { name: 'left hand', colour: '#eb6834' },
-  { name: 'feet', colour: '#1baf7a' },
-  { name: 'tongue', colour: '#6250d6' },
+  { name: 'right hand', color: '#2a78d6' },
+  { name: 'left hand', color: '#eb6834' },
+  { name: 'feet', color: '#1baf7a' },
+  { name: 'tongue', color: '#6250d6' },
 ];
 const NONE = '#898781';
-const jointColour = (k: number) => (k < TASKS.length ? TASKS[k].colour : NONE);
+const jointColor = (k: number) => (k < TASKS.length ? TASKS[k].color : NONE);
 /** the five motor patches of section 4 and the movement whose own area each is (the left hemisphere's hand area moves the right hand) */
 const PATCHES = MOTOR();
 const OWNER = [0, 1, 2, 3, 3];
@@ -35,66 +35,76 @@ const TRIALS = 100;
 const SIGNS = [1, -1, 1, -1, 1]; // the scrunched start folds the arm in alternate directions
 
 export function mountDimensions(root: HTMLElement) {
-  const sec = section(root, 'dimensions', '9', 'A head with EEG can operate only a few dimensions', 'Few rhythms can be changed at will, their changes overlap, and each change is smaller than the rhythm’s own swings');
+  const sec = section(root, 'dimensions', '9', 'Overlapping rhythm changes make joint control harder', 'This simulation tests how shared responses and noise affect independent commands');
   prose(sec.text, `
-<p>To drive a robot arm a person needs one signal per joint, each moved at will without moving the others. The
-scalp could carry many such signals: in the head of section 4 a decoder that knows the patches' scalp patterns
-separates the figure's five motor patches with 128 electrodes and keeps 89% to nearly all of each one's
-signal-to-noise ratio, counted in power ${c('cap-separates')}, and section 11 showed that about 64 electrodes read a
-patch nearly as well as any cap can. The shortage is in what a person can move. The signals a person changes at will
-that show from outside are the sensorimotor rhythms (section 6 maps the others), changed by imagining
-a movement: the mu rhythm over that body part's area loses part of its power (event-related desynchronization,
-ERD), about half on average in one study and about 85% in the most reactive band in another ${c('erd-depth')}. The
-body parts whose areas are large enough and far enough apart to be told apart from outside are few: the two hands,
-the feet and the tongue, the four classes of the imagery competitions ${c('mi-classes')}. The figure gives each joint
-one of them, so a fifth joint gets none; the tongue's own area is small and spread over both hemispheres, and the
-figure grants it a response as deep as a hand area's, though no scalp measurement of its size could be found
-${c('tongue-areas')}. Nor
-does each movement act on its own area alone. Imagining either hand dims both hand areas and the foot area, the
-opposite hand's area most ${c('mi-matrix')}${c('mi-overlap')}; imagining the feet or the tongue makes the hand areas'
-rhythm grow, by 90 to 145% on average ${c('mi-matrix')}. The area at work loses its rhythm while idle areas gain
-theirs, a pattern read as the active area inhibiting the others through the thalamus, where a model of it relies on
-cross-talk between the parts of the reticular nucleus that serve distinct sensory modules; not everyone shows it
-${c('surround-ers')}. To the decoder, imagining the feet therefore looks much like imagining the hands less: the two
-differ mainly at the foot area itself, next to the midline, whose rhythm falls by only a fifth on average
-${c('mi-matrix')}, and toe movements change the scalp rhythm less consistently than finger movements
-${c('own-rhythm')}.</p>
-<p>A decoder calibrated on each movement alone can undo the overlap, but only by amplifying the noise: the more
-joints, the smaller the differences it has to read and the larger each joint's command noise at rest. And each
-reading is the power of a rhythm over a window, which scatters by about 1/√(BT) of its mean from one window to the
-next, ±58% for a 3 Hz band over 1 s, however good the recording ${c('erd-detect')}; real alpha power scatters two to
-three times more ${c('rhythm-fluctuation')}. The person in the figure controls perfectly: they know their own delays
-(section 10), imagine exactly as much as each joint needs, and may combine movements at no cost, their changes adding
-just as the decoder expects, while real users find holding several imagined movements hard and need extra practice
-${c('compound-mi')}. Even so, with the rhythm as strong as section 7's alpha, one joint ends straight in nearly every
-attempt, two in about one in four, three in one in ten or fewer, and a fifth joint never moves on purpose
-${c('arm-success')}. Longer windows cut the noise as √T but slow every correction; measured accuracy for left-
-against right-hand imagery climbs from about 65% with 1 s windows to 74% with 4 s ${c('window-accuracy')}. The record
-agrees. People have learned two-dimensional control over weeks of training ${c('self-generated-signals')} and, four
-adults, simultaneous control of three signals read from three or four electrodes ${c('dof-control')}; robots driven
-by imagery have gained degrees of freedom by sequencing, by holding one fixed or by an on/off switch rather than by
-more continuous signals, a robotic arm reaching in two dimensions and then grasping in a third ${c('robot-arm')}; adding a fourth or fifth mental task did not raise the
-information rate ${c('task-limit')}. A four-way choice carries about 0.15 bits/s at best ${c('mi-bitrate')}, the best
-interfaces of 2002 managed 10 to 25 bits per minute ${c('itr-2002')}, limb trajectories read from EEG did not beat
-chance ${c('kinematics-chance')}, and control fails altogether for an estimated 15 to 30% of users
-${c('bci-inefficiency')}. The fastest EEG spellers reach about 5 bits/s only by decoding responses to flickering
-targets chosen by gaze, a selection rather than a dimension of control ${c('itr-ssvep')}; intracortical arrays, for
-comparison, decode handwriting at 90 characters/min and speech at 62 words/min ${c('intracortical')}.</p>`);
+<p>Continuous control needs commands that can change independently. This model uses imagined movements to change
+sensorimotor mu rhythms. Power can fall over the area associated with an imagined movement. This decrease is
+called event-related desynchronization (ERD)
+${c('erd-depth')}. The model uses the right hand, left hand, feet and tongue, the four choices in a motor-imagery competition
+${c('mi-classes')}. These choices do not establish a biological maximum. Section 6 describes other EEG signals
+people can use.</p>
+<p><strong>Separate patches can still respond to the same movement.</strong> In section 4's head model, a decoder
+that knows the scalp patterns can separate the five motor patches using 128 electrodes. After canceling the other
+patches, each estimate retains at least 89% of its signal-to-noise power ratio compared with reading that patch alone ${c('cap-separates')}.
+That is a test of spatial separation. The overlap here is different: imagining one movement changes several areas.
+In a study of nine people, hand imagery reduced mu power over both hand areas. Foot and tongue imagery instead
+increased hand-area mu power by about 90 to 145% on average ${c('mi-matrix')}${c('mi-overlap')}.
+A decoder can distinguish those response patterns, but doing so magnifies noise in its commands.</p>
+<p><strong>The model makes generous assumptions.</strong> It assigns the measured electrode responses to the hand
+and foot patches, using group averages rather than one person's responses ${c('mi-matrix')}${c('arm-response-model')}.
+The tongue patches get an assumed 85% power drop; the sources checked did not measure that value
+${c('tongue-areas')}. Simultaneous imagery multiplies the individual power factors and costs the person no extra
+effort. This combination rule has not been validated; real users may need extra practice to combine movements
+${c('compound-mi')}. A fifth joint has no assigned imagined movement in this model. Its failure is built into
+that choice, rather than evidence that a person could never learn another control signal ${c('arm-decoder')}.</p>
+<p><strong>Even a clean recording has variable rhythm power.</strong> For the modeled Gaussian rhythm, the
+standard deviation of a power reading is approximately 1/√(BT) times its mean. B is the frequency bandwidth in hertz;
+T is the reading window in seconds. With B = 3 Hz and T = 1 s, that relative standard deviation is about 58%.
+The often-written “±58%” describes scatter, not bounds on possible readings ${c('erd-detect')}.
+Measured resting alpha power varies more than this model predicts ${c('rhythm-fluctuation')}.
+The model also gives mu the strength of section 7's alpha rhythm, an optimistic assumption ${c('mu-vs-alpha')}.</p>
+<p><strong>The success rates are simulated.</strong> With the default settings, nearly every one-joint attempt
+succeeds. About one in four two-joint attempts and one in ten or fewer three-joint attempts succeed
+${c('arm-success')}. The modeled person knows the delays and selects the intended imagery perfectly ${c('arm-controller')}.
+Longer windows reduce the modeled relative scatter in proportion to 1/√T, but make corrections arrive later
+${c('erd-detect')}. In a separate study, median accuracy for left- versus right-hand imagery rose from about 65%
+with 1 s windows to 74% with 4 s windows ${c('window-accuracy')}.</p>
+<p>People have learned simultaneous control of three EEG signals in a cursor task ${c('dof-control')}.
+EEG-controlled robots have also used sequences, fixed commands or a separate on/off choice to perform more complex
+actions ${c('robot-arm')}. Those tasks differ from this arm simulation, so their results do not validate its
+success rates or establish a universal limit.</p>`);
 
-  const sJoints = slider({ label: 'Joints to control', min: 1, max: 5, step: 1, value: 1, format: (v) => String(Math.round(v)), marks: [{ value: 3, label: 'Record: 3' }], note: c('dof-control') });
+  const sJoints = slider({ label: 'Joints to control', min: 1, max: 5, step: 1, value: 1, format: (v) => String(Math.round(v)), marks: [{ value: 3, label: 'Demonstrated: 3' }], note: c('dof-control') });
   let together = false;
   const pick = choice('Intended movement', [{ value: 'seq', label: 'One at a time' }, { value: 'all', label: 'All at once' }], 'seq', (v) => { together = v === 'all'; changed(); });
-  const sWin = slider({ label: 'Window for each reading', unit: 's', min: 0.5, max: 4, step: 0.05, value: 1, marks: [{ value: 1, label: 'Typical' }], note: c('bci-windows') });
+  const sWin = slider({ label: 'Window for each reading', unit: 's', min: 0.5, max: 4, step: 0.05, value: 1, marks: [{ value: 1, label: 'Default' }], note: c('bci-windows') + c('arm-success') });
   const { sN, sF } = sourceSliders();
-  const rAttempt = readout('This attempt');
-  const rRate = readout(`Attempts out of ${TRIALS} that end straight`, c('arm-success'));
-  const rNoise = readout('Command noise at rest', c('erd-detect'));
+  const rAttempt = readout('This simulated attempt');
+  const rRate = readout(`Success in ${TRIALS} simulated attempts`, c('arm-success'));
+  const rNoise = readout('Command noise at rest', c('erd-detect') + c('arm-decoder'));
   const rUsed = readout('Imagined movements in use', c('mi-classes'));
 
-  const fig = figure(sec.fig, `Left: the cortex from above with the five motor patches of section 4, numbered as there (1 and 2 the hand areas of the left and right hemispheres, which move the right and left hand, 3 the foot area, 4 and 5 the tongue areas), coloured like the joint whose imagined movement is their own and shaded by their mu power at this moment, relative to rest; patches of movements that no joint uses are drawn without colour, but their rhythm changes all the same. Middle: the mu power each of the 128 electrodes sees, relative to rest: every patch's scalp pattern weighted by its power, on top of ${CAP.bgUv} µV of the brain's own activity in the band ${c('brain-background')}. Right: the intended arm and the arm the decoder drives, one joint per imagined movement with joint 1 at the base, and under them each joint's decoded command since Go. Press Go: the intended arm straightens, one joint at a time or all together, and the person imagines the movement of every joint that lags behind it, as much as it needs, knowing the delays of section 10. Every imagined movement changes every patch's rhythm by its measured response ${c('mi-matrix')}${c('tongue-areas')}${c('compound-mi')}; the decoder reads each patch's power over the window through the best combination of a 64-electrode cap (section 11) ${c('snr-electrodes')}${c('cap-separates')}, undoes the overlap of the responses, and moves a joint while its command is more than half a full movement either way. An attempt succeeds when all joints are within ${ARM.tolDeg}° of straight together for ${ARM.dwellS} s before the time runs out. The readouts give this attempt's outcome, the share of ${TRIALS} attempts with fixed seeds that succeed with the current settings ${c('arm-success')}, each joint's command noise while the person rests, in units of a full movement's change ${c('erd-detect')}, and the imagined movements in use ${c('mi-classes')}.`, { wide: true });
+  const fig = figure(sec.fig, `
+<p><strong>Left:</strong> the five motor patches from section 4. Patches 1 and 2 are the hand areas in the left and
+right hemispheres, associated with the opposite hands. Patch 3 is the foot area; patches 4 and 5 are the tongue
+areas. Each disc uses its movement's joint color and is shaded by its current mu power relative to rest.
+An unused movement's patches can still respond to other imagery ${c('mi-matrix')}${c('tongue-areas')}${c('arm-response-model')}.</p>
+<p><strong>Middle:</strong> expected mu power at the 128 displayed electrodes, relative to rest, including an assumed
+${CAP.bgUv} µV root-mean-square background ${c('brain-background')}${c('arm-response-model')}. This display shows the scalp pattern.
+The arm decoder uses a separate noise estimate: each patch is read through a modeled ${CAP.electrodes}-electrode
+channel from section 11 ${c('snr-electrodes')}. It does not decode the displayed 128-electrode map.</p>
+<p><strong>Right:</strong> the intended arm, the decoded arm and each joint's command since Go. Joint 1 is at the
+base. Press Go to play one simulated attempt. The ideal person adjusts imagery to straighten each assigned joint ${c('arm-controller')}.
+“Full movement” means the model's maximum imagery intensity, not an arm angle. The decoder estimates patch power
+over the selected window and separates the movement responses ${c('mi-matrix')}${c('tongue-areas')}${c('compound-mi')}.
+A command outside ±${ARM.deadZone} moves its joint; 1 represents full imagery. Success means all joints stay within ${ARM.tolDeg}° of straight
+for ${ARM.dwellS} s before the time limit ${c('arm-decoder')}${c('arm-task')}.</p>
+<p>The readouts show this simulated attempt, the success rate across ${TRIALS} simulated attempts, command noise at
+rest and the imagery choices in use ${c('arm-success')}. Repeating these settings repeats the same ${TRIALS} noise sequences and results ${c('arm-task')}. Command noise is a standard deviation, expressed
+relative to the response to full imagery ${c('erd-detect')}. The fifth joint has no assigned imagery ${c('arm-decoder')}.</p>`, { wide: true });
   const lede = document.createElement('p');
   lede.className = 'figure-lede';
-  lede.innerHTML = '<strong>Simulation of joint control using realistic patches.</strong> The person imagines each movement perfectly, but the patches are connected and affect each other (as in real brains), so every movement changes several of them. Noise from the rhythm itself, the electrodes and the brain’s background makes untangling the signals difficult.';
+  lede.innerHTML = `<strong>Simulation of control from imagined movements.</strong> Each movement changes several patches. Separating those responses magnifies the noise, even when the person chooses the imagery perfectly ${c('mi-matrix')}${c('arm-success')}.`;
   fig.el.prepend(lede);
   const row = document.createElement('div');
   row.className = 'viz-row';
@@ -119,18 +129,21 @@ comparison, decode handwriting at 90 characters/min and speech at 62 words/min $
   outs.style.gridTemplateColumns = '1.3fr 1fr 1fr 0.8fr';
   fig.viz.append(outs);
   fig.panel.append(controls(sJoints.el, pick.el, sWin.el, sN.el, sF.el));
-  const tag = (t: string) => `<span class="assumption-tag">${t}</span>`;
   assumptions(fig.el, [
-    { what: 'Responses', value: 'the mean change of mu power at C3, C4 and Cz during imagined movements of the right hand, left hand, feet and tongue in nine people (trial-averaged, in the most reactive band of each person, electrode and movement, from Laplacian derivations), placed on the left and right hemispheres’ hand areas and the foot area of section 4; group means, which no single person matches (the spread across people is as large as the mean for the feet and tongue)', cite: c('mi-matrix') + c('mi-overlap') },
-    { what: 'Tongue areas', value: 'lose 85% of their mu power during tongue imagery and do not respond to the other movements: a generous guess, since no scalp study gives the size', cite: c('tongue-areas') },
-    { what: 'Several movements at once', value: 'their power changes multiply, each raised to the intensity of its imagery, which a decoder calibrated on single movements reads exactly apart from noise; combining costs the person nothing, which flatters the movements made together', cite: c('compound-mi') },
-    { what: 'Timing', value: `the rhythm starts to change ${P.erdOnsetS} s after the imagery changes and takes ${P.erdRampS} s to change fully (section 10)`, cite: c('erd-timecourse') },
-    { what: 'Channel', value: `each patch is read through the best linear combination of a ${CAP.electrodes}-electrode cap for a ${CAP.radiusMm} mm patch, against ${CAP.bgUv} µV of the brain's background and ${CAP.noiseUv} µV of electrode noise (section 11), which adds a floor of 1/ρ to every reading, ρ being the rhythm's power over the noise; the cap separates the patches from one another with little loss`, cite: c('snr-electrodes') + c('brain-background') + c('cap-separates') },
-    { what: 'One reading', value: `the rhythm is band-limited Gaussian noise in a ${P.decoderBandHz} Hz band; its power over the trailing window is gamma distributed with about B·T degrees of freedom; real rhythms scatter more, so the model flatters the person`, cite: c('erd-detect') + c('window-samples') + c('rhythm-fluctuation') },
-    { what: 'Decoder', value: `calibrated on each movement alone: the least-squares unmixing of the patches' log powers into one command per joint, 1 meaning the change of a full movement; a joint moves at up to ${ARM.speedDegS}°/s while its command is beyond ±${ARM.deadZone} (section 10's halfway threshold) and stops at ±${ARM.limitDeg}°; a fifth joint gets the one patch direction that no movement reaches`, cite: tag('model definition') },
-    { what: 'Person', value: `an ideal controller: sees the arm, knows the delays and forecasts their effect, and imagines each lagging joint's movement in proportion to its gap, revising ${Math.round(1 / (ARM.dt * ARM.planEvery))} times a second; one movement at a time when the joints move one at a time`, cite: tag('model definition') },
-    { what: 'Task', value: `start folded by ${ARM.startDeg.join('°, ')}° (joint 1 first), in alternate directions; the intended arm straightens each joint in ${ARM.stageS} s, or all together in ${ARM.togetherS} s; success: all joints within ${ARM.tolDeg}° of straight together for ${ARM.dwellS} s, at most ${ARM.graceS} s after the intended arm has finished`, cite: tag('model definition') },
-    { what: 'Slider ranges', value: 'windows from 0.5 s to the 4 s of the imagery competitions, around the typical 1 s', cite: c('bci-windows') },
+    { what: 'Measured responses', value: 'Mean mu-power changes from nine people, measured at C3, C4 and Cz using local electrode differences (Laplacian derivations). Each value uses the most reactive band for that person, site and movement. These are trial averages with substantial variation across people.', cite: c('mi-matrix') + c('mi-overlap') },
+    { what: 'Mapping responses to patches', value: 'The measured electrode responses are assigned to the hand and foot patches from section 4. They are not direct measurements of those patches.', cite: c('arm-response-model') },
+    { what: 'Tongue patches', value: 'Assumed to lose 85% of mu power during tongue imagery and to ignore other imagery. The sources checked give no measured value for this drop.', cite: c('tongue-areas') },
+    { what: 'Simultaneous imagery', value: 'Each patch’s power factors multiply, with each factor raised to its imagery intensity. The log changes therefore add. Combining imagery has no effort cost. This optimistic rule has not been validated.', cite: c('compound-mi') },
+    { what: 'Mu strength', value: 'Set equal to section 7’s alpha strength, which is optimistic for mu.', cite: c('mu-vs-alpha') },
+    { what: 'Timing', value: `Power starts changing ${P.erdOnsetS} s after an imagery change and takes another ${P.erdRampS} s to reach the new level. These model defaults follow the cue-paced timing discussed in section 10.`, cite: c('erd-timecourse') },
+    { what: 'Decoder channel', value: `Each patch gets the noise level of a ${CAP.radiusMm} mm patch read through a ${CAP.electrodes}-electrode cap in section 11’s sphere model. Background: ${CAP.bgUv} µV root mean square. Electrode noise: ${CAP.noiseUv} µV. If ρ is rhythm power divided by channel-noise power, the added noise floor is 1/ρ.`, cite: c('snr-electrodes') + c('brain-background') },
+    { what: 'Spatial separation check', value: 'A separate computation uses the 128-electrode anatomical head to cancel the other patches. It retains 89% to 99.7% of each patch’s isolated squared signal-to-noise ratio. This supports separating the patches; it does not supply the arm’s channel-noise values.', cite: c('cap-separates') },
+    { what: 'Power readings', value: `The rhythm is band-limited Gaussian noise with bandwidth B = ${P.decoderBandHz} Hz. T is the selected trailing window in seconds. Its power estimate is approximated by a gamma distribution with shape B·T. Real alpha power varies more.`, cite: c('erd-detect') + c('window-samples') + c('rhythm-fluctuation') },
+    { what: 'Decoder and joints', value: `Calibrated on each movement alone. Least-squares weights turn patch log powers into one command per joint. A command of 1 represents full imagery intensity. A joint moves beyond ±${ARM.deadZone}, at up to ${ARM.speedDegS}°/s, and stops at ±${ARM.limitDeg}°. The fifth joint has no assigned movement; its decoder reads a response direction that none of the four imagery choices can produce.`, cite: c('arm-decoder') },
+    { what: 'Ideal person', value: `Sees the arm and forecasts the effect of known delays without noise. Adjusts imagery ${Math.round(1 / (ARM.dt * ARM.planEvery))} times per second. In “One at a time” mode, imagines only one movement at once.`, cite: c('arm-controller') },
+    { what: 'Task and success', value: `Starts with joints folded by ${ARM.startDeg.join('°, ')}°, in alternating directions. The target straightens each joint over ${ARM.stageS} s, or all joints over ${ARM.togetherS} s. Success requires every joint within ${ARM.tolDeg}° of straight for ${ARM.dwellS} s. The deadline is ${ARM.graceS} s after the target finishes.`, cite: c('arm-task') },
+    { what: 'Repeated attempts', value: `The success rate uses ${TRIALS} fixed random seeds. Each seed specifies a reproducible simulated noise sequence. These are simulated attempts, not observations of people.`, cite: c('arm-success') + c('arm-task') },
+    { what: 'Window range', value: 'The slider runs from 0.5 to 4 s, with a 1 s default. The upper end matches the imagery period in the competition data; these slider limits are model choices.', cite: c('bci-windows') + c('arm-task') },
   ]);
 
   const geo = headGeometry(WL, H), geoM = headGeometry(WM, H);
@@ -147,7 +160,7 @@ comparison, decode handwriting at 90 characters/min and speech at 62 words/min $
     for (const [x, y, z] of geo.srcXY) { if (!visible(z)) continue; lctx.beginPath(); lctx.arc(x, y, 1.2, 0, 2 * Math.PI); lctx.fill(); }
     const used = Math.min(K, TASKS.length), r = Math.max(6, 10 * geo.s);
     PATCHES.forEach((p, j) => {
-      const [px, py] = geo.srcXY[p.center], own = OWNER[j], col = own < used ? TASKS[own].colour : NONE;
+      const [px, py] = geo.srcXY[p.center], own = OWNER[j], col = own < used ? TASKS[own].color : NONE;
       lctx.globalAlpha = shade(power[j]); lctx.fillStyle = col;
       lctx.beginPath(); lctx.arc(px, py, r, 0, 2 * Math.PI); lctx.fill();
       lctx.globalAlpha = 1; lctx.strokeStyle = col; lctx.lineWidth = imagery[own] > 0 ? 3.5 : 1.5; lctx.stroke();
@@ -209,7 +222,7 @@ comparison, decode handwriting at 90 characters/min and speech at 62 words/min $
       for (const s of [1, -1]) { actx.beginPath(); actx.moveTo(hx + s * 6 * nx, hy + s * 6 * ny); actx.lineTo(hx + s * 6 * nx + 10 * ux, hy + s * 6 * ny + 10 * uy); actx.stroke(); }
       for (let k = 0; k < K; k++) {
         actx.beginPath(); actx.arc(pts[k][0], pts[k][1], 6.5, 0, 2 * Math.PI);
-        actx.fillStyle = jointColour(k); actx.fill(); actx.strokeStyle = '#fcfcfb'; actx.lineWidth = 1.5; actx.stroke();
+        actx.fillStyle = jointColor(k); actx.fill(); actx.strokeStyle = '#fcfcfb'; actx.lineWidth = 1.5; actx.stroke();
       }
       actx.restore();
       actx.font = CANVAS_FONT; actx.fillStyle = '#1a1a1a'; actx.textAlign = 'center';
@@ -221,7 +234,7 @@ comparison, decode handwriting at 90 characters/min and speech at 62 words/min $
     if (!trial) parts = ['Press Go: the left arm shows the intended movement'];
     else if (t < trial.end - 1e-9 || isNaN(trial.doneAt)) {
       const active = imagery.map((u, j) => (u > 0 ? j : -1)).filter((j) => j >= 0);
-      parts = active.length ? ['Imagining: ', ...active.flatMap((j, i) => [{ sw: TASKS[j].colour }, TASKS[j].name + (i < active.length - 1 ? ', ' : '')])] : ['Imagining nothing: resting'];
+      parts = active.length ? ['Imagining: ', ...active.flatMap((j, i) => [{ sw: TASKS[j].color }, TASKS[j].name + (i < active.length - 1 ? ', ' : '')])] : ['Imagining nothing: resting'];
       if (t >= trial.end - 1e-9) parts = [outcome(trial)];
     } else parts = [outcome(trial)];
     const w = partsWidth(actx, parts, 12);
@@ -237,14 +250,14 @@ comparison, decode handwriting at 90 characters/min and speech at 62 words/min $
     if (trial) {
       const i0 = trial.t.findIndex((v) => v >= 0);
       trial.command.forEach((cmd, k) => {
-        actx.strokeStyle = jointColour(k); actx.lineWidth = 1.3; actx.beginPath();
+        actx.strokeStyle = jointColor(k); actx.lineWidth = 1.3; actx.beginPath();
         for (let m = i0; m <= i; m++) { const X = xt(trial.t[m]), Y = yc(cmd[m]); if (m === i0) actx.moveTo(X, Y); else actx.lineTo(X, Y); }
         actx.stroke();
       });
       actx.textAlign = 'right'; actx.fillStyle = '#1a1a1a'; actx.fillText(`${fmt(Math.min(t, tMax), 2)} s after Go`, x1, top - 4);
     }
     actx.textAlign = 'left'; actx.fillStyle = '#1a1a1a'; actx.fillText('decoded commands', x0, top - 4);
-    footnote(actx, H, [TASKS.slice(0, K).flatMap((m, k) => [{ sw: m.colour }, `${k + 1} ${m.name} `] as TextPart[]).concat(K > TASKS.length ? [{ sw: NONE }, '5 none'] : []), ['joint 1 at the base;  ', { sw: '#e8e7e1' }, 'command too small to move its joint']]);
+    footnote(actx, H, [TASKS.slice(0, K).flatMap((m, k) => [{ sw: m.color }, `${k + 1} ${m.name} `] as TextPart[]).concat(K > TASKS.length ? [{ sw: NONE }, '5 none'] : []), ['joint 1 at the base;  ', { sw: '#e8e7e1' }, 'command too small to move its joint']]);
   }
 
   function outcome(r: ArmTrial): string {
@@ -285,7 +298,7 @@ comparison, decode handwriting at 90 characters/min and speech at 62 words/min $
     idle();
     const o = opts(), K = o.joints;
     const noise = commandNoise(LOG, o);
-    rNoise.set(noise.map((v, k) => `${sw(jointColour(k))}${fmt(v, 2)}`).join(' '));
+    rNoise.set(noise.map((v, k) => `${sw(jointColor(k))}${fmt(v, 2)}`).join(' '));
     rUsed.set(K > TASKS.length ? `all ${TASKS.length} <span class="readout-aside">and none for joint 5</span>` : `${K} of ${TASKS.length}`);
     rRate.set('…');
     clearTimeout(pending);

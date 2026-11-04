@@ -55,7 +55,7 @@ export function mountSynchrony(root: HTMLElement) {
     <section class="rhythm-note">
       <h3>Other uses of EEG</h3>
       <p>Clinicians use EEG to help evaluate seizures, and sleep studies use it to classify sleep stages ${c('eeg-clinical-uses')}.</p>
-      <p>Researchers also study responses to mistakes. An error-related response can help an interface recognise that it made a wrong choice ${c('evoked-map')}.</p>
+      <p>Researchers also study responses to mistakes. An error-related response can help an interface recognize that it made a wrong choice ${c('evoked-map')}.</p>
     </section>
   </div>`;
 

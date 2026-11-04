@@ -19,7 +19,7 @@ export const P = {
   brainRadiusM: 0.08, // 'brain-radius'
   cellCurrentPa: 1000, // net current of one cell during a burst ≈ moment / length ('single-cell-moment', 'dipole-length'); a single synapse ~100 pA ('epsc')
   dipoleLengthUm: 500, // 'dipole-length'
-  somaDepthMm: 1.6, // depth of a layer-5 cell body below the cortical surface, 'cortex-layers'
+  somaDepthMm: 1.6, // cortical-surface height above the drawn dipole center; body is half a dipole length deeper, 'cortex-layers'
   corticalThicknessMm: 2.5, // 'cortex-layers'
   spikeNoiseUv: 5, // 'spike-noise-floor'
   singleCellMomentPAm: 0.5, // 'single-cell-moment'

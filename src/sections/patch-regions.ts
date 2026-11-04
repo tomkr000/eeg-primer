@@ -1,6 +1,6 @@
 import { claimCite as c } from '../data/params';
 import { section, sw } from '../ui/layout';
-import { at, ax, by, patchColour, type Patch } from './dim-model';
+import { at, ax, by, patchColor, type Patch } from './dim-model';
 import { drawCortex, headGeometry } from './head-view';
 
 type Mode = 'reinforce' | 'drift' | 'cancel';
@@ -17,7 +17,7 @@ export function mountPatchRegions(root: HTMLElement) {
     <div class="patch-region-map">
       <div class="viz-title">Regions contain local patches</div>
       <canvas class="patch-region-head" width="640" height="700" role="img" aria-label="Head viewed from above. Three dashed broad regions each contain two smaller numbered cortical patches: frontal contains 3 and 4, movement contains 1 and 2, and visual contains 5 and 6. A separate ring E marks a scalp electrode. Locations and counts are schematic."></canvas>
-      <p class="patch-region-key">${sw('#76756e', 'dash')}Broad region &nbsp; ${sw(patchColour(0), 'glow')}Numbered local patch<br><span class="patch-electrode-key" aria-hidden="true">E</span> Scalp electrode</p>
+      <p class="patch-region-key">${sw('#76756e', 'dash')}Broad region &nbsp; ${sw(patchColor(0), 'glow')}Numbered local patch<br><span class="patch-electrode-key" aria-hidden="true">E</span> Scalp electrode</p>
       <p class="patch-region-assumption">Locations and patch count are illustrative, not measured boundaries. ${c('patch-regions')}</p>
     </div>
     <div class="patch-region-signals">
@@ -43,7 +43,7 @@ export function mountPatchRegions(root: HTMLElement) {
 
   const traces = fig.querySelector<HTMLElement>('.patch-contribution-traces')!;
   const labels = ['Patch 1: contribution at E', 'Patch 2: contribution at E', 'Sum at electrode E'];
-  const colors = [patchColour(0), patchColour(1), INK];
+  const colors = [patchColor(0), patchColor(1), INK];
   traces.innerHTML = labels.map((label, row) => `<div class="patch-trace-row">
     <div class="patch-trace-label">${sw(colors[row], 'line')}${label}</div>
     <div class="patch-trace-chart"><span class="patch-trace-zero-label" aria-hidden="true">0</span>

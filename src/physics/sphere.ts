@@ -22,7 +22,7 @@
 
 export interface Shell {
   name: string;
-  /** outer radius of this shell, metres (ascending) */
+  /** outer radius of this shell, meters (ascending) */
   outerRadius: number;
   /** conductivity, S/m */
   sigma: number;

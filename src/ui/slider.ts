@@ -12,7 +12,7 @@ export interface SliderOpts {
   /** HTML appended after the label (e.g. citation markers) */
   note?: string;
   /** reference points drawn as carets under the track, e.g. the typical value; align overrides the automatic placement */
-  marks?: { value: number; label: string; align?: 'start' | 'end' | 'centre' }[];
+  marks?: { value: number; label: string; align?: 'start' | 'end' | 'center' }[];
   /** approximate track width in px, for placing the mark labels (default: one column of a two-column panel) */
   trackPx?: number;
 }
@@ -59,14 +59,14 @@ export function slider(o: SliderOpts): Slider {
   const EST_W = o.trackPx ?? 175;
   for (const m of [...(o.marks ?? [])].sort((a, b) => toPos(a.value) - toPos(b.value))) {
     const frac = Math.min(1, Math.max(0, toPos(m.value)));
-    const auto = frac > 0.72 ? 'end' : frac < 0.28 ? 'start' : 'centre';
+    const auto = frac > 0.72 ? 'end' : frac < 0.28 ? 'start' : 'center';
     const w = m.label.length * 6.5, px = 8 + frac * (EST_W - 16);
     const span = (a: string) => { const lo = a === 'start' ? px : a === 'end' ? px - w : px - w / 2; return { lo, hi: lo + w }; };
     const inside = (a: string) => { const { lo, hi } = span(a); return lo >= -4 && hi <= EST_W + 4; };
     const free = (a: string, row: number) => { const { lo, hi } = span(a); return !placed.some((p) => p.row === row && lo < p.hi + 6 && hi > p.lo - 6); };
     // keep the label on the first row by changing its alignment if that avoids a collision; otherwise drop a row
     let align = m.align ?? auto, row = 0;
-    if (!m.align && !free(align, 0)) { const alt = (['start', 'end', 'centre'] as const).find((a) => inside(a) && free(a, 0)); if (alt) align = alt; }
+    if (!m.align && !free(align, 0)) { const alt = (['start', 'end', 'center'] as const).find((a) => inside(a) && free(a, 0)); if (alt) align = alt; }
     while (!free(align, row) && row < 3) row++;
     const { lo, hi } = span(align);
     placed.push({ lo, hi, row });
@@ -141,7 +141,7 @@ export function controls(...items: HTMLElement[]): HTMLElement {
   return el;
 }
 
-/** A labelled readout (value computed from the model). */
+/** A labeled readout (value computed from the model). */
 export function readout(label: string, note = ''): { el: HTMLElement; set(v: string): void } {
   const el = document.createElement('div');
   el.className = 'readout';

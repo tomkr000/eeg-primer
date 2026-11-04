@@ -16,7 +16,7 @@ export type ClaimStatus =
   | 'partially' // source supports the gist but with a nuance recorded in `note`
   | 'unverified' // could not be checked against the source text (e.g. paywalled)
   | 'derived' // follows from the model + verified inputs; not itself a literature claim
-  | 'assumption'; // a modelling choice; stated explicitly, no literature value exists
+  | 'assumption'; // a modeling choice; stated explicitly, no literature value exists
 
 export interface Claim {
   id: string;

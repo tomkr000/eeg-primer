@@ -17,7 +17,7 @@
   --text-secondary: var(--ink-2);
   --panel-w: 380px;
 }
-/* The site is always light: the figures draw with fixed colours (white neuron glyphs, dark contours and
+/* The site is always light: the figures draw with fixed colors (white neuron glyphs, dark contours and
    grid numbers) that are designed for the light surfaces, so no dark scheme is offered. */
 
 * { box-sizing: border-box; }

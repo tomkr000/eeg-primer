@@ -1,12 +1,12 @@
 /**
- * Extracellular potential of a single neuron modelled as a pair of point current sources in an
+ * Extracellular potential of a single neuron modeled as a pair of point current sources in an
  * infinite homogeneous conductor (quasi-static). A synaptic current I enters the cell at the
  * synapse (an extracellular SINK, −I) and leaves through the membrane near the soma (a SOURCE, +I).
  * Point source: V = I / (4π σ r). Far from the pair (r ≫ d) the field is that of a current dipole
  * p = I·d:  V ≈ p cosθ / (4π σ r²).
  */
 
-/** Potential (V) of a two-monopole "neuron" with separation d (m) centred at the origin, axis along z. */
+/** Potential (V) of a two-monopole "neuron" with separation d (m) centered at the origin, axis along z. */
 export function twoMonopole(I: number, sigma: number, d: number, x: number, z: number): number {
   const rSink = Math.hypot(x, z - d / 2);
   const rSource = Math.hypot(x, z + d / 2);

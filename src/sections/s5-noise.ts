@@ -24,33 +24,29 @@ export const ALPHA_N = RAW_DEFAULTS.signalUv / (scalpUvPerNam * P.patchDefaultSy
 /** The two sliders of the shared source model, used by sections 4 to 9. */
 export const sourceSliders = (defaultN = ALPHA_N, defaultF = P.patchDefaultSync) => ({
   sN: slider({ label: 'Neurons in the patch, N', min: 1e5, max: P.patchMaxN, value: defaultN, log: true, format: (v) => fmt(Math.round(v), 2), marks: [{ value: P.patchDefaultN, label: 'Typical' }, { value: ALPHA_N, label: 'Alpha' }], note: c('alpha-source-chain') }),
-  sF: slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: defaultF, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Seizure' }] }),
+  sF: slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: defaultF, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'All in step' }] }),
 });
 
 export function mountNoise(root: HTMLElement) {
   const sec = section(root, 'noise', '7', 'The signal that gets outside the skull is noisy', 'Follow one alpha rhythm over time, mixed with other signals and recording noise');
   prose(sec.text, `
-<p>What arrives at the scalp is tens of microvolts ${c('eeg-amplitude')}. The alpha rhythm in the figure
-comes from the same chain as the earlier sections: its textbook 20 µV takes a source of about 40 nA·m in
-the head of section 3, which by section 2 is about 740,000 cells with a tenth in step, where the sliders
-start ${c('alpha-source-chain')}. Almost everything else in the recording is bigger. Scalp and neck muscles produce electromyographic (EMG) activity across roughly
-20–300 Hz that can reach ~100 µV, against gamma-band brain signals under a microvolt
-${c('emg-band')}${c('emg-topography')}. Eye blinks give frontal deflections of 100–200 µV
-${c('blink-amplitude')}, a dozen or more times a minute ${c('blink-rate')}. A blink is not a muscle signal: the
-eyelid slides over the cornea, which sits about 13 mV positive to the forehead, and carries that potential to the
-frontal electrodes ${c('blink-mechanism')}. The body also carries a
-common-mode mains voltage of millivolts to hundreds of millivolts ${c('common-mode')}. Noise does not cancel
-the neural signal so much as bury it: independent sources add in power.</p>
-<p>Three defences, each with a cost. A differential amplifier rejects common-mode voltage, by 80–90 dB in
-older designs ${c('cmrr-customary')} and 110–120 dB in a modern integrated front end ${c('ads1299')},
-but only if the two electrodes have matched impedances: an imbalance converts common-mode into
-differential voltage through the potential-divider effect, V = V<sub>cm</sub>·ΔZ/Z<sub>in</sub>
-${c('potential-divider')}. The electrode–skin interface adds 1–20 µV rms of its own noise, from the
-skin rather than the metal ${c('skin-noise')}; the thermal noise of a 10 kΩ contact over 100 Hz is only
-~0.13 µV ${c('thermal-noise')}. Movement and cables add more ${c('motion-artifact')}. Averaging repeated
-trials improves the signal-to-noise ratio (SNR) by √N ${c('averaging')}, which is why evoked-potential
-paradigms work and why they are slow: for a brain–computer interface (BCI) every averaged trial is time the user
-spends waiting.</p>`);
+<p>The figure starts with an idealized alpha rhythm with a reference amplitude of 20 µV ${c('eeg-amplitude')}. Its amplitude comes
+from the same cell-group and head models as sections 2 and 3. In this model, that requires about 740,000
+cells with 10% in step ${c('alpha-source-chain')}.</p>
+<p>Other sources can be much larger. Scalp and neck muscles produce electrical activity, called
+electromyography (EMG), across roughly 20–300 Hz ${c('emg-band')}. Eye blinks can produce frontal voltage
+changes of 100–200 µV ${c('blink-amplitude')}. These blink signals arise from the eye's electrical potential,
+not simply from the contracting muscles ${c('blink-mechanism')}. Power-line electricity also places a
+voltage on the body ${c('common-mode')}.</p>
+<p>An amplifier measures the voltage difference between electrodes. It can reject interference that
+reaches both electrodes equally ${c('cmrr-customary')}. Unequal contact impedances, the contacts'
+opposition to current flow, let some of that shared interference appear in the difference
+${c('potential-divider')}.</p>
+<p>The skin–electrode contact adds its own noise, typically 1–20 µV root mean square (rms), a measure of
+noise size ${c('skin-noise')}. Movement and cables can add artifacts ${c('motion-artifact')}.
+When the same response repeats and noise varies independently between trials, averaging N responses
+improves the signal-to-noise ratio by about √N ${c('averaging')}. That helps reveal a response but makes the user wait for
+more repetitions.</p>`);
 
   const { sN, sF } = sourceSliders();
   const sEmg = slider({ label: 'Muscle (EMG), 20–300 Hz', unit: 'µV rms', min: 0, max: 100, value: RAW_DEFAULTS.emgUvRms, step: 1, note: c('emg-level'), marks: [{ value: RAW_DEFAULTS.emgUvRms, label: 'Relaxed' }, { value: 100, label: 'Clenched jaw' }] });
@@ -59,17 +55,18 @@ spends waiting.</p>`);
   const rSnr = readout('Signal-to-noise ratio (alpha vs the rest)');
   const rRms = readout('Total rms of the recording');
 
-  const fig = figure(sec.fig, `Four seconds of a synthetic scalp channel: the idealized 10 Hz alpha rhythm (${sw('#2a78d6', 'line')}) and the same rhythm buried in muscle, blink, skin, mains and amplifier noise (${sw('#eb6834', 'line')}). The alpha amplitude is not a free number: it comes from the patch of sections 2 and 3 through the same head, and the textbook 20 µV needs about 740,000 cells with a tenth in step, more than the typical evoked source. The large deflections are eye blinks at their reported size and rate: potentials of the eye itself, as the eyelid slides over the cornea, not muscle activity. This is the raw signal at the scalp: whatever the electrode type, this is what it is trying to pick up.`);
+  const fig = figure(sec.fig, `<p>Four seconds of a simulated single-channel recording. The ${sw('#2a78d6', 'line')} line is an idealized 10 Hz alpha rhythm. The ${sw('#eb6834', 'line')} line adds muscle activity, blinks and recording noise ${c('noise-model-settings')}.</p><p>The alpha amplitude is calculated from the earlier source and head models ${c('alpha-source-chain')}. Blink size, duration and rate use the settings listed below ${c('noise-model-settings')}. This is a synthetic recording, including contact and amplifier noise, rather than brain voltage alone ${c('noise-model-settings')}.</p>`);
   fig.viz.append(vizTitle('Simulated scalp potential at one electrode: alpha rhythm plus noise sources'));
   const plot = linePlot(fig.viz, { x: { label: 'Time (s)', domain: [0, 4] }, y: { label: 'Potential (µV)' }, height: 360, legendInside: true });
   fig.panel.append(controls(sN.el, sF.el, sEmg.el, sSkin.el));
   fig.viz.append(readouts(rAlpha.el, rSnr.el, rRms.el));
   assumptions(fig.el, [
-    { what: 'Alpha rhythm', value: `a pure 10 Hz sine whose amplitude is the scalp potential of the patch in the section 3 head (${fmt(scalpUvPerNam, 2)} µV per nA·m, source 2 mm below the cortex); 20 µV is the textbook scalp amplitude`, cite: c('alpha-source-chain') + c('eeg-amplitude') },
-    { what: 'Blinks', value: `${RAW_DEFAULTS.blinkUv} µV, ${RAW_DEFAULTS.blinksPerMinute} per minute, about 190 ms wide at half height (reported values, not adjustable); a potential of the eye, the eyelid sliding over the cornea, not muscle activity`, cite: c('blink-amplitude') + c('blink-rate') + c('blink-width') + c('blink-mechanism') },
-    { what: 'Mains (50/60 Hz) interference', value: `${RAW_DEFAULTS.mainsUvcm / 1e3} mV of common-mode mains voltage on the body, rejected by ${RAW_DEFAULTS.cmrrDb} dB, with an electrode-impedance imbalance of 1 in ${fmt(1 / RAW_DEFAULTS.imbalanceRatio, 2)} letting a further fraction through (potential-divider effect): about 1.3 µV is left, so it is kept in the trace but not adjustable`, cite: c('common-mode') + c('cmrr-customary') + c('potential-divider') },
-    { what: 'Amplifier noise', value: `${RAW_DEFAULTS.ampUvRms} µV rms, white`, cite: c('ads1299') },
-    { what: 'Spectra', value: 'muscle noise band-limited to 20–300 Hz; skin noise with a 1/f spectrum', cite: c('emg-band') + c('skin-noise') },
+    { what: 'Alpha rhythm', value: `A 10 Hz sine wave with a slowly varying amplitude. The head model converts source strength to scalp amplitude at ${fmt(scalpUvPerNam, 2)} µV per nA·m, for a source 2 mm below the cortical surface ${c('alpha-source-chain')}. The default amplitude is 20 µV.`, cite: c('eeg-amplitude') },
+    { what: 'Blink settings', value: `Peak amplitude: ${RAW_DEFAULTS.blinkUv} µV ${c('blink-amplitude')}. Rate: ${RAW_DEFAULTS.blinksPerMinute} per minute ${c('blink-rate')}. Chosen Gaussian shape: about 190 ms wide at half the peak height.`, cite: c('noise-model-settings') },
+    { what: 'Blink source', value: 'The moving eyelid carries the eye’s electrical potential toward the frontal electrodes. The model adds this as an eye artifact.', cite: c('blink-mechanism') },
+    { what: 'Power-line interference', value: `The chosen body-voltage amplitude is ${RAW_DEFAULTS.mainsUvcm / 1e3} mV. The amplifier rejects shared interference by ${RAW_DEFAULTS.cmrrDb} dB ${c('cmrr-customary')}. A contact-impedance mismatch adds leakage. Together they leave about 1.3 µV in this example. These are fixed simulation settings, not adjustable measurements.`, cite: c('noise-model-settings') },
+    { what: 'Amplifier noise', value: `${RAW_DEFAULTS.ampUvRms} µV rms ${c('ads1299')}. The model spreads this noise evenly across frequencies (white noise).`, cite: c('noise-model-settings') },
+    { what: 'Noise frequencies', value: `Reported muscle activity spans roughly 20–300 Hz ${c('emg-band')}. The simulation filters muscle noise between 20 and 225 Hz ${c('noise-model-settings')}. Skin noise is stronger at low frequencies (1/f).`, cite: c('skin-noise') },
   ]);
 
   function update() {

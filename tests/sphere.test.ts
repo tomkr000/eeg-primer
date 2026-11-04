@@ -115,7 +115,7 @@ describe('multi-shell solver', () => {
       const dIn = (potential(sol, r - eps, theta, phi) - potential(sol, r - eps - h, theta, phi)) / h;
       const dOut = (potential(sol, r + eps + h, theta, phi) - potential(sol, r + eps, theta, phi)) / h;
       const jin = shells[n].sigma * dIn, jout = shells[n + 1].sigma * dOut;
-      // normalise by the natural current scale σ|V|/r: at the CSF/skull interface the radial current itself is ~100× smaller
+      // normalize by the natural current scale σ|V|/r: at the CSF/skull interface the radial current itself is ~100× smaller
       const scale = Math.max(Math.abs(jin), (shells[n].sigma * Math.abs(vin)) / r);
       expect(Math.abs(jin - jout) / scale).toBeLessThan(1e-4);
     }

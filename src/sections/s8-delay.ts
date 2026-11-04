@@ -67,59 +67,56 @@ export function simulateTrial(onset: number, ramp: number, T: number, drop: numb
 }
 
 export function mountDelay(root: HTMLElement) {
-  const sec = section(root, 'delay', '10', 'EEG signals have inherent delays', 'This makes control feel sluggish');
+  const sec = section(root, 'delay', '10', 'Reading an EEG signal takes time', 'The brain response and the decoder both contribute to the delay');
   prose(sec.text, `
-<p>Even a perfect electrode cannot report a thought the moment it happens, because what EEG reads is a
-rhythm, and a rhythm takes time both to change and to be measured. The sensorimotor mu rhythm over the hand
-area fades (desynchronises) when a movement is prepared or imagined and rebounds afterwards. Before a
-self-paced finger movement the fade begins about 1.75 s ahead of the movement; after a cue to imagine a
-movement, the motor cortex responds within about 300 ms and the imagery is best told apart about 1 s after
-the cue, which is why the first imagery BCI answered within 1.5 s ${c('erd-timecourse')}. A decoder then has
-to estimate how strong the rhythm is, and an estimate from a record of length T resolves frequencies no finer
-than 1/T and is noisy unless several segments are averaged, which costs resolution ${c('spectral-window')}.
-The sensorimotor BCI that reached three-dimensional control re-estimated its spectrum every 50 ms from the
-previous 400 ms, and competition imagery trials allotted 4 s each ${c('bci-windows')}. Evoked responses
-are no faster: the P300 peaks about 300 ms after its stimulus and spellers repeat each flash many times,
-up to 29 s per character ${c('p300-timing')}, and the quickest flicker spellers still need 0.3 to 0.5 s of
-stimulus plus 0.5 s for the eyes to move per character ${c('bci-windows')}.</p>
-<p>The figure follows the decoder's chain for one imagined movement. A mu rhythm as strong as section 7's alpha
-(an upper bound: mu is usually the weaker of the two, see section 6 ${c('mu-vs-alpha')}) starts
-to fade 0.3 s after the intention and settles within about a second, losing half its power ${c('erd-depth')}.
-To show the timing alone, the rhythm here is steady apart from that fade; section 9 showed how its own waxing
-and waning hides the fade in any one window. The decoder first filters out everything but the 8 to 13 Hz band,
-then averages the band's power over a sliding window, and fires when the estimate crosses halfway to the
-suppressed level. Each step adds time: the rhythm starts to fade only after the intention, its power takes the
-ramp to fall, and a trailing window reports the fall only once it has filled with faded signal, so the longer
-the window the later the decoder fires. A short window would be quick, but its estimate scatters (section 9),
-which is why decoders settle for about a second. The brain adds its own lead time too: the readiness potential that precedes a self-initiated
-movement begins about 2 s before it, and the moment people report deciding to move comes only about 200 ms
-before the movement, hundreds of milliseconds after the potential has started ${c('readiness-potential')}.
-Put together, typing with EEG carries a floor of roughly a second per decision that no electrode can
-remove.</p>`);
+<p>EEG interfaces can read rhythms or responses to events, as section 6 showed. For imagined-movement
+control, a decoder can look for a fall in the mu rhythm's power. In cued hand imagery, motor-cortex activation
+starts about 0.3 s after the cue, and classification from one trial is most accurate about 1 s after the cue
+${c('erd-timecourse')}. Those measurements start at an external cue; they do not time a person's private decision.</p>
+<p>The decoder also needs time to estimate power from a noisy signal. For example, one system that achieved
+three-dimensional control updated its spectrum every 50 ms using the previous 400 ms of EEG
+${c('bci-windows')}. Updating often still means reading a window of earlier data.</p>
+<p>The figure isolates these delays for one imagined movement. The button press defines the model's
+intention time. The chosen onset and fade duration are informed by cued-imagery timing
+${c('erd-timecourse')}. The rhythm is steady except for that fade, an explicit simplification; section 9
+includes its natural fluctuations. Its strength matches section 7's alpha rhythm, a generous assumption
+because mu is usually weaker ${c('mu-vs-alpha')}.</p>
+<p>The decoder keeps the chosen frequency band, then averages its squared voltage over a trailing window
+to estimate power. The threshold is halfway between resting power and the power after the fade is complete.
+Filtering delays the signal, and the window still contains earlier samples with higher power as the rhythm
+fades. The arm starts when the estimate first crosses below the threshold after the modeled intention.
+These are choices for this demonstration, not a universal delay for EEG ${c('delay-model')}.</p>
+<p>Event-based interfaces have different timing. The P300 peaks 250 to 500 ms after an attended, infrequent
+stimulus ${c('evoked-map')}; spellers often average repeated flashes to improve accuracy
+${c('p300-timing')}. Published flicker spellers use 0.3 to 0.5 s of stimulation and take 0.8 to 1 s per
+selection including the gaze shift ${c('bci-windows')}. Response latency and time per selection describe
+different parts of the task.</p>`);
 
-  const sWin = slider({ label: 'Analysis window length', unit: 's', min: 0.4, max: 3, value: 1, step: 0.05, note: c('bci-windows'), marks: [{ value: 1, label: 'Typical' }] });
-  const sDrop = slider({ label: 'Power lost during imagery (ERD)', unit: '%', min: 40, max: 90, value: P.erdPowerDrop * 100, step: 1, note: c('erd-depth'), marks: [{ value: P.erdPowerDrop * 100, label: 'Typical' }, { value: 85, label: 'Best case' }] });
-  const sOnset = slider({ label: 'Rhythm starts to fade after the intention', unit: 's', min: 0, max: 1.5, value: P.erdOnsetS, step: 0.05, note: c('erd-timecourse'), marks: [{ value: P.erdOnsetS, label: 'Typical' }] });
-  const sRamp = slider({ label: 'Time for the rhythm to fade fully', unit: 's', min: 0.1, max: 2, value: P.erdRampS, step: 0.05, note: c('erd-timecourse'), marks: [{ value: P.erdRampS, label: 'Typical' }] });
-  const rOnset = readout('Rhythm starts to fade');
-  const rTrue = readout('True power reaches the threshold');
-  const rDet = readout('Decoder fires and the arm moves');
+  const sWin = slider({ label: 'Analysis window length', unit: 's', min: 0.4, max: 3, value: 1, step: 0.05, note: c('delay-model') + c('bci-windows'), marks: [{ value: 1, label: 'Default' }] });
+  const sDrop = slider({ label: 'Power lost during imagery', unit: '%', min: 40, max: 90, value: P.erdPowerDrop * 100, step: 1, note: c('delay-model') + c('erd-depth'), marks: [{ value: P.erdPowerDrop * 100, label: 'Default' }, { value: 85, label: 'Study mean' }] });
+  const sOnset = slider({ label: 'Rhythm starts to fade after the intention', unit: 's', min: 0, max: 1.5, value: P.erdOnsetS, step: 0.05, note: c('delay-model') + c('erd-timecourse'), marks: [{ value: P.erdOnsetS, label: 'Default' }] });
+  const sRamp = slider({ label: 'Time for the rhythm to fade fully', unit: 's', min: 0.1, max: 2, value: P.erdRampS, step: 0.05, note: c('delay-model') + c('erd-timecourse'), marks: [{ value: P.erdRampS, label: 'Default' }] });
+  const rOnset = readout('Intention → fade starts');
+  const rTrue = readout('Intention → model power at threshold');
+  const rDet = readout('Intention → arm starts');
 
-  const fig = figure(sec.fig, `One imagined movement through the decoder's chain. Top: the scalp signal of section 7 (${sw('#eb6834', 'line')}), rhythm plus noise; the intention is at t = 0 and the rhythm fades after it (event-related desynchronisation, ERD), a change the raw trace barely shows. Middle: the decoder's first step, the 8 to 13 Hz band of that signal (${sw('#2a78d6', 'line')}), with the amplitude the rhythm should have at each moment, the resting amplitude falling along the fade (${sw('#898781', 'dash')}): the band's peaks hug it, and the step down is what the decoder has to detect. Bottom: the band's power as the decoder estimates it from a sliding window of the chosen length (${sw('#2a78d6', 'line')}), the true power (${sw('#898781', 'dash')}) and the threshold (${sw('#52514e', 'dash')}); the decoder fires where the estimate first crosses the threshold downwards after the intention, and the arm moves then. The readouts split the delay into the fade's onset, the time the true power takes to reach the threshold, and the window's lag. The rhythm is steady apart from the fade; section 9 has its real waxing and waning.`);
+  const fig = figure(sec.fig, `Top: the simulated scalp signal (${sw('#eb6834', 'line')}) combines the rhythm and noise around the modeled intention at t = 0. Middle: the filtered 8 to 13 Hz signal (${sw('#2a78d6', 'line')}) is shown with its expected amplitude including noise (${sw('#898781', 'dash')}). Bottom: the window's power estimate (${sw('#2a78d6', 'line')}) follows the model's expected band power including noise (${sw('#898781', 'dash')}), and its first downward threshold crossing after the intention starts the arm. Each readout measures time from the intention to its named endpoint ${c('delay-model')}.`);
   fig.viz.append(vizTitle('Scalp signal at one electrode around one imagined movement'));
   const top = linePlot(fig.viz, { x: { label: '', tip: 'Time from the intention', domain: [-2, 5] }, y: { label: 'µV', domain: [-50, 50], ticks: 3 }, height: 86, margin: { top: 8, bottom: 22 } });
-  fig.viz.append(vizTitle('The decoder’s first step: the 8 to 13 Hz band of that signal'));
+  fig.viz.append(vizTitle('Filtered scalp signal and expected amplitude'));
   const mid = linePlot(fig.viz, { x: { label: '', tip: 'Time from the intention', domain: [-2, 5] }, y: { label: 'µV', ticks: 3 }, height: 104, margin: { top: 8, bottom: 22 } });
-  fig.viz.append(vizTitle('Mu-band power over the sliding window versus the threshold'));
+  fig.viz.append(vizTitle('Estimated and modeled band power versus the threshold'));
   const bottom = linePlot(fig.viz, { x: { label: 'Time from the intention (s)', domain: [-2, 5] }, y: { label: 'Power (rest = 1)', domain: [0, 1.6], ticks: 3 }, height: 132, margin: { top: 10 } });
   fig.panel.append(controls(sWin.el, sDrop.el, sOnset.el, sRamp.el));
   const arm = robotArm(fig.panel, () => trial);
   fig.viz.append(readouts(rOnset.el, rTrue.el, rDet.el));
   assumptions(fig.el, [
-    { what: 'Rhythm', value: `a steady 10 Hz rhythm at the strength of section 7's alpha (an upper bound, mu being usually the weaker) in the same noise, without blinks; its power falls by the ERD fraction (${Math.round(P.erdPowerDrop * 100)}% by default) along a linear ramp that starts ${P.erdOnsetS} s after the intention and lasts ${P.erdRampS} s (adjustable). The rhythm's own waxing and waning, which section 9 models, is left out here so that the timing stands alone`, cite: c('erd-depth') + c('erd-timecourse') + c('alpha-source-chain') + c('mu-vs-alpha') },
-    { what: 'Estimator', value: 'the signal is band-passed to 8–13 Hz and its mean square over the trailing window is taken as the power, relative to the expected resting level; the threshold is halfway between the resting and the fully suppressed level', cite: c('spectral-window') },
-    { what: 'Detection', value: 'the first downward crossing of the threshold by the estimate after the intention moves the arm; the true power reaches the threshold when the ramp has taken it there', cite: '<span class="assumption-tag">model definition</span>' },
-    { what: 'Slider ranges', value: 'windows from 0.4 s, the window of the sensorimotor BCI that reached three-dimensional control, to 3 s, and fades of 40 to 90% of the power, around the measured 50% average and 85% best case; below those, the estimate\u2019s own jitter crosses the threshold by itself, the problem of section 9', cite: c('bci-windows') + c('erd-depth') },
+    { what: 'Rhythm and noise', value: 'A steady 10 Hz rhythm at section 7’s alpha strength, with the same noise sources except blinks; electrode–skin noise is fixed at 1 µV rms. The steady rhythm and generous mu strength simplify the demonstration.', cite: c('delay-model') + c('alpha-source-chain') + c('mu-vs-alpha') + c('skin-noise') },
+    { what: 'Fade', value: `The amplitude falls along a linear ramp. By default, the fade starts ${P.erdOnsetS} s after the modeled intention, lasts ${P.erdRampS} s, and reduces rhythm power by ${Math.round(P.erdPowerDrop * 100)}%. Timing is chosen from cued-imagery evidence; it is not a measured delay from thought.`, cite: c('delay-model') + c('erd-timecourse') + c('erd-depth') },
+    { what: 'Power estimate', value: 'The signal is filtered to 8–13 Hz. The trailing mean of squared voltage estimates its power. Both this estimate and its resting baseline include noise. The reference curves show expected band amplitude and power without filter delay or window averaging. The threshold lies halfway between expected resting and fully faded power.', cite: c('delay-model') },
+    { what: 'Detection and replay', value: 'The first downward threshold crossing after the modeled intention starts the arm. Every replay uses the same noise realization; the readouts all start at the intention.', cite: c('delay-model') },
+    { what: 'Chosen slider ranges', value: 'Window: 0.4 to 3 s; power loss: 40 to 90%; onset: 0 to 1.5 s; fade duration: 0.1 to 2 s. These are exploration settings, not measured population ranges.', cite: c('delay-model') },
+    { what: 'Study comparisons', value: 'One three-dimensional EEG system used a 0.4 s window. Imagery studies reported mean peak power losses around 50% and 85% under different conditions; these trial averages do not establish a best result for an individual window.', cite: c('bci-windows') + c('erd-depth') },
   ]);
 
   let trial = simulateTrial(sOnset.value, sRamp.value, sWin.value, sDrop.value / 100);
@@ -130,11 +127,11 @@ remove.</p>`);
     top.update([{ name: 'Scalp signal', points: pts(trial.raw), color: '#eb6834', width: 1 }], [{ axis: 'x', value: 0, label: 'intention' }]);
     mid.update([
       { name: '8 to 13 Hz band of the signal', points: pts(trial.mu), color: '#2a78d6', width: 1.2 },
-      { name: 'Amplitude of the rhythm as it fades', points: pts(trial.env), color: '#898781', dashed: true, width: 1.5 },
+      { name: 'Expected band amplitude', points: pts(trial.env), color: '#898781', dashed: true, width: 1.5 },
       { name: '', points: pts(Float64Array.from(trial.env, (v) => -v)), color: '#898781', dashed: true, width: 1.5, noLegend: true },
     ], [{ axis: 'x', value: 0, label: '' }]);
     bottom.update([
-      { name: 'True rhythm power', points: pts(trial.truth), color: '#898781', dashed: true, width: 1.5 },
+      { name: 'Model band power', points: pts(trial.truth), color: '#898781', dashed: true, width: 1.5 },
       { name: `Estimate from a ${fmt(sWin.value, 2)} s window`, points: pts(trial.rel), color: '#2a78d6', width: 2 },
     ], [
       { axis: 'y', value: threshold, label: 'threshold' },
@@ -148,29 +145,24 @@ remove.</p>`);
   [sWin, sDrop, sOnset, sRamp].forEach((sl) => sl.onChange(() => { run(); arm.reset(); }));
   run();
 
-  // timeline of the delay sources
-  const note = figure(sec.fig, '', { panelWidth: '0px' });
+  const note = figure(sec.fig, `Each row describes a separate task. An early cued-imagery system returned its classification within 1.5 s ${c('erd-timecourse')}. The P300 peaks 250 to 500 ms after an attended, infrequent stimulus; that is a response latency, not a whole letter selection ${c('evoked-map')}${c('p300-timing')}. One flicker-speller protocol used 0.5 s of stimulation and 0.5 s for a gaze shift per selection ${c('bci-windows')}. The rows are examples, not stages to add together or minimum delays for every interface.`, { panelWidth: '0px' });
   note.el.classList.add('figure-note');
-  note.viz.append(vizTitle('Time from intention or stimulus to decision, four paradigms'));
+  note.viz.append(vizTitle('Reported timings in three EEG interface examples'));
   note.viz.insertAdjacentHTML('beforeend', timelineSvg());
-  note.caption.innerHTML = `<strong>Where the time goes.</strong> After a cue to imagine a movement the motor cortex responds in about 0.3 s and the imagery is best told apart about 1 s later; a window of several cycles must then fill ${c('erd-timecourse')}${c('bci-windows')}. A P300 speller waits 0.3 s for each response and repeats the flashes, up to 29 s per character ${c('p300-timing')}. A flicker speller needs 0.5 s of stimulus and 0.5 s for the eyes to move ${c('bci-windows')}. And the brain starts before the person knows it: the readiness potential begins about 2 s before a self-initiated movement, while the reported decision comes only 0.2 s before it ${c('readiness-potential')}. None of these is an electrode problem.`;
 }
 
 function timelineSvg(): string {
-  const x = (t: number) => 410 + t * 135; // 135 px per second, t = 0 at the intention or stimulus (the movement, for the last row)
-  const row = (y: number, label: string, segs: { from: number; to: number; text: string; color: string; above?: boolean }[], decision?: number) => `
-    <text x="${x(-2) - 10}" y="${y + 5}" font-size="14" font-weight="600" text-anchor="end" fill="#1a1a1a" font-family="system-ui, sans-serif">${label}</text>
-    ${segs.map((sg) => `<rect x="${x(sg.from)}" y="${y - 11}" width="${x(sg.to) - x(sg.from)}" height="22" rx="4" fill="${sg.color}"/><text x="${(x(sg.from) + x(sg.to)) / 2}" y="${sg.above ? y - 15 : y + 5}" font-size="12.5" text-anchor="middle" fill="#1a1a1a" font-family="system-ui, sans-serif">${sg.text}</text>`).join('')}
-    ${decision === undefined ? '' : `<path d="M${x(decision)},${y - 13} l6,13 l-6,13 z" fill="#1a1a1a"/><text x="${x(decision) + 10}" y="${y + 5}" font-size="12.5" fill="#1a1a1a" font-family="system-ui, sans-serif">decision</text>`}`;
-  const ticks = [-2, -1, 0, 1, 2, 3].map((t) => `<line x1="${x(t)}" y1="196" x2="${x(t)}" y2="204" stroke="#52514e"/><text x="${x(t)}" y="218" font-size="12" text-anchor="middle" fill="#52514e" font-family="system-ui, sans-serif">${t} s</text>`).join('');
-  const axis = `<line x1="${x(0)}" y1="22" x2="${x(0)}" y2="200" stroke="#1a1a1a" stroke-width="1.5" stroke-dasharray="4 3"/><line x1="${x(-2)}" y1="200" x2="${x(3.2)}" y2="200" stroke="#898781"/>${ticks}<text x="${x(0)}" y="14" font-size="12" text-anchor="middle" fill="#52514e" font-family="system-ui, sans-serif">intention or stimulus</text>`;
-  return `<svg class="sync-svg" viewBox="0 0 850 225" width="850" height="225" role="img" aria-label="Timeline of EEG delays">
+  const x = (t: number) => 210 + t * 360;
+  const row = (y: number, label: string, segs: { from: number; to: number; text: string; color: string }[]) => `
+    <text x="190" y="${y + 5}" font-size="14" font-weight="600" text-anchor="end" fill="#1a1a1a" font-family="system-ui, sans-serif">${label}</text>
+    ${segs.map((sg) => `<rect x="${x(sg.from)}" y="${y - 11}" width="${x(sg.to) - x(sg.from)}" height="22" rx="4" fill="${sg.color}"/><text x="${(x(sg.from) + x(sg.to)) / 2}" y="${y + 5}" font-size="12.5" text-anchor="middle" fill="#1a1a1a" font-family="system-ui, sans-serif">${sg.text}</text>`).join('')}`;
+  const ticks = [0, 0.5, 1, 1.5].map((t) => `<line x1="${x(t)}" y1="171" x2="${x(t)}" y2="179" stroke="#52514e"/><text x="${x(t)}" y="193" font-size="12" text-anchor="middle" fill="#52514e" font-family="system-ui, sans-serif">${t} s</text>`).join('');
+  const axis = `<line x1="${x(0)}" y1="22" x2="${x(0)}" y2="175" stroke="#1a1a1a" stroke-width="1.5" stroke-dasharray="4 3"/><line x1="${x(0)}" y1="175" x2="${x(1.5)}" y2="175" stroke="#898781"/>${ticks}<text x="${(x(0) + x(1.5)) / 2}" y="216" font-size="12" text-anchor="middle" fill="#52514e" font-family="system-ui, sans-serif">Time from each task’s cue or stimulus</text>`;
+  return `<svg class="sync-svg" viewBox="0 0 850 225" width="850" height="225" role="img" aria-label="Separate examples: cued imagery classification within 1.5 seconds, P300 peak at 250 to 500 milliseconds, and a one-second flicker selection">
     ${axis}
-    ${row(45, 'Motor imagery', [{ from: 0, to: 0.3, text: 'cortex responds', color: '#dbe8f7', above: true }, { from: 0.3, to: 1.0, text: 'rhythm fades', color: '#bcd3f0' }, { from: 1.0, to: 1.5, text: 'window', color: '#9fc0e8' }], 1.5)}
-    ${row(90, 'P300 speller', [{ from: 0, to: 0.3, text: 'P300', color: '#fde1df', above: true }, { from: 0.3, to: 3.2, text: 'repeat the flashes and average: 3 to 29 s per character', color: '#f7c3bd' }])}
-    ${row(135, 'Flicker speller', [{ from: 0, to: 0.5, text: 'flicker', color: '#d8f0e6' }, { from: 0.5, to: 1.0, text: 'eyes move', color: '#b3e3cf' }], 1.0)}
-    ${row(180, 'The brain itself', [{ from: -2, to: -0.4, text: 'readiness potential builds for 2 s', color: '#efe7d7' }, { from: -0.4, to: 0, text: '', color: '#c3c2b7' }])}
-    <text x="${x(-0.2)}" y="${180 - 15}" font-size="12.5" text-anchor="end" fill="#1a1a1a" font-family="system-ui, sans-serif">reported decision 0.2 s before the movement ▸</text>
+    ${row(45, 'Cued imagery system', [{ from: 0, to: 1.5, text: 'classification within 1.5 s', color: '#bcd3f0' }])}
+    ${row(95, 'P300 response', [{ from: 0.25, to: 0.5, text: 'peak', color: '#f7c3bd' }])}
+    ${row(145, 'Flicker selection', [{ from: 0, to: 0.5, text: 'stimulation', color: '#d8f0e6' }, { from: 0.5, to: 1.0, text: 'gaze shift', color: '#b3e3cf' }])}
   </svg>`;
 }
 

@@ -6,40 +6,39 @@ import { P, claimCite as c, defaultHead } from '../data/params';
 import { section, figure, prose, readouts, assumptions, sw, vizTitle } from '../ui/layout';
 
 export function mountPopulation(root: HTMLElement) {
-  const sec = section(root, 'population', '2', 'Many neurons must fire synchronously to create larger signal');
-  // "How do neurons fall into step?": a heading above the figure, with the schematic and its note under a toggle
+  const sec = section(root, 'population', '2', 'Coordinated currents make larger signals');
   prose(sec.text, `
-<p>Fields add linearly ${c('superposition')}, so a patch of N cells is louder than one. How much louder
-depends on timing. If the cells’ synaptic currents rise and fall together, their dipoles add in phase
-and the far field grows as N. If their timing is unrelated, variances add instead of amplitudes and the sum
-grows only as √N ${c('variances-add')}. Geometry matters too: pyramidal cells stand in parallel,
-perpendicular to the cortical surface, so their dipoles point the same way and form an open field that
-survives at a distance; cells with dendrites in all directions form closed fields that cancel just outside
-the cell ${c('open-closed')}. Slow synaptic currents overlap in time; millisecond spikes rarely do, so the
-distant field is synaptic ${c('psp-dominate')}.</p>
-<p>The numbers: one layer-5 pyramidal cell carries about ${P.singleCellMomentRange[0]}–${P.singleCellMomentRange[1]} pA·m
-during a burst ${c('single-cell-moment')}; a source that is routinely measured from outside is about
-10 nA·m, which takes ${fmt(P.cellsFor10nAm[0], 2)}–${fmt(P.cellsFor10nAm[1], 2)} synchronous cells
-${c('cells-for-10nam')}. Cortex holds ${fmt(P.neuronsPerMm2, 3)} neurons per mm² ${c('neuron-density')},
-so those cells fit under half a square millimetre. In practice scalp visibility needs an area: spikes from
-under 6 cm² of cortex were never seen on the scalp, those from over 10 cm² usually were ${c('tao-area')}
-${c('area-rule')}.</p>
-<h3>Do supporting cells help?</h3>
-<p>No. Glia carry current, but mainly as slow shifts below 0.1 Hz, outside the EEG band ${c('glia-slow')},
-and they are not lined up into open fields. What does enlarge a source is more coherent current: dendritic
-calcium spikes ${c('ca-spike-moment')}, rhythmic drive that synchronises large populations
-${c('oscillations-synchrony')}, and inhibitory currents in active cells ${c('inhibitory-contrib')}. EEG sees
-individual sources of any orientation ${c('orientation')}. When several sources are active together,
-cortical folding can make their voltage contributions oppose and partly cancel ${c('patch-cancellation')}.
-The measured sum depends on both the timing and direction of the currents ${c('superposition')}${c('variances-add')}.</p>`);
+<p>Voltages from different cells add together ${c('superposition')}. Let N be the number of cells.
+When their currents rise and fall together and point the same way, the voltage amplitude grows in proportion
+to N. With unrelated timing, its typical amplitude grows only as the square root of N ${c('variances-add')}.</p>
+<p>Direction matters as much as timing. Nearby pyramidal cells tend to point perpendicular to the cortical
+surface, so their currents can reinforce each other. Cells with branches in many directions tend to produce
+voltages that cancel at a distance ${c('open-closed')}. Synaptic currents last longer and overlap more often
+than brief spikes. They are often the main source of the distant signal ${c('psp-dominate')}.</p>
+<p>A source commonly measured with EEG or magnetoencephalography (MEG) has a strength of about 10 nA·m.
+The unit combines current with distance, as in section 1. Estimates associate this strength with tens of
+thousands of cells acting together ${c('cells-for-10nam')}. The figure uses 200,000 cells with 10% in step
+to produce roughly that strength ${c('cells-for-10nam')}${c('single-cell-moment')}.</p>
+<p>A cell count alone does not establish scalp visibility. In a study of patients with epilepsy, discharges
+involving less than 6 cm² of cortex were never detected on the scalp. Those involving more than 10 cm²
+usually were ${c('tao-area')}. These observations concern extended epileptic discharges, not a universal
+area cutoff for every EEG signal ${c('area-rule')}.</p>
+<h3>What about supporting cells?</h3>
+<p>Supporting cells called glia also carry current. Their contribution is thought to consist mainly of
+very slow voltage changes, below 0.1 cycles per second ${c('glia-slow')}. Neuronal signals can grow through
+stronger dendritic currents ${c('ca-spike-moment')}, shared rhythmic activity ${c('oscillations-synchrony')},
+or inhibitory currents in active cells ${c('inhibitory-contrib')}.</p>
+<p>EEG is sensitive to individual sources pointing in different directions ${c('orientation')}. But when several
+sources are active, cortical folding can make their voltage contributions oppose and partly cancel.
+Even synchronized sources can therefore produce a smaller scalp signal ${c('patch-cancellation')}.</p>`);
 
   const sN = slider({ label: 'Neurons in the patch, N', min: 1, max: P.patchMaxN, value: P.patchDefaultN, log: true, format: (v) => fmt(Math.round(v), 3), marks: [{ value: P.patchDefaultN, label: 'Typical source' }] });
-  const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Seizure' }] });
+  const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'All in step' }] });
   const rMoment = readout('Net dipole moment');
   const rArea = readout('Cortical area of the patch', c('neuron-density') + c('pyramidal-fraction'));
   const rScalp = readout('Peak scalp potential (section 3 head)');
 
-  const fig = figure(sec.fig, `A patch of pyramidal cells in the cortex, with the layers above it to scale as in section 1 (each grid square is 0.5 mm). Each glyph stands for many cells; the glow is their summed field (${sw('#e34948', 'glow')} positive, ${sw('#2a78d6', 'glow')} negative). Cells firing out of step make a patchwork that cancels; cells in step merge into one large dipole whose field spreads further. The field is drawn as if the layers above were grey matter; what the skull does to it is section 3. The carets mark typical values: 200,000 cells with a tenth in step make the 10 nA·m source that is typically measured from outside, and a seizure drives nearly all of them together.`);
+  const fig = figure(sec.fig, `A modeled patch of pyramidal cells. Each cell symbol represents many cells. Their voltages add to form the glow (${sw('#e34948', 'glow')} positive, ${sw('#2a78d6', 'glow')} negative) ${c('superposition')}. Unrelated current timing causes partial cancellation; shared timing produces a stronger signal ${c('variances-add')}. Each grid square is 0.5 mm wide. The layers are drawn to scale, but the voltage calculation treats the tissue as uniform gray matter. Section 3 adds the layers' different conductivities. The default 200,000 cells with 10% in step approximate a typical 10 nA·m source ${c('cells-for-10nam')}${c('single-cell-moment')}. Full synchrony is an extreme model setting.`);
   const W = 620, H = 400;
   const xr: [number, number] = [-5e-3, 5e-3], yr: [number, number] = [-1.2e-3, -1.2e-3 + 10e-3 * H / W];
   const surface = P.somaDepthMm * 1e-3, csf = P.thicknessCsfMm * 1e-3, dura = P.thicknessDuraMm * 1e-3;
@@ -49,10 +48,11 @@ The measured sum depends on both the timing and direction of the currents ${c('s
   glowLegend(fig.viz, '0.1 µV', '10 mV');
   fig.panel.append(controls(sN.el, sF.el), readouts(rMoment.el, rArea.el, rScalp.el));
   assumptions(fig.el, [
-    { what: 'Per-cell source', value: `${P.singleCellMomentPAm} pA·m per cell (a layer-5 pyramidal cell during a burst), all cells aligned normal to the cortex`, cite: c('single-cell-moment') + c('open-closed') },
-    { what: 'Summation', value: 'the synchronous fraction adds coherently (as N); the rest adds as a random walk (as √N) with random phases', cite: c('superposition') + c('variances-add') },
-    { what: 'Patch', value: 'a square of cortex sized by the cell density, modelled as 16 × 16 macro-dipoles; the field is computed as in uniform grey matter, with the layers drawn to scale for orientation (section 3 solves the layers properly)', cite: c('neuron-density') + c('pyramidal-fraction') + c('cortex-layers') },
-    { what: 'Typical values', value: `${fmt(P.patchDefaultN, 3)} cells with a fraction ${P.patchDefaultSync} in step give ${fmt(P.patchDefaultN * P.patchDefaultSync * P.singleCellMomentPAm * 1e-3, 2)} nA·m, the typical measured source; the range of the N slider ends at ${fmt(P.patchMaxN, 2)} cells, about ${fmt(P.patchMaxN / (P.neuronsPerMm2 * P.pyramidalFraction) / 100, 2)} cm² of cortex`, cite: c('cells-for-10nam') + c('tao-area') },
+    { what: 'Per-cell source', value: `Each cell is assigned a dipole strength of ${P.singleCellMomentPAm} pA·m ${c('single-cell-moment')}. All currents point perpendicular to the cortical surface.`, cite: c('open-closed') },
+    { what: 'Summation', value: 'The cells in step add in proportion to their number. Contributions with unrelated timing add in squared amplitude, giving square-root growth in amplitude.', cite: c('superposition') + c('variances-add') },
+    { what: 'Patch', value: `Cell density sets the square patch's area ${c('neuron-density')}${c('pyramidal-fraction')}. A 16 × 16 grid represents groups of cells. The calculation treats all tissue as uniform gray matter; the drawn layers show their anatomical positions.`, cite: c('cortex-layers') },
+    { what: 'Default source', value: `${fmt(P.patchDefaultN, 3)} cells with ${P.patchDefaultSync * 100}% in step give about ${fmt(P.patchDefaultN * P.patchDefaultSync * P.singleCellMomentPAm * 1e-3, 2)} nA·m. These are model choices that approximate a typical measured source.`, cite: c('single-cell-moment') + c('cells-for-10nam') },
+    { what: 'Cell-count limit', value: `The slider ends at ${fmt(P.patchMaxN, 2)} cells. At the assumed cell density and pyramidal-cell fraction, that occupies about ${fmt(P.patchMaxN / (P.neuronsPerMm2 * P.pyramidalFraction) / 100, 2)} cm².`, cite: c('neuron-density') + c('pyramidal-fraction') },
   ]);
 
   const head = defaultHead();

@@ -5,7 +5,7 @@ import svd from '../src/data/leadfield-svd.json';
 // counts move, this test fails and the claim text must be updated.
 describe('precomputed lead-field singular values', () => {
   const montages = Object.keys(svd.models.bem) as (keyof typeof svd.models.bem)[];
-  it('has normalised, monotonically decreasing singular values for every model and montage', () => {
+  it('has normalized, monotonically decreasing singular values for every model and montage', () => {
     for (const model of ['bem', 'bem_subset', 'sphere'] as const) {
       for (const m of montages) {
         const s = svd.models[model][m].singular_values_normalised;

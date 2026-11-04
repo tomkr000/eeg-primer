@@ -22,7 +22,7 @@ export interface GlowCfg {
   fadeWhere?: (x: number, y: number) => number;
   /** compute the field at 1/scale resolution and upscale smoothly; overlays stay crisp (default 1) */
   scale?: number;
-  /** exponent applied to the normalised log magnitude before it becomes opacity (default 1.4; 1 is linear) */
+  /** exponent applied to the normalized log magnitude before it becomes opacity (default 1.4; 1 is linear) */
   gamma?: number;
   /** grid lines every `step` world units, numbered along the bottom and left edges as value × factor + unit */
   grid?: { step: number; factor: number; unit: string; xTitle?: string; yTitle?: string; labelEvery?: number; note?: string };
@@ -107,7 +107,7 @@ export function glow(container: HTMLElement, cfg: GlowCfg): Glow {
 export const CANVAS_FONT = '14px system-ui, sans-serif';
 
 export type TextPart = string | { sw: string };
-/** Draw a line of text in which colour swatches stand in for colour names; returns the x where it ends. */
+/** Draw a line of text in which color swatches stand in for color names; returns the x where it ends. */
 export function textWithSwatches(ctx: CanvasRenderingContext2D, parts: TextPart[], x: number, y: number, size = 12): number {
   ctx.save(); ctx.textAlign = 'left';
   for (const p of parts) {
@@ -156,15 +156,15 @@ function drawGrid(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], cfg: GlowCf
     ctx.fillText(text, px, py);
   };
   const every = g.labelEvery ?? 1;
-  const isLabelled = (v: number) => Math.abs(Math.round(v / (g.step * every)) * g.step * every - v) < g.step * 1e-6;
+  const isLabeled = (v: number) => Math.abs(Math.round(v / (g.step * every)) * g.step * every - v) < g.step * 1e-6;
   for (let x = x0; x <= x1 + 1e-12; x += g.step) {
-    if (!isLabelled(x)) continue;
+    if (!isLabeled(x)) continue;
     const [px] = toPx(x, 0);
     if (px < 24 || px > cfg.width - 24) continue;
     label(fmtTick(x), px, cfg.height - 5, 'center');
   }
   for (let y = y0; y <= y1 + 1e-12; y += g.step) {
-    if (!isLabelled(y)) continue;
+    if (!isLabeled(y)) continue;
     const [, py] = toPx(0, y);
     if (py < 14 || py > cfg.height - 22) continue;
     label(fmtTick(y), 4, py + 5, 'left');
@@ -177,14 +177,14 @@ function drawGrid(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], cfg: GlowCf
 
 /**
  * Shade and label the tissue layers above a cortical cell in a cross-section whose y axis is height above
- * the cell body (metres): grey matter up to the cortical surface, then CSF, dura and skull.
+ * the cell body (meters): gray matter up to the cortical surface, then CSF, dura and skull.
  */
 /**
  * The tissue above the cortex as horizontal tinted bands: CSF, dura and skull (sections 1 and 2, the skull
  * running to the top of the picture), or CSF, dura, skull, scalp and air when `skull` and `scalp` are given
  * (section 3). Bands too thin to label are named together at the left, and labels get a white halo.
  */
-export function drawCortexLayers(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], o: { xRange: [number, number]; yTop: number; surface: number; csf: number; dura: number; skull?: number; scalp?: number; greyLabelY?: number }): void {
+export function drawCortexLayers(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], o: { xRange: [number, number]; yTop: number; surface: number; csf: number; dura: number; skull?: number; scalp?: number; grayLabelY?: number }): void {
   const [x0] = toPx(o.xRange[0], 0), [x1] = toPx(o.xRange[1], 0);
   const w = x1 - x0;
   const top = o.surface + o.csf + o.dura;
@@ -214,19 +214,19 @@ export function drawCortexLayers(ctx: CanvasRenderingContext2D, toPx: Glow['toPx
     text(`${thin.join(' + ')} (thin)`, x0 + 8, yt - 4, 'left');
     text('cortical surface', x1 - 8, ys + 16, 'right');
   } else text('cortical surface', x1 - 8, ys - 6, 'right');
-  const [, yg] = toPx(0, o.greyLabelY ?? o.surface * 0.55);
-  text('grey matter', x1 - 8, yg, 'right');
+  const [, yg] = toPx(0, o.grayLabelY ?? o.surface * 0.55);
+  text('gray matter', x1 - 8, yg, 'right');
   ctx.restore();
 }
 
 
 export interface NeuronGlyphOpts {
-  /** horizontal position and vertical position of the soma centre (world units) */
+  /** horizontal position and vertical position of the soma center (world units) */
   x: number;
   soma: number;
   /** vertical position of the apical tuft (world units) */
   tuft: number;
-  /** stroke colour */
+  /** stroke color */
   color?: string;
   lineWidth?: number;
   /** draw basal dendrites and axon below the soma */
@@ -277,8 +277,8 @@ export function scaleBar(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], x0: 
   ctx.restore();
 }
 
-/** Legend for the glow colours. */
-/** The legend of a glow: colour swatches with their meaning, always visible. */
+/** Legend for the glow colors. */
+/** The legend of a glow: color swatches with their meaning, always visible. */
 export function glowLegend(container: HTMLElement, floor: string, ceiling: string, note?: string): void {
   const el = document.createElement('div');
   el.className = 'glow-legend';

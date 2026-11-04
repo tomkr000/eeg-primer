@@ -7,23 +7,22 @@ import { section, figure, prose, readouts, assumptions, sw, vizTitle } from '../
 export function mountNeuron(root: HTMLElement) {
   const sec = section(root, 'neuron', '1', 'Neurons make very small electric fields');
   prose(sec.text, `
-<p>A neuron does not radiate. When a synapse opens, current flows into the dendrite there (a sink) and
-leaves through the membrane near the cell body (a source). The loop closes through the extracellular
-fluid, and because tissue conducts, each point of current raises or lowers the potential around it in
-proportion to 1/distance ${c('quasistatic')}${c('monopole')}. A sink and a source a distance
-<span class="math">d</span> apart make a current dipole, <span class="math">p = I·d</span>, whose field
-falls as <span class="math">1/r²</span> beyond about <span class="math">d</span> ${c('dipole')}.</p>
-<p>The figure draws that field around a pyramidal cell in grey matter
-(σ ≈ ${P.sigmaGray} S/m ${c('sigma-gray')}). One synapse passes about 100 pA ${c('epsc')}; a cell driven by
-many passes about a nanoampere, the value implied by measured single-cell dipole moments and dendrite
-lengths ${c('cell-current')}.</p>
-<p>Measured in vivo, the spike of a single pyramidal cell is at least 60 µV within 50 µm of the soma and
-cannot be picked out of the noise beyond about 140 µm ${c('henze-50um')}${c('henze-140um')}; the slower
-synaptic field reaches about as far. The cell body of a layer-5 pyramidal cell sits about 1.5 to 2 mm below
-the cortical surface, in a cortex about 2.5 mm thick ${c('cortex-layers')}, with a millimetre of cerebrospinal
-fluid (CSF), the dura and the skull above that. At one centimetre a single cell contributes nanovolts, a
-thousand times below anything a scalp amplifier can separate from noise. One cell is invisible from
-outside.</p>`);
+<p>Synaptic activity drives current into a neuron's dendrite and out through other parts of its membrane.
+The current returns through the fluid around the cell. This creates a voltage, also called an electric
+potential, in the surrounding tissue ${c('quasistatic')}${c('monopole')}.</p>
+<p>The model represents the cell as a pair of points where current enters and leaves. This pair is a
+<strong>current dipole</strong>. Its strength is current I times the distance d between the points:
+<span class="math">p = I·d</span>. Far from the pair, doubling the distance from the cell reduces the voltage to about a
+quarter ${c('dipole')}.</p>
+<p>The current slider starts at about one nanoampere, or 1,000 picoamperes (pA). This is a model value
+inferred from published estimates of cell source strength and dendrite length ${c('cell-current')}. The figure calculates
+the voltage around one pyramidal neuron in uniform gray matter ${c('sigma-gray')}.</p>
+<p>Measurements show how local a single cell's signal is. In one rat hippocampus study, a cell's spike
+was at least 60 microvolts (µV) within 50 micrometers (µm) of its cell body ${c('henze-50um')}.
+Beyond about 140 µm, the spike could not be distinguished from noise ${c('henze-140um')}. A cortical cell
+also lies beneath brain tissue and the layers that separate the brain from the scalp ${c('cortex-layers')}.
+In this model, the voltage 1 cm from one cell is on the nanovolt scale ${c('dipole')}${c('cell-current')}.
+That is far below the microvolt noise of scalp contacts ${c('skin-noise')}.</p>`);
 
   const sI = slider({ label: 'Net synaptic current into the cell', unit: 'pA', min: 100, max: 5000, value: P.cellCurrentPa, log: true, note: c('cell-current'), marks: [{ value: P.cellCurrentPa, label: 'Average current' }] });
   const TH_UV = P.spikeNoiseUv; // detection floor: the noise of a silicon probe in the tissue (claim spike-noise-floor)
@@ -34,7 +33,7 @@ outside.</p>`);
   const rMeasured = readout('Measured: a single spike vanishes beyond', c('henze-140um'));
   rMeasured.set('140 µm');
 
-  const fig = figure(sec.fig, `One pyramidal cell in the cortex, seen in cross-section with the tissue layers above it to scale. Current enters at the dendritic tuft (${sw('#2a78d6', 'glow')} negative) and leaves at the cell body (${sw('#e34948', 'glow')} positive); the colour fades with the logarithm of the potential, and it is below 0.1 µV before it reaches the cortical surface. Each grid square is 0.25 mm; the field is computed as in uniform grey matter.`);
+  const fig = figure(sec.fig, `One modeled pyramidal cell, viewed from the side. Current enters at its dendritic tuft (${sw('#2a78d6', 'glow')} negative voltage) and leaves at its cell body (${sw('#e34948', 'glow')} positive voltage) ${c('dipole')}. The glow fades as voltage decreases, using a logarithmic scale. Each grid square is 0.25 mm wide. The tissue layers are drawn to scale, but this calculation treats all surrounding tissue as uniform gray matter ${c('sigma-gray')}${c('cortex-layers')}. Section 3 adds the effects of the head's layers.`);
   const W = 620, H = 400;
   const xr: [number, number] = [-3.1e-3, 3.1e-3], yr: [number, number] = [-0.9e-3, 3.1e-3];
   const surface = P.somaDepthMm * 1e-3, csf = P.thicknessCsfMm * 1e-3, dura = P.thicknessDuraMm * 1e-3;
@@ -44,11 +43,11 @@ outside.</p>`);
   glowLegend(fig.viz, '0.03 µV', '30 µV');
   fig.panel.append(controls(sI.el), readouts(rRadius.el, rMeasured.el, rAt1cm.el, rMoment.el));
   assumptions(fig.el, [
-    { what: 'Cell geometry', value: `synaptic current enters at the apical tuft and leaves at the cell body ${P.dipoleLengthUm} µm away (a layer-5 pyramidal cell), so the cell is two opposite point sources`, cite: c('dipole-length') + c('monopole') },
-    { what: 'Layers', value: `cell body ${P.somaDepthMm} mm below the cortical surface in a ${P.corticalThicknessMm} mm cortex; CSF ${P.thicknessCsfMm} mm and dura ${P.thicknessDuraMm} mm drawn to scale above it; the field itself is computed as in uniform grey matter (it is below 0.1 µV before it reaches the surface)`, cite: c('cortex-layers') + c('thickness-csf') + c('thickness-dura') },
-    { what: 'Tissue', value: `uniform grey matter, ${P.sigmaGray} S/m, purely resistive at these frequencies`, cite: c('sigma-gray') + c('quasistatic') },
-    { what: 'Current range', value: 'one synapse passes about 100 to 300 pA; a strongly driven cell a few nanoamps', cite: c('epsc') + c('cell-current') },
-    { what: 'Detection floor', value: `${TH_UV} µV rms, the noise of a silicon probe in the action-potential band; the detection distance scales as current ÷ noise`, cite: c('spike-noise-floor') },
+    { what: 'Cell geometry', value: `Two points represent current entering the tuft and leaving the cell body. They are ${P.dipoleLengthUm} µm apart.`, cite: c('dipole-length') + c('monopole') },
+    { what: 'Layers shown', value: `The drawn cell body is ${P.somaDepthMm + P.dipoleLengthUm / 2000} mm below the surface of a ${P.corticalThicknessMm} mm cortex ${c('cortex-layers')}. Above it are ${P.thicknessCsfMm} mm of cerebrospinal fluid (CSF) ${c('thickness-csf')} and ${P.thicknessDuraMm} mm of dura, the membrane around the brain.`, cite: c('thickness-dura') },
+    { what: 'Tissue calculation', value: `Uniform gray matter with conductivity ${P.sigmaGray} siemens per meter (S/m), a measure of how easily current flows ${c('sigma-gray')}. The model treats tissue as resistive at EEG frequencies.`, cite: c('quasistatic') },
+    { what: 'Current range', value: 'The slider ranges from 100 to 5,000 pA. The default is an illustrative cell-scale current inferred from source strength and cell length.', cite: c('cell-current') },
+    { what: 'Detection floor', value: `${TH_UV} µV root mean square (rms), a measure of noise size. This is the noise of a silicon probe inside tissue when recording spikes, rather than the noise of a scalp contact.`, cite: c('spike-noise-floor') },
   ]);
 
   function update() {

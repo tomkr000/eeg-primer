@@ -23,27 +23,25 @@ hero.innerHTML = `
   <h1>EEG primer: the physics of a non-invasive BCI</h1>`;
 const standfirst = document.createElement('div');
 standfirst.className = 'standfirst';
-standfirst.innerHTML = `<p>Scalp electroencephalography (EEG) listens to the brain from the far side of a
-  resistive bone, through fluid that shorts the signal sideways and skin that adds noise of its own. Interactive
-  models and diagrams show why one neuron is invisible from outside, what it takes for a population to be
-  seen, how much the head attenuates and blurs, how patches of cortex blur together from outside, how noise and
-  electrodes intervene, how many independent signals a non-invasive brain\u2013computer interface (BCI) can hope
-  to control, why every one of them arrives late, and how little more electrodes add. Every number carries a
-  citation, and every citation was checked by an independent auditor (see the verification log).</p>`;
+standfirst.innerHTML = `<p>Scalp electroencephalography (EEG) records voltage differences at the head.
+A brain–computer interface (BCI) can use these recordings to issue commands.</p>
+<p>The interactive models trace a signal from one cell to the scalp. They show how tissue, noise and
+ electrode contact affect the recording. Later sections explore independent commands, response delays
+and the benefit of adding electrodes. Physical claims link to sources and their verification status.</p>`;
 hero.append(inDepth(standfirst));
 const toc = document.createElement('nav');
 toc.className = 'toc';
 toc.setAttribute('aria-label', 'Sections');
 toc.innerHTML = `
     <a href="#neuron"><b>1</b> Neurons make very small electric fields</a>
-    <a href="#population"><b>2</b> Many neurons must fire synchronously to create larger signal</a>
-    <a href="#head"><b>3</b> Only large, multi-neuron signals reach outside the skull</a>
+    <a href="#population"><b>2</b> Coordinated currents make larger signals</a>
+    <a href="#head"><b>3</b> The head weakens and spreads cortical signals</a>
     <a href="#blur"><b>4</b> Patches of cortex blur into broad blobs at the scalp</a>
     <a href="#patches"><b>5</b> Local patches combine into changing scalp voltages</a>
     <a href="#synchrony"><b>6</b> EEG signals reveal rhythms and responses to events</a>
     <a href="#noise"><b>7</b> The signal that gets outside the skull is noisy</a>
-    <a href="#electrodes"><b>8</b> Different electrode types result in different signals</a>
-    <a href="#dimensions"><b>9</b> A head with EEG can operate only a few dimensions</a>
+    <a href="#electrodes"><b>8</b> Electrode contact affects signal loss and added noise</a>
+    <a href="#dimensions"><b>9</b> Overlapping rhythm changes make joint control harder</a>
     <a href="#delay"><b>10</b> EEG signals have inherent delays</a>
     <a href="#count"><b>11</b> Adding electrodes gives diminishing returns</a>
     <a href="#method">Method and caveats</a>

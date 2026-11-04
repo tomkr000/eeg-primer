@@ -7,31 +7,27 @@ import { netDipole } from '../physics/population';
 import { section, figure, prose, assumptions, readouts, sw, vizTitle } from '../ui/layout';
 
 export function mountHead(root: HTMLElement) {
-  const sec = section(root, 'head', '3', 'Between the brain and scalp, many layers attenuate signal', 'Only large-scale synchronous events get through');
+  const sec = section(root, 'head', '3', 'The head weakens and spreads cortical signals', 'Tissue layers change the voltage pattern before it reaches the scalp');
   prose(sec.text, `
-<p>Between a cortical source and a scalp electrode lie grey matter, a film of cerebrospinal fluid (CSF),
-the dura, the skull and the scalp, each with its own conductivity ${c('mccann-meta')}. CSF is the best
-conductor in the head (≈${P.sigmaCsf} S/m ${c('sigma-csf')}); the skull is by far the worst, around
-${P.sigmaSkull} S/m, some 15 to 80 times lower than brain depending on the measurement
-${c('sigma-skull')}${c('skull-brain-ratio')}. Scalp conducts about as well as brain ${c('sigma-scalp')}.</p>
-<p>Two things happen on the way out. The CSF offers an easy sideways path, so much of the return current is
-shunted along it before reaching the skull ${c('csf-shunt')}. The skull then resists the rest, so the
-current that does cross spreads tangentially first and emerges over a wide area. The scalp potential is a
-blurred, weakened image of the cortical one: features finer than a few centimetres are lost
-${c('spatial-lowpass')}.</p>
-<p>The figure takes the patch of section 2, N cells with a fraction firing in step, and places it at an
-adjustable depth in the classical concentric-sphere head, solved exactly ${c('sphere-model')} with measured
-thicknesses ${c('thickness-skull')}${c('thickness-scalp')}${c('thickness-csf')}${c('thickness-dura')}. The
-default patch, 100,000 cells with a tenth in step, is a 5 nA·m source and gives a few microvolts at the
-scalp, tens of times less than at the cortical surface for a focal source ${c('ecog-vs-eeg')}, consistent
-with scalp EEG at tens of microvolts ${c('eeg-amplitude')}; 10 nA·m, a typical measured source, takes
-10,000 to 50,000 cells in step ${c('cells-for-10nam')}. Nothing special happens at the skin: the potential continues into the
-air, halving about a centimetre above it ${c('exterior-potential')}, which is what an electrode held off
-the scalp has to work with, and why, as section 8 shows, it gets almost nothing: the coupling through air is
-far too weak to use what is there.</p>`);
+<p>Current from the cortex passes through several tissues before reaching the scalp. These include
+cerebrospinal fluid (CSF), the protective membrane called the dura, and the skull. Their conductivities
+describe how easily current flows ${c('mccann-meta')}. CSF conducts well ${c('sigma-csf')}; the skull
+conducts much less well than brain tissue ${c('sigma-skull')}${c('skull-brain-ratio')}.</p>
+<p>CSF lets current spread sideways before it reaches the skull ${c('csf-shunt')}. The poorly conducting
+skull further broadens and weakens the voltage pattern seen at the scalp. Fine spatial detail is strongly
+reduced ${c('spatial-lowpass')}. Section 4 shows how nearby sources can then look alike.</p>
+<p>The figure uses the cell-group model from section 2. At the default settings,
+${fmt(P.patchDefaultN, 3)} cells with ${P.patchDefaultSync * 100}% in step produce about
+${fmt(P.patchDefaultN * P.patchDefaultSync * P.singleCellMomentPAm * 1e-3, 2)} nA·m
+${c('single-cell-moment')}${c('cells-for-10nam')}. The head is represented by spherical layers with a
+shared center. The calculation solves that simplified geometry, rather than an individual person's head
+${c('sphere-model')}. The readouts compare voltage at the cortex and scalp as you change source depth.</p>
+<p>Voltage also extends into the air above the skin ${c('exterior-potential')}. That does not mean a plate
+held away from the scalp records it well: the air gap forms a very weak electrical connection.
+Section 8 examines this gap and the amplifier needed to measure through it ${c('noncontact-cap')}.</p>`);
 
   const sN = slider({ label: 'Neurons in the patch, N', min: 1, max: P.patchMaxN, value: P.patchDefaultN, log: true, format: (v) => fmt(Math.round(v), 3), marks: [{ value: P.patchDefaultN, label: 'Typical source' }] });
-  const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Seizure' }] });
+  const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'All in step' }] });
   const sDepth = slider({ label: 'Source depth below the cortical surface', unit: 'mm', min: 0.5, max: 25, value: 2, step: 0.5, marks: [{ value: 2, label: 'Gyral crown' }, { value: 20, label: 'Deep in a sulcus' }] });
   const TH_UV = 1; // dark contour: the quietest electrode contact alone (section 7 adds the rest)
   const orientation = 'radial' as const;
@@ -41,7 +37,7 @@ far too weak to use what is there.</p>`);
   const rRatio = readout('Cortex-to-scalp attenuation');
   const rWidth = readout(`Stretch of scalp above ${1} µV`);
 
-  const fig = figure(sec.fig, `Left: the layers between cortex and air in cross-section, drawn flat like sections 1 and 2 (the sphere model unrolled; axes in centimetres). ${sw('#e34948', 'glow')} positive, ${sw('#2a78d6', 'glow')} negative, fading with the logarithm of the potential. The ${sw('#1a1a1a', 'thick')} stretch of scalp is where an electrode on it would see more than 1 µV, the noise of the quietest electrode contact alone (section 7 adds the rest). The potential continues into the air, but no electrode can read it there: a square centimetre held a centimetre off the scalp couples through under a tenth of a picofarad, hopeless as section 8 shows, so the air is faded and the profile stops at the scalp. Right: the potential straight above the source, on the same vertical scale. The source is the patch of section 2 at the chosen depth, pointing outward.`, { panelWidth: '400px' });
+  const fig = figure(sec.fig, `Left: the head's layers, drawn flat for a side view of the spherical model. The source points outward at the selected depth ${c('sphere-model')}. The glow shows voltage (${sw('#e34948', 'glow')} positive, ${sw('#2a78d6', 'glow')} negative) on a logarithmic scale. The ${sw('#1a1a1a', 'thick')} bar marks scalp voltage magnitude above 1 µV, the noise of an unusually quiet contact alone ${c('skin-noise')}. Other noise is excluded. Right: voltage along the line directly above the source, with height aligned to the left panel. Voltage continues into air, but that part is faded in the drawing and omitted from the profile ${c('exterior-potential')}. Section 8 explains the difficulty of recording across an air gap.`, { panelWidth: '400px' });
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
@@ -49,23 +45,23 @@ far too weak to use what is there.</p>`);
   left.style.flex = '0 0 390px';
   row.append(left, right);
   fig.viz.append(row);
-  // picture coordinates: x along the scalp, y above the cortical surface (metres); the sphere is unrolled
+  // picture coordinates: x along the scalp, y above the cortical surface (meters); the sphere is unrolled
   const xRange: [number, number] = [-0.04, 0.04];
   const yRange: [number, number] = [-0.033, -0.033 + 0.08 * 330 / 390];
   let scalpY = Infinity; // height of the scalp surface above the cortex (set in update)
   left.append(vizTitle('Potential through the layers (cross-section)'));
   right.append(vizTitle('Potential versus height above the source'));
   const hm = glow(left, { width: 390, height: 330, scale: 2, xRange, yRange, floor: 1e-7, ceiling: 1e-4, fadeWhere: (_x, y) => (y > scalpY ? 0.3 : 1), grid: { step: 0.01, factor: 100, unit: 'cm', note: 'each grid square = 1 cm' } });
-  glowLegend(left, '0.1 µV', '100 µV', `${sw('#1a1a1a', 'thick')} scalp where an electrode sees > 1 µV; air faded: unreadable`);
+  glowLegend(left, '0.1 µV', '100 µV', `${sw('#1a1a1a', 'thick')} scalp where an electrode sees > 1 µV; air faded: weak electrode coupling`);
   const radial = verticalProfile(right, { height: 330, yDomain: [yRange[0] * 100, yRange[1] * 100], yLabel: 'cm above the cortical surface', xLabel: 'Potential straight above the source (µV)', xDomain: [0.1, 1e4] });
   fig.panel.append(controls(sN.el, sF.el, sDepth.el));
   fig.viz.append(readouts(rSource.el, rScalp.el, rCortex.el, rRatio.el, rWidth.el));
   assumptions(fig.el, [
-    { what: 'Head geometry', value: `concentric spheres, brain radius 8.0 cm; CSF ${P.thicknessCsfMm} mm, dura ${P.thicknessDuraMm} mm, skull ${P.thicknessSkullMm} mm, scalp ${P.thicknessScalpMm} mm (measured averages)`, cite: c('brain-radius') + c('sphere-model') + c('thickness-csf') + c('thickness-dura') + c('thickness-skull') + c('thickness-scalp') },
-    { what: 'Conductivities', value: `grey matter ${P.sigmaGray} S/m, CSF ${P.sigmaCsf}, dura ${P.sigmaDura}, skull ${P.sigmaSkull} (the key uncertain one: measured values span 0.003 to 0.08), scalp ${P.sigmaScalp}`, cite: c('sigma-gray') + c('sigma-csf') + c('sigma-dura') + c('sigma-skull') + c('sigma-scalp') },
-    { what: 'Source', value: `the patch of section 2 as one current dipole at the chosen depth, pointing outward (a gyral crown): N × fraction in step × ${P.singleCellMomentPAm} pA·m per cell, plus the √N random-walk part; a real source is a sheet, not a point`, cite: c('single-cell-moment') + c('variances-add') + c('cells-for-10nam') + c('orientation') },
-    { what: 'Detection floor', value: `${TH_UV} µV, the lower end of measured electrode–skin noise: the quietest contact alone, with muscle, blinks, mains and amplifier noise all removed; drawn grey above the scalp because a contact floor does not apply there (a plate in air couples through C = ε₀A/d, under 0.1 pF for 1 cm² at 1 cm)`, cite: c('skin-noise') + c('hair-permittivity') },
-    { what: 'Solution', value: 'Legendre series per degree with continuity of potential and radial current at each interface, 600 terms; the air above the scalp carries the exterior solution', cite: c('sphere-model') + c('exterior-potential') },
+    { what: 'Head geometry', value: `Spherical layers share one center ${c('sphere-model')}. Brain radius: 8.0 cm ${c('brain-radius')}. Layer thicknesses: CSF ${P.thicknessCsfMm} mm ${c('thickness-csf')}; dura ${P.thicknessDuraMm} mm ${c('thickness-dura')}; skull ${P.thicknessSkullMm} mm ${c('thickness-skull')}; scalp ${P.thicknessScalpMm} mm. These representative inputs come from different studies.`, cite: c('thickness-scalp') },
+    { what: 'Conductivities', value: `Values are in siemens per meter (S/m). Gray matter: ${P.sigmaGray} ${c('sigma-gray')}; CSF: ${P.sigmaCsf} ${c('sigma-csf')}; dura: ${P.sigmaDura} ${c('sigma-dura')}; skull: ${P.sigmaSkull} ${c('sigma-skull')}; scalp: ${P.sigmaScalp}.`, cite: c('sigma-scalp') },
+    { what: 'Source', value: `The cell group is represented by one outward-pointing current dipole. Each cell contributes ${P.singleCellMomentPAm} pA·m ${c('single-cell-moment')}. The fraction in step adds directly; the squared amplitudes of the remaining contributions add, as in section 2.`, cite: c('variances-add') },
+    { what: 'Detection floor', value: `${TH_UV} µV, the low end of measured electrode–skin noise. Muscle activity, blinks, electrical interference and amplifier noise are excluded. This threshold applies to a contact on the scalp, not a plate in air.`, cite: c('skin-noise') },
+    { what: 'Solution', value: `The calculation matches voltage and current across every tissue boundary ${c('sphere-model')}. It uses a 600-term Legendre expansion, a mathematical series for spherical geometry. A separate solution gives voltage in the insulating air.`, cite: c('exterior-potential') },
   ]);
 
   function build(): { shells: Shell[]; b: number } {
@@ -93,9 +89,9 @@ far too weak to use what is there.</p>`);
       if (r > R) break; // the profile stops at the scalp: nothing can read the field in the air
       prof.push([Math.abs(potential(sol, Math.min(r, R - 1e-9), 0, 0)) * 1e6, y * 100]);
     }
-    const layerColours = ['#2a78d6', '#1baf7a', '#eda100', '#898781', '#eb6834'];
+    const layerColors = ['#2a78d6', '#1baf7a', '#eda100', '#898781', '#eb6834'];
     const above = (r: number) => (r - rCortexSurf) * 100;
-    const bands = shells.map((sh, i) => ({ from: i === 0 ? yRange[0] * 100 : above(shells[i - 1].outerRadius), to: above(sh.outerRadius), label: i === 0 ? 'grey matter' : sh.name, color: layerColours[i % layerColours.length] }));
+    const bands = shells.map((sh, i) => ({ from: i === 0 ? yRange[0] * 100 : above(shells[i - 1].outerRadius), to: above(sh.outerRadius), label: i === 0 ? 'gray matter' : sh.name, color: layerColors[i % layerColors.length] }));
     bands.push({ from: above(R), to: yRange[1] * 100, label: 'air: unreadable', color: '#f4f1ea' });
     scalpY = R - rCortexSurf;
     radial.update(prof, bands, [{ value: TH_UV, label: '1 µV' }], (b - rCortexSurf) * 100);
@@ -118,7 +114,7 @@ far too weak to use what is there.</p>`);
     }, (ctx, toPx) => {
       ctx.save();
       const t = (i: number) => shells[i].outerRadius - shells[i - 1].outerRadius;
-      drawCortexLayers(ctx, toPx, { xRange, yTop: yRange[1], surface: 0, csf: t(1), dura: t(2), skull: t(3), scalp: t(4), greyLabelY: -0.012 });
+      drawCortexLayers(ctx, toPx, { xRange, yTop: yRange[1], surface: 0, csf: t(1), dura: t(2), skull: t(3), scalp: t(4), grayLabelY: -0.012 });
       ctx.font = CANVAS_FONT; ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'left';
       if (reach > 0) {
         // the black bar along the scalp; arrowheads where it runs past the edge of the picture

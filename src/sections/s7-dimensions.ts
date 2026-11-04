@@ -28,7 +28,7 @@ const MC = 600; // random windows per movement behind the readouts
 const seen = (erdPct: number, n: number) => (1 + erdPct / 100 + n) / (1 + n);
 
 export function mountDimensions(root: HTMLElement) {
-  const sec = section(root, 'dimensions', '7', 'A head with EEG can operate only a few dimensions', 'Few rhythms can be changed at will, their changes overlap, and each hides in the rhythm’s own fluctuation');
+  const sec = section(root, 'dimensions', '7', 'A head with EEG can operate only a few dimensions', 'Few rhythms can be changed at will, their changes overlap, and each change is smaller than the rhythm’s own swings');
   prose(sec.text, `
 <p>A dimension of control is a signal a person can move at will, independently of the others. With EEG the
 signals are the sensorimotor rhythms (the mu rhythm and its 20 Hz partner; mental tasks such as arithmetic or word

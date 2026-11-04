@@ -31,6 +31,18 @@ export const P = {
   erdRampS: 0.7, // time for the fade to complete, 'erd-timecourse' (provisional)
   erdPowerDrop: 0.5, // fraction of mu-band power lost during motor imagery, 'erd-depth'
   decoderBandHz: 3, // width of the rhythm's band, which sets the B·T degrees of freedom of a power estimate, 'erd-detect'
+  /**
+   * Change of mu power (%) at five cortical patches during four imagined movements. Columns: right hand, left hand,
+   * feet, tongue. Rows: the left hemisphere's hand area (C3), the right hemisphere's hand area (C4) and the foot area
+   * (Cz), claim 'mi-matrix'; the two tongue areas, claim 'tongue-areas'.
+   */
+  miResponse: [
+    [-84.7, -64.6, 89.3, 145.2],
+    [-71.6, -86.7, 112.7, 133.6],
+    [-58.3, -56.8, -21.3, 107.0],
+    [0, 0, 0, -85],
+    [0, 0, 0, -85],
+  ] as number[][],
   patchMaxN: 2e6, // top of the N sliders: about 17 mm² of cortex; with every cell in step a 1 µA·m seizure-sized source
   neuronsPerMm2: 147000, // 'neuron-density'
   pyramidalFraction: 0.8, // 'pyramidal-fraction'

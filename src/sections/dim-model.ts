@@ -107,7 +107,7 @@ export const nearestSource = (x: number, y: number, z: number) => { let best = 0
 export const at = (x: number, y: number, z: number, r?: number): Patch => ({ center: nearestSource(x, y, z), radiusMm: r ?? state.radiusMm });
 /** motor areas in fsaverage head coordinates (mm), converted from approximate MNI coordinates with MNE (claim motor-map) */
 export const MOTOR = (): Patch[] => [
-  { ...at(-38.8, 9.6, 98.9, 10), name: 'left hand' }, { ...at(35.2, 9.3, 98.9, 10), name: 'right hand' }, { ...at(-1.9, 5.2, 113.2, 10), name: 'feet' },
+  { ...at(-38.8, 9.6, 98.9, 10), name: 'right hand (left hemisphere)' }, { ...at(35.2, 9.3, 98.9, 10), name: 'left hand (right hemisphere)' }, { ...at(-1.9, 5.2, 113.2, 10), name: 'feet' },
   { ...at(-56.8, 25.3, 76.0, 10), name: 'tongue' }, { ...at(53.2, 25.0, 76.0, 10), name: 'tongue' },
 ];
 

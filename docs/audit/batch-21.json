@@ -1,0 +1,42 @@
+[
+ {
+  "id": "surround-ers",
+  "statement": "When one body part moves or is imagined, the mu rhythm over its own area desynchronizes while the rhythm over other, uninvolved areas can synchronize at the same time: foot movement increased the mu rhythm over both hand areas (three subjects), and imagining a foot movement increased the hand-area mu rhythm. The pattern, named focal ERD/surround ERS, is read as one area activated while the others are deactivated or inhibited at the same time, probably through thalamic gating, and has been proposed as a thalamo-cortical mechanism that sharpens the activation of one area by inhibiting the others; a model of thalamo-cortical networks reproduces it through cross-talk between the sectors of the thalamic reticular nucleus that correspond to distinct sensory modules. It is not seen in everyone: in ten other people, foot imagery desynchronized the hand areas as well.",
+  "sources": [
+   "Pfurtscheller G, Neuper C (1994). Event-related synchronization of mu rhythm in the EEG over the cortical hand area in man. Neuroscience Letters 174(1):93–96. doi:10.1016/0304-3940(94)90127-9",
+   "Neuper C, Wörtz M, Pfurtscheller G (2006). ERD/ERS patterns reflecting sensorimotor activation and deactivation. Progress in Brain Research 159:211–222. doi:10.1016/S0079-6123(06)59014-4",
+   "Pfurtscheller G (2003). Induced oscillations in the alpha band: functional meaning. Epilepsia 44(Suppl 12):2–8. doi:10.1111/j.0013-9580.2003.12001.x",
+   "Neuper C, Pfurtscheller G (2001). Event-related dynamics of cortical rhythms: frequency-specific features and functional correlates. International Journal of Psychophysiology 43(1):41–58. doi:10.1016/S0167-8760(01)00178-7",
+   "Suffczynski P, Kalitzin S, Pfurtscheller G, Lopes da Silva FH (2001). Computational model of thalamo-cortical networks: dynamical control of alpha rhythms in relation to focal attention. International Journal of Psychophysiology 43(1):25–40. doi:10.1016/S0167-8760(01)00177-5",
+   "Yi W, Qiu S, Qi H, Zhang L, Wan B, Ming D (2013). EEG feature comparison and classification of simple and compound limb motor imagery. Journal of NeuroEngineering and Rehabilitation 10:106. doi:10.1186/1743-0003-10-106"
+  ]
+ },
+ {
+  "id": "robot-arm",
+  "statement": "EEG-driven robots have added degrees of freedom by sequencing rather than by more simultaneous signals: in a reach-and-grasp study with a robotic arm (13 subjects, 8 to 15 sessions) the arm moved in two dimensions above the table and then in one dimension down to grasp, never more than two at once, and the authors note that continuous three-dimensional arm control would need at least three independent control signals; a quadcopter was steered with two imagery signals while its forward speed was fixed; and a robotic arm was moved in two dimensions by hand imagery while foot imagery gave a separate on/off click.",
+  "sources": [
+   "Meng J, Zhang S, Bekyo A, Olsoe J, Baxter B, He B (2016). Noninvasive electroencephalogram based control of a robotic arm for reach and grasp tasks. Scientific Reports 6:38565. doi:10.1038/srep38565",
+   "LaFleur K, Cassady K, Doud A, Shades K, Rogin E, He B (2013). Quadcopter control in three-dimensional space using a noninvasive motor imagery-based brain–computer interface. Journal of Neural Engineering 10(4):046003. doi:10.1088/1741-2560/10/4/046003",
+   "Forenzo D, Zhang Y, Wittenberg GF, He B (2025). Continuous reaching and grasping with a BCI controlled robotic arm in healthy and stroke-affected individuals. IEEE Transactions on Neural Systems and Rehabilitation Engineering 33:3888–3899. doi:10.1109/TNSRE.2025.3611821"
+  ]
+ },
+ {
+  "id": "compound-mi",
+  "statement": "Modelling choice: movements imagined at the same moment change each patch’s mu power by the product of their single changes, each raised to the intensity of its imagery (their log changes add), so a decoder calibrated on single movements reads a combination exactly apart from noise, and the person pays nothing for combining. No study gives the sizes of combined changes. With a hand and the opposite foot imagined together, each limb’s own area kept its desynchronization, which broadened in frequency, and no hand-area synchronization was reported (ten people); holding several imagined movements at once is described as often difficult for inexperienced users; and users who learned three-dimensional control needed extra practice to control all three dimensions at once. The model therefore flatters movements made together.",
+  "sources": [
+   "Yi W, Qiu S, Qi H, Zhang L, Wan B, Ming D (2013). EEG feature comparison and classification of simple and compound limb motor imagery. Journal of NeuroEngineering and Rehabilitation 10:106. doi:10.1186/1743-0003-10-106",
+   "Doud AJ, Lucas JP, Pisansky MT, He B (2011). Continuous three-dimensional control of a virtual helicopter using a motor imagery based brain-computer interface. PLoS ONE 6(10):e26322. doi:10.1371/journal.pone.0026322",
+   "McFarland DJ, Sarnacki WA, Wolpaw JR (2010). Electroencephalographic (EEG) control of three-dimensional movement. Journal of Neural Engineering 7(3):036007. doi:10.1088/1741-2560/7/3/036007"
+  ],
+  "note_to_auditor": "The first sentence is a modelling choice of the site and needs no source; check every other statement (the evidence summarised after it) against the cited sources. Statements attributed to claim mi-matrix are checked elsewhere; ignore them."
+ },
+ {
+  "id": "tongue-areas",
+  "statement": "Modelling choice: the two tongue areas lose 85% of their mu power during tongue imagery, about as much as the hand area opposite an imagined hand (claim mi-matrix), and do not respond to the other movements. No study gives this size from scalp EEG. The tongue’s representation is small and spread over both hemispheres, and real tongue movements add a glossokinetic potential; in the 1.5 s before the cue to start, tongue trials showed a desynchronization in 2 of 8 subjects and a synchronization in 2; imagined tongue movements activate the tongue regions of both hemispheres in functional magnetic resonance imaging (fMRI); the robust scalp sign of tongue imagery is the rise of the hand-area mu rhythm (claim mi-matrix). The assumption is generous.",
+  "sources": [
+   "Morash V, Bai O, Furlani S, Lin P, Hallett M (2008). Classifying EEG signals preceding right hand, left hand, tongue, and right foot movements and motor imageries. Clinical Neurophysiology 119(11):2570–2578. doi:10.1016/j.clinph.2008.08.013",
+   "Ehrsson HH, Geyer S, Naito E (2003). Imagery of voluntary movement of fingers, toes, and tongue activates corresponding body-part-specific motor representations. Journal of Neurophysiology 90(5):3304–3316. doi:10.1152/jn.01113.2002"
+  ],
+  "note_to_auditor": "The first sentence is a modelling choice of the site and needs no source; check every other statement (the evidence summarised after it) against the cited sources. Statements attributed to claim mi-matrix are checked elsewhere; ignore them."
+ }
+]

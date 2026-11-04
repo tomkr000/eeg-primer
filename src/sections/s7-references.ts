@@ -25,9 +25,12 @@ and checked for continuity of potential and current at every interface. Section 
 offline with MNE-Python’s boundary-element solver on the public fsaverage head ${cite('gramfort2013', 'mnefsaverage')}
 (<code>scripts/</code>); the page ships only the resulting matrices, and a unit test pins the quoted counts to that
 data. Section 5 synthesises a scalp channel from published noise magnitudes; section 6 passes that channel through
-lumped electrode–skin circuits. Section 7 treats a rhythm as band-limited Gaussian noise whose power, averaged over a
-window, is gamma distributed ${cite('condon2016')}; section 8 runs the same kind of rhythm through a sliding-window
-detector. Section 9 computes the best linear estimate of one patch from N electrodes on the sphere of section 3,
+lumped electrode–skin circuits. Section 7 drives a simulated arm: the measured responses of four imagined movements
+change the rhythms of five cortical patches, each rhythm is band-limited Gaussian noise whose power, averaged over a
+window, is gamma distributed ${cite('condon2016')}, and a decoder calibrated on each movement alone turns the patches'
+powers into one command per joint; unit tests check that the decoder undoes the overlap exactly, that its commands
+scatter as the gamma model says, and that the head of section 4 separates the patches. Section 8 runs the same kind
+of rhythm through a sliding-window detector. Section 9 computes the best linear estimate of one patch from N electrodes on the sphere of section 3,
 exactly in electrode space up to 128 electrodes and per spherical-harmonic degree above that; unit tests check that the
 two agree and that the simulated band power scatters as the gamma model says.</p>
 <p><strong>What they are not.</strong> Real heads are not spheres and skull properties vary by site and age

@@ -1,0 +1,60 @@
+[
+  {
+    "id": "surround-ers",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Pfurtscheller & Neuper 1994, Neurosci Lett 174:93-96: abstract only (Europe PMC, PMID 7970165)",
+      "Neuper, Wörtz & Pfurtscheller 2006, Prog Brain Res 159:211-222: abstract only (Europe PMC, PMID 17071233)",
+      "Pfurtscheller 2003, Epilepsia 44 Suppl 12:2-8: abstract only (Europe PMC, PMID 14641556)",
+      "Neuper & Pfurtscheller 2001, Int J Psychophysiol 43:41-58: abstract only (Europe PMC, PMID 11742684)",
+      "Suffczynski et al. 2001, Int J Psychophysiol 43:25-40: abstract only (Europe PMC, PMID 11742683)",
+      "Yi et al. 2013, J NeuroEng Rehabil 10:106: full text (Europe PMC PMC3853015)"
+    ],
+    "evidence_location": "Pfurtscheller & Neuper 1994 abstract: 3 subjects, 56 electrodes; foot movement gave ERS of mu at electrodes over both hand areas. Neuper 2006 abstract: 12 volunteers; imagined foot movement increased the hand-area mu rhythm. Pfurtscheller 2003 abstract: the name 'focal ERD/surround ERS', activated area plus 'simultaneously deactivated or inhibited other areas', ERS 'very likely mediated by thalamic gating'. Neuper & Pfurtscheller 2001 abstract: hypothesized 'thalamo-cortical mechanism to enhance focal cortical activation by simultaneous inhibition of other cortical areas'. Suffczynski 2001 abstract: depends on thalamo-cortical/reticular (TCR-RE) interaction and its cholinergic modulation; 'essential feature' is cross-talk between RE sectors for distinct sensory modules. Yi 2013: Discussion, 'Characteristics of compound limb motor imagery', first paragraph; Results Figs 2 and 6 (one subject) and Figs 3 to 5 (group means).",
+    "quote": "The imagination of feet movement desynchronized the alpha band over not only the feet but also the hand representation area",
+    "discrepancy": "All statements up to the last sentence are supported by the abstracts. Last sentence (Yi 2013), minor: the task was imagery of both feet ('feet'), the finding concerns the alpha band, and it is shown in one subject's time-frequency maps and topography (Figs 2, 6) and in group-mean spectra (Figs 3 to 5); the paper does not report that each of the ten people showed it. Yi also notes, citing Pfurtscheller et al. 2006, that this widespread ERD 'was not found in every subject'. Also minor: in Suffczynski's model the phenomenon depends on the TCR-RE interaction and its cholinergic modulation, with cross-talk between RE sectors called 'an essential feature', not the only mechanism.",
+    "suggested_fix": "It is not seen in everyone: in another study of ten people, imagining both feet desynchronized the alpha band over the hand areas as well (shown in one subject's maps and in the group means).",
+    "bibliographic_issues": "None. All six records match Europe PMC (authors, year, journal, volume, issue, pages, DOI)."
+  },
+  {
+    "id": "robot-arm",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Meng et al. 2016, Sci Rep 6:38565: full text (Europe PMC PMC5155290)",
+      "LaFleur et al. 2013, J Neural Eng 10:046003: full text, author manuscript (NCBI efetch PMC3839680)",
+      "Forenzo et al. 2025, IEEE TNSRE 33:3888-3899: full text (Europe PMC PMC12548837)"
+    ],
+    "evidence_location": "Meng 2016: Introduction, last paragraph (two stages: 2D plane to above the object, then down in the third dimension); Results, 'Brain-control tasks' (13 subjects, 8 to 15 sessions); Discussion, 'Sequential low dimensional control vs. fluid 3D control' ('requires at least three independent control signals'). LaFleur 2013: Methods, 'Experimental Paradigm' (right/left hand imagery turns, both hands rise, rest falls; constant forward signal, 0.69 m/s without rotation; turning attenuated forward velocity); Results, 'Subject Speed of Control'. Forenzo 2025: Abstract; Methods, 'Motor Imagery Paradigm' (left/right hand, both hands up, rest down; one or both feet imagery 'on', rest 'off'); Results, 'Group-Level Results'.",
+    "quote": "[Forenzo] subjects were able to control both movement and clicking simultaneously / [LaFleur] Turning the quadcopter attenuated its forward velocity significantly",
+    "discrepancy": "Meng 2016 checks out: 13 subjects, 8 to 15 sessions, 2D then 1D, and 'Fluid 3D ... continuous control ... with high accuracy ... requires at least three independent control signals'. (1) The lead framing 'by sequencing rather than by more simultaneous signals' fits only Meng. LaFleur held one degree of freedom at a constant command instead of sequencing. Forenzo present the click as an additional output signal decoded alongside the 2D movement: subjects controlled 'both movement and clicking simultaneously' using 'two different MI paradigms simultaneously'. (2) LaFleur fixed the forward command, not the speed: velocity was 0.69 ± 0.02 m/s only without rotation, turning attenuated it, and subjects 'were able to manipulate the speed by rotating and adjusting the altitude'. (3) Minor: in Forenzo (and LaFleur) downward motion came from rest, not hand imagery; the click came from imagery of one or both feet.",
+    "suggested_fix": "EEG-driven robots have added degrees of freedom by sequencing, by holding one fixed or by an on/off switch, rather than by more continuous signals: [Meng sentence unchanged]; a quadcopter was steered with two imagery signals (turning and altitude) under a constant forward command; and a robotic arm was moved in two dimensions by hand imagery and rest while foot imagery, decoded at the same time, gave a separate on/off click.",
+    "bibliographic_issues": "None. Meng (Sci Rep 6:38565), LaFleur (J Neural Eng 10(4):046003) and Forenzo (IEEE TNSRE 33:3888-3899, 2025) match Europe PMC, with authors as cited."
+  },
+  {
+    "id": "compound-mi",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Yi et al. 2013, J NeuroEng Rehabil 10:106: full text (Europe PMC PMC3853015)",
+      "Doud et al. 2011, PLoS ONE 6:e26322: full text (Europe PMC PMC3202533)",
+      "McFarland et al. 2010, J Neural Eng 7:036007: full text, author manuscript (NCBI efetch PMC2907523)"
+    ],
+    "evidence_location": "Yi 2013: Methods, 'Event-related spectral perturbation' (ERSP averaged over the 4 s of imagery, then over all subjects); Results ERSP paragraphs and Figs 3 to 5 (group-mean power change versus frequency at C3, Cz, C4, compound versus simple imagery, paired t-tests); topography paragraph and Fig 6 (one subject: 'strong ERD on both hand areas and another midcentral ERD'); Discussion ('the homolatertal hand area is also activated'); Methods, 'Experimental procedure' (ten subjects, no prior MI-BCI experience, one week of training). Doud 2011: Discussion (multiple simultaneous motor imageries 'often complicated for the inexperienced user'); Introduction ('transition between 2D and 3D control remains difficult'). McFarland 2010: Discussion, first paragraph ('They did need further practice to control three dimensions simultaneously'); Methods (1-D for 1 to 4 sessions, 2-D for 10 to 12, then 3-D for 21 to 42; four users).",
+    "quote": "[Yi] Then the mean power changes were computed by averaging over all subjects. / [Doud] a task often complicated for the inexperienced user",
+    "discrepancy": "(1) 'No study gives the sizes of combined changes' is contradicted by the cited Yi 2013. Figs 3 to 5 plot the group-mean power change against frequency (ERSP averaged over the 4 s of imagery and over the ten subjects) at C3, Cz and C4 for both-hands, left-hand-plus-right-foot and right-hand-plus-left-foot imagery next to the single movements. The sizes are given only graphically (no table of band-power values), and the paper does not test whether a combined change equals the product of the single ones. (2) Dropped nuance: during hand plus opposite-foot imagery Yi report ERD on both hand areas, including the hand not imagined; 'no hand-area synchronization was reported' is true but understates this. The rest checks out: broadened ERD at C3, Cz and C4; ten people; Doud's 'often complicated' for inexperienced users; McFarland's 'further practice' for three dimensions at once (four users).",
+    "suggested_fix": "No study tests whether combined changes equal the product of the single ones; one (Yi et al., ten people) plots only group-mean spectra at C3, Cz and C4. With a hand and the opposite foot imagined together, each limb's own area kept its desynchronization, which broadened in frequency, and both hand areas desynchronized, including the one not imagined (ten people); ...",
+    "bibliographic_issues": "None. Yi (J NeuroEng Rehabil 10:106), Doud (PLoS ONE 6(10):e26322) and McFarland (J Neural Eng 7(3):036007) match Europe PMC."
+  },
+  {
+    "id": "tongue-areas",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "Morash et al. 2008, Clin Neurophysiol 119:2570-2578: full text, author manuscript (NCBI efetch PMC2602863)",
+      "Ehrsson et al. 2003, J Neurophysiol 90:3304-3316: abstract only (Europe PMC, PMID 14615433)"
+    ],
+    "evidence_location": "Morash 2008: Discussion, 'Implications for BCI applications' (tongue representation small and bilateral; glossokinetic potential); Results, 'CNV and ERD/ERS visualizations', and Table 1 (preparatory ERD/ERS per subject: tongue imagery ERD in subjects 1 and 2, ERS in 5 and 6; tongue movement ERD in 7, ERS in 5 and 6); Methods (8 naive subjects, S2 is the go cue, classification on the 1.5 s before S2). Ehrsson 2003 abstract (fMRI, 7 subjects; tongue imagery activates the tongue region of the primary motor and premotor cortex bilaterally, areas 4a, 4p and 6).",
+    "quote": "The tongue representation is relatively small and distributed across both hemispheres.",
+    "discrepancy": "The counts '2 of 8 desynchronized, 2 synchronized' match Morash Table 1 for tongue imagery only; for tongue movement trials they are 1 ERD (subject 7) and 2 ERS (subjects 5, 6), so 'tongue trials' should say imagery. Dropped nuances: these are preparatory changes before the go cue, not during the imagery; they were judged by eye as sustained 8 to 30 Hz changes over 'mostly motor channels' (the tongue ERS shown is at CP2), not measured at the tongue areas; and two of the eight (subjects 7, 8) did not do the imagery adequately (no CNV). 'No study gives this size from scalp EEG' cannot be checked as a universal negative, though neither cited source gives one (Morash reports presence only, Ehrsson is fMRI). The glossokinetic potential, small bilateral representation and Ehrsson's bilateral fMRI activation all check out.",
+    "suggested_fix": "... in the 1.5 s before the cue to start, tongue imagery showed a desynchronization over the motor channels in 2 of 8 subjects and a synchronization in 2 (judged by eye; two of the eight did not perform the imagery properly); ...",
+    "bibliographic_issues": "None. Morash (Clin Neurophysiol 119(11):2570-2578) and Ehrsson (J Neurophysiol 90(5):3304-3316) match Europe PMC."
+  }
+]

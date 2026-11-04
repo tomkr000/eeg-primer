@@ -200,39 +200,6 @@ export function restVersusImagery(depth: number, B: number, T: number, rho: numb
   return { k, mRest, mTask, tRest, tTask, threshold, correct };
 }
 
-/** a gamma draw with shape k ≥ 1 and scale θ (Marsaglia and Tsang), for single-window power estimates */
-export function gammaSample(k: number, theta: number, rng: () => number): number {
-  const d = k - 1 / 3, c = 1 / Math.sqrt(9 * d);
-  for (;;) {
-    const u1 = Math.max(rng(), 1e-12), u2 = rng(), z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2), v = (1 + c * z) ** 3;
-    if (v <= 0) continue;
-    const u = rng();
-    if (Math.log(Math.max(u, 1e-300)) < 0.5 * z * z + d - d * v + d * Math.log(v)) return d * v * theta;
-  }
-}
-
-/**
- * Which of several imagined movements: each class c gives the electrodes mean relative powers `means[c]` (rest = 1),
- * a window's estimate at each electrode is gamma distributed with shape k = BT about its mean, and the decoder picks the
- * class with the highest likelihood. Returns the share of windows called right, per class and overall, from `n` draws
- * per class (electrodes are taken as independent, which flatters the decoder).
- */
-export function classifyWindows(means: number[][], k: number, n: number, seed = 1): { perClass: number[]; overall: number } {
-  const rng = mulberry32(seed), C = means.length, E = means[0].length, hits = new Array(C).fill(0);
-  for (let c = 0; c < C; c++) for (let i = 0; i < n; i++) {
-    const x = means[c].map((m) => gammaSample(k, m / k, rng));
-    let best = -1, bestLL = -Infinity;
-    for (let d = 0; d < C; d++) {
-      let ll = 0;
-      for (let e = 0; e < E; e++) ll += -k * Math.log(means[d][e]) - (k * x[e]) / means[d][e];
-      if (ll > bestLL) { bestLL = ll; best = d; }
-    }
-    if (best === c) hits[c]++;
-  }
-  const perClass = hits.map((h) => h / n);
-  return { perClass, overall: perClass.reduce((a, v) => a + v, 0) / C };
-}
-
 /**
  * An m-way choice: the person imagines one of m movements, each lowering the power of its own rhythm, read in its own
  * channel (independent, an upper bound: real scalp patterns overlap); the decoder picks the channel whose power fell

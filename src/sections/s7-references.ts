@@ -24,19 +24,19 @@ ${cite('demunck1993', 'nunez2019')}; the solver is unit-tested against the close
 and checked for continuity of potential and current at every interface. Section 4 uses a lead field computed
 offline with MNE-Python’s boundary-element solver on the public fsaverage head ${cite('gramfort2013', 'mnefsaverage')}
 (<code>scripts/</code>); the page ships only the resulting matrices, and a unit test pins the quoted counts to that
-data. Section 5 synthesises a scalp channel from published noise magnitudes; section 6 passes that channel through
-lumped electrode–skin circuits. Section 7 drives a simulated arm: the measured responses of four imagined movements
+data. Section 5 illustrates local patches and their signed voltage contributions; section 6 describes EEG rhythms and event responses. Section 7 synthesises a scalp channel from published noise magnitudes; section 8 passes that channel through
+lumped electrode–skin circuits. Section 9 drives a simulated arm: the measured responses of four imagined movements
 change the rhythms of five cortical patches, each rhythm is band-limited Gaussian noise whose power, averaged over a
 window, is gamma distributed ${cite('condon2016')}, and a decoder calibrated on each movement alone turns the patches'
 powers into one command per joint; unit tests check that the decoder undoes the overlap exactly, that its commands
-scatter as the gamma model says, and that the head of section 4 separates the patches. Section 8 runs the same kind
-of rhythm through a sliding-window detector. Section 9 computes the best linear estimate of one patch from N electrodes on the sphere of section 3,
+scatter as the gamma model says, and that the head of section 4 separates the patches. Section 10 runs the same kind
+of rhythm through a sliding-window detector. Section 11 computes the best linear estimate of one patch from N electrodes on the sphere of section 3,
 exactly in electrode space up to 128 electrodes and per spherical-harmonic degree above that; unit tests check that the
 two agree and that the simulated band power scatters as the gamma model says.</p>
 <p><strong>What they are not.</strong> Real heads are not spheres and skull properties vary by site and age
 ${cite('mccann2019', 'tang2008')}; sources are sheets, not points, which is why the cortex-to-scalp ratio
 ranges from 50–100 for a point dipole to 2–5 for a large synchronous sheet ${cite('nunez2019')}. The
-accuracies in sections 7 and 9 are upper bounds: real rhythms fluctuate more than Gaussian noise of the same
+accuracies in sections 9 and 11 are upper bounds: real rhythms fluctuate more than Gaussian noise of the same
 bandwidth, the imagery classes overlap, and a real decoder learns its weights from limited calibration data. Some inputs rest on thin
 evidence: electrode impedances were measured on the forearm ${cite('chi2010')}, the scalp thickness comes
 from a case report, and the noise levels per electrode type are assumptions guided by the measured
@@ -59,7 +59,7 @@ export function mountVerification(root: HTMLElement) {
   table.className = 'claims-table';
   table.innerHTML = `<thead><tr><th>#</th><th>Claim</th><th>Sources</th><th>Status</th></tr></thead>`;
   const tb = document.createElement('tbody');
-  const sectionNames = ['', 'Neuron', 'Population', 'Head', 'Noise', 'Electrodes', 'Dimensionality', 'Delays'];
+  const sectionNames = ['', 'Neuron', 'Population', 'Head', 'Scalp maps', 'Patches and sums', 'EEG signals', 'Noise', 'Electrodes', 'Dimensionality', 'Delays', 'Electrode count'];
   for (const c of CLAIMS) {
     const tr = document.createElement('tr');
     tr.id = `claim-${c.id}`;

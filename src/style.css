@@ -211,3 +211,84 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .references li { margin-bottom: 5px; }
 .references li:target { background: rgba(42, 120, 214, 0.1); }
 .site-foot { font-family: var(--sans); font-size: 13px; color: var(--ink-2); margin-top: 28px; }
+
+/* The rhythm aside: short callouts beside a shared head, then one idea per note. */
+.rhythm-guide { grid-template-columns: minmax(0, 1fr); }
+.rhythm-guide figcaption, .rhythm-note { min-width: 0; }
+.rhythm-map { display: grid; grid-template-columns: minmax(0, 1fr) 320px minmax(0, 1fr); gap: 16px; max-width: 1040px; width: 100%; margin: 8px auto; }
+.rhythm-head { display: block; width: 320px; height: 400px; }
+.rhythm-labels { display: grid; min-width: 0; height: 400px; }
+.rhythm-labels-left { grid-template-rows: repeat(3, 1fr); text-align: right; }
+.rhythm-labels-right { grid-template-rows: repeat(4, 1fr); }
+.section .rhythm-callout h3 { font-family: var(--sans); font-size: 14.5px; line-height: 1.4; margin: 6px 0 3px; }
+.rhythm-callout p { font-family: var(--sans); font-size: 14px; line-height: 1.4; margin: 0; color: var(--ink-2); }
+.rhythm-notes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 32px; border-top: 1px solid var(--rule); padding-top: 14px; }
+.section .rhythm-note h3 { font-family: var(--sans); font-size: 16px; line-height: 1.35; margin: 0 0 7px; }
+.rhythm-note p { margin: 0 0 8px; }
+.rhythm-note p:last-child { margin-bottom: 0; }
+.rhythm-model-note { color: var(--ink-2); font-size: 13px; }
+.rhythm-responses { grid-column: 1 / -1; }
+.rhythm-signal-table { border-collapse: collapse; width: 100%; margin: 10px 0; font-family: var(--sans); font-size: 14px; line-height: 1.45; }
+.rhythm-signal-table th, .rhythm-signal-table td { text-align: left; vertical-align: top; padding: 10px 16px 10px 0; border-bottom: 1px solid var(--grid); }
+.rhythm-signal-table thead th { font-size: 12.5px; color: var(--ink-2); }
+.rhythm-signal-table tbody th { width: 25%; font-weight: 600; }
+.rhythm-signal-table tbody th span { font-size: 12.5px; font-weight: 400; color: var(--ink-2); }
+.rhythm-signal-table td { width: 37.5%; }
+.rhythm-signal-table td:last-child { padding-right: 0; }
+.rhythm-map-key { font-family: var(--sans); color: var(--ink-2); font-size: 12.5px; margin: 0 0 4px; }
+@media (max-width: 780px) {
+  .rhythm-map { grid-template-columns: 1fr 1fr; gap: 18px; }
+  .rhythm-head { grid-column: 1 / -1; grid-row: 1; justify-self: center; max-width: 100%; height: auto; }
+  .rhythm-labels { height: auto; display: flex; flex-direction: column; gap: 16px; text-align: left; }
+  .rhythm-notes { grid-template-columns: 1fr; }
+}
+@media (max-width: 430px) {
+  .rhythm-map { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .rhythm-signal-table, .rhythm-signal-table tbody { display: block; }
+  .rhythm-signal-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .rhythm-signal-table tr { display: block; padding: 12px 0; border-bottom: 1px solid var(--grid); }
+  .rhythm-signal-table tbody th, .rhythm-signal-table td { display: block; width: auto; border: 0; padding: 0 0 6px; }
+  .rhythm-signal-table td::before { content: attr(data-label) ': '; font-weight: 600; }
+}
+
+/* Local patches and their signed contributions, scoped to this compact bridge figure. */
+.patch-regions { margin: 0 0 18px; padding: 14px 16px 12px; display: grid; grid-template-columns: minmax(320px, 0.82fr) minmax(0, 1.18fr); gap: 10px 30px; border: 1px solid var(--rule); background: var(--surface-1); font-family: var(--sans); }
+.patch-regions > div { min-width: 0; }
+.patch-regions p { margin: 0; font-size: 13.5px; line-height: 1.4; }
+.patch-regions .viz-title { margin-bottom: 7px; }
+.patch-region-head { display: block; width: 320px; max-width: 100%; height: auto; margin: 0 auto; }
+.patch-regions .patch-region-key { color: var(--ink-2); line-height: 1.65; }
+.patch-electrode-key { display: inline-grid; place-items: center; width: 17px; height: 17px; margin-right: 3px; border: 1.5px solid var(--ink); border-radius: 50%; font-size: 11px; font-weight: 600; color: var(--ink); vertical-align: middle; }
+.patch-regions .patch-region-assumption { color: var(--ink-2); font-size: 12.5px; margin-top: 6px; }
+.patch-mode-buttons { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 8px; }
+.patch-mode-buttons button { border: 1px solid var(--rule); background: transparent; color: var(--ink); padding: 5px 12px; border-radius: 999px; font: 14px var(--sans); cursor: pointer; }
+.patch-mode-buttons button:hover { border-color: var(--ink-2); }
+.patch-mode-buttons button[aria-pressed='true'] { border-color: var(--ink); background: var(--ink); color: var(--surface-1); }
+.patch-regions .patch-voltage-label { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 3px 10px; color: var(--ink-2); font-size: 12.5px; }
+.patch-voltage-label span { color: var(--ink-3); }
+.patch-contribution-traces { margin-top: 9px; }
+.patch-trace-row { margin-bottom: 5px; }
+.patch-trace-chart { position: relative; padding-left: 19px; }
+.patch-trace-chart svg { display: block; width: 100%; height: 58px; }
+.patch-trace-axis { stroke: var(--rule); stroke-width: 1; }
+.patch-trace-zero { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
+.patch-trace-label { color: var(--ink); font-size: 13.5px; line-height: 1.4; }
+.patch-trace-zero-label { position: absolute; left: 3px; top: 20px; color: var(--ink-2); font-size: 12px; }
+.patch-regions .patch-trace-time { color: var(--ink-2); font-size: 12.5px; text-align: center; }
+.patch-trace-wave { stroke-linejoin: round; stroke-linecap: round; }
+.patch-regions .patch-mode-explanation { margin: 6px 0 0; min-height: 40px; }
+.patch-regions .patch-snapshot-note { margin: 8px 0; }
+.patch-region-answers { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; border-top: 1px solid var(--rule); padding-top: 10px; }
+.patch-regions .patch-region-answers p { font-size: 14px; }
+@media (max-width: 800px) {
+  .patch-regions { grid-template-columns: 1fr; gap: 20px; }
+  .patch-region-map { max-width: 440px; margin: 0 auto; width: 100%; }
+  .patch-region-answers { grid-template-columns: 1fr; gap: 10px; }
+  .patch-regions .patch-mode-explanation { min-height: 0; }
+}
+@media (max-width: 480px) {
+  .patch-regions { padding: 12px 10px; }
+  .patch-mode-buttons button { padding: 5px 10px; }
+}

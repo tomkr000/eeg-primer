@@ -11,21 +11,21 @@ const { cx, cy, s, elXY } = geo;
 const FLOOR = 0.1, CEIL = 50; // µV: the colour scale of the summed map
 const RED = '#e34948', BLUE = '#2a78d6';
 export function mountBlur(root: HTMLElement) {
-  const sec = section(root, 'blur', '4', 'Patches of cortex blur into broad blobs at the scalp');
+  const sec = section(root, 'blur', '4', 'Patches of cortex blur into broad blobs at the scalp', 'A snapshot of voltage across the scalp: each patch contributes, and their voltages add together');
   prose(sec.text, `
 <p>The skull smears every source into a blob several centimetres wide ${c('spatial-lowpass')}, so two
 patches closer than a few centimetres, or one nested inside another, produce scalp patterns that look
-nearly the same from outside ${c('svd-method')}. And a person cannot modulate arbitrary patches of cortex
-on demand: what can be modulated at will and still seen from outside are the sensorimotor rhythms of a few
-body parts, the hands, the feet and the tongue, the four motor-imagery classes used in brain–computer
+nearly the same from outside ${c('svd-method')}. A well-studied way to change these signals deliberately is to
+imagine moving a body part: the hands, the feet and the tongue are the four motor-imagery classes used in brain–computer
 interface (BCI) competitions ${c('mi-classes')}. Their cortical areas are not spread evenly: the hand areas
 sit on a knob of the precentral gyrus either side of the midline, the foot areas next to the midline, and the
 mouth areas low on the side of the head ${c('motor-map')}. The areas differ in size, the hand and mouth
 areas far larger than the foot area ${c('area-sizes')}, and each can carry its own rhythm, strongest while the
-area idles and fading when its body part moves or the movement is imagined ${c('own-rhythm')}; section 7 is
-about that fading. The figure gives all five patches one radius, so that only their position differs. The maps below are snapshots of one instant: a
-rhythm such as alpha is this same pattern reversing sign every half-cycle, its shape fixed and only its
-amplitude swinging. The tissue does not filter in time ${c('quasistatic')}, so faster rhythms such as gamma
+area idles and fading when its body part moves or the movement is imagined ${c('own-rhythm')}; section 9 is
+about that fading. The figure gives all five patches one radius, so that only their position differs. The maps below are snapshots of one instant.
+One fixed patch oscillating around zero keeps its scalp pattern while its voltages reverse sign.
+Different patches can have different timing, so their combined map can change shape ${c('rhythm-snapshot')}.
+This model treats conduction through the head as effectively instantaneous ${c('quasistatic')}, so faster rhythms such as gamma
 reach the scalp in principle; they are smaller, and muscle activity occupies the same 20 to 300 Hz band
 ${c('emg-level')}, which is why scalp gamma is hard to trust.</p>
 <p>The figure places patches on a real head, the fsaverage template with a three-layer boundary-element
@@ -33,7 +33,7 @@ model and 128 electrodes ${c('fsaverage-bem')}${c('mne-bem')}${c('montages')}. E
 fraction in step, the source of sections 2 and 3, spread over a disc. The patches are a representative set,
 the motor areas for the hands, the feet and the tongue. The middle map
 shows each patch alone from outside; the right map shows all of them together, which is the only thing
-the electrodes ever see. Noise comes in section 5, and section 7 asks what can be controlled.</p>`);
+the electrodes ever see. Noise comes in section 7, and section 9 asks what can be controlled.</p>`);
 
   const fig = figure(sec.fig, `Left: the cortex from above, nose up, with a fixed, representative set of patches on the motor areas a person can modulate at will: the hands, the feet and the tongue ${c('mi-classes')}${c('motor-map')}. Middle: the scalp voltage each patch makes on its own, each map scaled to its own peak, so the shapes can be compared. Right: the voltage of all patches together, on a fixed scale.`, { wide: true });
   const row = document.createElement('div');
@@ -57,7 +57,7 @@ the electrodes ever see. Noise comes in section 5, and section 7 asks what can b
 
   function drawCortexView() {
     cctx.clearRect(0, 0, W, H + FOOT);
-    footnote(cctx, H, [['five representative patches of synchronous cortex,'], ['placed on motor areas a person can modulate at will'], [`each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]]);
+    footnote(cctx, H, [['five representative local groups of cortical cells,'], ['placed on motor areas a person can modulate at will'], [`each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]]);
     drawCortex(cctx, geo, state.patches);
   }
 
@@ -71,7 +71,7 @@ the electrodes ever see. Noise comes in section 5, and section 7 asks what can b
 
   function drawEach(pats: { a: Float64Array }[]) {
     ectx.clearRect(0, 0, W, H + FOOT);
-    footnote(ectx, H, [[{ sw: RED }, 'positive voltage, ', { sw: BLUE }, 'negative'], ['each map is scaled to its own peak, to compare shapes'], ['a rhythm is this pattern reversing sign every half-cycle']]);
+    footnote(ectx, H, [[{ sw: RED }, 'positive voltage, ', { sw: BLUE }, 'negative'], ['each map is scaled to its own peak, to compare shapes'], ['one fixed patch can reverse this pattern as it oscillates']]);
     ectx.font = CANVAS_FONT; ectx.fillStyle = '#52514e'; ectx.textAlign = 'center';
     if (!pats.length) { ectx.fillText('no patches placed', W / 2, H / 2); return; }
     const cols = Math.ceil(Math.sqrt(pats.length)), rows = Math.ceil(pats.length / cols);
@@ -94,7 +94,7 @@ the electrodes ever see. Noise comes in section 5, and section 7 asks what can b
   /** the scalp voltage of all patches together, on an absolute log colour scale, with a colour bar */
   function drawSummed(total: Float64Array, peak: number) {
     sctx.clearRect(0, 0, W, H + FOOT);
-    footnote(sctx, H, [[{ sw: RED }, 'above the average of all 128 electrodes, ', { sw: BLUE }, 'below it'], ['far from the patches the voltage dips below that average'], [`signal peak ${fmt(peak, 2)} µV at the strongest electrode`]]);
+    footnote(sctx, H, [[{ sw: RED }, 'above the average of all 128 electrodes, ', { sw: BLUE }, 'below it'], ['patches with different timing can change the shape'], [`signal peak ${fmt(peak, 2)} µV at the strongest electrode`]]);
     const hw = half.width, hh = half.height, d = himg.data, lf = Math.log10(FLOOR), lc = Math.log10(CEIL);
     for (let j = 0; j < hh; j++) for (let i = 0; i < hw; i++) {
       const k = (j * hw + i) * 4, px = (i + 0.5) * 2, py = (j + 0.5) * 2;

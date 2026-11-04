@@ -29,9 +29,9 @@ export interface Trial {
   /** when the true power reaches the threshold, and when the decoder's estimate first crosses it downwards after the intention */
   tTrue: number; det: number;
 }
-const FS = 250, SECONDS = 10, T0 = 4, SEED = 11, SKIN_UV = 1; // electrode noise at the 1 µV floor of sections 7 and 9 (claim skin-noise); // the intention is 4 s into the record, shown as t = 0, so the longest window is full 1 s before it
+const FS = 250, SECONDS = 10, T0 = 4, SEED = 11, SKIN_UV = 1; // electrode noise at the 1 µV floor of sections 9 and 11 (claim skin-noise); // the intention is 4 s into the record, shown as t = 0, so the longest window is full 1 s before it
 
-/** One imagined movement as the decoder sees it: a steady rhythm whose power falls by `drop` along a ramp, in the noise of section 5. */
+/** One imagined movement as the decoder sees it: a steady rhythm whose power falls by `drop` along a ramp, in the noise of section 7. */
 export function simulateTrial(onset: number, ramp: number, T: number, drop: number): Trial {
   const n = FS * SECONDS, amp = Math.sqrt(1 - drop);
   const envelope = (t: number) => { const u = (t - T0 - onset) / ramp; return u <= 0 ? 1 : u >= 1 ? amp : 1 - (1 - amp) * u; };
@@ -67,7 +67,7 @@ export function simulateTrial(onset: number, ramp: number, T: number, drop: numb
 }
 
 export function mountDelay(root: HTMLElement) {
-  const sec = section(root, 'delay', '8', 'EEG signals have inherent delays', 'This makes control feel sluggish');
+  const sec = section(root, 'delay', '10', 'EEG signals have inherent delays', 'This makes control feel sluggish');
   prose(sec.text, `
 <p>Even a perfect electrode cannot report a thought the moment it happens, because what EEG reads is a
 rhythm, and a rhythm takes time both to change and to be measured. The sensorimotor mu rhythm over the hand
@@ -82,15 +82,15 @@ previous 400 ms, and competition imagery trials allotted 4 s each ${c('bci-windo
 are no faster: the P300 peaks about 300 ms after its stimulus and spellers repeat each flash many times,
 up to 29 s per character ${c('p300-timing')}, and the quickest flicker spellers still need 0.3 to 0.5 s of
 stimulus plus 0.5 s for the eyes to move per character ${c('bci-windows')}.</p>
-<p>The figure follows the decoder's chain for one imagined movement. A mu rhythm as strong as section 5's alpha
-(an upper bound: mu is usually the weaker of the two, see the aside after section 4 ${c('mu-vs-alpha')}) starts
+<p>The figure follows the decoder's chain for one imagined movement. A mu rhythm as strong as section 7's alpha
+(an upper bound: mu is usually the weaker of the two, see section 6 ${c('mu-vs-alpha')}) starts
 to fade 0.3 s after the intention and settles within about a second, losing half its power ${c('erd-depth')}.
-To show the timing alone, the rhythm here is steady apart from that fade; section 7 showed how its own waxing
+To show the timing alone, the rhythm here is steady apart from that fade; section 9 showed how its own waxing
 and waning hides the fade in any one window. The decoder first filters out everything but the 8 to 13 Hz band,
 then averages the band's power over a sliding window, and fires when the estimate crosses halfway to the
 suppressed level. Each step adds time: the rhythm starts to fade only after the intention, its power takes the
 ramp to fall, and a trailing window reports the fall only once it has filled with faded signal, so the longer
-the window the later the decoder fires. A short window would be quick, but its estimate scatters (section 7),
+the window the later the decoder fires. A short window would be quick, but its estimate scatters (section 9),
 which is why decoders settle for about a second. The brain adds its own lead time too: the readiness potential that precedes a self-initiated
 movement begins about 2 s before it, and the moment people report deciding to move comes only about 200 ms
 before the movement, hundreds of milliseconds after the potential has started ${c('readiness-potential')}.
@@ -105,7 +105,7 @@ remove.</p>`);
   const rTrue = readout('True power reaches the threshold');
   const rDet = readout('Decoder fires and the arm moves');
 
-  const fig = figure(sec.fig, `One imagined movement through the decoder's chain. Top: the scalp signal of section 5 (${sw('#eb6834', 'line')}), rhythm plus noise; the intention is at t = 0 and the rhythm fades after it (event-related desynchronisation, ERD), a change the raw trace barely shows. Middle: the decoder's first step, the 8 to 13 Hz band of that signal (${sw('#2a78d6', 'line')}), with the amplitude the rhythm should have at each moment, the resting amplitude falling along the fade (${sw('#898781', 'dash')}): the band's peaks hug it, and the step down is what the decoder has to detect. Bottom: the band's power as the decoder estimates it from a sliding window of the chosen length (${sw('#2a78d6', 'line')}), the true power (${sw('#898781', 'dash')}) and the threshold (${sw('#52514e', 'dash')}); the decoder fires where the estimate first crosses the threshold downwards after the intention, and the arm moves then. The readouts split the delay into the fade's onset, the time the true power takes to reach the threshold, and the window's lag. The rhythm is steady apart from the fade; section 7 has its real waxing and waning.`);
+  const fig = figure(sec.fig, `One imagined movement through the decoder's chain. Top: the scalp signal of section 7 (${sw('#eb6834', 'line')}), rhythm plus noise; the intention is at t = 0 and the rhythm fades after it (event-related desynchronisation, ERD), a change the raw trace barely shows. Middle: the decoder's first step, the 8 to 13 Hz band of that signal (${sw('#2a78d6', 'line')}), with the amplitude the rhythm should have at each moment, the resting amplitude falling along the fade (${sw('#898781', 'dash')}): the band's peaks hug it, and the step down is what the decoder has to detect. Bottom: the band's power as the decoder estimates it from a sliding window of the chosen length (${sw('#2a78d6', 'line')}), the true power (${sw('#898781', 'dash')}) and the threshold (${sw('#52514e', 'dash')}); the decoder fires where the estimate first crosses the threshold downwards after the intention, and the arm moves then. The readouts split the delay into the fade's onset, the time the true power takes to reach the threshold, and the window's lag. The rhythm is steady apart from the fade; section 9 has its real waxing and waning.`);
   fig.viz.append(vizTitle('Scalp signal at one electrode around one imagined movement'));
   const top = linePlot(fig.viz, { x: { label: '', tip: 'Time from the intention', domain: [-2, 5] }, y: { label: 'µV', domain: [-50, 50], ticks: 3 }, height: 86, margin: { top: 8, bottom: 22 } });
   fig.viz.append(vizTitle('The decoder’s first step: the 8 to 13 Hz band of that signal'));
@@ -116,10 +116,10 @@ remove.</p>`);
   const arm = robotArm(fig.panel, () => trial);
   fig.viz.append(readouts(rOnset.el, rTrue.el, rDet.el));
   assumptions(fig.el, [
-    { what: 'Rhythm', value: `a steady 10 Hz rhythm at the strength of section 5's alpha (an upper bound, mu being usually the weaker) in the same noise, without blinks; its power falls by the ERD fraction (${Math.round(P.erdPowerDrop * 100)}% by default) along a linear ramp that starts ${P.erdOnsetS} s after the intention and lasts ${P.erdRampS} s (adjustable). The rhythm's own waxing and waning, which section 7 models, is left out here so that the timing stands alone`, cite: c('erd-depth') + c('erd-timecourse') + c('alpha-source-chain') + c('mu-vs-alpha') },
+    { what: 'Rhythm', value: `a steady 10 Hz rhythm at the strength of section 7's alpha (an upper bound, mu being usually the weaker) in the same noise, without blinks; its power falls by the ERD fraction (${Math.round(P.erdPowerDrop * 100)}% by default) along a linear ramp that starts ${P.erdOnsetS} s after the intention and lasts ${P.erdRampS} s (adjustable). The rhythm's own waxing and waning, which section 9 models, is left out here so that the timing stands alone`, cite: c('erd-depth') + c('erd-timecourse') + c('alpha-source-chain') + c('mu-vs-alpha') },
     { what: 'Estimator', value: 'the signal is band-passed to 8–13 Hz and its mean square over the trailing window is taken as the power, relative to the expected resting level; the threshold is halfway between the resting and the fully suppressed level', cite: c('spectral-window') },
     { what: 'Detection', value: 'the first downward crossing of the threshold by the estimate after the intention moves the arm; the true power reaches the threshold when the ramp has taken it there', cite: '<span class="assumption-tag">model definition</span>' },
-    { what: 'Slider ranges', value: 'windows from 0.4 s, the window of the sensorimotor BCI that reached three-dimensional control, to 3 s, and fades of 40 to 90% of the power, around the measured 50% average and 85% best case; below those, the estimate\u2019s own jitter crosses the threshold by itself, the problem of section 7', cite: c('bci-windows') + c('erd-depth') },
+    { what: 'Slider ranges', value: 'windows from 0.4 s, the window of the sensorimotor BCI that reached three-dimensional control, to 3 s, and fades of 40 to 90% of the power, around the measured 50% average and 85% best case; below those, the estimate\u2019s own jitter crosses the threshold by itself, the problem of section 9', cite: c('bci-windows') + c('erd-depth') },
   ]);
 
   let trial = simulateTrial(sOnset.value, sRamp.value, sWin.value, sDrop.value / 100);

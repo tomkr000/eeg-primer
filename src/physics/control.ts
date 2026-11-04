@@ -1,7 +1,7 @@
 /**
  * What a decoder can get from the scalp: the signal-to-noise ratio (SNR) of one cortical patch's activity against
- * the brain's own background and the electrodes' noise, for any number of electrodes (sections 7 and 9), and the
- * detectability of a change in a rhythm's band power (section 7).
+ * the brain's own background and the electrodes' noise, for any number of electrodes (sections 9 and 11), and the
+ * detectability of a change in a rhythm's band power (section 9).
  */
 import { solveShells, modalTransfer } from './sphere';
 import { applyTransfer } from './fft';
@@ -217,7 +217,7 @@ export function mWayCorrect(m: number, depth: number, B: number, T: number, rho:
 
 /**
  * A band-limited Gaussian process: white noise through an ideal band-pass of width B centred on f0, scaled to unit
- * power. Used for the rhythm and for the in-band noise in the simulated recordings of section 7.
+ * power. Used for the rhythm and for the in-band noise in the simulated recordings of section 9.
  */
 export function bandNoise(n: number, fs: number, f0: number, B: number, seed: number): Float64Array {
   const rng = mulberry32(seed), x = new Float64Array(n);

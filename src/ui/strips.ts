@@ -82,7 +82,7 @@ export function stripPlot(container: HTMLElement, cfg: { xLabel: string; xDomain
     for (const m of markers) {
       const mx = x(m.t);
       gMarks.append('line').attr('x1', mx).attr('x2', mx).attr('y1', M.top + 15).attr('y2', M.top + strips.length * sh).attr('stroke', '#52514e').attr('stroke-dasharray', '4 3');
-      // the label sits in the top band of the first strip, left of the line, boxed like the callouts of section 5
+      // the label sits in the top band of the first strip, left of the line, boxed like the callouts of section 7
       const txt = gMarks.append('text').attr('class', 'callout-text').attr('x', mx - 14).attr('y', M.top + 12).attr('text-anchor', 'end').text(m.label);
       const bb = (txt.node() as SVGTextElement).getBBox();
       gMarks.insert('rect', 'text').attr('class', 'callout-box').attr('x', bb.x - 6).attr('y', bb.y - 2).attr('width', bb.width + 12).attr('height', bb.height + 4).attr('rx', 4);

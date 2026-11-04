@@ -67,7 +67,7 @@ export function simulateTrial(onset: number, ramp: number, T: number, drop: numb
 }
 
 export function mountDelay(root: HTMLElement) {
-  const sec = section(root, 'delay', '8', 'EEG signals have inherent delays');
+  const sec = section(root, 'delay', '8', 'EEG signals have inherent delays', 'This makes control feel sluggish');
   prose(sec.text, `
 <p>Even a perfect electrode cannot report a thought the moment it happens, because what EEG reads is a
 rhythm, and a rhythm takes time both to change and to be measured. The sensorimotor mu rhythm over the hand

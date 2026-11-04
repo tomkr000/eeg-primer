@@ -212,11 +212,9 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .site-foot { font-family: var(--sans); font-size: 13px; color: var(--ink-2); margin-top: 28px; }
 
 /* The rhythm aside: short callouts beside a shared head, then one idea per note. */
-.rhythm-intro, .rhythm-next { font-family: var(--sans); font-size: 15px; line-height: 1.5; }
+.rhythm-intro { font-family: var(--sans); font-size: 15px; line-height: 1.5; }
 .rhythm-intro { max-width: 92ch; margin: 4px 0 14px; }
 .rhythm-intro p { margin: 0 0 8px; }
-.rhythm-next { margin: 12px 0 0; }
-.rhythm-next a { font-weight: 600; }
 .rhythm-guide { grid-template-columns: minmax(0, 1fr); }
 .rhythm-guide figcaption, .rhythm-note { min-width: 0; }
 .rhythm-map { display: grid; grid-template-columns: minmax(0, 1fr) 320px minmax(0, 1fr); gap: 16px; max-width: 1040px; width: 100%; margin: 8px auto; }
@@ -231,7 +229,7 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .rhythm-note p { margin: 0 0 8px; }
 .rhythm-note p:last-child { margin-bottom: 0; }
 .rhythm-model-note { color: var(--ink-2); font-size: 13px; }
-.rhythm-responses, .rhythm-timing, .rhythm-waves { grid-column: 1 / -1; }
+.rhythm-responses { grid-column: 1 / -1; }
 .rhythm-signal-table { border-collapse: collapse; width: 100%; margin: 10px 0; font-family: var(--sans); font-size: 14px; line-height: 1.45; }
 .rhythm-signal-table th, .rhythm-signal-table td { text-align: left; vertical-align: top; padding: 10px 16px 10px 0; border-bottom: 1px solid var(--grid); }
 .rhythm-signal-table thead th { font-size: 12.5px; color: var(--ink-2); }
@@ -239,10 +237,7 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .rhythm-signal-table tbody th span { font-size: 12.5px; font-weight: 400; color: var(--ink-2); }
 .rhythm-signal-table td { width: 37.5%; }
 .rhythm-signal-table td:last-child { padding-right: 0; }
-.rhythm-sync { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 10px; max-width: 660px; width: 100%; font-family: var(--sans); font-size: 12px; fill: var(--ink-2); }
-.rhythm-sync .sync-heading { font-size: 14px; font-weight: 600; fill: var(--ink); }
 .rhythm-map-key { font-family: var(--sans); color: var(--ink-2); font-size: 12.5px; margin: 0 0 4px; }
-.rhythm-trace-key { color: var(--ink-2); font-size: 12.5px; }
 @media (max-width: 780px) {
   .rhythm-map { grid-template-columns: 1fr 1fr; gap: 18px; }
   .rhythm-head { grid-column: 1 / -1; grid-row: 1; justify-self: center; max-width: 100%; height: auto; }

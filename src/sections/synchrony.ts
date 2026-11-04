@@ -67,20 +67,8 @@ export function mountSynchrony(root: HTMLElement) {
       <p>Clinicians use EEG to help evaluate seizures, and sleep studies use it to classify sleep stages ${c('eeg-clinical-uses')}.</p>
       <p>Researchers also study responses to mistakes. An error-related response can help an interface recognise that it made a wrong choice ${c('evoked-map')}.</p>
     </section>
-    <section class="rhythm-note rhythm-timing">
-      <h3>How neurons keep time together</h3>
-      <p>Groups of neurons can share a rhythm through common input or repeated pauses in activity. Activity can also travel from one group to the next, forming a wave ${c('sync-thalamic')}${c('sync-inhibition')}${c('sync-waves')}.</p>
-      ${synchronySvg()}
-    </section>
-    <section class="rhythm-note rhythm-waves">
-      <h3>Could a travelling wave become a command?</h3>
-      <p>Scalp EEG mixes signals from different places, making waves that cover small areas harder to distinguish ${c('waves-control')}. Detecting a wave is also different from controlling it: these studies do not show a person deliberately changing waves to steer a computer.</p>
-    </section>
   </div>`;
-  const next = document.createElement('p');
-  next.className = 'rhythm-next';
-  next.innerHTML = '<a href="#noise">Next: can we pick out one rhythm?</a> Section 5 follows an alpha rhythm at one electrode and adds the other signals and noise that can hide it.';
-  body.append(next);
+
 }
 
 /** The same head geometry as section 4; callout text stays in HTML so it wraps and remains accessible. */
@@ -119,28 +107,4 @@ function drawRhythmMap(ctx: CanvasRenderingContext2D) {
   leader(true, 116, MU, mu);
   leader(true, 216, SCP, vertex);
   leader(true, 316, ALPHA, alpha);
-}
-
-/** Timing traces: one row per group of neurons, with common timing or a delay between groups. */
-function synchronySvg(): string {
-  const panel = (title: string, description: string, delayed: boolean, pause = false) => {
-    const traces = [0, 1, 2].map((row) => {
-      const shift = delayed ? row * 18 : 0;
-      const points = Array.from({ length: 151 }, (_, i) => {
-        const phase = (i - shift) * Math.PI / 30;
-        const amplitude = pause ? Math.max(0, Math.sin(phase)) : Math.sin(phase);
-        return `${20 + i},${77 + row * 24 - amplitude * 7}`;
-      }).join(' ');
-      return `<polyline points="${points}" fill="none" stroke="#2a78d6" stroke-width="2"/>`;
-    }).join('');
-    const guides = delayed
-      ? '<path d="M35,65 L71,137 M95,65 L131,137" stroke="#898781" stroke-dasharray="3 3"/>'
-      : '<path d="M35,65 V137 M95,65 V137 M155,65 V137" stroke="#898781" stroke-dasharray="3 3"/>';
-    return `<svg class="sync-svg" viewBox="0 0 210 158" width="210" height="158" role="img" aria-label="${title}: ${description}"><text x="0" y="18" class="sync-heading">${title}</text><text x="0" y="40">${description}</text>${guides}${traces}</svg>`;
-  };
-  return `<div class="rhythm-sync">
-    ${panel('Common input', 'One signal sets the timing.', false)}
-    ${panel('Shared inhibition', 'Cells suppress activity together.', false, true)}
-    ${panel('Travelling wave', 'Peaks arrive later in each group.', true)}
-  </div><p class="rhythm-trace-key">Illustration: each line shows a group’s activity over time, from left to right. Dashed guides follow the peaks; flat stretches show shared pauses.</p>`;
 }

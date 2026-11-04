@@ -3,7 +3,7 @@ import { figure, inDepth, sw } from '../ui/layout';
 import { MOTOR, ax, by } from './dim-model';
 import { headGeometry, titledCanvas, drawCortex } from './head-view';
 
-const ALPHA = '#2a78d6', MU = '#eb6834', THETA = '#1baf7a', MUSCLE = '#898781';
+const ALPHA = '#2a78d6', MU = '#eb6834', THETA = '#1baf7a', MUSCLE = '#898781', SCP = '#6250d6', ATTN = '#eda100', EYES = '#8a6d3b';
 
 /** "Which rhythms does the scalp see, and how do neurons synchronize?": an aside with a head map, a schematic and a cited note, placed after section 4. */
 export function mountSynchrony(root: HTMLElement) {
@@ -20,11 +20,11 @@ export function mountSynchrony(root: HTMLElement) {
   row.className = 'viz-row';
   fig.viz.append(row);
   const headBox = document.createElement('div');
-  headBox.style.flex = '0 0 550px';
-  const cv = titledCanvas(headBox, 'Regions of the main scalp rhythms (head from above)', 550, 360);
+  headBox.style.flex = '0 0 800px';
+  const cv = titledCanvas(headBox, 'Sources of the scalp\u2019s signals, seen from above', 800, 360);
   drawRhythmMap(cv.getContext('2d')!);
   const schemBox = document.createElement('div');
-  schemBox.className = 'viz-box'; schemBox.style.flex = '1 1 420px';
+  schemBox.className = 'viz-box'; schemBox.style.flex = '1 1 576px';
   schemBox.innerHTML = `<div class="viz-title">Three ways neurons synchronize</div>${synchronySvg()}`;
   row.append(headBox, schemBox);
   fig.caption.innerHTML = `<p><strong>Which rhythms.</strong> The scalp sees a handful of rhythms, each from its own region with its own switch.
@@ -37,14 +37,24 @@ about 100 µV of muscle (${sw(MUSCLE)}) at the temples, whose spectrum covers th
 muscle ${c('gamma-scalp')}.
 Mu and alpha share a band and are told apart by place and by what switches them; mu is usually the weaker of the two and is seen
 by eye in only a minority of adults, so sections 7 to 9, which run the mu rhythm at the strength of section 5's alpha, take an
-upper bound ${c('mu-vs-alpha')}. Of these rhythms, the sensorimotor ones are what a person can change at will without a stimulus
-(slow cortical potentials, below these bands, are the other such signal), which makes them the control signal of sections 7 to 9;
-closing the eyes raises alpha and works as an on/off switch, and the P300 and flicker responses need a stimulus
-${c('self-generated-signals')}.</p>
+upper bound ${c('mu-vs-alpha')}.</p>
+<p><strong>What a person can change at will.</strong> The sensorimotor rhythms, by imagining a movement, which is why they are the
+control signal of sections 7 to 9; closing the eyes raises alpha and works as an on/off switch; the P300 and flicker responses need
+a stimulus ${c('self-generated-signals')}. The front of the head adds more: frontal midline theta rises with mental effort, and
+mental tasks that engage different areas, subtraction, word association, spatial navigation, give patterns a decoder can
+tell apart, so a four-class interface built on them ran at 61 to 72% in 8 of 14 users, where motor imagery also sits
+${c('frontal-control')}. At the vertex (${sw(SCP)}), slow shifts of the potential over seconds can be trained into a switch: locked-in
+patients spelled with them, letter by letter through binary choices, after months of training ${c('scp-control')}, and the readiness potential, the slow negativity
+that precedes a self-paced movement by about 2 s, announces an intention before the muscle moves ${c('readiness-potential')}. Over the
+parietal lobe (${sw(ATTN)}), the pattern of alpha changes with where attention goes, eyes still, and a decoder reads the direction
+at about 75% for the best pair ${c('covert-attention')}. All of these are band powers or slow shifts read over seconds, so they widen the menu of
+section 7 without escaping its scatter limit. The two biggest signals at the front are not brain at all: blinks and eye movements
+(${sw(EYES)}) at 100 to 200 µV ${c('blink-amplitude')} and the muscles, which is why frontal control signals need artefact rejection
+that the sensorimotor strip does not.</p>
 <p><strong>How neurons synchronize.</strong> Three ways, often together. A shared rhythmic drive: the thalamus sends the same oscillation
 to many cortical cells, which is how the alpha rhythm is paced ${c('sync-thalamic')}. Shared inhibition: networks of inhibitory
 interneurons silence a population together and release it together, so its cells can only fire in the same brief window, the
-mechanism behind gamma oscillations ${c('sync-inhibition')}, and one the 20 Hz sensorimotor rhythm depends on too ${c('rhythm-beta')}.
+mechanism behind gamma oscillations ${c('sync-inhibition')}, and one that also shapes the 20 Hz sensorimotor rhythm ${c('rhythm-beta')}.
 Travelling waves: activity sweeps across the cortex, so neighbours fire a little after each other rather than exactly together;
 such waves cross the cortex at roughly 0.1 to 10 metres per second ${c('sync-waves')}. The bigger the pool recruited in each cycle,
 the slower the rhythm ${c('oscillations-synchrony')}.</p>
@@ -55,40 +65,48 @@ arrays, and the only deliberate control of cortical waves so far is in mice. The
 kind, whose direction reverses between watching a stimulus and resting with the eyes closed ${c('waves-control')}.</p>`;
 }
 
-/** The head from above with the regions of the rhythms, labelled at the right with leader lines. */
+/** The head from above with the regions of the signals, labelled on both sides with leader lines. */
 function drawRhythmMap(ctx: CanvasRenderingContext2D) {
-  const HW = 300, geo = headGeometry(HW, 360), { cx, cy, s } = geo;
+  const LEFT = 240, HW = 300, geo = headGeometry(HW, 360), { cx, cy, s } = geo;
+  ctx.translate(LEFT, 0); // head coordinates: the head spans x = 0 to HW, labels sit at x < 0 and x > HW
   drawCortex(ctx, geo, []);
-  const blob = (x: number, y: number, rxMm: number, ryMm: number, color: string) => {
-    ctx.save(); ctx.globalAlpha = 0.28; ctx.fillStyle = color;
-    ctx.beginPath(); ctx.ellipse(x, y, rxMm * s, ryMm * s, 0, 0, 2 * Math.PI); ctx.fill();
+  type Region = { x: number; y: number; rx: number; ry: number };
+  const blob = (r: Region, color: string, alpha = 0.28) => {
+    ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = color;
+    ctx.beginPath(); ctx.ellipse(r.x, r.y, r.rx * s, r.ry * s, 0, 0, 2 * Math.PI); ctx.fill();
     ctx.globalAlpha = 1; ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
   };
-  // regions (centre in px, half-axes in mm): the back of the head, the sensorimotor strip through the two hand areas of section 4, the midline just in front of the vertex, the temples
-  const motor = MOTOR(), hand = (i: number) => geo.srcXY[motor[i].center];
-  const alpha = { x: cx, y: cy + 0.56 * by * s, rx: 0.46 * ax, ry: 0.27 * by };
-  const mu = { x: (hand(0)[0] + hand(1)[0]) / 2, y: (hand(0)[1] + hand(1)[1]) / 2, rx: Math.abs(hand(1)[0] - hand(0)[0]) / (2 * s) + 16, ry: 16 };
-  const theta = { x: cx, y: cy - 0.4 * by * s, rx: 14, ry: 16 };
-  const temple = { x: cx + 0.88 * ax * s, y: cy - 0.05 * by * s, rx: 10, ry: 24 };
-  blob(alpha.x, alpha.y, alpha.rx, alpha.ry, ALPHA);
-  blob(mu.x, mu.y, mu.rx, mu.ry, MU);
-  blob(theta.x, theta.y, theta.rx, theta.ry, THETA);
-  for (const sgn of [-1, 1]) blob(cx + sgn * (temple.x - cx), temple.y, temple.rx, temple.ry, MUSCLE);
+  // regions (centre in px, half-axes in mm): the back of the head, the parieto-occipital band, the sensorimotor strip through the two hand areas of section 4, the vertex (the foot area), the midline just in front of the vertex, the temples, the eyes
+  const motor = MOTOR(), at = (i: number) => geo.srcXY[motor[i].center];
+  const alpha: Region = { x: cx, y: cy + 0.58 * by * s, rx: 0.46 * ax, ry: 0.26 * by };
+  const attn: Region = { x: cx, y: cy + 0.24 * by * s, rx: 0.42 * ax, ry: 0.1 * by };
+  const mu: Region = { x: (at(0)[0] + at(1)[0]) / 2, y: (at(0)[1] + at(1)[1]) / 2, rx: Math.abs(at(1)[0] - at(0)[0]) / (2 * s) + 16, ry: 16 };
+  const vertex: Region = { x: at(2)[0], y: at(2)[1], rx: 8, ry: 8 };
+  const theta: Region = { x: cx, y: cy - 0.4 * by * s, rx: 14, ry: 16 };
+  const temple = (sgn: number): Region => ({ x: cx + sgn * 0.88 * ax * s, y: cy - 0.05 * by * s, rx: 10, ry: 24 });
+  const eye = (sgn: number): Region => ({ x: cx + sgn * 0.3 * ax * s, y: cy - 0.82 * by * s, rx: 8, ry: 6 });
+  blob(alpha, ALPHA); blob(attn, ATTN); blob(mu, MU); blob(theta, THETA);
+  for (const sgn of [-1, 1]) { blob(temple(sgn), MUSCLE); blob(eye(sgn), EYES, 0.5); }
+  blob(vertex, SCP, 0.55);
   geo.outline(ctx);
-  // labels down the right, each with a leader from the right edge of its region
-  const label = (y: number, color: string, title: string, lines: string[], r: { x: number; y: number; rx: number }) => {
-    const lx = HW + 22;
+  // labels: a column on each side, each with a leader from the near edge of its region
+  const label = (side: 'left' | 'right', y: number, color: string, title: string, lines: string[], r: Region) => {
+    const right = side === 'right', lx = right ? HW + 22 : -22, tx = right ? lx + 16 : lx - 6;
     ctx.strokeStyle = color; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(r.x + r.rx * s, r.y); ctx.lineTo(lx - 8, y - 4); ctx.stroke();
-    ctx.fillStyle = color; ctx.fillRect(lx, y - 9, 10, 10);
-    ctx.textAlign = 'left'; ctx.fillStyle = '#1a1a1a'; ctx.font = 'bold 13px system-ui, sans-serif'; ctx.fillText(title, lx + 16, y);
+    ctx.beginPath(); ctx.moveTo(r.x + (right ? 1 : -1) * r.rx * s, r.y); ctx.lineTo(right ? lx - 8 : lx + 18, y - 4); ctx.stroke();
+    ctx.fillStyle = color; ctx.fillRect(right ? lx : lx - 10 + 10, y - 9, 10, 10);
+    ctx.textAlign = right ? 'left' : 'right'; ctx.fillStyle = '#1a1a1a'; ctx.font = 'bold 13px system-ui, sans-serif'; ctx.fillText(title, tx, y);
     ctx.font = '12px system-ui, sans-serif'; ctx.fillStyle = '#52514e';
-    lines.forEach((l, i) => ctx.fillText(l, lx + 16, y + 16 + i * 13));
+    lines.forEach((l, i) => ctx.fillText(l, tx, y + 16 + i * 13));
   };
-  label(28, THETA, 'frontal midline theta', ['4 to 8 Hz, on the midline just', 'in front of the vertex; problem', 'solving and stress'], theta);
-  label(96, MU, 'mu (with beta near 20 Hz)', ['7 to 11 Hz, under 50 \u00b5V, over', 'the sensorimotor strip (C3, Cz,', 'C4); fades with real, imagined', 'or observed movement; usually', 'weaker than alpha'], mu);
-  label(190, MUSCLE, 'muscle (jaw and temples)', ['about 100 \u00b5V, 20 to 300 Hz; the', 'brain\u2019s own gamma reaches the', 'scalp at under 1 \u00b5V'], temple);
-  label(258, ALPHA, 'alpha rhythm', ['8 to 13 Hz, under 50 \u00b5V, over', 'the back of the head; largest', 'with the eyes closed, fades', 'with attention'], alpha);
+  label('right', 28, THETA, 'frontal midline theta', ['4 to 8 Hz, just before the vertex;', 'raised at will by mental arithmetic', 'or word association: a BCI class'], theta);
+  label('right', 96, MU, 'mu (with beta near 20 Hz)', ['7 to 11 Hz, under 50 \u00b5V, over', 'the sensorimotor strip (C3, Cz,', 'C4); fades with real, imagined', 'or observed movement; usually', 'weaker than alpha'], mu);
+  label('right', 190, SCP, 'slow potentials at the vertex', ['months of feedback training make', 'a switch that spells, slowly; the', 'readiness potential shows a', 'move 2 s before it'], vertex);
+  label('right', 272, ALPHA, 'alpha rhythm', ['8 to 13 Hz, under 50 \u00b5V, over', 'the back of the head; largest', 'with the eyes closed, fades', 'with attention'], alpha);
+  label('left', 28, EYES, 'eyes', ['blinks and eye movements: 100 to', '200 \u00b5V at the front, bigger than', 'any rhythm'], eye(-1));
+  label('left', 120, MUSCLE, 'muscle (jaw and temples)', ['about 100 \u00b5V, 20 to 300 Hz; the', 'brain\u2019s own gamma reaches the', 'scalp at under 1 \u00b5V'], temple(-1));
+  label('left', 230, ATTN, 'parietal alpha (attention)', ['its pattern follows where attention', 'goes, eyes still; a decoder reads', 'the direction at about 75%'], attn);
+  ctx.translate(-LEFT, 0);
 }
 
 /** Schematic of three synchronising mechanisms, as inline SVG. */

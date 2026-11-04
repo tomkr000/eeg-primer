@@ -1,0 +1,41 @@
+[
+ {
+  "id": "contact-area-hair",
+  "statement": "A dry electrode reaches the scalp through hair with pins and touches it over a small area: in one comparison the approximate contact surfaces were 3.5 mm² for a single titanium pin, 6 mm² for a 15-pin gold electrode and 85 mm² for a soft 24-pin polyurethane electrode whose pins indent the scalp, against 42.5 mm² for a conventional Ag/AgCl ring electrode; measured impedances of multipin and comb dry electrodes run from tens of kilohms to about 600 kΩ (under 200 kΩ on the forehead, under 600 kΩ at the occiput for one multipin design). Anterior (forehead) and mastoid positions are free of dense hair, so a flat or wave-shaped contact touches there over its face, and wet gel bridges the hair wherever it is applied.",
+  "sources": [
+   "Fiedler P, Haueisen J, Jannek D, Griebel S, Zentner L, Vaz F, Fonseca C (2014). Comparison of three types of dry electrodes for electroencephalography. Acta IMEKO 3(3):33–37. https://acta.imeko.org/index.php/acta-imeko/article/view/IMEKO-ACTA-03%20%282014%29-03-08",
+   "Bernhardt A, Fiedler P, Fonseca C, Gonçalves R, Haueisen J (2020). Novel dry electrode EEG headbands for home use: comparing performance and comfort. Current Directions in Biomedical Engineering 6(3):139–142. doi:10.1515/cdbme-2020-3036",
+   "Liu Q, Yang L, Zhang Z, Yang H, Zhang Y, Wu J (2023). The feature, performance, and prospect of advanced electrodes for electroencephalogram. Biosensors 13(1):101. doi:10.3390/bios13010101"
+  ],
+  "note_for_auditor": "Three sources: the contact surfaces are Table 1 of Fiedler et al. 2014 (Acta IMEKO 3(3), open access on acta.imeko.org); the forehead/mastoid statement and the gel statement are from Bernhardt et al. 2020 (open access, De Gruyter, also on db-thueringen.de); the impedance range is from the table of Liu et al. 2023 (Biosensors, MDPI). Check which source holds which number and whether the summary of the impedance range is fair."
+ },
+ {
+  "id": "frontal-control",
+  "statement": "Frontal midline theta (5–7 Hz) is generated in the dorsal anterior cingulate and adjacent medial prefrontal cortex and appears over medial frontal areas during tasks that demand mental concentration; mental arithmetic produces late-onset, sustained increases of it. Mental tasks that engage spatially distinct cortical areas, such as mental subtraction and word association (“brain-teasers”), spatial navigation and mental rotation, give event-related (de)synchronization patterns distinct from motor imagery and serve as brain–computer interface classes: in a 4-class BCI (word association, mental subtraction, spatial navigation, motor imagery), 8 of 14 users reached mean accuracies of 61–72% and controlled all four classes, with performance and brain patterns stable over ten weeks, and in end-users with disability the best-performing pairs combined a brain-teaser with a dynamic imagery task.",
+  "sources": [
+   "Ishii R, Canuet L, Ishihara T, Aoki Y, Ikeda S, Hata M, Katsimichas T, Gunji A, Takahashi H, Nakahachi T, Iwase M, Takeda M (2014). Frontal midline theta rhythm and gamma power changes during focused attention on mental calculation: an MEG beamformer analysis. Frontiers in Human Neuroscience 8:406. doi:10.3389/fnhum.2014.00406",
+   "Gärtner M, Grimm S, Bajbouj M (2015). Frontal midline theta oscillations during mental arithmetic: effects of stress. Frontiers in Behavioral Neuroscience 9:96. doi:10.3389/fnbeh.2015.00096",
+   "Friedrich EVC, Scherer R, Neuper C (2013). Long-term evaluation of a 4-class imagery-based brain–computer interface. Clinical Neurophysiology 124(5):916–927. doi:10.1016/j.clinph.2012.11.010",
+   "Scherer R, Faller J, Friedrich EVC, Opisso E, Costa U, Kübler A, Müller-Putz GR (2015). Individually adapted imagery improves brain-computer interface performance in end-users with disability. PLoS ONE 10(5):e0123727. doi:10.1371/journal.pone.0123727"
+  ],
+  "note_for_auditor": "Four sources: the theta physiology (Ishii et al. 2014, Gärtner et al. 2015, both open access on Frontiers / PMC) and the BCI results (Friedrich et al. 2013, Clinical Neurophysiology; Scherer et al. 2015, PLoS ONE, open access). Check the 8 of 14, 61–72% and ten-week figures and the task list against Friedrich 2013 (its abstract is on PubMed), and the “brain-teaser plus dynamic imagery” result against Scherer 2015."
+ },
+ {
+  "id": "scp-control",
+  "statement": "Slow cortical potentials (SCPs), shifts of the scalp potential lasting seconds and recorded at the vertex, can be brought under voluntary control by operant feedback training: with the Thought Translation Device, completely paralysed patients learned over weeks to months to make their SCP more positive or more negative on command in trials of a few seconds and used it to spell, at about two characters per minute (about seven trials per character with the full alphabet); functional MRI implicated the basal ganglia and premotor cortex in the required positivity.",
+  "sources": [
+   "Birbaumer N, Ghanayim N, Hinterberger T, Iversen I, Kotchoubey B, Kübler A, Perelmouter J, Taub E, Flor H (1999). A spelling device for the paralysed. Nature 398(6725):297–298. doi:10.1038/18581",
+   "Birbaumer N, Hinterberger T, Kübler A, Neumann N (2003). The thought-translation device (TTD): neurobehavioral mechanisms and clinical outcome. IEEE Transactions on Neural Systems and Rehabilitation Engineering 11(2):120–123. doi:10.1109/TNSRE.2003.814439"
+  ],
+  "note_for_auditor": "Birbaumer et al. 1999 is a one-page Nature correspondence; Birbaumer et al. 2003 is an IEEE paper. The per-character and characters-per-minute figures may come from the Tübingen group’s other reports of the Thought Translation Device rather than these two: check what these two actually state (trial length, training duration, spelling rate, the fMRI finding) and flag any number they do not contain."
+ },
+ {
+  "id": "covert-attention",
+  "statement": "Covert shifts of visual attention, with the eyes still, modulate alpha power over parietal and occipital cortex, which falls over the hemisphere contralateral to the attended side; the change is classifiable on single trials, with a mean accuracy of 74.6% for the best-classifiable pair of directions in one study, and modulation of posterior alpha by attention in two dimensions has been proposed as a control signal.",
+  "sources": [
+   "Treder MS, Bahramisharif A, Schmidt NM, van Gerven MAJ, Blankertz B (2011). Brain-computer interfacing using modulations of alpha activity induced by covert shifts of attention. Journal of NeuroEngineering and Rehabilitation 8:24. doi:10.1186/1743-0003-8-24",
+   "van Gerven M, Jensen O (2009). Attention modulations of posterior alpha as a control signal for two-dimensional brain–computer interfaces. Journal of Neuroscience Methods 179(1):78–84. doi:10.1016/j.jneumeth.2009.01.016"
+  ],
+  "note_for_auditor": "Treder et al. 2011 is open access (Journal of NeuroEngineering and Rehabilitation); van Gerven & Jensen 2009 may be abstract-only. Check the 74.6% figure, the electrode sites, the direction of the alpha change, and whether the 2009 paper proposes two-dimensional control."
+ }
+]

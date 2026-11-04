@@ -10,7 +10,7 @@ under an "In depth" toggle:
 4. From outside, patches of cortex blur into broad blobs: a fixed, representative set of patches on a realistic head
    (the hand, foot and tongue motor areas a person can modulate at will), each one's own scalp map and the summed map
    the electrodes see, using a precomputed lead field for the fsaverage boundary-element head (MNE-Python)
-   (After section 4, an unnumbered aside, "Which rhythms does the scalp see, and how do neurons synchronize?": a head map of the alpha, mu, frontal-theta and muscle regions with their bands, switches and amplitudes, a schematic of thalamic drive, shared inhibition and travelling waves, and a cited note, including why travelling waves are not a scalp control signal.)
+   (After section 4, an unnumbered aside, "Which rhythms does the scalp see, and how do neurons synchronize?": a head map of where the scalp's signals come from, the alpha, mu and frontal-theta rhythms, the slow potentials of the vertex, parietal attention, and the eye and muscle artefacts, with their bands, switches and amplitudes; a schematic of thalamic drive, shared inhibition and travelling waves; and a cited note on which of these a person can change at will and why travelling waves are not a scalp control signal.)
 5. The signal that gets outside the skull is noisy: the alpha amplitude derived from N and synchrony through the section 3 head, buried in muscle, blink, skin, mains and amplifier noise
 6. Different electrode types result in different signals: the scalp signal through wet gel on abraded skin, wet gel, a dry plate and a plate over hair, each with an illustration
 7. A head with EEG can operate only a few dimensions: a simulated recording in which rest and imagined movement

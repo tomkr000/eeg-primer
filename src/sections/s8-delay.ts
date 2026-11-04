@@ -54,7 +54,7 @@ export function simulateTrial(onset: number, ramp: number, T: number, drop: numb
     acc += sq[i]; if (i >= w) acc -= sq[i - w]; if (i >= w - 1) rel[i] = acc / w / base;
     const pw = envelope(s.t[i]) ** 2;
     truth[i] = (restPow * pw + noiseBand) / base;
-    env[i] = Math.SQRT2 * Math.sqrt(restPow * pw + noiseBand); // expected amplitude of the band
+    env[i] = Math.SQRT2 * Math.sqrt(restPow * pw + noiseBand); // the amplitude the band should have: the faded rhythm, with the in-band noise in quadrature
   }
   const threshold = (1 + (restPow * amp * amp + noiseBand) / base) / 2; // halfway between rest and the fully suppressed level
   let tTrue = NaN, det = NaN;
@@ -105,7 +105,7 @@ remove.</p>`);
   const rTrue = readout('True power reaches the threshold');
   const rDet = readout('Decoder fires and the arm moves');
 
-  const fig = figure(sec.fig, `One imagined movement through the decoder's chain. Top: the scalp signal of section 5 (${sw('#eb6834', 'line')}), rhythm plus noise; the intention is at t = 0 and the rhythm fades after it (event-related desynchronisation, ERD), a change the raw trace barely shows. Middle: the decoder's first step, the 8 to 13 Hz band of that signal (${sw('#2a78d6', 'line')}), with the amplitude it should have (${sw('#898781', 'dash')}): the fade is visible here. Bottom: the band's power as the decoder estimates it from a sliding window of the chosen length (${sw('#2a78d6', 'line')}), the true power (${sw('#898781', 'dash')}) and the threshold (${sw('#52514e', 'dash')}); the decoder fires where the estimate first crosses the threshold downwards after the intention, and the arm moves then. The readouts split the delay into the fade's onset, the time the true power takes to reach the threshold, and the window's lag. The rhythm is steady apart from the fade; section 7 has its real waxing and waning.`);
+  const fig = figure(sec.fig, `One imagined movement through the decoder's chain. Top: the scalp signal of section 5 (${sw('#eb6834', 'line')}), rhythm plus noise; the intention is at t = 0 and the rhythm fades after it (event-related desynchronisation, ERD), a change the raw trace barely shows. Middle: the decoder's first step, the 8 to 13 Hz band of that signal (${sw('#2a78d6', 'line')}), with the amplitude the rhythm should have at each moment, the resting amplitude falling along the fade (${sw('#898781', 'dash')}): the band's peaks hug it, and the step down is what the decoder has to detect. Bottom: the band's power as the decoder estimates it from a sliding window of the chosen length (${sw('#2a78d6', 'line')}), the true power (${sw('#898781', 'dash')}) and the threshold (${sw('#52514e', 'dash')}); the decoder fires where the estimate first crosses the threshold downwards after the intention, and the arm moves then. The readouts split the delay into the fade's onset, the time the true power takes to reach the threshold, and the window's lag. The rhythm is steady apart from the fade; section 7 has its real waxing and waning.`);
   fig.viz.append(vizTitle('Scalp signal at one electrode around one imagined movement'));
   const top = linePlot(fig.viz, { x: { label: '', tip: 'Time from the intention', domain: [-2, 5] }, y: { label: 'µV', domain: [-50, 50], ticks: 3 }, height: 86, margin: { top: 8, bottom: 22 } });
   fig.viz.append(vizTitle('The decoder’s first step: the 8 to 13 Hz band of that signal'));
@@ -130,7 +130,7 @@ remove.</p>`);
     top.update([{ name: 'Scalp signal', points: pts(trial.raw), color: '#eb6834', width: 1 }], [{ axis: 'x', value: 0, label: 'intention' }]);
     mid.update([
       { name: '8 to 13 Hz band of the signal', points: pts(trial.mu), color: '#2a78d6', width: 1.2 },
-      { name: 'Expected amplitude', points: pts(trial.env), color: '#898781', dashed: true, width: 1.5 },
+      { name: 'Amplitude of the rhythm as it fades', points: pts(trial.env), color: '#898781', dashed: true, width: 1.5 },
       { name: '', points: pts(Float64Array.from(trial.env, (v) => -v)), color: '#898781', dashed: true, width: 1.5, noLegend: true },
     ], [{ axis: 'x', value: 0, label: '' }]);
     bottom.update([

@@ -17,7 +17,7 @@ quarter ${c('dipole')}.</p>
 <p>The current slider starts at about one nanoampere, or 1,000 picoamperes (pA). This is a model value
 inferred from published estimates of cell source strength and dendrite length ${c('cell-current')}. The figure calculates
 the voltage around one pyramidal neuron in uniform gray matter ${c('sigma-gray')}.</p>
-<p>Measurements show how local a single cell's signal is. In one rat hippocampus study, a cell's spike
+<p>Measurements show how local the signal is. In one rat hippocampus study, a cell's spike
 was at least 60 microvolts (µV) within 50 micrometers (µm) of its cell body ${c('henze-50um')}.
 Beyond about 140 µm, the spike could not be distinguished from noise ${c('henze-140um')}. A cortical cell
 also lies beneath brain tissue and the layers that separate the brain from the scalp ${c('cortex-layers')}.
@@ -30,17 +30,17 @@ That is far below the microvolt noise of scalp contacts ${c('skin-noise')}.</p>`
   const rRadius = readout(`Field above an electrode’s ${TH_UV} µV noise floor only within`, c('spike-noise-floor'));
   const rAt1cm = readout('Potential 1 cm away');
   const rMoment = readout('Dipole moment p = I·d');
-  const rMeasured = readout('Measured: a single spike vanishes beyond', c('henze-140um'));
+  const rMeasured = readout('Detection radius', c('henze-140um'));
   rMeasured.set('140 µm');
 
-  const fig = figure(sec.fig, `One modeled pyramidal cell, viewed from the side. Current enters at its dendritic tuft (${sw('#2a78d6', 'glow')} negative voltage) and leaves at its cell body (${sw('#e34948', 'glow')} positive voltage) ${c('dipole')}. The glow fades as voltage decreases, using a logarithmic scale. Each grid square is 0.25 mm wide. The tissue layers are drawn to scale, but this calculation treats all surrounding tissue as uniform gray matter ${c('sigma-gray')}${c('cortex-layers')}. Section 3 adds the effects of the head's layers.`);
+  const fig = figure(sec.fig, `One modeled pyramidal cell, viewed from the side. Current enters at its dendritic tuft (${sw('#2a78d6', 'glow')} negative voltage) and leaves at its cell body (${sw('#e34948', 'glow')} positive voltage) ${c('dipole')}. The glow fades as voltage decreases, using a logarithmic scale. The dotted line encloses the region where the voltage exceeds the ${TH_UV} µV noise of a silicon probe in the tissue ${c('spike-noise-floor')}. Each grid square is 0.1 mm wide. The view shows gray matter only: the cortical surface lies ${P.somaDepthMm} mm above the middle of the cell. The calculation treats all surrounding tissue as uniform gray matter ${c('sigma-gray')}${c('cortex-layers')}. Section 3 adds the effects of the head's layers.`);
   const W = 620, H = 400;
-  const xr: [number, number] = [-3.1e-3, 3.1e-3], yr: [number, number] = [-0.9e-3, 3.1e-3];
+  const xr: [number, number] = [-0.8e-3, 0.8e-3], yr: [number, number] = [-0.6e-3, -0.6e-3 + 1.6e-3 * H / W];
   const surface = P.somaDepthMm * 1e-3, csf = P.thicknessCsfMm * 1e-3, dura = P.thicknessDuraMm * 1e-3;
   fig.viz.append(vizTitle('Extracellular potential of one pyramidal neuron (cortical cross-section)'));
-  const g = glow(fig.viz, { width: W, height: H, scale: 2, xRange: xr, yRange: yr, floor: 3e-8, ceiling: 3e-5, gamma: 1, grid: { step: 0.25e-3, factor: 1e3, unit: 'mm', labelEvery: 4, note: 'each grid square = 0.25 mm' } });
+  const g = glow(fig.viz, { width: W, height: H, scale: 2, xRange: xr, yRange: yr, floor: 1e-7, ceiling: 1e-4, gamma: 1, threshold: P.spikeNoiseUv * 1e-6, dotted: true, grid: { step: 0.1e-3, factor: 1e3, unit: 'mm', labelEvery: 2, note: 'each grid square = 0.1 mm' } });
   g.canvas.style.width = `${W}px`;
-  glowLegend(fig.viz, '0.03 µV', '30 µV');
+  glowLegend(fig.viz, '0.1 µV', '100 µV', undefined, `${sw('#141414', 'dot')} detection radius`);
   fig.panel.append(controls(sI.el), readouts(rRadius.el, rMeasured.el, rAt1cm.el, rMoment.el));
   assumptions(fig.el, [
     { what: 'Cell geometry', value: `Two points represent current entering the tuft and leaving the cell body. They are ${P.dipoleLengthUm} µm apart.`, cite: c('dipole-length') + c('monopole') },
@@ -57,7 +57,7 @@ That is far below the microvolt noise of scalp contacts ${c('skin-noise')}.</p>`
     rAt1cm.set(`${fmt(Math.abs(twoMonopole(I, sg, d, 0, d / 2 + 0.01)) * 1e9, 3)} nV`);
     rMoment.set(`${fmt(I * d * 1e12, 3)} pA·m`);
     g.draw((x, y) => twoMonopole(I, sg, d, x, y), (ctx, toPx) => {
-      drawCortexLayers(ctx, toPx, { xRange: xr, yTop: yr[1], surface, csf, dura });
+      drawCortexLayers(ctx, toPx, { xRange: xr, yTop: yr[1], surface, csf, dura, grayLabelY: yr[1] - 0.06e-3 });
       drawNeuron(ctx, toPx, { x: 0, soma: -d / 2, tuft: d / 2 });
       ctx.save();
       ctx.font = CANVAS_FONT; ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'right';

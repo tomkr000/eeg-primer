@@ -27,11 +27,11 @@ held away from the scalp records it well: the air gap forms a very weak electric
 Section 8 examines this gap and the amplifier needed to measure through it ${c('noncontact-cap')}.</p>`);
 
   const sN = slider({ label: 'Neurons in the patch, N', min: 1, max: P.patchMaxN, value: P.patchDefaultN, log: true, format: (v) => fmt(Math.round(v), 3), marks: [{ value: P.patchDefaultN, label: 'Typical source' }] });
-  const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'All in step' }] });
+  const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Theoretical maximum' }] });
   const sDepth = slider({ label: 'Source depth below the cortical surface', unit: 'mm', min: 0.5, max: 25, value: 2, step: 0.5, marks: [{ value: 2, label: 'Gyral crown' }, { value: 20, label: 'Deep in a sulcus' }] });
   const TH_UV = 1; // dark contour: the quietest electrode contact alone (section 7 adds the rest)
   const orientation = 'radial' as const;
-  const rSource = readout('Source: the patch of section 2', c('single-cell-moment') + c('cells-for-10nam'));
+  const rSource = readout('Net dipole moment of the patch', c('single-cell-moment') + c('cells-for-10nam'));
   const rScalp = readout('Peak scalp potential');
   const rCortex = readout('Peak at the cortical surface');
   const rRatio = readout('Cortex-to-scalp attenuation');
@@ -52,7 +52,7 @@ Section 8 examines this gap and the amplifier needed to measure through it ${c('
   left.append(vizTitle('Potential through the layers (cross-section)'));
   right.append(vizTitle('Potential versus height above the source'));
   const hm = glow(left, { width: 390, height: 330, scale: 2, xRange, yRange, floor: 1e-7, ceiling: 1e-4, fadeWhere: (_x, y) => (y > scalpY ? 0.3 : 1), grid: { step: 0.01, factor: 100, unit: 'cm', note: 'each grid square = 1 cm' } });
-  glowLegend(left, '0.1 µV', '100 µV', `${sw('#1a1a1a', 'thick')} scalp where an electrode sees > 1 µV; air faded: weak electrode coupling`);
+  glowLegend(left, '0.1 µV', '100 µV');
   const radial = verticalProfile(right, { height: 330, yDomain: [yRange[0] * 100, yRange[1] * 100], yLabel: 'cm above the cortical surface', xLabel: 'Potential straight above the source (µV)', xDomain: [0.1, 1e4] });
   fig.panel.append(controls(sN.el, sF.el, sDepth.el));
   fig.viz.append(readouts(rSource.el, rScalp.el, rCortex.el, rRatio.el, rWidth.el));

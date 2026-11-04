@@ -24,7 +24,7 @@ export const ALPHA_N = RAW_DEFAULTS.signalUv / (scalpUvPerNam * P.patchDefaultSy
 /** The two sliders of the shared source model, used by sections 4 to 9. */
 export const sourceSliders = (defaultN = ALPHA_N, defaultF = P.patchDefaultSync) => ({
   sN: slider({ label: 'Neurons in the patch, N', min: 1e5, max: P.patchMaxN, value: defaultN, log: true, format: (v) => fmt(Math.round(v), 2), marks: [{ value: P.patchDefaultN, label: 'Typical' }, { value: ALPHA_N, label: 'Alpha' }], note: c('alpha-source-chain') }),
-  sF: slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: defaultF, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'All in step' }] }),
+  sF: slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: defaultF, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Theoretical maximum' }] }),
 });
 
 export function mountNoise(root: HTMLElement) {

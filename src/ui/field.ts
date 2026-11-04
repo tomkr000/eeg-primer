@@ -18,6 +18,8 @@ export interface GlowCfg {
   threshold?: number;
   /** draw the contour only where this returns true (default everywhere) */
   contourWhere?: (x: number, y: number) => boolean;
+  /** draw the contour as a dotted line instead of a solid one */
+  dotted?: boolean;
   /** opacity multiplier for the glow at a point, 0 to 1 (default 1): fade a region where the field exists but cannot be read */
   fadeWhere?: (x: number, y: number) => number;
   /** compute the field at 1/scale resolution and upscale smoothly; overlays stay crisp (default 1) */
@@ -65,7 +67,7 @@ export function glow(container: HTMLElement, cfg: GlowCfg): Glow {
     setThreshold(v) { threshold = v; },
     draw(f, overlay) {
       const d = img.data;
-      const mag = new Float32Array(W * H);
+      const mag = new Float32Array(W * H), val = new Float32Array(W * H);
       for (let j = 0; j < H; j++) {
         const y = cfg.yRange[1] - ((j + 0.5) / H) * (cfg.yRange[1] - cfg.yRange[0]);
         for (let i = 0; i < W; i++) {
@@ -74,13 +76,14 @@ export function glow(container: HTMLElement, cfg: GlowCfg): Glow {
           const k = (j * W + i) * 4;
           if (Number.isNaN(v)) { d[k + 3] = 0; mag[j * W + i] = NaN; continue; }
           const a = Math.abs(v);
-          mag[j * W + i] = a;
+          mag[j * W + i] = a; val[j * W + i] = v;
           const t = Math.max(0, Math.min(1, (Math.log10(Math.max(a, 1e-30)) - lf) / (lc - lf)));
           const c = v >= 0 ? POS : NEG;
           d[k] = c[0]; d[k + 1] = c[1]; d[k + 2] = c[2];
           d[k + 3] = Math.round(235 * Math.pow(t, gamma) * (cfg.fadeWhere?.(x, y) ?? 1));
         }
       }
+      const dots: [number, number][] = [];
       if (threshold !== undefined) {
         const th = threshold;
         for (let j = 1; j < H - 1; j++) for (let i = 1; i < W - 1; i++) {
@@ -88,6 +91,16 @@ export function glow(container: HTMLElement, cfg: GlowCfg): Glow {
           if (!(m >= th)) continue;
           if (mag[j * W + i - 1] < th || mag[j * W + i + 1] < th || mag[(j - 1) * W + i] < th || mag[(j + 1) * W + i] < th) {
             if (cfg.contourWhere && !cfg.contourWhere(cfg.xRange[0] + ((i + 0.5) / W) * (cfg.xRange[1] - cfg.xRange[0]), cfg.yRange[1] - ((j + 0.5) / H) * (cfg.yRange[1] - cfg.yRange[0]))) continue;
+            if (cfg.dotted) {
+              // skip the line where the field changes sign: there |V| dips below threshold without the source fading
+              let flip = false;
+              for (let q = -3; q <= 3 && !flip; q++) {
+                const ii = Math.min(W - 1, Math.max(0, i + q)), jj = Math.min(H - 1, Math.max(0, j + q));
+                if (val[j * W + ii] * val[j * W + i] < 0 || val[jj * W + i] * val[j * W + i] < 0) flip = true;
+              }
+              if (!flip && (i + j) % 4 === 0) dots.push([(i + 0.5) * scale, (j + 0.5) * scale]);
+              continue;
+            }
             const k = (j * W + i) * 4;
             d[k] = 20; d[k + 1] = 20; d[k + 2] = 20; d[k + 3] = 255;
           }
@@ -100,6 +113,8 @@ export function glow(container: HTMLElement, cfg: GlowCfg): Glow {
       ctx.drawImage(off, 0, 0, cfg.width, cfg.height);
       if (cfg.grid) drawGrid(ctx, toPx, cfg);
       if (overlay) overlay(ctx, toPx);
+      ctx.fillStyle = '#141414';
+      for (const [x, y] of dots) { ctx.beginPath(); ctx.arc(x, y, 1.7, 0, 2 * Math.PI); ctx.fill(); }
     },
   };
 }
@@ -279,11 +294,11 @@ export function scaleBar(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], x0: 
 
 /** Legend for the glow colors. */
 /** The legend of a glow: color swatches with their meaning, always visible. */
-export function glowLegend(container: HTMLElement, floor: string, ceiling: string, note?: string): void {
+export function glowLegend(container: HTMLElement, floor: string, ceiling: string, note?: string, extra?: string): void {
   const el = document.createElement('div');
   el.className = 'glow-legend';
   el.innerHTML = `<span class="sw" style="background:linear-gradient(90deg,rgba(42,120,214,0),rgba(42,120,214,0.92))"></span><span>negative</span>
-    <span class="sw" style="background:linear-gradient(90deg,rgba(227,73,72,0),rgba(227,73,72,0.92))"></span><span>positive</span>
+    <span class="sw" style="background:linear-gradient(90deg,rgba(227,73,72,0),rgba(227,73,72,0.92))"></span><span>positive</span>${extra ? `<span>${extra}</span>` : ''}
     <span class="note">faint = ${floor}, solid = ${ceiling}${note ? `; ${note}` : ''}</span>`;
   container.append(el);
 }

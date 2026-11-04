@@ -36,7 +36,7 @@ export function mountPatchRegions(root: HTMLElement) {
     <figcaption class="patch-region-answers">
       <p><strong>Inside a patch:</strong> cells need not be perfectly synchronized. Sections 2 and 4 vary the fraction in step. ${c('patch-regions')}</p>
       <p><strong>Between patches:</strong> neighbors can share some activity and differ in other activity. Being close does not mean being in step. ${c('patch-relations')}</p>
-      <p><strong>Current direction matters too:</strong> even synchronized sources can partly cancel if their currents produce opposite voltage signs at the electrode. ${c('patch-cancellation')}</p>
+      <p><strong>Current direction also affects the sum.</strong> Even synchronized sources can partly cancel if their currents produce opposite voltage signs at the electrode. ${c('patch-cancellation')}</p>
     </figcaption>`;
   sec.fig.append(fig);
   drawRegionHead(fig.querySelector('canvas')!);

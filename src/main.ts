@@ -33,7 +33,7 @@ toc.className = 'toc';
 toc.setAttribute('aria-label', 'Sections');
 toc.innerHTML = `
     <a href="#neuron"><b>1</b> Neurons make very small electric fields</a>
-    <a href="#population"><b>2</b> Coordinated currents make larger signals</a>
+    <a href="#population"><b>2</b> Coordinated neurons make larger signals</a>
     <a href="#head"><b>3</b> The head weakens and spreads cortical signals</a>
     <a href="#blur"><b>4</b> Patches of cortex blur into broad blobs at the scalp</a>
     <a href="#patches"><b>5</b> Local patches combine into changing scalp voltages</a>

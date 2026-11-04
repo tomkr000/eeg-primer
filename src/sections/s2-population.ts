@@ -6,12 +6,12 @@ import { P, claimCite as c, defaultHead } from '../data/params';
 import { section, figure, prose, readouts, assumptions, sw, vizTitle } from '../ui/layout';
 
 export function mountPopulation(root: HTMLElement) {
-  const sec = section(root, 'population', '2', 'Coordinated currents make larger signals');
+  const sec = section(root, 'population', '2', 'Coordinated neurons make larger signals');
   prose(sec.text, `
 <p>Voltages from different cells add together ${c('superposition')}. Let N be the number of cells.
 When their currents rise and fall together and point the same way, the voltage amplitude grows in proportion
 to N. With unrelated timing, its typical amplitude grows only as the square root of N ${c('variances-add')}.</p>
-<p>Direction matters as much as timing. Nearby pyramidal cells tend to point perpendicular to the cortical
+<p>The direction of each cell affects the summed voltage as much as its timing does. Nearby pyramidal cells tend to point perpendicular to the cortical
 surface, so their currents can reinforce each other. Cells with branches in many directions tend to produce
 voltages that cancel at a distance ${c('open-closed')}. Synaptic currents last longer and overlap more often
 than brief spikes. They are often the main source of the distant signal ${c('psp-dominate')}.</p>

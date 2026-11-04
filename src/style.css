@@ -99,6 +99,7 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .figure figcaption { grid-column: 1 / -1; font-family: var(--sans); font-size: 14.5px; color: var(--ink-2); line-height: 1.45; margin: 0; border-top: 1px solid var(--grid); padding-top: 8px; }
 .viz { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .figure-wide { grid-template-columns: 1fr; }
+.figure-lede { grid-column: 1 / -1; margin: 0 0 2px; font-family: var(--sans); font-size: 15px; line-height: 1.45; color: var(--ink); }
 .figure-wide .controls { grid-template-columns: repeat(4, 1fr); gap: 6px 24px; }
 .figure-wide .controls:has(> :nth-child(3):last-child) { grid-template-columns: repeat(3, 1fr); }
 .figure-wide .controls:has(> :nth-child(5)) { grid-template-columns: repeat(5, 1fr); gap: 6px 18px; }

@@ -88,15 +88,19 @@ comparison, decode handwriting at 90 characters/min and speech at 62 words/min $
   const { sN, sF } = sourceSliders();
   const rAttempt = readout('This attempt');
   const rRate = readout(`Attempts out of ${TRIALS} that end straight`, c('arm-success'));
-  const rNoise = readout('Each joint’s command noise at rest (1 = a full movement)', c('erd-detect'));
+  const rNoise = readout('Command noise at rest', c('erd-detect'));
   const rUsed = readout('Imagined movements in use', c('mi-classes'));
 
-  const fig = figure(sec.fig, `Left: the cortex from above with the five motor patches of section 4, each labelled with the imagined movement whose own area it is and shaded by its mu power at this moment, relative to rest; patches of movements that no joint uses are drawn without colour, but their rhythm changes all the same. Middle: the mu power each of the 128 electrodes sees, relative to rest: every patch's scalp pattern weighted by its power, on top of ${CAP.bgUv} µV of the brain's own activity in the band ${c('brain-background')}. Right: the intended arm and the arm the decoder drives, one joint per imagined movement with joint 1 at the base, and under them each joint's decoded command since Go. Press Go: the intended arm straightens, one joint at a time or all together, and the person imagines the movement of every joint that lags behind it, as much as it needs, knowing the delays of section 8. Every imagined movement changes every patch's rhythm by its measured response ${c('mi-matrix')}${c('tongue-areas')}${c('compound-mi')}; the decoder reads each patch's power over the window through the best combination of a 64-electrode cap (section 9) ${c('snr-electrodes')}${c('cap-separates')}, undoes the overlap of the responses, and moves a joint while its command is more than half a full movement either way. An attempt succeeds when all joints are within ${ARM.tolDeg}° of straight together for ${ARM.dwellS} s before the time runs out. The readouts give this attempt's outcome, the share of ${TRIALS} attempts with fixed seeds that succeed with the current settings ${c('arm-success')}, each joint's command noise while the person rests ${c('erd-detect')}, and the imagined movements in use ${c('mi-classes')}.`, { wide: true });
+  const fig = figure(sec.fig, `Left: the cortex from above with the five motor patches of section 4, numbered as there (1 and 2 the hand areas of the left and right hemispheres, which move the right and left hand, 3 the foot area, 4 and 5 the tongue areas), coloured like the joint whose imagined movement is their own and shaded by their mu power at this moment, relative to rest; patches of movements that no joint uses are drawn without colour, but their rhythm changes all the same. Middle: the mu power each of the 128 electrodes sees, relative to rest: every patch's scalp pattern weighted by its power, on top of ${CAP.bgUv} µV of the brain's own activity in the band ${c('brain-background')}. Right: the intended arm and the arm the decoder drives, one joint per imagined movement with joint 1 at the base, and under them each joint's decoded command since Go. Press Go: the intended arm straightens, one joint at a time or all together, and the person imagines the movement of every joint that lags behind it, as much as it needs, knowing the delays of section 8. Every imagined movement changes every patch's rhythm by its measured response ${c('mi-matrix')}${c('tongue-areas')}${c('compound-mi')}; the decoder reads each patch's power over the window through the best combination of a 64-electrode cap (section 9) ${c('snr-electrodes')}${c('cap-separates')}, undoes the overlap of the responses, and moves a joint while its command is more than half a full movement either way. An attempt succeeds when all joints are within ${ARM.tolDeg}° of straight together for ${ARM.dwellS} s before the time runs out. The readouts give this attempt's outcome, the share of ${TRIALS} attempts with fixed seeds that succeed with the current settings ${c('arm-success')}, each joint's command noise while the person rests, in units of a full movement's change ${c('erd-detect')}, and the imagined movements in use ${c('mi-classes')}.`, { wide: true });
+  const lede = document.createElement('p');
+  lede.className = 'figure-lede';
+  lede.innerHTML = '<strong>Simulation of joint control using realistic patches.</strong> The person imagines each movement perfectly, but the patches are connected and affect each other (as in real brains), so every movement changes several of them. Noise from the rhythm itself, the electrodes and the brain’s background makes untangling the signals difficult.';
+  fig.el.prepend(lede);
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
   fig.viz.append(row);
-  const WL = 400, WM = 340, H = 290, FOOT = 46, AW = 360;
+  const WL = 340, WM = 340, H = 252, FOOT = 34, AW = 360;
   const left = titledCanvas(row, 'Patches the imagined movements change', WL, H + FOOT);
   const middle = titledCanvas(row, 'Mu power at the scalp, relative to rest', WM, H + FOOT);
   const armBox = document.createElement('div');
@@ -136,13 +140,6 @@ comparison, decode handwriting at 90 characters/min and speech at 62 words/min $
 
   /** opacity of a patch disc for its mu power relative to rest: ×0.25 faint, ×1 middling, ×4 solid */
   const shade = (p: number) => 0.08 + 0.84 * Math.max(0, Math.min(1, (Math.log2(p) + 2) / 4));
-  /** label slots outside the head for the tongue and hand areas, below the patch for the feet */
-  const slot = (j: number): [number, number, CanvasTextAlign] => {
-    const [px, py] = geo.srcXY[PATCHES[j].center], edge = ax * geo.s + 6;
-    if (j === 2) return [px, py + 64, 'center'];
-    const sideX = px < geo.cx ? geo.cx - edge : geo.cx + edge, dy = OWNER[j] === 3 ? -24 : 24;
-    return [sideX, py + dy, px < geo.cx ? 'right' : 'left'];
-  };
   function drawPatches(power: number[], imagery: number[], K: number) {
     lctx.clearRect(0, 0, WL, H + FOOT);
     geo.grid(lctx);
@@ -150,22 +147,17 @@ comparison, decode handwriting at 90 characters/min and speech at 62 words/min $
     for (const [x, y, z] of geo.srcXY) { if (!visible(z)) continue; lctx.beginPath(); lctx.arc(x, y, 1.2, 0, 2 * Math.PI); lctx.fill(); }
     const used = Math.min(K, TASKS.length), r = Math.max(6, 10 * geo.s);
     PATCHES.forEach((p, j) => {
-      const [px, py] = geo.srcXY[p.center], own = OWNER[j], col = own < used ? TASKS[own].colour : NONE, [lx, ly, align] = slot(j);
-      // leader from the disc's edge to the label
-      const tx = align === 'center' ? lx : lx + (align === 'right' ? 3 : -3), ty = align === 'center' ? ly - 17 : ly - 5, ang = Math.atan2(ty - py, tx - px);
-      lctx.strokeStyle = '#52514e'; lctx.lineWidth = 1;
-      lctx.beginPath(); lctx.moveTo(px + r * Math.cos(ang), py + r * Math.sin(ang)); lctx.lineTo(tx, ty); lctx.stroke();
+      const [px, py] = geo.srcXY[p.center], own = OWNER[j], col = own < used ? TASKS[own].colour : NONE;
       lctx.globalAlpha = shade(power[j]); lctx.fillStyle = col;
       lctx.beginPath(); lctx.arc(px, py, r, 0, 2 * Math.PI); lctx.fill();
       lctx.globalAlpha = 1; lctx.strokeStyle = col; lctx.lineWidth = imagery[own] > 0 ? 3.5 : 1.5; lctx.stroke();
-      lctx.textAlign = align; lctx.font = imagery[own] > 0 ? 'bold 14px system-ui, sans-serif' : CANVAS_FONT;
-      if (align === 'center') { const w = Math.max(lctx.measureText(TASKS[own].name).width, 40) + 8; lctx.fillStyle = 'rgba(252,252,251,0.85)'; lctx.fillRect(lx - w / 2, ly - 14, w, 33); }
-      lctx.fillStyle = '#1a1a1a'; lctx.fillText(TASKS[own].name, lx, ly);
-      lctx.fillStyle = '#52514e'; lctx.font = '12px system-ui, sans-serif';
-      lctx.fillText(`×${fmt(power[j], 2)}`, lx, ly + 14);
+      // the number of section 4, legible on a faint or a solid disc
+      lctx.font = 'bold 13px system-ui, sans-serif'; lctx.textAlign = 'center'; lctx.lineJoin = 'round';
+      lctx.lineWidth = 3; lctx.strokeStyle = 'rgba(252,252,251,0.95)'; lctx.strokeText(String(j + 1), px, py + 5);
+      lctx.fillStyle = '#1a1a1a'; lctx.fillText(String(j + 1), px, py + 5);
     });
     geo.outline(lctx);
-    footnote(lctx, H, [['each disc: one patch of section 4, labelled with the movement'], ['whose own area it is and shaded by its mu power now:'], [{ sw: 'rgba(26,26,26,0.12)' }, '×0.25 of rest   ', { sw: 'rgba(26,26,26,0.5)' }, '×1   ', { sw: 'rgba(26,26,26,0.92)' }, '×4;  thick ring: being imagined']]);
+    footnote(lctx, H, [['each disc shaded by that patch’s mu power now:'], [{ sw: 'rgba(26,26,26,0.12)' }, '×0.25 of rest   ', { sw: 'rgba(26,26,26,0.5)' }, '×1   ', { sw: 'rgba(26,26,26,0.92)' }, '×4;  thick ring: being imagined']]);
   }
 
   /** the electrodes' mu power relative to rest: every patch's pattern weighted by its power, on top of the background */
@@ -193,13 +185,13 @@ comparison, decode handwriting at 90 characters/min and speech at 62 words/min $
     for (const [x, y, z] of geoM.elXY) { if (!visible(z)) continue; mctx.beginPath(); mctx.arc(x, y, 1.8, 0, 2 * Math.PI); mctx.fill(); }
     geoM.outline(mctx);
     const f = 2 ** SAT;
-    footnote(mctx, H, [[{ sw: `rgb(${NEG.join(',')})` }, 'weaker than at rest, ', { sw: `rgb(${POS.join(',')})` }, 'stronger'], [`solid at ×${fmt(1 / f, 2)} and ×${fmt(f, 2)}: what each of 128 electrodes sees,`], [`the patches on top of ${CAP.bgUv} µV of the brain's own activity`]]);
+    footnote(mctx, H, [[{ sw: `rgb(${NEG.join(',')})` }, 'weaker than at rest, ', { sw: `rgb(${POS.join(',')})` }, `stronger: solid at ×${fmt(1 / f, 2)} and ×${fmt(f, 2)}`], [`128 electrodes, including ${CAP.bgUv} µV of brain background`]]);
   }
 
   /** the two arms: joint angles in degrees, 0 straight */
   function drawArms(want: number[], got: number[], imagery: number[], t: number, trial: ArmTrial | null, i = 0) {
     actx.clearRect(0, 0, AW, H + FOOT);
-    const K = want.length, total = 80 + 16 * K, len = total / K, baseY = 188, bases: [number, number][] = [[AW / 4, baseY], [(3 * AW) / 4, baseY]];
+    const K = want.length, total = 64 + 14 * K, len = total / K, baseY = 158, bases: [number, number][] = [[AW / 4, baseY], [(3 * AW) / 4, baseY]];
     actx.strokeStyle = '#c3c2b7'; actx.lineWidth = 2; actx.beginPath(); actx.moveTo(10, baseY + 16); actx.lineTo(AW - 10, baseY + 16); actx.stroke();
     [want, got].forEach((angles, a) => {
       const [bx, by] = bases[a];
@@ -221,7 +213,7 @@ comparison, decode handwriting at 90 characters/min and speech at 62 words/min $
       }
       actx.restore();
       actx.font = CANVAS_FONT; actx.fillStyle = '#1a1a1a'; actx.textAlign = 'center';
-      actx.fillText(a ? 'Decoded from EEG' : 'Intended', bx, by + 36);
+      actx.fillText(a ? 'Decoded from EEG' : 'Intended', bx, by + 34);
     });
     // what the person is imagining, or the outcome
     actx.font = '13px system-ui, sans-serif'; actx.fillStyle = '#1a1a1a';
@@ -236,7 +228,7 @@ comparison, decode handwriting at 90 characters/min and speech at 62 words/min $
     actx.fillStyle = 'rgba(252,252,251,0.9)'; actx.fillRect(4, 6, w + 8, 18);
     actx.fillStyle = '#1a1a1a'; textWithSwatches(actx, parts, 8, 19, 12);
     // each joint's decoded command since Go, against the band too small to move a joint
-    const x0 = 34, x1 = AW - 12, top = 248, bot = 284, mid = (top + bot) / 2, yc = (v: number) => mid - (Math.max(-2, Math.min(2, v)) / 2) * ((bot - top) / 2);
+    const x0 = 34, x1 = AW - 12, top = 212, bot = 246, mid = (top + bot) / 2, yc = (v: number) => mid - (Math.max(-2, Math.min(2, v)) / 2) * ((bot - top) / 2);
     const tMax = trial ? Math.max(trial.end, 1) : 1, xt = (s: number) => x0 + (s / tMax) * (x1 - x0);
     actx.fillStyle = '#e8e7e1'; actx.fillRect(x0, yc(ARM.deadZone), x1 - x0, yc(-ARM.deadZone) - yc(ARM.deadZone));
     actx.strokeStyle = '#c3c2b7'; actx.lineWidth = 1; actx.strokeRect(x0, top, x1 - x0, bot - top);
@@ -252,7 +244,7 @@ comparison, decode handwriting at 90 characters/min and speech at 62 words/min $
       actx.textAlign = 'right'; actx.fillStyle = '#1a1a1a'; actx.fillText(`${fmt(Math.min(t, tMax), 2)} s after Go`, x1, top - 4);
     }
     actx.textAlign = 'left'; actx.fillStyle = '#1a1a1a'; actx.fillText('decoded commands', x0, top - 4);
-    footnote(actx, H, [['joints from the base, each moved by one imagined movement:'], TASKS.slice(0, K).flatMap((m, k) => [{ sw: m.colour }, `${k + 1} ${m.name} `] as TextPart[]).concat(K > TASKS.length ? [{ sw: NONE }, '5 none'] : []), [{ sw: '#e8e7e1' }, 'command too small to move its joint']]);
+    footnote(actx, H, [TASKS.slice(0, K).flatMap((m, k) => [{ sw: m.colour }, `${k + 1} ${m.name} `] as TextPart[]).concat(K > TASKS.length ? [{ sw: NONE }, '5 none'] : []), ['joint 1 at the base;  ', { sw: '#e8e7e1' }, 'command too small to move its joint']]);
   }
 
   function outcome(r: ArmTrial): string {

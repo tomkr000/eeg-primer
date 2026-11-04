@@ -15,8 +15,8 @@ export function mountSynchrony(root: HTMLElement) {
   el.append(inDepth(body, 'From patches to EEG signals'));
   const intro = document.createElement('div');
   intro.className = 'rhythm-intro';
-  intro.innerHTML = `<p>Section 4 shows the scalp voltage at one instant. As activity changes across many patches, their voltage contributions add together at each electrode. Recording that changing voltage over time gives an EEG signal ${c('superposition')}${c('quasistatic')}.</p>
-    <p>Repeating patterns in that signal are called rhythms ${c('rhythm-alpha')}${c('rhythm-mu')}. EEG also records brief responses to events, such as a flash on a screen ${c('evoked-map')}. Below, we map the ongoing signals, then show which patterns an interface can use as commands.</p>`;
+  intro.innerHTML = `<p>Section 4 freezes the scalp voltage at one instant. In a simple oscillation from one fixed patch, the ${sw('#e34948')}positive and ${sw('#2a78d6')}negative parts of its scalp map swap each half-cycle. At a fixed electrode, those changing voltages trace a wave over time. Different patches can have different timing, so their combined map can change shape as well ${c('rhythm-snapshot')}.</p>
+    <p>A repeating pattern is a <strong>rhythm</strong>. Its strength describes the size of its voltage swings, which can stay steady while the voltage keeps reversing sign ${c('rhythm-snapshot')}. EEG also records brief responses to events, such as a flash ${c('evoked-map')}. These patterns let us study brain activity, detect changes in a person’s state, and sometimes control a device.</p>`;
   body.append(intro);
   root.append(el);
   const fig = figure(body, '', { panelWidth: '0px' });
@@ -32,28 +32,30 @@ export function mountSynchrony(root: HTMLElement) {
       </div>
       <canvas class="rhythm-head" width="320" height="400" role="img" aria-label="Head seen from above. Eye signals are strongest at the front; muscle signals at the temples. Theta is near the front midline, mu and beta over movement areas, alpha toward the back, and an outlined electrode at the top of the head records slow voltage shifts. Regions are schematic."></canvas>
       <div class="rhythm-labels rhythm-labels-right">
-        ${callout(THETA, 'Mental effort (theta)', 'This rhythm often strengthens during tasks such as mental arithmetic.', ['rhythm-theta', 'frontal-control'])}
+        ${callout(THETA, 'Mental effort (theta)', 'Frontal theta often strengthens during demanding mental work and after errors.', ['theta-function'])}
         ${callout(MU, 'Movement (mu and beta)', 'These rhythms weaken when you move or imagine moving.', ['rhythm-mu', 'rhythm-beta'])}
         ${callout(SCP, 'Slow voltage shifts', 'This electrode records voltage changes over seconds. Some people learn to shift the voltage up or down to choose between two options.', ['scp-control'])}
-        ${callout(ALPHA, 'Eyes closed (alpha)', 'This rhythm is usually stronger with your eyes closed and weaker when you look at something.', ['rhythm-alpha'])}
+        ${callout(ALPHA, 'Vision and attention (alpha)', 'Usually stronger with the eyes closed; its pattern also changes with visual attention.', ['alpha-function'])}
       </div>
     </div><p class="rhythm-map-key">Shaded areas show approximate locations; the outlined ring marks a recording electrode.</p>`;
   drawRhythmMap(fig.viz.querySelector('canvas')!.getContext('2d')!);
 
   fig.caption.innerHTML = `<div class="rhythm-notes">
     <section class="rhythm-note rhythm-responses">
-      <h3>Main signals used for EEG control</h3>
-      <p>The map shows several kinds of recorded activity. These approaches turn a recognisable pattern into a command or choice:</p>
-      <table class="rhythm-control-table">
-        <thead><tr><th scope="col">Signal</th><th scope="col">What you do</th><th scope="col">What the computer detects</th></tr></thead>
+      <h3>What EEG signals tell us</h3>
+      <p>Rhythms are named partly by how fast they repeat. Their meaning also depends on location and context: theta occurs during both mental tasks and early sleep ${c('theta-context')}.</p>
+      <table class="rhythm-signal-table">
+        <thead><tr><th scope="col">Signal</th><th scope="col">What it reflects</th><th scope="col">What it is useful for</th></tr></thead>
         <tbody>
-          <tr><th scope="row">${sw(MU)}Movement rhythms<br><span>mu and beta</span></th><td data-label="What you do">Imagine moving a hand or foot.</td><td data-label="What the computer detects">A change in rhythm strength over brain areas involved in movement ${c('self-generated-signals')}.</td></tr>
-          <tr><th scope="row">P300 response</th><td data-label="What you do">Attend to a target letter while groups of letters flash.</td><td data-label="What the computer detects">A distinctive voltage response after flashes that include your target ${c('evoked-map')}.</td></tr>
-          <tr><th scope="row">Flicker response<br><span>steady-state visual evoked potential (SSVEP)</span></th><td data-label="What you do">Watch one of several targets, each flickering at a different rate.</td><td data-label="What the computer detects">A repeating response at the flicker rate of the target you watch ${c('evoked-map')}.</td></tr>
-          <tr><th scope="row">${sw(SCP)}Slow cortical potentials</th><td data-label="What you do">Use an on-screen indicator to practise shifting your recorded voltage up or down.</td><td data-label="What the computer detects">A slow voltage shift. Some trained users have used these shifts to choose between groups of letters until one letter remains ${c('scp-control')}.</td></tr>
+          <tr><th scope="row">${sw(ALPHA)}Alpha<br><span>8–13 cycles per second ${c('rhythm-alpha')}</span></th><td data-label="What it reflects">Often strongest with eyes closed. One proposed role is to help suppress distracting visual input ${c('alpha-function')}.</td><td data-label="What it is useful for">Studying visual attention and perception; detecting eye closure for a simple switch; estimating where attention is directed in experiments ${c('alpha-function')}${c('covert-attention')}.</td></tr>
+          <tr><th scope="row">${sw(THETA)}Frontal theta<br><span>about 4–8 cycles per second ${c('rhythm-theta')}</span></th><td data-label="What it reflects">Often increases during demanding mental work and after errors. Shared timing between frontal regions may help us adjust after a mistake ${c('theta-function')}.</td><td data-label="What it is useful for">Studying responses to mistakes and estimating workload in defined tasks. Workload estimates and mental-task commands use combinations of EEG features in these studies ${c('theta-function')}${c('frontal-control')}.</td></tr>
+          <tr><th scope="row">${sw(MU)}Mu and beta<br><span>movement</span></th><td data-label="What it reflects">The repeating voltage pattern over movement areas weakens during actual or imagined movement ${c('rhythm-mu')}${c('rhythm-beta')}.</td><td data-label="What it is useful for">Studying movement-related activity, or mapping imagined movements to cursor commands ${c('self-generated-signals')}.</td></tr>
+          <tr><th scope="row">P300 response</th><td data-label="What it reflects">A brief voltage response to an uncommon event you are attending to ${c('evoked-map')}.</td><td data-label="What it is useful for">Studying attention, or picking a target letter by comparing responses across repeated flashes of different letter groups ${c('evoked-map')}.</td></tr>
+          <tr><th scope="row">Response to flicker<br><span>steady-state visual evoked potential (SSVEP)</span></th><td data-label="What it reflects">Visual brain activity that repeats at a stimulus’s flicker rate ${c('evoked-map')}.</td><td data-label="What it is useful for">Measuring visual responses, or identifying a watched target among targets flickering at different rates ${c('evoked-map')}.</td></tr>
+          <tr><th scope="row">${sw(SCP)}Slow cortical potentials</th><td data-label="What it reflects">Slow shifts in recorded voltage over seconds ${c('scp-control')}.</td><td data-label="What it is useful for">With an on-screen voltage display for feedback, some users learn to choose between letter groups until one letter remains ${c('scp-control')}.</td></tr>
         </tbody>
       </table>
-      <p class="rhythm-model-note">Movement rhythms and slow shifts can be trained for control; P300 and flicker interfaces use responses to displayed targets ${c('self-generated-signals')}${c('scp-control')}.</p>
+      <p class="rhythm-model-note">Detecting a state is different from producing a reliable command on demand. These studies do not establish theta alone as a general-purpose control channel ${c('theta-function')}${c('frontal-control')}.</p>
     </section>
     <section class="rhythm-note">
       <h3>Telling rhythms apart</h3>
@@ -61,9 +63,9 @@ export function mountSynchrony(root: HTMLElement) {
       <p class="rhythm-model-note">The later control demos give mu the same voltage amplitude as alpha. Since mu is usually weaker, this can make control look easier than it may be ${c('mu-vs-alpha')}.</p>
     </section>
     <section class="rhythm-note">
-      <h3>Other signals can help</h3>
-      <p>Closing the eyes can make alpha act as an on/off switch; mental tasks can also produce patterns a computer can distinguish ${c('self-generated-signals')}${c('frontal-control')}.</p>
-      <p>Recognising a wrong choice can produce an error-related response, helping an interface detect a mistake ${c('evoked-map')}.</p>
+      <h3>Other uses of EEG</h3>
+      <p>Clinicians use EEG to help evaluate seizures, and sleep studies use it to classify sleep stages ${c('eeg-clinical-uses')}.</p>
+      <p>Researchers also study responses to mistakes. An error-related response can help an interface recognise that it made a wrong choice ${c('evoked-map')}.</p>
     </section>
     <section class="rhythm-note rhythm-timing">
       <h3>How neurons keep time together</h3>

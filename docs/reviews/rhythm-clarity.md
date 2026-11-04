@@ -46,3 +46,16 @@ The next revision replaces the overlapping command and evoked-response notes wit
 ## Verification
 
 Production build and all 25 existing tests passed. The revised map was inspected at 1366 × 768 and 967 × 923; it is 400 px tall with no internal horizontal overflow. At 390 × 844, labels and timing panels stack without overflow within this section. Existing layout overflow elsewhere on the deployed page is outside this change.
+
+## From map polarity to biological signals and uses
+
+The next revision broadens the table from commands to signal interpretation and applications. Alpha and frontal theta now have explicit rows describing observed associations, proposed functions, and detection/research uses. A separate note covers sleep staging, seizure evaluation, and error responses.
+
+- An independent code reader confirmed that section 4 draws fixed signed voltage snapshots. The introduction now explains a single oscillating source reversing polarity, different source timing changing the summed shape, and amplitude remaining distinct from sign. Section 4 no longer describes all rhythms as one fixed pattern, makes no distance-only claim about voltage polarity, and no longer restricts deliberate EEG modulation to motor imagery.
+- An independent source checker confirmed alpha attention/perception and suppression-hypothesis wording against Kelly 2006 and Thut 2006, the eye-closure switch against Kirkup 1997, and offline attention-direction decoding against Treder 2011. Suppression remains a proposed function; no universal attention meter or online accuracy is claimed.
+- Another source checker confirmed frontal theta during demanding tasks and after errors against Gärtner 2015 and Cavanagh 2009. Gevins 1998 supports workload estimation using multiple EEG features. The copy distinguishes detecting a state from producing a repeatable command; it does not attribute workload classification or mental-task control to theta alone.
+- Early-sleep theta is supported by the indexed AES atlas caption; the inaccessible figure is recorded as a partial verification in the claim registry. NINDS and NHLBI support the concise clinical-use statements.
+
+A fresh reader reviewed the introduction and all six table rows independently. Their feedback prompted the explicit scalp-map wording, repetition-rate labels for alpha and theta, plain-language attention direction, the multi-feature qualification within the theta row, and the missing selection steps for flashing letters and different flicker rates.
+
+Validation: production build passed after the final wording changes. Section 4 captions, the introduction, head map, and expanded table were inspected at the normal desktop width. The table was also inspected at 390 px; its internal scroll width matched its visible width. No browser errors were recorded.

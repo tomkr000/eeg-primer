@@ -75,7 +75,7 @@ ${c('dry-vs-wet-time')}${c('searle')}, and fingered dry electrodes reach the ski
 per finger ${c('fingered')}.</p>`);
 
   const { sN, sF } = sourceSliders(ALPHA_N, 0.13); // the same source model as sections 2 to 5, a little more in step so the rhythm stands out
-  const sArea = slider({ label: 'Electrode area', unit: 'cm²', min: 0.1, max: 3, value: 0.1, log: true, note: c('area-scaling'), marks: [{ value: 1, label: 'Typical' }] });
+  const sArea = slider({ label: 'Electrode area', unit: 'cm²', min: 0.1, max: 3, value: 0.1, log: true, note: c('area-scaling') + c('contact-area-hair'), marks: [{ value: 0.1, label: 'In hair' }, { value: 1, label: 'Forehead or gel' }] });
   const sGap = slider({ label: 'Hair / air gap thickness', unit: 'mm', min: 0.05, max: 2, value: 0.06, log: true, note: c('hair'), marks: [{ value: 0.06, label: 'One hair' }, { value: 0.5, label: 'Many hairs' }] });
   const sRin = slider({ label: 'Amplifier input resistance', min: 1e7, max: 5e13, value: 1e9, log: true, format: (v) => fmtSI(v, 'Ω', 2), note: c('ads1299'), marks: [{ value: 1e9, label: 'Typical' }, { value: 5e13, label: 'Research amp' }] });
   const BLINK_S = 0.4; // one eye blink in the two-second window (section 5's size and width)
@@ -92,7 +92,8 @@ per finger ${c('fingered')}.</p>`);
     { what: 'Wet gel, unprepared / dry plate', value: '350 kΩ ∥ 25 nF and 1.3 MΩ ∥ 12 nF per cm²', cite: c('chi-table') },
     { what: 'Gap coupling', value: 'C = ε₀ε<sub>r</sub>A/d (air, ε<sub>r</sub> = 1) in series with dry skin; a flat plate resting on hair touches none of the skin (fingered electrodes that reach through hair behave like the dry plate above)', cite: c('hair-permittivity') + c('fingered') },
     { what: 'Area scaling', value: 'R ∝ 1/A, C ∝ A relative to 1 cm²', cite: c('area-scaling') },
-    { what: 'Starting values', value: 'a 0.1 cm² contact (consumer-headset sized, a tenth of the typical 1 cm²) resting on one hair (0.06 mm; the 0.5 mm mark is several hair diameters), the alpha patch of section 5 with 0.13 of its cells in step, a little above the typical tenth, so the rhythm stands out of the noise, and the 1 GΩ front end', cite: c('area-scaling') + c('hair') + c('alpha-source-chain') + c('ads1299') },
+    { what: 'Starting values', value: 'a 0.1 cm² contact resting on one hair (0.06 mm; the 0.5 mm mark is several hair diameters), the alpha patch of section 5 with 0.13 of its cells in step, a little above the typical tenth, so the rhythm stands out of the noise, and the 1 GΩ front end', cite: c('contact-area-hair') + c('hair') + c('alpha-source-chain') + c('ads1299') },
+    { what: 'Electrode area marks', value: 'pins that reach the scalp through hair touch it over about 0.04 to 0.2 cm² (a soft 24-pin electrode that indents the scalp reaches 0.85 cm²); on the forehead, or anywhere with gel, a flat 1 cm² contact touches over its face. Measured multipin and comb electrodes through hair come in from tens of kilohms to about 600 kΩ, below the dry-plate model’s value at 0.1 cm², because the pins press into the skin and sweat accumulates within minutes', cite: c('contact-area-hair') + c('dry-vs-wet-time') },
     { what: 'Amplifier input resistance marks', value: '1 GΩ as the ADS1299 front end; 50 TΩ as a research non-contact amplifier', cite: c('ads1299') + c('noncontact-cap') },
     { what: 'Skin noise by contact type', value: `${SKIN_NOISE.abraded} / ${SKIN_NOISE.wet} / ${SKIN_NOISE.dry} / ${SKIN_NOISE.gap} µV rms (abraded / wet / dry / gap), 1/f spectrum, scaled by 1/√area`, cite: c('electrode-noise-levels') },
     { what: 'Amplifier', value: `R<sub>in</sub> from the slider in parallel with ${C_IN_PF} pF; 1 µV rms voltage noise; ${I_NOISE_FA} fA/√Hz current noise`, cite: c('ads1299') + c('amp-current-noise') },

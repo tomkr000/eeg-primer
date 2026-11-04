@@ -19,7 +19,6 @@ const app = document.getElementById('app')!;
 const hero = document.createElement('header');
 hero.className = 'hero';
 hero.innerHTML = `
-  <p class="kicker">An interactive, cited walk through the physics</p>
   <h1>EEG primer: the physics of a non-invasive BCI</h1>`;
 const standfirst = document.createElement('div');
 standfirst.className = 'standfirst';

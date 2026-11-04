@@ -51,6 +51,13 @@ at about 75% for the best pair ${c('covert-attention')}. All of these are band p
 section 7 without escaping its scatter limit. The two biggest signals at the front are not brain at all: blinks and eye movements
 (${sw(EYES)}) at 100 to 200 µV ${c('blink-amplitude')} and the muscles, which is why frontal control signals need artefact rejection
 that the sensorimotor strip does not.</p>
+<p><strong>Responses that need a stimulus or a mistake.</strong> Not on the map because the person does not generate them, yet they run
+the fastest interfaces. The P300: a positive wave, largest over the parietal midline, 250 to 500 ms after an attended, rare stimulus;
+spellers flash rows and columns of letters and find the one the user watched. The flicker response (steady-state visual evoked
+potential, SSVEP): the occipital cortex follows a flickering target at its frequency and harmonics, so looking at one of several
+targets selects it. The error-related potential: a dip at the front of the head within a few hundred milliseconds of the user's own
+mistake or of a machine's, then a bump further back, readable on single trials and used to undo the machine's action ${c('evoked-map')}. Sections 8 and 9
+return to the first two for their speed and their electrode needs.</p>
 <p><strong>How neurons synchronize.</strong> Three ways, often together. A shared rhythmic drive: the thalamus sends the same oscillation
 to many cortical cells, which is how the alpha rhythm is paced ${c('sync-thalamic')}. Shared inhibition: networks of inhibitory
 interneurons silence a population together and release it together, so its cells can only fire in the same brief window, the

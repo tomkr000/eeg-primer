@@ -1,0 +1,13 @@
+[
+ {
+  "id": "evoked-map",
+  "statement": "Three scalp responses that are not self-generated but drive the fastest interfaces: the P300 (P3b), a positive wave largest over the parietal midline about 300 ms after an attended, infrequent stimulus, which spellers evoke by flashing rows and columns of letters; the steady-state visual evoked potential (SSVEP), the response of the occipital cortex to a flickering target, periodic at the flicker frequency and its harmonics, so looking at one of several flickering targets selects it; and the error-related potential, a fronto-central negativity about 50–100 ms after one’s own erroneous response (or 200–300 ms after feedback of an error) followed by a positivity, which can be decoded on single trials and used to correct a machine’s action.",
+  "sources": [
+   "Polich J (2007). Updating P300: an integrative theory of P3a and P3b. Clinical Neurophysiology 118(10):2128–2148. doi:10.1016/j.clinph.2007.04.019",
+   "Farwell LA, Donchin E (1988). Talking off the top of your head: toward a mental prosthesis utilizing event-related brain potentials. Electroencephalography and Clinical Neurophysiology 70(6):510–523. doi:10.1016/0013-4694(88)90149-6",
+   "Vialatte FB, Maurice M, Dauwels J, Cichocki A (2010). Steady-state visually evoked potentials: focus on essential paradigms and future perspectives. Progress in Neurobiology 90(4):418–438. doi:10.1016/j.pneurobio.2009.11.005",
+   "Chavarriaga R, Sobolewski A, Millán JdR (2014). Errare machinale est: the use of error-related potentials in brain-machine interfaces. Frontiers in Neuroscience 8:208. doi:10.3389/fnins.2014.00208"
+  ],
+  "note_for_auditor": "Four sources, each for one part: Polich 2007 (the P3b’s parietal maximum and latency), Farwell & Donchin 1988 (the row/column speller), Vialatte et al. 2010 (SSVEP: occipital, periodic at the stimulation frequency and harmonics; the abstract is on PubMed and the full text may be paywalled) and Chavarriaga et al. 2014 (open access on Frontiers: the fronto-central negativity, its latencies after an erroneous response and after feedback, single-trial decoding and the correction of machine actions). Check which source supports which part."
+ }
+]

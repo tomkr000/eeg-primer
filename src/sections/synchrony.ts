@@ -2,6 +2,7 @@ import { claimCite as c } from '../data/params';
 import { figure, inDepth, sw } from '../ui/layout';
 import { MOTOR, ax, by } from './dim-model';
 import { headGeometry, drawCortex } from './head-view';
+import { mountPatchRegions } from './patch-regions';
 
 const ALPHA = '#2a78d6', MU = '#eb6834', THETA = '#1baf7a', MUSCLE = '#898781', SCP = '#6250d6', ATTN = '#eda100', EYES = '#8a6d3b';
 
@@ -19,6 +20,7 @@ export function mountSynchrony(root: HTMLElement) {
     <p>A repeating pattern is a <strong>rhythm</strong>. Its strength describes the size of its voltage swings, which can stay steady while the voltage keeps reversing sign ${c('rhythm-snapshot')}. EEG also records brief responses to events, such as a flash ${c('evoked-map')}. These patterns let us study brain activity, detect changes in a person’s state, and sometimes control a device.</p>`;
   body.append(intro);
   root.append(el);
+  mountPatchRegions(body);
   const fig = figure(body, '', { panelWidth: '0px' });
   fig.el.classList.add('figure-note', 'rhythm-guide');
   const callout = (color: string, title: string, description: string, claims: string[]) =>
@@ -37,7 +39,7 @@ export function mountSynchrony(root: HTMLElement) {
         ${callout(SCP, 'Slow voltage shifts', 'This electrode records voltage changes over seconds. Some people learn to shift the voltage up or down to choose between two options.', ['scp-control'])}
         ${callout(ALPHA, 'Vision and attention (alpha)', 'Usually stronger with the eyes closed; its pattern also changes with visual attention.', ['alpha-function'])}
       </div>
-    </div><p class="rhythm-map-key">Shaded areas show approximate locations; the outlined ring marks a recording electrode.</p>`;
+    </div><p class="rhythm-map-key">Brain-signal ovals summarize broad areas containing many possible cortical patches. Boundaries are schematic and the associations overlap; the outlined ring marks a recording electrode ${c('patch-regions')}.</p>`;
   drawRhythmMap(fig.viz.querySelector('canvas')!.getContext('2d')!);
 
   fig.caption.innerHTML = `<div class="rhythm-notes">

@@ -57,7 +57,7 @@ the electrodes ever see. Noise comes in section 5, and section 7 asks what can b
 
   function drawCortexView() {
     cctx.clearRect(0, 0, W, H + FOOT);
-    footnote(cctx, H, [['five representative patches of synchronous cortex,'], ['placed on motor areas a person can modulate at will'], [`each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]]);
+    footnote(cctx, H, [['five representative local groups of cortical cells,'], ['placed on motor areas a person can modulate at will'], [`each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]]);
     drawCortex(cctx, geo, state.patches);
   }
 

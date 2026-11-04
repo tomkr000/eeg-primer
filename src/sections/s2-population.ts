@@ -29,8 +29,9 @@ ${c('area-rule')}.</p>
 and they are not lined up into open fields. What does enlarge a source is more coherent current: dendritic
 calcium spikes ${c('ca-spike-moment')}, rhythmic drive that synchronises large populations
 ${c('oscillations-synchrony')}, and inhibitory currents in active cells ${c('inhibitory-contrib')}. EEG sees
-sources of any orientation with only modest differences (unlike MEG) ${c('orientation')}, so folding does not
-hide much. Only coherent, aligned current counts.</p>`);
+individual sources of any orientation ${c('orientation')}. When several sources are active together,
+cortical folding can make their voltage contributions oppose and partly cancel ${c('patch-cancellation')}.
+The measured sum depends on both the timing and direction of the currents ${c('superposition')}${c('variances-add')}.</p>`);
 
   const sN = slider({ label: 'Neurons in the patch, N', min: 1, max: P.patchMaxN, value: P.patchDefaultN, log: true, format: (v) => fmt(Math.round(v), 3), marks: [{ value: P.patchDefaultN, label: 'Typical source' }] });
   const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Seizure' }] });

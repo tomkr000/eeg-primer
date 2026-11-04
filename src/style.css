@@ -212,9 +212,6 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .site-foot { font-family: var(--sans); font-size: 13px; color: var(--ink-2); margin-top: 28px; }
 
 /* The rhythm aside: short callouts beside a shared head, then one idea per note. */
-.rhythm-intro { font-family: var(--sans); font-size: 15px; line-height: 1.5; }
-.rhythm-intro { max-width: 92ch; margin: 4px 0 14px; }
-.rhythm-intro p { margin: 0 0 8px; }
 .rhythm-guide { grid-template-columns: minmax(0, 1fr); }
 .rhythm-guide figcaption, .rhythm-note { min-width: 0; }
 .rhythm-map { display: grid; grid-template-columns: minmax(0, 1fr) 320px minmax(0, 1fr); gap: 16px; max-width: 1040px; width: 100%; margin: 8px auto; }
@@ -281,6 +278,7 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .patch-regions .patch-trace-time { color: var(--ink-2); font-size: 12.5px; text-align: center; }
 .patch-trace-wave { stroke-linejoin: round; stroke-linecap: round; }
 .patch-regions .patch-mode-explanation { margin: 6px 0 0; min-height: 40px; }
+.patch-regions .patch-snapshot-note { margin: 8px 0; }
 .patch-region-answers { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; border-top: 1px solid var(--rule); padding-top: 10px; }
 .patch-regions .patch-region-answers p { font-size: 14px; }
 @media (max-width: 800px) {

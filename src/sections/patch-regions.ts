@@ -1,5 +1,5 @@
 import { claimCite as c } from '../data/params';
-import { sw } from '../ui/layout';
+import { section, sw } from '../ui/layout';
 import { at, ax, by, patchColour, type Patch } from './dim-model';
 import { drawCortex, headGeometry } from './head-view';
 
@@ -8,6 +8,8 @@ const INK = '#161616';
 
 /** A schematic bridge from broad functional regions to local sources and their signed scalp sum. */
 export function mountPatchRegions(root: HTMLElement) {
+  const sec = section(root, 'patches', '5', 'Local patches combine into changing scalp voltages');
+  sec.text.parentElement!.remove();
   const fig = document.createElement('figure');
   fig.className = 'patch-regions';
   fig.setAttribute('aria-label', 'Local patches within broad regions, and their voltage contributions at one electrode');
@@ -27,6 +29,7 @@ export function mountPatchRegions(root: HTMLElement) {
       </div>
       <p class="patch-voltage-label">Voltage relative to reference <span>Same scale throughout</span></p>
       <div class="patch-contribution-traces"></div>
+      <p class="patch-snapshot-note">Section 4 shows a snapshot. For one fixed oscillating patch, the ${sw('#e34948')}positive and ${sw('#2a78d6')}negative parts of its scalp map swap each half-cycle. Different patch timing can also change the combined map’s shape. ${c('rhythm-snapshot')}</p>
       <p class="patch-mode-explanation" aria-live="polite"></p>
       <p class="patch-region-assumption"><strong>Only patches 1 and 2 enter this sum.</strong> The two contributions are equally strong; other patches and noise are left out. ${c('patch-mix-demo')}${c('superposition')}</p>
     </div>
@@ -35,7 +38,7 @@ export function mountPatchRegions(root: HTMLElement) {
       <p><strong>Between patches:</strong> neighbors can share some activity and differ in other activity. Being close does not mean being in step. ${c('patch-relations')}</p>
       <p><strong>Current direction matters too:</strong> even synchronized sources can partly cancel if their currents produce opposite voltage signs at the electrode. ${c('patch-cancellation')}</p>
     </figcaption>`;
-  root.append(fig);
+  sec.fig.append(fig);
   drawRegionHead(fig.querySelector('canvas')!);
 
   const traces = fig.querySelector<HTMLElement>('.patch-contribution-traces')!;

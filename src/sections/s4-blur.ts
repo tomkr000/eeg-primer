@@ -21,7 +21,7 @@ interface (BCI) competitions ${c('mi-classes')}. Their cortical areas are not sp
 sit on a knob of the precentral gyrus either side of the midline, the foot areas next to the midline, and the
 mouth areas low on the side of the head ${c('motor-map')}. The areas differ in size, the hand and mouth
 areas far larger than the foot area ${c('area-sizes')}, and each can carry its own rhythm, strongest while the
-area idles and fading when its body part moves or the movement is imagined ${c('own-rhythm')}; section 7 is
+area idles and fading when its body part moves or the movement is imagined ${c('own-rhythm')}; section 9 is
 about that fading. The figure gives all five patches one radius, so that only their position differs. The maps below are snapshots of one instant.
 One fixed patch oscillating around zero keeps its scalp pattern while its voltages reverse sign.
 Different patches can have different timing, so their combined map can change shape ${c('rhythm-snapshot')}.
@@ -33,7 +33,7 @@ model and 128 electrodes ${c('fsaverage-bem')}${c('mne-bem')}${c('montages')}. E
 fraction in step, the source of sections 2 and 3, spread over a disc. The patches are a representative set,
 the motor areas for the hands, the feet and the tongue. The middle map
 shows each patch alone from outside; the right map shows all of them together, which is the only thing
-the electrodes ever see. Noise comes in section 5, and section 7 asks what can be controlled.</p>`);
+the electrodes ever see. Noise comes in section 7, and section 9 asks what can be controlled.</p>`);
 
   const fig = figure(sec.fig, `Left: the cortex from above, nose up, with a fixed, representative set of patches on the motor areas a person can modulate at will: the hands, the feet and the tongue ${c('mi-classes')}${c('motor-map')}. Middle: the scalp voltage each patch makes on its own, each map scaled to its own peak, so the shapes can be compared. Right: the voltage of all patches together, on a fixed scale.`, { wide: true });
   const row = document.createElement('div');

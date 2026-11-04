@@ -1,27 +1,15 @@
 import { claimCite as c } from '../data/params';
-import { figure, inDepth, sw } from '../ui/layout';
+import { figure, section, sw } from '../ui/layout';
 import { MOTOR, ax, by } from './dim-model';
 import { headGeometry, drawCortex } from './head-view';
-import { mountPatchRegions } from './patch-regions';
 
 const ALPHA = '#2a78d6', MU = '#eb6834', THETA = '#1baf7a', MUSCLE = '#898781', SCP = '#6250d6', ATTN = '#eda100', EYES = '#8a6d3b';
 
-/** A signal map and short explanations, placed after section 4. */
+/** The main EEG signals, following the local-patch and voltage-sum illustration. */
 export function mountSynchrony(root: HTMLElement) {
-  const el = document.createElement('section');
-  el.className = 'section question';
-  el.id = 'synchrony';
-  const body = document.createElement('div');
-  body.className = 'section-note';
-  el.append(inDepth(body, 'From patches to EEG signals'));
-  const intro = document.createElement('div');
-  intro.className = 'rhythm-intro';
-  intro.innerHTML = `<p>Section 4 freezes the scalp voltage at one instant. In a simple oscillation from one fixed patch, the ${sw('#e34948')}positive and ${sw('#2a78d6')}negative parts of its scalp map swap each half-cycle. At a fixed electrode, those changing voltages trace a wave over time. Different patches can have different timing, so their combined map can change shape as well ${c('rhythm-snapshot')}.</p>
-    <p>A repeating pattern is a <strong>rhythm</strong>. Its strength describes the size of its voltage swings, which can stay steady while the voltage keeps reversing sign ${c('rhythm-snapshot')}. EEG also records brief responses to events, such as a flash ${c('evoked-map')}. These patterns let us study brain activity, detect changes in a person’s state, and sometimes control a device.</p>`;
-  body.append(intro);
-  root.append(el);
-  mountPatchRegions(body);
-  const fig = figure(body, '', { panelWidth: '0px' });
+  const sec = section(root, 'synchrony', '6', 'EEG signals reveal rhythms and responses to events');
+  sec.text.parentElement!.remove();
+  const fig = figure(sec.fig, '', { panelWidth: '0px' });
   fig.el.classList.add('figure-note', 'rhythm-guide');
   const callout = (color: string, title: string, description: string, claims: string[]) =>
     `<div class="rhythm-callout"><h3>${sw(color)}${title}</h3><p>${description} ${claims.map(c).join('')}</p></div>`;
@@ -45,7 +33,7 @@ export function mountSynchrony(root: HTMLElement) {
   fig.caption.innerHTML = `<div class="rhythm-notes">
     <section class="rhythm-note rhythm-responses">
       <h3>What EEG signals tell us</h3>
-      <p>Rhythms are named partly by how fast they repeat. Their meaning also depends on location and context: theta occurs during both mental tasks and early sleep ${c('theta-context')}.</p>
+      <p>A <strong>rhythm</strong> is a repeating voltage pattern. Its strength is the size of the swings, which can stay steady while the voltage reverses sign ${c('rhythm-snapshot')}. Names partly reflect repetition rate; meaning also depends on location and context: theta occurs during mental tasks and early sleep ${c('theta-context')}.</p>
       <table class="rhythm-signal-table">
         <thead><tr><th scope="col">Signal</th><th scope="col">What it reflects</th><th scope="col">What it is useful for</th></tr></thead>
         <tbody>

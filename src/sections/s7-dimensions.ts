@@ -8,7 +8,7 @@ import { sourceSliders, momentNam } from './s5-noise';
 import { MOTOR } from './dim-model';
 import { headGeometry, titledCanvas, footnote, drawCortex } from './head-view';
 
-/** the decoder's channel: the best linear combination of a 64-electrode cap (the model of section 9) */
+/** the decoder's channel: the best linear combination of a 64-electrode cap (the model of section 11) */
 const CAP = { electrodes: 64, noiseUv: 1, bgUv: 10, radiusMm: 10 };
 const [cap] = snrVersusElectrodes([CAP.electrodes], CAP.noiseUv, CAP.bgUv, CAP.radiusMm);
 /** rhythm power over the in-band noise power in that channel */
@@ -28,12 +28,12 @@ const MC = 600; // random windows per movement behind the readouts
 const seen = (erdPct: number, n: number) => (1 + erdPct / 100 + n) / (1 + n);
 
 export function mountDimensions(root: HTMLElement) {
-  const sec = section(root, 'dimensions', '7', 'A head with EEG can operate only a few dimensions', 'Few rhythms can be changed at will, their changes overlap, and each hides in the rhythm’s own fluctuation');
+  const sec = section(root, 'dimensions', '9', 'A head with EEG can operate only a few dimensions', 'Few rhythms can be changed at will, their changes overlap, and each hides in the rhythm’s own fluctuation');
   prose(sec.text, `
 <p>A dimension of control is a signal a person can move at will, independently of the others. With EEG the
 signals are the sensorimotor rhythms (the mu rhythm and its 20 Hz partner; mental tasks such as arithmetic or word
 association add classes at the front of the head, read the same way and no more accurately, and slow potentials at the
-vertex make a trained switch: the aside after section 4 maps them all), and the way to move one is to imagine a
+vertex make a trained switch: section 6 maps them all), and the way to move one is to imagine a
 movement: the mu rhythm over that body part's area loses part of its power (event-related desynchronization, ERD), about half of it on
 average in one study and about 85% in the most reactive band in another, both averaged over many trials
 ${c('erd-depth')}. The body parts with areas large enough and far enough apart to show up from outside are
@@ -51,7 +51,7 @@ measured over a window of T seconds in a band B hertz wide scatters by about 1/�
 window to the next, ±58% for a 3 Hz band over 1 s, however strong the rhythm ${c('erd-detect')}, and real
 alpha power scatters two to three times more than that ${c('rhythm-fluctuation')}. The bands in the figure
 are that scatter, and the dots are one window's reading; press the button to draw another and watch the
-left-hand row turn into the right-hand row. Longer windows narrow the bands as √T but cost time (section 8);
+left-hand row turn into the right-hand row. Longer windows narrow the bands as √T but cost time (section 10);
 measured accuracy for left- versus right-hand imagery climbs the same way, from about 65% with 1 s windows to
 74% with 4 s ${c('window-accuracy')}. The four-way choice carries about 0.15 bits/s at best
 ${c('mi-bitrate')}; the best interfaces of 2002 managed 10 to 25 bits per minute ${c('itr-2002')}; attempts
@@ -95,7 +95,7 @@ dimension of control ${c('itr-ssvep')}. Intracortical arrays, for comparison, de
   fig.panel.append(controls(pick.el, sWin.el, sN.el, sF.el, again));
   assumptions(fig.el, [
     { what: 'Responses', value: 'the mean change of mu power at C3, Cz and C4 during imagined movements of the left hand, right hand, feet and tongue in nine people (trial-averaged, in the most reactive band of each person, electrode and task, from Laplacian derivations on a dense grid rather than bare electrodes, so upper bounds for a fixed-band decoder on three plain electrodes); the two hand responses are also what section 4 shows from the lead field: each hand area is seen by both hand electrodes', cite: c('mi-matrix') + c('mi-overlap') },
-    { what: 'Channel', value: `the rhythm is the patch of the N and synchrony sliders through the best linear combination of ${CAP.electrodes} electrodes for a ${CAP.radiusMm} mm patch, against the brain's background (${CAP.bgUv} µV per electrode) and ${CAP.noiseUv} µV of electrode noise (section 9); the unchanging noise adds a floor of 1/ρ to every reading, with ρ the rhythm's power over the noise`, cite: c('snr-electrodes') + c('brain-background') },
+    { what: 'Channel', value: `the rhythm is the patch of the N and synchrony sliders through the best linear combination of ${CAP.electrodes} electrodes for a ${CAP.radiusMm} mm patch, against the brain's background (${CAP.bgUv} µV per electrode) and ${CAP.noiseUv} µV of electrode noise (section 11); the unchanging noise adds a floor of 1/ρ to every reading, with ρ the rhythm's power over the noise`, cite: c('snr-electrodes') + c('brain-background') },
     { what: 'One window', value: 'the power estimate over B·T degrees of freedom is gamma distributed with a spread of 1/√(BT) of its mean (B = 3 Hz); the band drawn is the 16th to 84th percentile; the dots are one random draw per electrode, the same draws on the head', cite: c('erd-detect') + c('window-samples') },
     { what: 'Decoder', value: `reads the three electrodes of one window, taken as independent, and picks the movement whose measured response makes the reading most likely (the gamma likelihood); the shares are from ${MC} windows per movement. Real decoders use more electrodes and learned spatial filters, which is why the measured four-class figure, 68% with 4 s windows, beats this one`, cite: c('mi-bitrate') + c('window-accuracy') },
     { what: 'Electrodes on the head', value: 'C3 and C4 are drawn above the hand areas of section 4 and Cz on the midline above the foot area; the 10–20 positions lie approximately there', cite: c('mi-matrix') },

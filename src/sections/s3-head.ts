@@ -27,13 +27,13 @@ scalp, tens of times less than at the cortical surface for a focal source ${c('e
 with scalp EEG at tens of microvolts ${c('eeg-amplitude')}; 10 nA·m, a typical measured source, takes
 10,000 to 50,000 cells in step ${c('cells-for-10nam')}. Nothing special happens at the skin: the potential continues into the
 air, halving about a centimetre above it ${c('exterior-potential')}, which is what an electrode held off
-the scalp has to work with, and why, as section 6 shows, it gets almost nothing: the coupling through air is
+the scalp has to work with, and why, as section 8 shows, it gets almost nothing: the coupling through air is
 far too weak to use what is there.</p>`);
 
   const sN = slider({ label: 'Neurons in the patch, N', min: 1, max: P.patchMaxN, value: P.patchDefaultN, log: true, format: (v) => fmt(Math.round(v), 3), marks: [{ value: P.patchDefaultN, label: 'Typical source' }] });
   const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Seizure' }] });
   const sDepth = slider({ label: 'Source depth below the cortical surface', unit: 'mm', min: 0.5, max: 25, value: 2, step: 0.5, marks: [{ value: 2, label: 'Gyral crown' }, { value: 20, label: 'Deep in a sulcus' }] });
-  const TH_UV = 1; // dark contour: the quietest electrode contact alone (section 5 adds the rest)
+  const TH_UV = 1; // dark contour: the quietest electrode contact alone (section 7 adds the rest)
   const orientation = 'radial' as const;
   const rSource = readout('Source: the patch of section 2', c('single-cell-moment') + c('cells-for-10nam'));
   const rScalp = readout('Peak scalp potential');
@@ -41,7 +41,7 @@ far too weak to use what is there.</p>`);
   const rRatio = readout('Cortex-to-scalp attenuation');
   const rWidth = readout(`Stretch of scalp above ${1} µV`);
 
-  const fig = figure(sec.fig, `Left: the layers between cortex and air in cross-section, drawn flat like sections 1 and 2 (the sphere model unrolled; axes in centimetres). ${sw('#e34948', 'glow')} positive, ${sw('#2a78d6', 'glow')} negative, fading with the logarithm of the potential. The ${sw('#1a1a1a', 'thick')} stretch of scalp is where an electrode on it would see more than 1 µV, the noise of the quietest electrode contact alone (section 5 adds the rest). The potential continues into the air, but no electrode can read it there: a square centimetre held a centimetre off the scalp couples through under a tenth of a picofarad, hopeless as section 6 shows, so the air is faded and the profile stops at the scalp. Right: the potential straight above the source, on the same vertical scale. The source is the patch of section 2 at the chosen depth, pointing outward.`, { panelWidth: '400px' });
+  const fig = figure(sec.fig, `Left: the layers between cortex and air in cross-section, drawn flat like sections 1 and 2 (the sphere model unrolled; axes in centimetres). ${sw('#e34948', 'glow')} positive, ${sw('#2a78d6', 'glow')} negative, fading with the logarithm of the potential. The ${sw('#1a1a1a', 'thick')} stretch of scalp is where an electrode on it would see more than 1 µV, the noise of the quietest electrode contact alone (section 7 adds the rest). The potential continues into the air, but no electrode can read it there: a square centimetre held a centimetre off the scalp couples through under a tenth of a picofarad, hopeless as section 8 shows, so the air is faded and the profile stops at the scalp. Right: the potential straight above the source, on the same vertical scale. The source is the patch of section 2 at the chosen depth, pointing outward.`, { panelWidth: '400px' });
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';

@@ -45,7 +45,7 @@ ${c('erd-depth')}. The first four joints take the right hand, left hand, feet an
 ${c('mi-classes')}. The fifth joint takes the right shoulder, whose area lies on the motor strip above and toward the midline from the hand area ${c('motor-map')}. These choices do not establish a biological maximum. The model uses motor imagery because sensorimotor signals are among the few scalp signals a
 person can change at will without an outside stimulus (which makes sense because they are already actuator control signals)
 ${c('self-generated-signals')}. Other self-generated signals are slower or coarser. Control through prefrontal cortex is error-prone and requires a completely different set of visualizations (imagine "I'm doing subtraction" is a control signal) ${c('frontal-control')}. P300 and flicker responses need a stimulus and pick one option from a set
-rather than steering continuously ${c('self-generated-signals')}${c('evoked-map')}.</p>
+rather than steering continuously ${c('self-generated-signals')}${c('p300-response')}${c('ssvep-response')}.</p>
 <p><strong>Separate patches can still respond to the same movement.</strong> Imagining one movement can change several areas.
 In a study of nine people, hand imagery reduced mu power over both hand areas. Foot and tongue imagery instead
 increased hand-area mu power by about 90 to 145% on average ${c('mi-matrix')}${c('mi-overlap')}.
@@ -66,9 +66,9 @@ of eight targets in 51% of trials in the first session and 59% in the third, whe
 ${c('osa-3d')}. EEG-controlled robots have
 done more complex tasks with sequences, fixed commands or a separate on/off choice, never steering more than two
 dimensions continuously at once ${c('robot-arm')}. The closest to four is an interface in which people chose one of
-four commands for two extra robotic arms by attending to vibrating pads, one choice at a time. After three days they
-chose correctly 79% of the time, or 70% while also using their own arms, where guessing would give 25%
-${c('tactile-four')}. These studies count success in different ways from each other and from this arm, where every
+four commands for two extra robotic arms by attending to vibrating pads, one choice at a time. On the third day the
+reported success at detecting the attended pad's response was 79% in this task alone and 70% while also using their
+own arms ${c('tactile-four')}. These studies count success in different ways from each other and from this arm, where every
 joint must stay within 15° of straight at the same time ${c('arm-task')}.
 We found no report of four EEG signals steered continuously at once, although that is not proof that it cannot be
 done ${c('dof-search')}.</p>

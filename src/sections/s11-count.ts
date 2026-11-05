@@ -24,20 +24,24 @@ function crossing(pts: [number, number][], level: number): number {
 }
 
 export function mountCount(root: HTMLElement) {
-  const sec = section(root, 'count', '11', 'More electrodes cannot tell two typing fingers apart', 'Neighboring fingers make nearly the same scalp pattern, and a keystroke is too short to read a rhythm');
+  const sec = section(root, 'count', '11', 'In this model, more electrodes cannot tell two typing fingers apart', 'Neighboring fingers make nearly the same scalp pattern, and a keystroke is too short to read a rhythm');
   const G = P.fingerGapMm;
   prose(sec.text, `
 <p>This section asks whether more electrodes would let someone type by imagining finger movements. A decoder
-would have to tell neighboring fingers, such as the index and middle finger, apart once per keystroke. The model suggests no. With the two fingers' regions ${G.indexMiddleMotor} mm apart and one keystroke to decide, it names
-the right finger 50% of the time with 128 electrodes and 53% with 100,000, no better than guessing
-${c('finger-count')}.</p>
+would have to tell neighboring fingers, such as the index and middle finger, apart once per keystroke. In this
+model the answer is no. With the two fingers' regions ${G.indexMiddleMotor} mm apart and one keystroke to decide, it
+names the right finger 50% of the time with 128 electrodes and 53% with 100,000, no better than guessing
+${c('finger-count')}. These percentages are calculations on this page, not measured results. The model reads only
+the power of one rhythm in each region with a linear decoder, so it does not cover every EEG feature or decoder, and
+it does not show that decoding fingers from EEG is impossible. Studies have decoded imagined fingers under slower
+conditions, as the last paragraphs describe.</p>
 <p>The first reason is space. In primary motor cortex the thumb and the little finger lie about 6 mm apart, and in
 sensory cortex about 16 mm ${c('finger-spacing')}. Neighbors such as the index and middle finger lie about a
 quarter of that apart ${c('finger-neighbors')}. Each region's voltage spreads over centimeters of scalp (section 4),
 so the two fingers make nearly the same scalp pattern. To tell them apart, a decoder must cancel one pattern from
 the other, which removes most of the signal they share ${c('finger-model')}. More electrodes help when the only
 noise is the electrodes' own ${c('snr-electrodes')}. The brain's own activity reaches many electrodes at once
-${c('brain-noise')} and sets a ceiling even with the whole scalp known exactly ${c('electrode-ceiling')}.</p>
+${c('brain-noise')} and, in this model, sets a ceiling even with the whole scalp known exactly ${c('electrode-ceiling')}.</p>
 <p>The second reason is time. Typists average about 52 words per minute, about 240 ms between keystrokes
 ${c('typing-speed')}. Rhythm power measured over so short a window fluctuates so much that even a recording with no
 added noise would name the right finger only 64% of the time ${c('erd-detect')}${c('finger-count')}. The rhythm

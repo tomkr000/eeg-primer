@@ -73,8 +73,10 @@ less interference from nearby electric fields than wet ones ${c('searle')}.</p>
 <p>A flat plate that rests on hair never touches the skin. The hair and air between them act as a capacitor, and
 a wider gap gives less capacitance and more impedance ${c('hair-permittivity')}${c('electrode-model-settings')}.
 The amplifier's own input capacitance then reduces the voltage further, so raising the input resistance alone
-does not recover the signal ${c('noncontact-cap')}. This is why research EEG over hairy scalp still uses wet
-electrodes ${c('haired-scalp-wet')}. </p>`);
+does not recover the signal ${c('noncontact-cap')}. For this reason a 2010 review judged wet electrodes still
+necessary for research EEG over hairy scalp ${c('haired-scalp-wet')}. Wet electrodes remain the usual reference for
+demanding recordings, while dry electrodes with pins that reach the scalp have since matched wet electrodes in some
+comparisons ${c('dry-through-hair')}. How well any of them works depends on the contact, the amplifier and the task.</p>`);
 
   const { sN, sF } = sourceSliders(ALPHA_N, 0.13); // the same source model as sections 2 to 7, a little more in step so the rhythm stands out
   const sArea = slider({ label: 'Electrode area', unit: 'cm²', min: 0.1, max: 3, value: 0.1, log: true, note: c('area-scaling') + c('contact-area-hair'), marks: [{ value: 0.1, label: 'In hair' }, { value: 1, label: 'Forehead or gel' }] });

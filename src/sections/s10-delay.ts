@@ -151,7 +151,7 @@ These are choices for this demonstration, not a universal delay for EEG ${c('del
   new ResizeObserver(fit).observe(fig.el);
   fit();
 
-  const note = figure(sec.fig, `Each row describes a separate task. An early cued-imagery system returned its classification within 1.5 s ${c('erd-timecourse')}. The P300 peaks 250 to 500 ms after an attended, infrequent stimulus. That is the delay of one brain response, not the time to select a whole letter ${c('evoked-map')}${c('p300-timing')}. One flicker-speller protocol used 0.5 s of stimulation and 0.5 s for a gaze shift per selection ${c('bci-windows')}. The rows are examples, not stages to add together or minimum delays for every interface.`, { panelWidth: '0px' });
+  const note = figure(sec.fig, `Each row describes a separate task. An early cued-imagery system returned its classification within 1.5 s ${c('erd-timecourse')}. The P300 peaks 250 to 500 ms after an attended, infrequent stimulus. That is the delay of one brain response, not the time to select a whole letter ${c('p300-response')}${c('p300-timing')}. One flicker-speller protocol used 0.5 s of stimulation and 0.5 s for a gaze shift per selection ${c('bci-windows')}. The rows are examples, not stages to add together or minimum delays for every interface.`, { panelWidth: '0px' });
   note.el.classList.add('figure-note');
   note.viz.append(vizTitle('Reported timings in three EEG interface examples'));
   note.viz.insertAdjacentHTML('beforeend', timelineSvg());

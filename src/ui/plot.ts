@@ -23,6 +23,8 @@ export interface Marker {
   color?: string;
   /** x markers only: draw the label as a boxed callout near the top of the plot instead of at the foot of the line */
   callout?: boolean;
+  /** x markers only: draw the label just above the plot area, clear of the data (needs a top margin of about 16) */
+  above?: boolean;
 }
 /** a boxed note with a pointer to a data point: the box sits dx, dy pixels from the point, or at the data position `at` */
 export interface Note {
@@ -43,6 +45,8 @@ export interface AxisCfg {
   format?: (v: number) => string;
   /** suggested number of ticks (default 6 on x, 5 on y) */
   ticks?: number;
+  /** keep the ticks but print no labels (a plot stacked over another that labels the shared axis) */
+  hideTickLabels?: boolean;
 }
 export interface PlotCfg {
   x: AxisCfg;
@@ -113,6 +117,7 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
     else if (cfg.x.scale === 'log') xAxis.ticks(6, (v: number) => fmt(v, 2));
     if (cfg.y.format) yAxis.tickFormat((v) => cfg.y.format!(+v));
     else if (cfg.y.scale === 'log') yAxis.ticks(5, (v: number) => fmt(v, 2));
+    if (cfg.x.hideTickLabels) xAxis.tickFormat(() => '');
     gX.attr('transform', `translate(0,${MARGIN.top + ih})`).call(xAxis as never);
     gY.attr('transform', `translate(${MARGIN.left},0)`).call(yAxis as never);
     gGrid.selectAll('*').remove();
@@ -162,6 +167,8 @@ export function linePlot(container: HTMLElement, cfg: PlotCfg): Plot {
           const bb = (txt.node() as SVGTextElement).getBBox();
           g.insert('rect', 'text').attr('x', bb.x - 6).attr('y', bb.y - 3).attr('width', bb.width + 12).attr('height', bb.height + 6).attr('rx', 4).attr('class', 'callout-box');
           g.append('line').attr('x1', nearRight ? bb.x + bb.width + 6 : bb.x - 6).attr('y1', bb.y + bb.height / 2).attr('x2', x(m.value)).attr('y2', bb.y + bb.height / 2).attr('class', 'callout-line');
+        } else if (m.above) {
+          gMarkers.append('text').attr('class', 'marker-label').attr('x', x(m.value)).attr('y', MARGIN.top - 5).attr('text-anchor', 'middle').attr('fill', col).text(m.label);
         } else {
           gMarkers.append('text').attr('class', 'marker-label').attr('x', x(m.value) + (nearRight ? -4 : 4)).attr('y', MARGIN.top + ih - 6).attr('text-anchor', nearRight ? 'end' : 'start').attr('fill', col).text(m.label);
         }

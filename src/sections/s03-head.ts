@@ -16,18 +16,15 @@ conducts much less well than brain tissue ${c('sigma-skull')}${c('skull-brain-ra
 <p>CSF lets current spread sideways before it reaches the skull ${c('csf-shunt')}. The poorly conducting
 skull further broadens and weakens the voltage pattern seen at the scalp. Fine spatial detail is strongly
 reduced ${c('spatial-lowpass')}. Section 4 shows how nearby sources can then look alike.</p>
-<p>The figure uses the cell-group model from section 2. At the default settings,
-${fmt(P.patchDefaultN, 3)} cells with ${P.patchDefaultSync * 100}% in step produce about
-${fmt(P.patchDefaultN * P.patchDefaultSync * P.singleCellMomentPAm * 1e-3, 2)} nA·m
-${c('single-cell-moment')}${c('cells-for-10nam')}. The head is represented by spherical layers with a
+<p>The figure uses the cell-group model from section 2. The head is represented by spherical layers with a
 shared center. The calculation solves that simplified geometry, rather than an individual person's head
 ${c('sphere-model')}. The readouts compare voltage at the cortex and scalp as you change source depth.</p>
 <p>Voltage also extends into the air above the skin ${c('exterior-potential')}. That does not mean a plate
-held away from the scalp records it well: the air gap forms a very weak electrical connection.
+held away from the scalp records it well: the air gap forms a very weak electrical connection and noise dominates the signal.
 Section 8 examines this gap and the amplifier needed to measure through it ${c('noncontact-cap')}.</p>`);
 
   const sN = slider({ label: 'Neurons in the patch, N', min: 1, max: P.patchMaxN, value: P.patchDefaultN, log: true, format: (v) => fmt(Math.round(v), 3), marks: [{ value: P.patchDefaultN, label: 'Typical source' }] });
-  const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Theoretical maximum' }] });
+  const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Theoretical<br>max' }] });
   const sDepth = slider({ label: 'Source depth below the cortical surface', unit: 'mm', min: 0.5, max: 25, value: 2, step: 0.5, marks: [{ value: 2, label: 'Gyral crown' }, { value: 20, label: 'Deep in a sulcus' }] });
   const TH_UV = 1; // dark contour: the quietest electrode contact alone (section 7 adds the rest)
   const orientation = 'radial' as const;
@@ -37,7 +34,7 @@ Section 8 examines this gap and the amplifier needed to measure through it ${c('
   const rRatio = readout('Cortex-to-scalp attenuation');
   const rWidth = readout(`Stretch of scalp above ${1} µV`);
 
-  const fig = figure(sec.fig, `Left: the head's layers, drawn flat for a side view of the spherical model. The source points outward at the selected depth ${c('sphere-model')}. The glow shows voltage (${sw('#e34948', 'glow')} positive, ${sw('#2a78d6', 'glow')} negative) on a logarithmic scale. The ${sw('#1a1a1a', 'thick')} bar marks scalp voltage magnitude above 1 µV, the noise of an unusually quiet contact alone ${c('skin-noise')}. Other noise is excluded. Right: voltage along the line directly above the source, with height aligned to the left panel. Voltage continues into air, but that part is faded in the drawing and omitted from the profile ${c('exterior-potential')}. Section 8 explains the difficulty of recording across an air gap.`, { panelWidth: '400px' });
+  const fig = figure(sec.fig, `Left: the head's layers, drawn flat for a side view of the spherical model. The source points outward at the selected depth ${c('sphere-model')}. The glow shows voltage (${sw('#e34948', 'glow')} positive, ${sw('#2a78d6', 'glow')} negative) on a logarithmic scale. The ${sw('#1a1a1a', 'thick')} bar marks scalp voltage magnitude above 1 µV, the noise of an unusually quiet contact alone ${c('skin-noise')}. Other noise is excluded. Right: voltage along the line directly above the source, with height aligned to the left panel. Voltage continues into the air above the scalp, faded in the drawing and shown in the profile ${c('exterior-potential')}. Section 8 explains the difficulty of recording across an air gap.`, { panelWidth: '400px' });
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
@@ -86,13 +83,14 @@ Section 8 examines this gap and the amplifier needed to measure through it ${c('
     const prof: [number, number][] = [];
     for (let k = 0; k <= 400; k++) {
       const y = yRange[0] + ((yRange[1] - yRange[0]) * k) / 400, r = rCortexSurf + y;
-      if (r > R) break; // the profile stops at the scalp: nothing can read the field in the air
-      prof.push([Math.abs(potential(sol, Math.min(r, R - 1e-9), 0, 0)) * 1e6, y * 100]);
+      // the air has a potential too (claim exterior-potential), but no current flows there for an electrode to draw
+      const v = r > R ? exteriorPotential(sol, r, 0, 0) : potential(sol, Math.min(r, R - 1e-9), 0, 0);
+      prof.push([Math.abs(v) * 1e6, y * 100]);
     }
     const layerColors = ['#2a78d6', '#1baf7a', '#eda100', '#898781', '#eb6834'];
     const above = (r: number) => (r - rCortexSurf) * 100;
     const bands = shells.map((sh, i) => ({ from: i === 0 ? yRange[0] * 100 : above(shells[i - 1].outerRadius), to: above(sh.outerRadius), label: i === 0 ? 'gray matter' : sh.name, color: layerColors[i % layerColors.length] }));
-    bands.push({ from: above(R), to: yRange[1] * 100, label: 'air: unreadable', color: '#f4f1ea' });
+    bands.push({ from: above(R), to: yRange[1] * 100, label: 'air: weak electrical connection', color: '#f4f1ea' });
     scalpY = R - rCortexSurf;
     radial.update(prof, bands, [{ value: TH_UV, label: '1 µV' }], (b - rCortexSurf) * 100);
     let peakScalp = 0, peakCortex = 0;

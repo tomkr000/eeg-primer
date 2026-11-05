@@ -1,5 +1,5 @@
 /**
- * A robot arm of 1 to 5 joints driven by imagined movements (section 7). Each joint is assigned one imagined
+ * A robot arm of 1 to 5 joints driven by imagined movements (section 9). Each joint is assigned one imagined
  * movement; imagining it changes the mu power of every cortical patch by the measured response of that movement;
  * a full cap reads each patch's power over a trailing window, and a decoder calibrated on the single movements
  * turns the patch powers back into one command per joint. The person is an ideal controller: they see the arm,
@@ -69,25 +69,13 @@ export function seenResponse(logResp: number[][], nF: number): number[][] {
 
 /**
  * Decoder rows (one per joint, one weight per patch): the least-squares unmixing of the calibrated responses of the
- * joints' movements. A joint beyond the number of movements gets the direction no movement reaches (orthogonal to
- * all of them), scaled like a typical movement: it can be read, but nothing the person does moves it.
+ * joints' movements, one movement per joint.
  */
 export function decoder(seen: number[][], joints: number): number[][] {
-  const P = seen.length, nT = Math.min(joints, seen[0].length);
-  const cols = Array.from({ length: nT }, (_, k) => seen.map((r) => r[k]));
+  const P = seen.length, cols = Array.from({ length: joints }, (_, k) => seen.map((r) => r[k]));
   const dot = (a: number[], b: number[]) => a.reduce((s, v, i) => s + v * b[i], 0);
   const Ginv = invert(cols.map((a) => cols.map((b) => dot(a, b))));
-  const rows = Ginv.map((g) => Array.from({ length: P }, (_, p) => cols.reduce((s, c, m) => s + g[m] * c[p], 0)));
-  for (let extra = nT; extra < joints; extra++) {
-    // a patch direction minus its exact projection on the movements' responses (and on earlier leftover rows)
-    const basis = [...cols, ...rows.slice(nT)], Gb = invert(basis.map((a) => basis.map((b) => dot(a, b))));
-    const e = Array.from({ length: P }, (_, p) => (p === P - 1 - (extra - nT) ? 1 : 0.1)), proj = basis.map((b) => dot(b, e));
-    const w = Gb.map((g) => g.reduce((s, x, m) => s + x * proj[m], 0));
-    const v = e.map((x, i) => x - basis.reduce((s, b, m) => s + w[m] * b[i], 0));
-    const nv = Math.hypot(...v), scale = cols.reduce((s, c) => s + Math.hypot(...c), 0) / cols.length;
-    rows.push(v.map((x) => x / nv / scale));
-  }
-  return rows;
+  return Ginv.map((g) => Array.from({ length: P }, (_, p) => cols.reduce((s, c, m) => s + g[m] * c[p], 0)));
 }
 function invert(A: number[][]): number[][] {
   const n = A.length, M = A.map((r, i) => [...r, ...r.map((_, j) => (i === j ? 1 : 0))]);
@@ -126,7 +114,7 @@ function bandProcess(n: number, B: number, rng: () => number): [Float64Array, Fl
 }
 
 export function simulateArm(logResp: number[][], o: ArmOpts): ArmTrial {
-  const { dt } = ARM, P = logResp.length, K = o.joints, nTask = Math.min(K, logResp[0].length), nF = 1 / o.rho;
+  const { dt } = ARM, P = logResp.length, K = o.joints, nTask = K, nF = 1 / o.rho;
   const D = decoder(seenResponse(logResp, nF), K), dof = powerDof(o.bandHz, o.windowS);
   const restLog = Math.log(1 + nF) + digamma(dof) - Math.log(dof); // mean of ln(estimate) at rest
   const Nw = Math.max(1, Math.round(o.windowS / dt)), nOn = Math.round(o.onsetS / dt), nRamp = Math.max(1, Math.round(o.rampS / dt));
@@ -207,4 +195,37 @@ export function successRate(logResp: number[][], o: Omit<ArmOpts, 'seed'>, trial
   let ok = 0, time = 0;
   for (let s = 0; s < trials; s++) { const r = simulateArm(logResp, { ...o, seed: firstSeed + s }); if (!isNaN(r.doneAt)) { ok++; time += r.doneAt; } }
   return { rate: ok / trials, meanTime: ok ? time / ok : NaN };
+}
+
+/**
+ * A check against a measured task (claim cursor-check): the 3D cursor task of McFarland et al. 2010, read through the
+ * same signal chain. The cursor starts at the center of a cube of half-width 1 with walls; each axis moves at
+ * gain·(command − 0.5) per second, the command of its movement minus its average over the eight targets, and the
+ * ideal person holds full imagery for the axes whose target side is positive and rests for the others, starting when
+ * the target appears 1 s before the cursor. The trial succeeds when every coordinate reaches `edge` on the target's
+ * side. Returns the time from the cursor's start (NaN: not reached within limitS).
+ */
+export function cursorTrial(logResp: number[][], target: number[], o: { rho: number; windowS: number; bandHz: number; onsetS: number; rampS: number; limitS: number; gain: number; edge: number; seed: number }): number {
+  const { dt } = ARM, P = logResp.length, K = target.length, nF = 1 / o.rho;
+  const D = decoder(seenResponse(logResp, nF), K), dof = powerDof(o.bandHz, o.windowS);
+  const restLog = Math.log(1 + nF) + digamma(dof) - Math.log(dof), Nw = Math.max(1, Math.round(o.windowS / dt));
+  const pre = Nw + Math.round(1 / dt) + 5, n = pre + Math.ceil(o.limitS / dt), rng = mulberry32(o.seed);
+  const rhythm = Array.from({ length: P }, () => bandProcess(n, o.bandHz, rng)), noise = Array.from({ length: P }, () => bandProcess(n, o.bandHz, rng));
+  const sq = Array.from({ length: P }, () => new Float64Array(n)), wsum = new Float64Array(P), est = new Float64Array(P), pos = new Array(K).fill(0);
+  for (let i = 0; i < n; i++) {
+    const t = (i - pre) * dt, ramp = Math.max(0, Math.min(1, (t + 1 - o.onsetS) / o.rampS));
+    for (let p = 0; p < P; p++) {
+      let lp = 0; for (let k = 0; k < K; k++) if (target[k] > 0) lp += ramp * logResp[p][k];
+      const a = Math.sqrt(Math.exp(lp)), b = Math.sqrt(nF), re = a * rhythm[p][0][i] + b * noise[p][0][i], im = a * rhythm[p][1][i] + b * noise[p][1][i];
+      sq[p][i] = re * re + im * im; wsum[p] += sq[p][i]; if (i >= Nw) wsum[p] -= sq[p][i - Nw];
+      est[p] = wsum[p] / Math.min(i + 1, Nw) / (1 + nF);
+    }
+    if (t < 0) continue;
+    for (let k = 0; k < K; k++) {
+      let c = 0; for (let p = 0; p < P; p++) c += D[k][p] * (Math.log(est[p] * (1 + nF)) - restLog);
+      pos[k] = Math.max(-1, Math.min(1, pos[k] + o.gain * (c - 0.5) * dt));
+    }
+    if (pos.every((x, k) => x * target[k] >= o.edge)) return t;
+  }
+  return NaN;
 }

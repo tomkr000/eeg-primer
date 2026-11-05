@@ -3,7 +3,7 @@ import { controls, readout, slider, fmt } from '../ui/slider';
 import { linePlot } from '../ui/plot';
 import { P, claimCite as c } from '../data/params';
 import { section, figure, prose, readouts, assumptions, sw, vizTitle } from '../ui/layout';
-import { RAW_DEFAULTS } from './s5-noise';
+import { RAW_DEFAULTS } from './s07-noise';
 
 /** 2nd-order band-pass (a high-pass and a low-pass biquad) for the mu band. */
 function bandpass(lo: number, hi: number, fs: number) {
@@ -69,31 +69,28 @@ export function simulateTrial(onset: number, ramp: number, T: number, drop: numb
 export function mountDelay(root: HTMLElement) {
   const sec = section(root, 'delay', '10', 'Reading an EEG signal takes time', 'The brain response and the decoder both contribute to the delay');
   prose(sec.text, `
-<p>EEG interfaces can read rhythms or responses to events, as section 6 showed. For imagined-movement
+<p>EEG interfaces can read rhythms or responses to events, as section 6 showed. This section uses a simulated robot arm reach to demonstrate how EEG has inherent delays between human intention and action. For imagined-movement
 control, a decoder can look for a fall in the mu rhythm's power. In cued hand imagery, motor-cortex activation
 starts about 0.3 s after the cue, and classification from one trial is most accurate about 1 s after the cue
-${c('erd-timecourse')}. Those measurements start at an external cue; they do not time a person's private decision.</p>
+${c('erd-timecourse')}.</p>
 <p>The decoder also needs time to estimate power from a noisy signal. For example, one system that achieved
 three-dimensional control updated its spectrum every 50 ms using the previous 400 ms of EEG
 ${c('bci-windows')}. Updating often still means reading a window of earlier data.</p>
-<p>The figure isolates these delays for one imagined movement. The button press defines the model's
+<p>This figure isolates these delays for one imagined movement. The button press defines the model's
 intention time. The chosen onset and fade duration are informed by cued-imagery timing
-${c('erd-timecourse')}. The rhythm is steady except for that fade, an explicit simplification; section 9
-includes its natural fluctuations. Its strength matches section 7's alpha rhythm, a generous assumption
+${c('erd-timecourse')}. In this figure the rhythm keeps the same strength except for that fade.
+A real rhythm also grows and shrinks on its own from moment to moment ${c('rhythm-fluctuation')}. Section 9 includes those swings, however this
+figure leaves them out so the delays are easier to interpret. The rhythm's strength matches section 7's alpha rhythm, a generous assumption
 because mu is usually weaker ${c('mu-vs-alpha')}.</p>
 <p>The decoder keeps the chosen frequency band, then averages its squared voltage over a trailing window
 to estimate power. The threshold is halfway between resting power and the power after the fade is complete.
-Filtering delays the signal, and the window still contains earlier samples with higher power as the rhythm
+Filtering also delays the signal, and the window still contains earlier samples with higher power as the rhythm
 fades. The arm starts when the estimate first crosses below the threshold after the modeled intention.
 These are choices for this demonstration, not a universal delay for EEG ${c('delay-model')}.</p>
-<p>Event-based interfaces have different timing. The P300 peaks 250 to 500 ms after an attended, infrequent
-stimulus ${c('evoked-map')}; spellers often average repeated flashes to improve accuracy
-${c('p300-timing')}. Published flicker spellers use 0.3 to 0.5 s of stimulation and take 0.8 to 1 s per
-selection including the gaze shift ${c('bci-windows')}. Response latency and time per selection describe
-different parts of the task.</p>`);
+`);
 
   const sWin = slider({ label: 'Analysis window length', unit: 's', min: 0.4, max: 3, value: 1, step: 0.05, note: c('delay-model') + c('bci-windows'), marks: [{ value: 1, label: 'Default' }] });
-  const sDrop = slider({ label: 'Power lost during imagery', unit: '%', min: 40, max: 90, value: P.erdPowerDrop * 100, step: 1, note: c('delay-model') + c('erd-depth'), marks: [{ value: P.erdPowerDrop * 100, label: 'Default' }, { value: 85, label: 'Study mean' }] });
+  const sDrop = slider({ label: 'Power lost during imagery', unit: '%', min: 40, max: 90, value: P.erdPowerDrop * 100, step: 1, note: c('delay-model') + c('erd-depth'), marks: [{ value: P.erdPowerDrop * 100, label: 'Default' }, { value: 85, label: 'Study mean' }], trackPx: 300 });
   const sOnset = slider({ label: 'Rhythm starts to fade after the intention', unit: 's', min: 0, max: 1.5, value: P.erdOnsetS, step: 0.05, note: c('delay-model') + c('erd-timecourse'), marks: [{ value: P.erdOnsetS, label: 'Default' }] });
   const sRamp = slider({ label: 'Time for the rhythm to fade fully', unit: 's', min: 0.1, max: 2, value: P.erdRampS, step: 0.05, note: c('delay-model') + c('erd-timecourse'), marks: [{ value: P.erdRampS, label: 'Default' }] });
   const rOnset = readout('Intention → fade starts');
@@ -102,12 +99,14 @@ different parts of the task.</p>`);
 
   const fig = figure(sec.fig, `Top: the simulated scalp signal (${sw('#eb6834', 'line')}) combines the rhythm and noise around the modeled intention at t = 0. Middle: the filtered 8 to 13 Hz signal (${sw('#2a78d6', 'line')}) is shown with its expected amplitude including noise (${sw('#898781', 'dash')}). Bottom: the window's power estimate (${sw('#2a78d6', 'line')}) follows the model's expected band power including noise (${sw('#898781', 'dash')}), and its first downward threshold crossing after the intention starts the arm. Each readout measures time from the intention to its named endpoint ${c('delay-model')}.`);
   fig.viz.append(vizTitle('Scalp signal at one electrode around one imagined movement'));
-  const top = linePlot(fig.viz, { x: { label: '', tip: 'Time from the intention', domain: [-2, 5] }, y: { label: 'µV', domain: [-50, 50], ticks: 3 }, height: 86, margin: { top: 8, bottom: 22 } });
+  const top = linePlot(fig.viz, { x: { label: '', tip: 'Time from the intention', domain: [-2, 5], hideTickLabels: true }, y: { label: 'µV', domain: [-50, 50], ticks: 3 }, height: 86, margin: { top: 18, bottom: 6 } });
   fig.viz.append(vizTitle('Filtered scalp signal and expected amplitude'));
-  const mid = linePlot(fig.viz, { x: { label: '', tip: 'Time from the intention', domain: [-2, 5] }, y: { label: 'µV', ticks: 3 }, height: 104, margin: { top: 8, bottom: 22 } });
+  const mid = linePlot(fig.viz, { x: { label: '', tip: 'Time from the intention', domain: [-2, 5], hideTickLabels: true }, y: { label: 'µV', ticks: 3 }, height: 92, margin: { top: 8, bottom: 6 } });
   fig.viz.append(vizTitle('Estimated and modeled band power versus the threshold'));
   const bottom = linePlot(fig.viz, { x: { label: 'Time from the intention (s)', domain: [-2, 5] }, y: { label: 'Power (rest = 1)', domain: [0, 1.6], ticks: 3 }, height: 132, margin: { top: 10 } });
-  fig.panel.append(controls(sWin.el, sDrop.el, sOnset.el, sRamp.el));
+  const ctl = controls(sWin.el, sDrop.el, sOnset.el, sRamp.el);
+  ctl.classList.add('aligned-controls', 'delay-controls');
+  fig.panel.append(ctl);
   const arm = robotArm(fig.panel, () => trial);
   fig.viz.append(readouts(rOnset.el, rTrue.el, rDet.el));
   assumptions(fig.el, [
@@ -124,7 +123,7 @@ different parts of the task.</p>`);
   function run() {
     trial = simulateTrial(sOnset.value, sRamp.value, sWin.value, sDrop.value / 100);
     const { det, tTrue, threshold } = trial;
-    top.update([{ name: 'Scalp signal', points: pts(trial.raw), color: '#eb6834', width: 1 }], [{ axis: 'x', value: 0, label: 'intention' }]);
+    top.update([{ name: 'Scalp signal', points: pts(trial.raw), color: '#eb6834', width: 1 }], [{ axis: 'x', value: 0, label: 'intention', above: true }]);
     mid.update([
       { name: '8 to 13 Hz band of the signal', points: pts(trial.mu), color: '#2a78d6', width: 1.2 },
       { name: 'Expected band amplitude', points: pts(trial.env), color: '#898781', dashed: true, width: 1.5 },
@@ -144,8 +143,15 @@ different parts of the task.</p>`);
   }
   [sWin, sDrop, sOnset, sRamp].forEach((sl) => sl.onChange(() => { run(); arm.reset(); }));
   run();
+  // end the arm's canvas level with the readouts under the plots, when the controls sit beside the plots
+  const fit = () => {
+    const v = fig.viz.getBoundingClientRect(), p = fig.panel.getBoundingClientRect();
+    arm.fitBottom(p.top < v.top + 40 ? v.bottom : 0);
+  };
+  new ResizeObserver(fit).observe(fig.el);
+  fit();
 
-  const note = figure(sec.fig, `Each row describes a separate task. An early cued-imagery system returned its classification within 1.5 s ${c('erd-timecourse')}. The P300 peaks 250 to 500 ms after an attended, infrequent stimulus; that is a response latency, not a whole letter selection ${c('evoked-map')}${c('p300-timing')}. One flicker-speller protocol used 0.5 s of stimulation and 0.5 s for a gaze shift per selection ${c('bci-windows')}. The rows are examples, not stages to add together or minimum delays for every interface.`, { panelWidth: '0px' });
+  const note = figure(sec.fig, `Each row describes a separate task. An early cued-imagery system returned its classification within 1.5 s ${c('erd-timecourse')}. The P300 peaks 250 to 500 ms after an attended, infrequent stimulus. That is the delay of one brain response, not the time to select a whole letter ${c('evoked-map')}${c('p300-timing')}. One flicker-speller protocol used 0.5 s of stimulation and 0.5 s for a gaze shift per selection ${c('bci-windows')}. The rows are examples, not stages to add together or minimum delays for every interface.`, { panelWidth: '0px' });
   note.el.classList.add('figure-note');
   note.viz.append(vizTitle('Reported timings in three EEG interface examples'));
   note.viz.insertAdjacentHTML('beforeend', timelineSvg());
@@ -170,7 +176,7 @@ function timelineSvg(): string {
  * A two-link robot arm driven by the simulated decoder. Pressing the button is the intention (t = 0): the arm reaches for
  * the ball when the current trial's estimate crosses the threshold.
  */
-function robotArm(parent: HTMLElement, current: () => Trial): { reset(): void } {
+function robotArm(parent: HTMLElement, current: () => Trial): { reset(): void; fitBottom(y: number): void } {
   const W = 380, H = 202, MOVE_S = 0.9;
   const box = document.createElement('div');
   box.className = 'viz-box arm-box';
@@ -194,9 +200,13 @@ function robotArm(parent: HTMLElement, current: () => Trial): { reset(): void } 
   const REST: [number, number] = [1.35, -2.55], REACH = ik(ball[0] - 16, ball[1]);
   let det = NaN, phase: 'idle' | 'waiting' | 'moving' | 'done' = 'idle', t = 0, raf = 0;
 
+  let lastPose: [number, number] = REST;
   function draw(pose: [number, number]) {
-    ctx.clearRect(0, 0, W, H);
-    const status = phase === 'idle' ? 'Press Move arm: the press is your intention (t = 0).'
+    lastPose = pose;
+    ctx.clearRect(0, 0, W, cv.height);
+    // a taller canvas (fitted to the plots beside it) keeps the scene at the bottom and the status line at the top
+    ctx.save(); ctx.translate(0, cv.height - H);
+    const status = phase === 'idle' ? ''
       : phase === 'waiting' ? `Intention at 0 s. Decoder still unsure: ${fmt(t, 2)} s`
       : phase === 'moving' ? `Detected at ${fmt(det, 2)} s: arm moving`
       : `The arm moved ${fmt(det, 2)} s after you pressed.`;
@@ -216,11 +226,6 @@ function robotArm(parent: HTMLElement, current: () => Trial): { reset(): void } 
     const ang = a1 + a2, ux = Math.cos(ang), uy = -Math.sin(ang), nx = -uy, ny = ux;
     ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 3;
     for (const sgn of [1, -1]) { ctx.beginPath(); ctx.moveTo(hx + sgn * 7 * nx, hy + sgn * 7 * ny); ctx.lineTo(hx + sgn * 7 * nx + 14 * ux, hy + sgn * 7 * ny + 14 * uy); ctx.stroke(); }
-    // the status line, drawn last so the arm never covers it
-    ctx.font = '13px system-ui, sans-serif'; ctx.textAlign = 'left';
-    const w = ctx.measureText(status).width;
-    ctx.fillStyle = 'rgba(252,252,251,0.9)'; ctx.fillRect(5, 6, w + 6, 17);
-    ctx.fillStyle = '#1a1a1a'; ctx.fillText(status, 8, 18);
     // timeline from the intention: the detection and the time elapsed
     const tMax = Math.max(2, (isNaN(det) ? 2 : det) + MOVE_S + 0.3), x = (s: number) => 16 + (s / tMax) * (W - 32), y0 = 172;
     ctx.fillStyle = '#e8e7e1'; ctx.fillRect(x(0), y0, x(tMax) - x(0), 8);
@@ -233,6 +238,14 @@ function robotArm(parent: HTMLElement, current: () => Trial): { reset(): void } 
       ctx.fillRect(x(det) - 1, y0 - 3, 2, 14);
       const right = det / tMax > 0.6, lx = right ? x(det) - 3 : Math.max(x(det) + 3, x(0) + wI + 14);
       ctx.textAlign = right ? 'right' : 'left'; ctx.fillText(label, lx, y0 + 23);
+    }
+    ctx.restore();
+    // the status line, drawn last so the arm never covers it
+    ctx.font = '13px system-ui, sans-serif'; ctx.textAlign = 'left';
+    if (status) {
+      const w = ctx.measureText(status).width;
+      ctx.fillStyle = 'rgba(252,252,251,0.9)'; ctx.fillRect(5, 6, w + 6, 17);
+      ctx.fillStyle = '#1a1a1a'; ctx.fillText(status, 8, 18);
     }
   }
   const ease = (u: number) => u * u * (3 - 2 * u);
@@ -253,6 +266,11 @@ function robotArm(parent: HTMLElement, current: () => Trial): { reset(): void } 
   });
   draw(REST);
   return {
+    /** stretch the canvas so it ends at page position y (the bottom of the plots beside it), never below its own height */
+    fitBottom(y: number) {
+      const h = Math.max(H, Math.round(y - cv.getBoundingClientRect().top));
+      if (h !== cv.height) { cv.height = h; draw(lastPose); }
+    },
     reset() { if (phase === 'waiting' || phase === 'moving') return; cancelAnimationFrame(raf); phase = 'idle'; det = NaN; t = 0; btn.textContent = 'Move arm'; draw(REST); },
   };
 }

@@ -27,11 +27,7 @@ export function mountPatchRegions(root: HTMLElement) {
         <button type="button" data-mode="drift" aria-pressed="false">Timing drifts</button>
         <button type="button" data-mode="cancel" aria-pressed="false">Cancel</button>
       </div>
-      <p class="patch-voltage-label">Voltage relative to reference <span>Same scale throughout</span></p>
       <div class="patch-contribution-traces"></div>
-      <p class="patch-snapshot-note">Section 4 shows a snapshot. For one fixed oscillating patch, the ${sw('#e34948')}positive and ${sw('#2a78d6')}negative parts of its scalp map swap each half-cycle. Different patch timing can also change the combined map’s shape. ${c('rhythm-snapshot')}</p>
-      <p class="patch-mode-explanation" aria-live="polite"></p>
-      <p class="patch-region-assumption"><strong>Only patches 1 and 2 enter this sum.</strong> The two contributions are equally strong; other patches and noise are left out. ${c('patch-mix-demo')}${c('superposition')}</p>
     </div>
     <figcaption class="patch-region-answers">
       <p><strong>Inside a patch:</strong> cells need not be perfectly synchronized. Sections 2 and 4 vary the fraction in step. ${c('patch-regions')}</p>
@@ -54,13 +50,7 @@ export function mountPatchRegions(root: HTMLElement) {
       </svg>
     </div></div>`).join('') + '<p class="patch-trace-time">Time →</p>';
   const paths = [...traces.querySelectorAll<SVGPathElement>('.patch-trace-wave')];
-  const modeNote = fig.querySelector<HTMLElement>('.patch-mode-explanation')!;
   const buttons = [...fig.querySelectorAll<HTMLButtonElement>('[data-mode]')];
-  const descriptions: Record<Mode, string> = {
-    reinforce: `<strong>Reinforce:</strong> the sources share timing and have the same voltage sign at E, so their contributions add. ${c('superposition')}`,
-    drift: `<strong>Timing drifts:</strong> slightly different repetition rates change the relative timing. The contributions sometimes reinforce and sometimes oppose. ${c('patch-mix-demo')}`,
-    cancel: `<strong>Cancel:</strong> one patch contributes positive voltage whenever the other contributes an equal negative voltage. This pair sums to zero at E, although both patches are active. ${c('patch-cancellation')}`,
-  };
   const render = (mode: Mode) => {
     // Fixed dimensions, gains and voltage scale in every mode, with no normalization.
     const values: number[][] = [[], [], []];
@@ -73,7 +63,6 @@ export function mountPatchRegions(root: HTMLElement) {
     paths.forEach((path, row) => path.setAttribute('d', values[row].map((v, i) =>
       `${i ? 'L' : 'M'}${(1 + i / 600 * 478).toFixed(2)},${(32 - v * 14).toFixed(2)}`).join(' ')));
     buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.mode === mode)));
-    modeNote.innerHTML = descriptions[mode];
   };
   buttons.forEach((button) => button.addEventListener('click', () => render(button.dataset.mode as Mode)));
   render('reinforce');

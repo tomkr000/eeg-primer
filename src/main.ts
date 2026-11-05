@@ -1,16 +1,17 @@
 import './style.css';
-import { mountNeuron } from './sections/s1-neuron';
-import { mountPopulation } from './sections/s2-population';
-import { mountHead } from './sections/s3-head';
-import { mountNoise } from './sections/s5-noise';
-import { mountElectrodes } from './sections/s6-electrodes';
-import { mountBlur } from './sections/s4-blur';
-import { mountSynchrony } from './sections/synchrony';
-import { mountPatchRegions } from './sections/patch-regions';
-import { mountDimensions } from './sections/s7-dimensions';
-import { mountDelay } from './sections/s8-delay';
-import { mountCount } from './sections/s9-count';
-import { mountMethod, mountReferences, mountVerification } from './sections/s7-references';
+import { mountNeuron } from './sections/s01-neuron';
+import { mountPopulation } from './sections/s02-population';
+import { mountHead } from './sections/s03-head';
+import { mountBlur } from './sections/s04-blur';
+import { mountPatchRegions } from './sections/s05-patches';
+import { mountSynchrony } from './sections/s06-synchrony';
+import { mountNoise } from './sections/s07-noise';
+import { mountElectrodes } from './sections/s08-electrodes';
+import { mountDimensions } from './sections/s09-dimensions';
+import { mountDelay } from './sections/s10-delay';
+import { mountCount } from './sections/s11-count';
+import { mountConclusion } from './sections/conclusion';
+import { mountMethod, mountReferences, mountVerification } from './sections/references';
 import { inDepth } from './ui/layout';
 import { claimById } from './data/claims';
 
@@ -42,7 +43,8 @@ toc.innerHTML = `
     <a href="#electrodes"><b>8</b> Electrode contact affects signal loss and added noise</a>
     <a href="#dimensions"><b>9</b> Overlapping rhythm changes make joint control harder</a>
     <a href="#delay"><b>10</b> EEG signals have inherent delays</a>
-    <a href="#count"><b>11</b> Adding electrodes gives diminishing returns</a>
+    <a href="#count"><b>11</b> More electrodes cannot tell two typing fingers apart</a>
+    <a href="#conclusion">Conclusion</a>
     <a href="#method">Method and caveats</a>
     <a href="#verification">Verification log</a>
     <a href="#references">References</a>`;
@@ -62,6 +64,7 @@ mountElectrodes(main);
 mountDimensions(main);
 mountDelay(main);
 mountCount(main);
+mountConclusion(main);
 mountMethod(main);
 mountVerification(main);
 mountReferences(main);

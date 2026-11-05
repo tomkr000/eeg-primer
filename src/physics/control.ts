@@ -260,3 +260,92 @@ function lnGamma(z: number): number {
   const t = z + g + 0.5;
   return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
 }
+
+export interface PairPoint { N: number; alone: number; separated: number; electrodesOnly: number; rho: number }
+/**
+ * Two patches of radius r whose centers lie `sepMm` apart on the cortex (patch A under the vertex, B along a meridian):
+ * the SNR per nA·m of the best linear estimate of A alone (B silent), of A with B's activity canceled (the unmixed
+ * estimate a decoder needs to tell them apart), and of the canceled estimate with electrode noise alone. rho is the
+ * correlation of the two patches' whitened scalp patterns; canceling B keeps a share 1 − rho² of A's SNR².
+ * Exact in electrode space up to `exactUpTo` electrodes, per spherical-harmonic degree above, as snrVersusElectrodes.
+ */
+export function pairVersusElectrodes(Ns: number[], noiseUv: number, bgUv: number, radiusMm: number, sepMm: number, exactUpTo = 128): PairPoint[] {
+  const { norm } = backgroundShape(), { c, b } = headModes();
+  const a = targetModes(radiusMm), bg2 = (bgUv * 1e-6) ** 2, sn2 = (noiseUv * 1e-6) ** 2, beta = bg2 / norm;
+  const th = (sepMm * 1e-3) / b, Pl = legendre(Math.cos(th), LMAX);
+  const v2 = new Float64Array(LMAX + 1), C = new Float64Array(LMAX + 1);
+  let total2 = 0, cross2 = 0;
+  for (let l = 1; l <= LMAX; l++) {
+    v2[l] = (a[l] * a[l] * 4 * Math.PI) / (2 * l + 1); total2 += v2[l]; cross2 += v2[l] * Pl[l];
+    C[l] = (beta * c[l] * c[l] * 4 * Math.PI) / ((2 * l + 1) * (2 * l + 1));
+  }
+  // A's SNR² once B is canceled: sA² − x²/sB², where x is the whitened cross product of the two patterns
+  const pack = (N: number, sA2: number, sB2: number, x: number, eA2: number, eB2: number, ex: number): PairPoint => ({
+    N, alone: Math.sqrt(sA2), separated: Math.sqrt(Math.max(0, sA2 - (x * x) / sB2)),
+    electrodesOnly: Math.sqrt(Math.max(0, eA2 - (ex * ex) / eB2)), rho: x / Math.sqrt(sA2 * sB2),
+  });
+  return Ns.map((N) => {
+    if (N <= exactUpTo) {
+      const K = correlation(N), tA = targetAt(N, radiusMm), { x, z } = fibonacci(N), tB = new Float64Array(N), Lc = new Float64Array(N * N);
+      for (let i = 0; i < N; i++) tB[i] = legendreSeries(a, Math.max(-1, Math.min(1, z[i] * Math.cos(th) + x[i] * Math.sin(th))));
+      for (let i = 0; i < N; i++) for (let j = 0; j <= i; j++) {
+        let s = bg2 * K[i * N + j] + (i === j ? sn2 : 0);
+        for (let k = 0; k < j; k++) s -= Lc[i * N + k] * Lc[j * N + k];
+        Lc[i * N + j] = i === j ? Math.sqrt(Math.max(s, 1e-40)) : s / Lc[j * N + j];
+      }
+      const whiten = (t: Float64Array) => { const u = new Float64Array(N); for (let i = 0; i < N; i++) { let s = t[i]; for (let k = 0; k < i; k++) s -= Lc[i * N + k] * u[k]; u[i] = s / Lc[i * N + i]; } return u; };
+      const uA = whiten(tA), uB = whiten(tB);
+      let sA2 = 0, sB2 = 0, xx = 0, eA2 = 0, eB2 = 0, ex = 0;
+      for (let i = 0; i < N; i++) { sA2 += uA[i] * uA[i]; sB2 += uB[i] * uB[i]; xx += uA[i] * uB[i]; eA2 += tA[i] * tA[i]; eB2 += tB[i] * tB[i]; ex += tA[i] * tB[i]; }
+      return pack(N, sA2, sB2, xx, eA2 / sn2, eB2 / sn2, ex / sn2);
+    }
+    const L = Math.min(Math.floor(Math.sqrt(N)) - 1, LMAX);
+    let alias = 0;
+    for (let l = L + 1; l <= LMAX; l++) alias += (C[l] * (2 * l + 1)) / (4 * Math.PI);
+    const noise = ((sn2 + alias) * 4 * Math.PI) / N;
+    let sA2 = 0, xx = 0;
+    for (let l = 1; l <= L; l++) { sA2 += v2[l] / (C[l] + noise); xx += (v2[l] * Pl[l]) / (C[l] + noise); }
+    const k = N / (4 * Math.PI) / sn2;
+    return pack(N, sA2, sA2, xx, total2 * k, total2 * k, cross2 * k);
+  });
+}
+/** the pair's ceiling per nA·m: A's estimate with B canceled, the whole scalp potential known exactly (as ceilingPerNam) */
+export function pairCeilingPerNam(bgUv: number, radiusMm: number, sepMm: number): number {
+  const { norm } = backgroundShape(), { b } = headModes(), g = capFactor((radiusMm * 1e-3) / b), Pl = legendre(Math.cos((sepMm * 1e-3) / b), LMAX);
+  const beta = (bgUv * 1e-6) ** 2 / norm;
+  let s = 0, x = 0;
+  for (let l = 1; l <= LMAX; l++) { const w = (2 * l + 1) * g[l] * g[l]; s += w; x += w * Pl[l]; }
+  return 1e-9 * Math.sqrt((s - (x * x) / s) / beta);
+}
+
+/** regularized incomplete beta function I_x(a, b) (continued fraction, Numerical Recipes §6.4) */
+export function betaI(a: number, b: number, x: number): number {
+  if (x <= 0) return 0;
+  if (x >= 1) return 1;
+  const front = Math.exp(lnGamma(a + b) - lnGamma(a) - lnGamma(b) + a * Math.log(x) + b * Math.log(1 - x));
+  const cf = (a: number, b: number, x: number) => {
+    let c = 1, d = 1 - ((a + b) * x) / (a + 1); if (Math.abs(d) < 1e-300) d = 1e-300; d = 1 / d;
+    let h = d;
+    for (let m = 1; m < 300; m++) {
+      const m2 = 2 * m;
+      let aa = (m * (b - m) * x) / ((a + m2 - 1) * (a + m2));
+      d = 1 + aa * d; if (Math.abs(d) < 1e-300) d = 1e-300; c = 1 + aa / c; if (Math.abs(c) < 1e-300) c = 1e-300; d = 1 / d; h *= d * c;
+      aa = (-(a + m) * (a + b + m) * x) / ((a + m2) * (a + m2 + 1));
+      d = 1 + aa * d; if (Math.abs(d) < 1e-300) d = 1e-300; c = 1 + aa / c; if (Math.abs(c) < 1e-300) c = 1e-300; d = 1 / d;
+      const del = d * c; h *= del;
+      if (Math.abs(del - 1) < 1e-12) break;
+    }
+    return h;
+  };
+  return x < (a + 1) / (a + b + 2) ? (front * cf(a, b, x)) / a : 1 - (front * cf(b, a, 1 - x)) / b;
+}
+
+/**
+ * Two equally likely movements, each lowering the power of its own region's rhythm, read in two channels with the
+ * same noise: the decoder picks the channel whose power fell more. With both estimates gamma distributed with shape
+ * k = BT, the share called correctly is exact: P(X_task < X_rest) = I_x(k, k) with x = m_rest / (m_rest + m_task).
+ */
+export function twoWayCorrect(depth: number, B: number, T: number, rho: number): number {
+  const r = restVersusImagery(depth, B, T, rho);
+  return betaI(r.k, r.k, r.mRest / (r.mRest + r.mTask));
+}

@@ -5,7 +5,7 @@
 import { netDipole } from '../physics/population';
 import { P } from '../data/params';
 import { controls, slider, type Slider } from '../ui/slider';
-import { sourceSliders } from './s5-noise';
+import { sourceSliders } from './s07-noise';
 import head from '../data/head-leadfield.json';
 
 export interface Patch { center: number; radiusMm: number; name?: string; }
@@ -109,6 +109,7 @@ export const at = (x: number, y: number, z: number, r?: number): Patch => ({ cen
 export const MOTOR = (): Patch[] => [
   { ...at(-38.8, 9.6, 98.9, 10), name: 'right hand (left hemisphere)' }, { ...at(35.2, 9.3, 98.9, 10), name: 'left hand (right hemisphere)' }, { ...at(-1.9, 5.2, 113.2, 10), name: 'feet' },
   { ...at(-56.8, 25.3, 76.0, 10), name: 'tongue' }, { ...at(53.2, 25.0, 76.0, 10), name: 'tongue' },
+  { ...at(-24.9, 3.0, 108.0, 10), name: 'right shoulder (left hemisphere)' }, // the hand patch moved by the shoulder's offset from the index finger in Grafton et al. (claim motor-map)
 ];
 
 /** scalp pattern of a patch (µV at each electrode) and the cortical sources it covers */

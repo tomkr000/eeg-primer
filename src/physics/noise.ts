@@ -24,6 +24,50 @@ export interface NoiseParams {
   blinkAtS?: number[];
   /** the rhythm's waveform at unit power (a narrowband random process), instead of a steady sine */
   rhythm?: Float64Array;
+  /** a movement artifact added to the noise, one value per sample (from movementArtifact) */
+  motion?: Float64Array;
+}
+
+export type Movement = 'none' | 'walking' | 'chewing' | 'nodding' | 'rolling' | 'running';
+export interface MovementSettings {
+  runUvRms: number; stepHz: number; walkUvRms: number; walkStepHz: number;
+  chewBurstUvRms: number; chewBurstS: number; chewPeriodS: number;
+  nodHz: number; nodSwingUv: number; nodMuscleUvRms: number;
+  roll: [number, number][];
+}
+
+/**
+ * A movement artifact at one electrode (µV), with its own random generator so that choosing one leaves the
+ * other noise sources unchanged. Shapes are modeling choices (claims running-artifact-size, movement-artifact-shapes).
+ */
+export function movementArtifact(kind: Movement, fs: number, seconds: number, m: MovementSettings, seed = 7): Float64Array {
+  const n = Math.round(fs * seconds), out = new Float64Array(n);
+  if (kind === 'none') return out;
+  const rng = mulberry32(seed);
+  // muscle bursts: 20–225 Hz noise at unit rms, gated by a window that is 1 inside a burst
+  const muscle = (gate: (t: number) => number, uvRms: number) => {
+    const hp = biquad('hp', 20, fs), lp = biquad('lp', Math.min(300, 0.45 * fs), fs);
+    const raw = Float64Array.from({ length: n }, () => lp(hp(gaussian(rng))));
+    const rms = Math.sqrt(raw.reduce((a, v) => a + v * v, 0) / n) || 1;
+    for (let i = 0; i < n; i++) out[i] += (uvRms * raw[i] / rms) * gate(i / fs);
+  };
+  // a smooth on/off gate: sin² ramps of 50 ms at each end of a burst of length len starting every period
+  const bursts = (period: number, len: number, start: number) => (t: number) => {
+    const u = (((t - start) % period) + period) % period, r = 0.05;
+    return u > len ? 0 : Math.sin((Math.PI / 2) * Math.min(1, u / r, (len - u) / r)) ** 2;
+  };
+  const harmonics = [[1, 0], [0.6, 0.9], [0.35, 2.1]]; // gait artifact shape, claim running-artifact-size
+  const [gaitUv, gaitHz] = kind === 'walking' ? [m.walkUvRms, m.walkStepHz] : [m.runUvRms, m.stepHz];
+  const gaitScale = gaitUv / Math.sqrt(harmonics.reduce((a, [h]) => a + h * h / 2, 0));
+  for (let i = 0; i < n; i++) {
+    const t = i / fs;
+    if (kind === 'running' || kind === 'walking') out[i] = gaitScale * harmonics.reduce((a, [h, ph], k) => a + h * Math.sin(2 * Math.PI * (k + 1) * gaitHz * t + ph), 0);
+    if (kind === 'nodding') out[i] = m.nodSwingUv * Math.sin(2 * Math.PI * m.nodHz * t);
+    if (kind === 'rolling') out[i] = m.roll.reduce((a, [uv, hz], k) => a + uv * Math.sin(2 * Math.PI * hz * t + Math.PI + 1.3 * k), 0);
+  }
+  if (kind === 'chewing') muscle(bursts(m.chewPeriodS, m.chewBurstS, 0.2), m.chewBurstUvRms);
+  if (kind === 'nodding') muscle(bursts(1 / m.nodHz, 0.3 / m.nodHz, 0.15 / m.nodHz), m.nodMuscleUvRms);
+  return out;
 }
 
 /** Simple 2nd-order Butterworth band-pass via two cascaded biquads (bilinear transform). */
@@ -56,12 +100,15 @@ export interface Synth {
   snrDb: number;
   /** times (s) of the blink deflections */
   blinkTimes: number[];
+  /** the movement artifact alone (zeros when none was given) */
+  motion: Float64Array;
 }
 
 export function synthesize(p: NoiseParams): Synth {
   const n = Math.round(p.fs * p.seconds);
   const rng = mulberry32(p.seed);
-  const t = new Float64Array(n), signal = new Float64Array(n), noise = new Float64Array(n), total = new Float64Array(n);
+  const t = new Float64Array(n), signal = new Float64Array(n), noise = new Float64Array(n), total = new Float64Array(n), motion = new Float64Array(n);
+  if (p.motion) motion.set(p.motion.subarray(0, n));
   // EMG: white → band-pass 20–300 Hz, then scaled to the requested rms
   const hp = biquad('hp', 20, p.fs), lp = biquad('lp', Math.min(300, 0.45 * p.fs), p.fs);
   const emg = new Float64Array(n);
@@ -96,12 +143,13 @@ export function synthesize(p: NoiseParams): Synth {
     signal[i] = p.signalUv * env * (p.rhythm ? p.rhythm[i] * Math.SQRT1_2 : Math.sin(2 * Math.PI * p.signalHz * ti)); // same mean power either way
     let v = emg[i] + pink[i] + p.ampUvRms * gaussian(rng) + mainsUv * Math.sin(2 * Math.PI * mainsHz * ti + 0.3);
     for (const tb of blinkTimes) v += p.blinkUv * Math.exp(-0.5 * Math.pow((ti - tb) / 0.08, 2));
+    v += motion[i];
     noise[i] = v;
     total[i] = signal[i] + v;
   }
   const ps = signal.reduce((s, v) => s + v * v, 0) / n;
   const pn = noise.reduce((s, v) => s + v * v, 0) / n;
-  return { t, signal, noise, total, snrDb: 10 * Math.log10(ps / Math.max(pn, 1e-30)), blinkTimes };
+  return { t, signal, noise, total, snrDb: 10 * Math.log10(ps / Math.max(pn, 1e-30)), blinkTimes, motion };
 }
 
 /**

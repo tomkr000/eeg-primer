@@ -29,7 +29,7 @@ stronger dendritic currents ${c('ca-spike-moment')}, shared rhythmic activity ${
 or inhibitory currents in active cells ${c('inhibitory-contrib')}.</p>`);
 
   const sN = slider({ label: 'Neurons in the patch, N', min: 1, max: P.patchMaxN, value: P.patchDefaultN, log: true, format: (v) => fmt(Math.round(v), 3), marks: [{ value: P.patchDefaultN, label: 'Typical source' }] });
-  const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Theoretical maximum' }] });
+  const sF = slider({ label: 'Fraction firing in synchrony', min: 0, max: 1, step: 0.01, value: P.patchDefaultSync, note: c('variances-add'), marks: [{ value: P.patchDefaultSync, label: 'Typical' }, { value: 1, label: 'Theoretical<br>max' }] });
   const rMoment = readout('Net dipole moment');
   const rArea = readout('Cortical area of the patch', c('neuron-density') + c('pyramidal-fraction'));
   const rScalp = readout('Peak scalp potential (section 3 head)');
@@ -101,7 +101,7 @@ or inhibitory currents in active cells ${c('inhibitory-contrib')}.</p>`);
       ctx.save();
       ctx.font = CANVAS_FONT; ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'left';
       const [px, py] = toPx(half, -d / 2 - 0.25e-3);
-      const label = `patch: ${fmt(N, 3)} cells, ${Wp < 1e-3 ? `${fmt(Wp * 1e6, 2)} µm` : `${fmt(Wp * 1e3, 2)} mm`} across`;
+      const label = `patch: ${fmt(N, 3)} ${N === 1 ? 'cell' : 'cells'}, ${Wp < 1e-3 ? `${fmt(Wp * 1e6, 2)} µm` : `${fmt(Wp * 1e3, 2)} mm`} across`;
       ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,255,255,0.8)';
       ctx.strokeText(label, px + 10, py + 14); ctx.fillText(label, px + 10, py + 14);
       ctx.restore();

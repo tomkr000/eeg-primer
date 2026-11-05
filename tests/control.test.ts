@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { snrVersusElectrodes, ceilingPerNam, dPrime, phi, wolpawBits, gammaPdf, gammaP, restVersusImagery, bandNoise, headModes } from '../src/physics/control';
+import { snrVersusElectrodes, ceilingPerNam, dPrime, phi, wolpawBits, gammaPdf, gammaP, restVersusImagery, bandNoise, headModes, pairVersusElectrodes, pairCeilingPerNam, twoWayCorrect, mWayCorrect, betaI } from '../src/physics/control';
 
 describe('SNR versus electrode count', () => {
   it('the per-degree formula agrees with the exact electrode-space solution', () => {
@@ -60,5 +60,40 @@ describe('detecting a drop in band power', () => {
     const m = est.reduce((a, v) => a + v, 0) / est.length, sd = Math.sqrt(est.reduce((a, v) => a + (v - m) ** 2, 0) / est.length);
     expect(m).toBeCloseTo(1, 1);
     expect(Math.abs(sd / m - 1 / Math.sqrt(B * T))).toBeLessThan(0.08);
+  });
+});
+
+describe('telling two neighboring regions apart (section 11, claim finger-count)', () => {
+  it('the per-degree pair formula agrees with the exact one, and far-apart regions cost nothing to separate', () => {
+    for (const N of [128, 256]) {
+      const [exact] = pairVersusElectrodes([N], 1, 10, 10, 6, 1000), [modal] = pairVersusElectrodes([N], 1, 10, 10, 6, 0);
+      expect(Math.abs(modal.separated / exact.separated - 1)).toBeLessThan(0.05);
+      expect(Math.abs(modal.rho - exact.rho)).toBeLessThan(0.02);
+    }
+    const [far] = pairVersusElectrodes([1024], 1, 10, 10, 150), [one] = snrVersusElectrodes([1024], 1, 10, 10);
+    expect(Math.abs(far.alone / one.withBrain - 1)).toBeLessThan(0.02);
+    expect(far.separated / far.alone).toBeGreaterThan(0.99);
+    expect(pairCeilingPerNam(10, 10, 300)).toBeCloseTo(ceilingPerNam(10, 10), 3);
+  });
+  it('closer regions are harder to separate, and no array beats the pair ceiling', () => {
+    const at = (sep: number) => pairVersusElectrodes([1e5], 1, 10, 10, sep)[0].separated;
+    expect(at(1.5)).toBeLessThan(at(4)); expect(at(4)).toBeLessThan(at(16));
+    expect(at(1.5)).toBeLessThan(pairCeilingPerNam(10, 10, 1.5));
+  });
+  it('the exact two-way share matches the integral, and the incomplete beta is right', () => {
+    expect(betaI(1, 1, 0.3)).toBeCloseTo(0.3, 10);
+    expect(betaI(2, 2, 0.5)).toBeCloseTo(0.5, 10);
+    expect(twoWayCorrect(0.5, 3, 1, 2)).toBeCloseTo(mWayCorrect(2, 0.5, 3, 1, 2), 3);
+    expect(twoWayCorrect(0, 3, 1, 10)).toBeCloseTo(0.5, 10);
+  });
+  it('index versus middle finger at a keystroke stays near chance with any cap (the numbers quoted in the claim)', async () => {
+    const { P } = await import('../src/data/params');
+    const { momentNam, ALPHA_N } = await import('../src/sections/s07-noise');
+    const MU = momentNam(ALPHA_N, P.patchDefaultSync);
+    const acc = (sep: number, T: number, N: number) => 100 * twoWayCorrect(P.erdPowerDrop, P.decoderBandHz, T, (pairVersusElectrodes([N], 1, 10, 10, sep)[0].separated * MU) ** 2);
+    expect(acc(1.5, 0.24, 128)).toBeCloseTo(50.4, 0);
+    expect(acc(1.5, 0.24, 1e5)).toBeCloseTo(52.8, 0);
+    expect(100 * twoWayCorrect(P.erdPowerDrop, P.decoderBandHz, 0.24, Infinity)).toBeCloseTo(63.7, 0);
+    expect(acc(16, 3, 128)).toBeCloseTo(84.9, 0); // thumb against little finger over the sensory spacing and a 3 s trial
   });
 });

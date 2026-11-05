@@ -5,29 +5,27 @@ import { CANVAS_FONT } from '../ui/field';
 import { state, subscribe, dimControls, patchPattern, miniValues, scalpValue, MOTOR, patchColor, visible, inHead, R, x0, y0, ax, by, sigmaMm, nCh, nSrc, G, miniIn, POS, NEG } from './dim-model';
 import { headGeometry, titledCanvas, footnote, drawCortex } from './head-view';
 
-const W = 360, H = 360, FOOT = 46; // the head view, with a band of notes under it
+const W = 360, H = 360, FOOT = 20; // the head view, with room for the sign key under the middle panel
 const geo = headGeometry(W, H);
 const { cx, cy, s, elXY } = geo;
 const FLOOR = 0.1, CEIL = 50; // µV: the color scale of the summed map
 const RED = '#e34948', BLUE = '#2a78d6';
 export function mountBlur(root: HTMLElement) {
-  const sec = section(root, 'blur', '4', 'Patches of cortex blur into broad blobs at the scalp', 'A snapshot of voltage across the scalp: each patch contributes, and their voltages add together');
+  const sec = section(root, 'blur', '4', 'Patches of cortex blur into broad blobs at the scalp');
   prose(sec.text, `
-<p>The head spreads each source's voltage over the scalp ${c('spatial-lowpass')}. Nearby patches can
+<p>Each source's voltage is spread over the scalp ${c('spatial-lowpass')}. Nearby patches can
 therefore produce similar scalp patterns, making them hard to distinguish ${c('svd-method')}.</p>
-<p>The figure uses five illustrative patches in movement-related areas ${c('motor-map')}. There are two
-hand patches, one foot patch and two tongue patches, one in each hemisphere. They represent four common
-imagery tasks: right hand, left hand, feet and tongue ${c('mi-classes')}${c('patch-map-model')}. Imagining
+<p>The figure uses six illustrative patches in movement-related areas ${c('motor-map')}. Imagining
 movement can weaken the local rhythm ${c('own-rhythm')}. Section 9 explores how these changes become commands.</p>
 <p>Each patch uses the cell-group model from sections 2 and 3, spread across a disc. All patches share the
 selected cell count, fraction in step and radius. This keeps their source strengths comparable while showing
 how location changes the scalp pattern ${c('patch-map-model')}.</p>
-<p>The calculation uses the public fsaverage anatomical template, rather than an individual person's head
+<p>The calculation uses the public fsaverage anatomical template, which is a digital skull phantom commonly used for modeling neural electrical signals
 ${c('fsaverage-bem')}. A boundary-element model calculates the scalp voltages ${c('mne-bem')}, sampled
-at 128 electrode positions ${c('montages')}. The middle panel isolates each patch; the right panel adds them.
+at 128 electrode positions ${c('montages')}. The middle panel isolates each patch and the right panel adds them.
 These are snapshots without recording noise. Section 5 follows voltage over time, and section 7 adds noise.</p>`);
 
-  const fig = figure(sec.fig, `<p>Left: the cortex viewed from above, with the nose at the top. The numbered patches are representative groups of cells in movement-related areas ${c('motor-map')}${c('patch-map-model')}.</p><p>Middle: the scalp voltage from each patch alone. Each small map is scaled to its own peak so you can compare shapes, not their absolute amplitudes.</p><p>Right: the sum of all patches. Its voltage scale stays fixed as you change the sliders ${c('patch-map-model')}.</p>`, { wide: true });
+  const fig = figure(sec.fig, `Left: the cortex viewed from above, with the nose at the top. The numbered patches are representative groups of cells in movement-related areas ${c('motor-map')}${c('patch-map-model')}. Middle: the scalp voltage from each patch alone. Each small map is scaled to its own peak so you can compare shapes, not their absolute amplitudes. Right: the sum of all patches. Its voltage scale stays fixed as you change the sliders ${c('patch-map-model')}.`, { wide: true });
   const row = document.createElement('div');
   row.className = 'viz-row';
   row.style.flexWrap = 'nowrap';
@@ -51,7 +49,6 @@ These are snapshots without recording noise. Section 5 follows voltage over time
 
   function drawCortexView() {
     cctx.clearRect(0, 0, W, H + FOOT);
-    footnote(cctx, H, [['five representative local groups of cortical cells,'], ['placed on motor areas a person can modulate at will'], [`each patch: ${fmt(Math.round(state.N), 2)} cells, ${fmt(state.f, 2)} in step, over ${state.radiusMm} mm`]]);
     drawCortex(cctx, geo, state.patches);
   }
 
@@ -65,7 +62,7 @@ These are snapshots without recording noise. Section 5 follows voltage over time
 
   function drawEach(pats: { a: Float64Array }[]) {
     ectx.clearRect(0, 0, W, H + FOOT);
-    footnote(ectx, H, [[{ sw: RED }, 'positive voltage, ', { sw: BLUE }, 'negative'], ['each map is scaled to its own peak, to compare shapes'], ['one fixed patch can reverse this pattern as it oscillates']]);
+    footnote(ectx, H, [[{ sw: RED }, 'positive voltage, ', { sw: BLUE }, 'negative']]);
     ectx.font = CANVAS_FONT; ectx.fillStyle = '#52514e'; ectx.textAlign = 'center';
     if (!pats.length) { ectx.fillText('no patches placed', W / 2, H / 2); return; }
     const cols = Math.ceil(Math.sqrt(pats.length)), rows = Math.ceil(pats.length / cols);
@@ -86,9 +83,8 @@ These are snapshots without recording noise. Section 5 follows voltage over time
   }
 
   /** the scalp voltage of all patches together, on an absolute log color scale, with a color bar */
-  function drawSummed(total: Float64Array, peak: number) {
+  function drawSummed(total: Float64Array) {
     sctx.clearRect(0, 0, W, H + FOOT);
-    footnote(sctx, H, [[{ sw: RED }, 'above the average of all 128 electrodes, ', { sw: BLUE }, 'below it'], ['patches with different timing can change the shape'], [`signal peak ${fmt(peak, 2)} µV at the strongest electrode`]]);
     const hw = half.width, hh = half.height, d = himg.data, lf = Math.log10(FLOOR), lc = Math.log10(CEIL);
     for (let j = 0; j < hh; j++) for (let i = 0; i < hw; i++) {
       const k = (j * hw + i) * 4, px = (i + 0.5) * 2, py = (j + 0.5) * 2;
@@ -125,10 +121,9 @@ These are snapshots without recording noise. Section 5 follows voltage over time
     const pats = state.patches.map(patchPattern);
     const total = new Float64Array(nCh);
     for (const p of pats) for (let ch = 0; ch < nCh; ch++) total[ch] += p.a[ch];
-    const peak = Math.max(0, ...Array.from(total, Math.abs));
     drawCortexView();
     drawEach(pats);
-    drawSummed(total, peak);
+    drawSummed(total);
   }
   subscribe(update);
   state.patches = MOTOR();

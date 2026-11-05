@@ -32,19 +32,30 @@ export const P = {
   erdPowerDrop: 0.5, // fraction of mu-band power lost during motor imagery, 'erd-depth'
   decoderBandHz: 3, // width of the rhythm's band, which sets the B·T degrees of freedom of a power estimate, 'erd-detect'
   /**
-   * Change of mu power (%) at five cortical patches during four imagined movements. Columns: right hand, left hand,
-   * feet, tongue. Rows: the left hemisphere's hand area (C3), the right hemisphere's hand area (C4) and the foot area
-   * (Cz), claim 'mi-matrix'; the two tongue areas, claim 'tongue-areas'.
+   * Change of mu power (%) at six cortical patches during five imagined movements. Columns: right hand, left hand,
+   * feet, tongue, right shoulder. Rows: the left hemisphere's hand area (C3), the right hemisphere's hand area (C4) and
+   * the foot area (Cz), claim 'mi-matrix'; the two tongue areas, claim 'tongue-areas'; the left hemisphere's shoulder
+   * area, claim 'shoulder-area' (the shoulder column is that claim's assumption too).
    */
   miResponse: [
-    [-84.7, -64.6, 89.3, 145.2],
-    [-71.6, -86.7, 112.7, 133.6],
-    [-58.3, -56.8, -21.3, 107.0],
-    [0, 0, 0, -85],
-    [0, 0, 0, -85],
+    [-84.7, -64.6, 89.3, 145.2, 0],
+    [-71.6, -86.7, 112.7, 133.6, 0],
+    [-58.3, -56.8, -21.3, 107.0, 0],
+    [0, 0, 0, -85, 0],
+    [0, 0, 0, -85, 0],
+    [0, 0, 0, 0, -85],
   ] as number[][],
   patchMaxN: 2e6, // top of the N sliders: about 17 mm² of cortex; with every cell in step a 1 µA·m seizure-sized source
   neuronsPerMm2: 147000, // 'neuron-density'
+  runStepHz: 2.7, // step frequency while running, 'running-artifact'
+  runArtifactUvRms: Math.sqrt((65.01 - 3.45) * 7), // ≈ 20.8 µV rms, 'running-artifact-size'
+  walkStepHz: 1.9, // step frequency walking at 1.25 m/s, 'running-artifact'
+  walkArtifactUvRms: Math.sqrt((5.49 - 3.45) * 7), // ≈ 3.8 µV rms, 'running-artifact-size'
+  chewBurstUvRms: 30, chewBurstS: 0.3, chewPeriodS: 0.8, // 'movement-artifact-shapes', sized to 'head-movement-artifacts'
+  nodHz: 1, nodSwingUv: 50, nodMuscleUvRms: 15, // 'movement-artifact-shapes'
+  rollUv: [[120, 0.3], [40, 0.7]] as [number, number][], // amplitude µV and frequency Hz of the slow swings, 'movement-artifact-shapes'
+  typingKeystrokeS: 0.239, // average time between keystrokes, 'typing-speed'
+  fingerGapMm: { indexMiddleMotor: 1.5, indexMiddleSensory: 4, thumbLittleSensory: 16 }, // 'finger-spacing', 'finger-neighbors'
   pyramidalFraction: 0.8, // 'pyramidal-fraction'
   /** measured extracellular spike amplitude: ≥ 60 µV within 50 µm of the soma (Henze 2000) */
   henzeSpikePoints: [[50e-6, 60]] as [number, number][],

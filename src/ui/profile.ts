@@ -14,6 +14,7 @@ export function verticalProfile(container: HTMLElement, cfg: { height: number; y
   const gGrid = svg.append('g').attr('class', 'grid');
   const pathMuted = svg.append('path').attr('fill', 'none').attr('stroke', '#b8b6ae').attr('stroke-width', 1.5).attr('stroke-dasharray', '2 5');
   const path = svg.append('path').attr('fill', 'none').attr('stroke', '#2a78d6').attr('stroke-width', 2.5);
+  const gLabels = svg.append('g'); // band labels sit above the profile line so it never cuts through them
   const gMarkers = svg.append('g');
   const gX = svg.append('g').attr('class', 'axis');
   const gY = svg.append('g').attr('class', 'axis');
@@ -35,11 +36,11 @@ export function verticalProfile(container: HTMLElement, cfg: { height: number; y
     yLabel.attr('x', -(M.top + H / 2)).attr('y', 12).text(cfg.yLabel);
     const b = gBands.selectAll('g.band').data(bands);
     const be = b.enter().append('g').attr('class', 'band');
-    be.append('rect'); be.append('text').attr('class', 'band-label');
+    be.append('rect');
     b.exit().remove();
     const all = be.merge(b as never);
     all.select('rect').attr('x', M.left).attr('width', iw).attr('y', (d) => y(d.to)).attr('height', (d) => Math.max(0, y(d.from) - y(d.to))).attr('fill', (d) => d.color).attr('opacity', 0.18);
-    all.select('text').attr('x', M.left + iw - 6).attr('y', (d) => (y(d.from) + y(d.to)) / 2 + 4).attr('text-anchor', 'end').text((d) => (y(d.from) - y(d.to) > 14 ? d.label : ''));
+    gLabels.selectAll('text').data(bands).join('text').attr('class', 'band-label').attr('x', M.left + iw - 6).attr('y', (d) => (y(d.from) + y(d.to)) / 2 + 4).attr('text-anchor', 'end').text((d) => (y(d.from) - y(d.to) > 14 ? d.label : ''));
     gGrid.selectAll('line').data(x.ticks(5).filter((v) => logFmt(v) !== '')).join('line').attr('x1', (v) => x(v)).attr('x2', (v) => x(v)).attr('y1', M.top).attr('y2', M.top + H);
     const line = d3.line<[number, number]>().x((p) => x(Math.max(cfg.xDomain[0], Math.min(cfg.xDomain[1], p[0])))).y((p) => y(p[1]));
     const ok = pts.filter((p) => p[0] > 0);

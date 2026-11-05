@@ -103,3 +103,16 @@ export function readouts(...items: HTMLElement[]): HTMLElement {
   el.append(...items);
   return el;
 }
+
+/** An unnumbered section of plain prose (conclusion, method, references), optionally collapsed. */
+export function plainSection(root: HTMLElement, id: string, title: string, collapsed = false): HTMLElement {
+  const el = document.createElement('section');
+  el.id = id;
+  el.className = 'section section-plain';
+  el.innerHTML = `<header class="section-head"><h2>${title}</h2></header>`;
+  const body = document.createElement('div');
+  body.className = 'section-body-plain';
+  el.append(collapsed ? inDepth(body) : body);
+  root.append(el);
+  return body;
+}

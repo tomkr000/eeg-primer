@@ -12,7 +12,7 @@ export interface SliderOpts {
   /** HTML appended after the label (e.g. citation markers) */
   note?: string;
   /** reference points drawn as carets under the track, e.g. the typical value; align overrides the automatic placement */
-  marks?: { value: number; label: string; align?: 'start' | 'end' | 'center' }[];
+  marks?: { value: number; label: string; align?: 'start' | 'end' | 'center'; row?: number }[];
   /** approximate track width in px, for placing the mark labels (default: one column of a two-column panel) */
   trackPx?: number;
 }
@@ -60,13 +60,13 @@ export function slider(o: SliderOpts): Slider {
   for (const m of [...(o.marks ?? [])].sort((a, b) => toPos(a.value) - toPos(b.value))) {
     const frac = Math.min(1, Math.max(0, toPos(m.value)));
     const auto = frac > 0.72 ? 'end' : frac < 0.28 ? 'start' : 'center';
-    const w = m.label.length * 6.5, px = 8 + frac * (EST_W - 16);
+    const lines = m.label.split('<br>'), w = Math.max(...lines.map((l) => l.length)) * 6.5, px = 8 + frac * (EST_W - 16);
     const span = (a: string) => { const lo = a === 'start' ? px : a === 'end' ? px - w : px - w / 2; return { lo, hi: lo + w }; };
     const inside = (a: string) => { const { lo, hi } = span(a); return lo >= -4 && hi <= EST_W + 4; };
     const free = (a: string, row: number) => { const { lo, hi } = span(a); return !placed.some((p) => p.row === row && lo < p.hi + 6 && hi > p.lo - 6); };
     // keep the label on the first row by changing its alignment if that avoids a collision; otherwise drop a row
-    let align = m.align ?? auto, row = 0;
-    if (!m.align && !free(align, 0)) { const alt = (['start', 'end', 'center'] as const).find((a) => inside(a) && free(a, 0)); if (alt) align = alt; }
+    let align = m.align ?? auto, row = m.row ?? 0;
+    if (!m.align && m.row === undefined && !free(align, 0)) { const alt = (['start', 'end', 'center'] as const).find((a) => inside(a) && free(a, 0)); if (alt) align = alt; }
     while (!free(align, row) && row < 3) row++;
     const { lo, hi } = span(align);
     placed.push({ lo, hi, row });
@@ -75,6 +75,7 @@ export function slider(o: SliderOpts): Slider {
     mk.style.left = `calc(8px + ${frac} * (100% - 16px))`;
     if (row) { mk.style.top = `${row * 15}px`; marks.style.height = `${26 + row * 15}px`; }
     mk.innerHTML = `<i></i>${m.label}`;
+    if (lines.length > 1) marks.style.height = `${Math.max(parseFloat(marks.style.height) || 26, 26 + row * 15 + (lines.length - 1) * 14)}px`;
     marks.append(mk);
   }
   const fromPos = (p: number) => (o.log ? o.min * Math.pow(o.max / o.min, p) : o.min + p * (o.max - o.min));

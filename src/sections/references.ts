@@ -2,19 +2,7 @@ import { CLAIMS } from '../data/claims';
 import { REFERENCES } from '../data/references';
 import { cite, formatReference } from '../ui/cite';
 import { claimCite as c } from '../data/params';
-import { prose, inDepth } from '../ui/layout';
-
-function plainSection(root: HTMLElement, id: string, title: string, collapsed = false): HTMLElement {
-  const el = document.createElement('section');
-  el.id = id;
-  el.className = 'section section-plain';
-  el.innerHTML = `<header class="section-head"><h2>${title}</h2></header>`;
-  const body = document.createElement('div');
-  body.className = 'section-body-plain';
-  el.append(collapsed ? inDepth(body) : body);
-  root.append(el);
-  return body;
-}
+import { prose, plainSection } from '../ui/layout';
 
 export function mountMethod(root: HTMLElement) {
   const body = plainSection(root, 'method', 'Method and caveats', true);
@@ -27,28 +15,40 @@ solver with a known solution and check voltage and current at each boundary.</p>
 cortical currents appear at scalp electrodes ${c('mne-bem')}. Section 5 illustrates how local contributions
 add. Section 6 describes EEG rhythms and responses to events.</p>
 <p>Section 7 combines a modeled rhythm with artifacts and recording noise ${c('noise-model-settings')}.
-Section 8 passes that shared input through simplified contact circuits and adds noise
+Its optional movement artifacts take their sizes from published recordings ${c('head-movement-artifacts')}${c('running-artifact')},
+and their shapes are modeling choices ${c('movement-artifact-shapes')}. Section 8 passes that shared input through simplified contact circuits and adds noise
 ${c('electrode-model-settings')}. Their settings illustrate mechanisms rather than predict every headset.</p>
 <p>Section 9 maps measured imagery responses onto modeled patches ${c('arm-response-model')}.
 A calibrated decoder separates their overlapping changes, which amplifies noise ${c('arm-decoder')}.
-The simulated person has ideal knowledge of the task ${c('arm-controller')}.
-Tests check separation, noise statistics and the simulated success rates ${c('arm-success')}.</p>
+The fifth movement, the right shoulder, is a model addition placed from a brain-imaging study
+${c('motor-map')}${c('shoulder-area')}. The simulated person has ideal knowledge of the task ${c('arm-controller')}.
+Tests check separation, noise statistics and the simulated success rates ${c('arm-success')}. The same signals,
+run on a published three-dimensional cursor task, succeed about as often as that study's trained users
+${c('cursor-check')}.</p>
 <p>Section 10 isolates delay using a steady rhythm with a chosen fade and a moving measurement window
-${c('delay-model')}. Section 11 calculates the best linear estimate of one patch from many electrodes.
-Two numerical methods handle small and large arrays; tests check that they agree ${c('snr-electrodes')}.</p>
+${c('delay-model')}. Section 11 asks whether many electrodes can tell two neighboring fingers apart within one
+keystroke. It calculates the best linear estimate of one finger's region with the other canceled, and the share of
+correct calls over a short window ${c('finger-model')}${c('finger-count')}. Two numerical methods handle small and
+large arrays, and tests check that they agree ${c('snr-electrodes')}.</p>
 <h3>Limits of the models</h3>
 <p>Real heads have irregular shapes, and tissue properties vary ${cite('mccann2019', 'tang2008')}.
 The voltage drop from cortex to scalp also depends on the source's extent ${c('ecog-vs-eeg')}.
 The arm results describe the chosen task and ideal controller, not a measured limit for all EEG control
-${c('arm-task')}${c('arm-controller')}.</p>
+${c('arm-task')}${c('arm-controller')}. The shoulder patch's response is assumed ${c('shoulder-area')}. Section 11's
+finger regions are deliberately broad, chosen so that thumb against little finger lands near a measured result
+${c('finger-model')}, and the spacing of neighboring fingers assumes the fingers are evenly spaced
+${c('finger-neighbors')}.</p>
 <p>Some inputs have limited support. The contact-circuit values come largely from forearm measurements
 ${c('chi-table')}. The scalp-thickness input comes from a case report ${c('thickness-scalp')}.
 Noise levels assigned to contact types are assumptions guided by measurements
-${c('electrode-noise-levels')}. These limits are recorded in the verification log.</p>
+${c('electrode-noise-levels')}. The sizes of chewing, nodding and head-rolling artifacts are read from figures of a
+consumer headset ${c('head-movement-artifacts')}. These limits are recorded in the verification log.</p>
 <h3>How sources were checked</h3>
 <p>Research agents gathered sources. Separate auditing agents received the claims without the research
-notes and checked their support. Corrections and access limits appear in each claim's notes.
-Status badges describe the current claim: verified, partially supported, unverified, derived or assumed.
+notes and checked their support. Claims added in November 2026 were checked directly against the full texts of
+their sources, without a separate audit, and their notes say so. Corrections and access limits appear in each
+claim's notes.
+Status badges describe each claim as verified, partially supported, unverified, derived or assumed.
 A derived value is calculated from cited inputs. An assumption is a model choice.</p>`);
 }
 
@@ -63,7 +63,7 @@ export function mountVerification(root: HTMLElement) {
   table.className = 'claims-table';
   table.innerHTML = `<thead><tr><th>#</th><th>Claim</th><th>Sources</th><th>Status</th></tr></thead>`;
   const tb = document.createElement('tbody');
-  const sectionNames = ['', 'Neuron', 'Population', 'Head', 'Scalp maps', 'Patches and sums', 'EEG signals', 'Noise', 'Electrodes', 'Dimensionality', 'Delays', 'Electrode count'];
+  const sectionNames = ['', 'Neuron', 'Population', 'Head', 'Scalp maps', 'Patches and sums', 'EEG signals', 'Noise', 'Electrodes', 'Dimensionality', 'Delays', 'Electrode count', 'Conclusion'];
   for (const c of CLAIMS) {
     const tr = document.createElement('tr');
     tr.id = `claim-${c.id}`;

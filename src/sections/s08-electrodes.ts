@@ -6,7 +6,7 @@ import { controls, slider, fmt, fmtSI } from '../ui/slider';
 import { stripPlot, type Strip } from '../ui/strips';
 import { claimCite as c } from '../data/params';
 import { section, figure, prose, assumptions, vizTitle } from '../ui/layout';
-import { RAW_DEFAULTS, ALPHA_N, alphaUv, sourceSliders } from './s5-noise';
+import { RAW_DEFAULTS, ALPHA_N, alphaUv, sourceSliders } from './s07-noise';
 
 /** Reference interface values per cm² (claims 'chi-table' and 'abrasion'). */
 const IFACE: Record<string, InterfaceParams> = {
@@ -18,7 +18,7 @@ type Kind = 'abraded' | 'wet' | 'dry' | 'gap';
 const KINDS: Kind[] = ['abraded', 'wet', 'dry', 'gap'];
 const NAMES: Record<Kind, string> = { abraded: 'Wet gel, abraded skin', wet: 'Wet gel, unprepared skin', dry: 'Dry metal plate', gap: 'Dry plate over hair (gap)' };
 const COLORS: Record<Kind, string> = { abraded: '#1baf7a', wet: '#2a78d6', dry: '#eb6834', gap: '#6250d6' };
-const SUBS: Record<Kind, string> = { abraded: 'skin prepared for lower impedance', wet: 'gel on intact skin', dry: 'direct skin contact', gap: 'no direct skin contact' };
+const SUBS: Record<Kind, string> = { abraded: 'skin prepared for lower impedance', wet: 'gel on intact skin', dry: 'direct skin contact (Consumer grade)', gap: 'no direct skin contact' };
 
 /** Small schematic icons (44 × 44): skin at the bottom, the electrode above it. */
 const skin = (scratched = false) => `<rect x="2" y="32" width="40" height="10" fill="#f0c9a6" stroke="#1a1a1a" stroke-width="1"/>${scratched ? '<path d="M8,32 l3,3 M15,32 l3,3 M22,32 l3,3 M29,32 l3,3 M36,32 l3,3" stroke="#b5542a" stroke-width="1.2"/>' : '<rect x="2" y="32" width="40" height="2.5" fill="#d9b48f"/>'}`;
@@ -51,27 +51,30 @@ function pink(n: number, rms: number, seed: number): Float64Array {
 }
 
 export function mountElectrodes(root: HTMLElement) {
-  const sec = section(root, 'electrodes', '8', 'Electrode contact affects signal loss and added noise', 'Compare gel, dry contact, and a plate separated from the scalp by hair');
+  const sec = section(root, 'electrodes', '8', 'Electrode contact affects signal loss and added noise', 'Compare gel, dry contact (the most common), and a plate separated from the scalp by hair');
   prose(sec.text, `
-<p>The electrode contact and amplifier input form a voltage divider. At each frequency, the fraction of
-scalp-voltage amplitude that reaches the amplifier is |Z<sub>in</sub> / (Z<sub>in</sub> + Z<sub>e</sub>)|.
-Here Z<sub>e</sub> is the contact impedance and Z<sub>in</sub> is the amplifier input impedance.
-Impedance describes opposition to alternating current. These circuit quantities depend on frequency
-${c('electrode-model-settings')}. A high input impedance can keep signal loss small even when contact
-impedance rises ${c('ferree')}.</p>
-<p>Signal loss and added noise are separate problems. In one study, raising scalp-contact impedance from
-below 10 kΩ to 40 kΩ caused no significant change in EEG amplitude ${c('ferree')}. Another study found that unprepared sites needed about three times as many trials as abraded sites
-for equally reliable detection of a brain response to an event. The extra noise was concentrated at low frequencies
-${c('kappenman')}.
-The figure models both voltage loss and added noise, with chosen noise levels for each contact type
-${c('electrode-noise-levels')}.</p>
-<p>Hair can keep a flat plate from touching the scalp. Here that separation is modeled as an air-gap
-capacitor. A wider gap gives less capacitance and greater impedance at the same frequency
-${c('hair-permittivity')}${c('electrode-model-settings')}. The amplifier's input capacitance also limits
-how much voltage gets through, so increasing input resistance alone does not remove the loss
-${c('noncontact-cap')}. Dry electrodes with pins can reach the scalp through hair and make direct contact
-${c('contact-area-hair')}. These simplified circuits compare contact conditions; they do not rank
-particular electrode products ${c('electrode-model-settings')}.</p>`);
+<p>Research EEG usually records with a small silver/silver-chloride (Ag/AgCl) disc held in conductive gel on
+skin that has been lightly scraped ${c('haired-scalp-wet')}. Scraping lowers the contact
+resistance to 5 to 10 kΩ and makes the contact quieter ${c('abrasion')}. In one study, abraded sites needed about
+12 trials to detect a brain response, while unprepared sites needed about 35 ${c('kappenman')}. Preparing each
+site takes time, and the gel slowly dries. In one study its impedance rose from 5 to 15 kΩ over 5 hours
+${c('dry-vs-wet-time')}.</p>
+<p>Skipping the scraping makes the gel electrode faster to apply and gentler on the skin, and it loses almost no
+signal. Impedance rises to around 40 kΩ without abrasions. Modern amplifiers have input impedances of about 200 MΩ, so raising
+the contact impedance from below 10 kΩ to 40 kΩ drives little change in signal amplitude ${c('ferree')} but does increase noise, particularly at low frequencies ${c('kappenman')}.</p>
+<p>Most consumer headsets use dry metal electrodes, which need no gel and go on in seconds
+${c('consumer-electrodes')}. A flat dry plate works on the forehead where there is no dense hair. Over hairy
+scalp, dry electrodes use pins or combs to reach the skin with impedances ranging from 10's of
+kilohms up to 600 kΩ ${c('contact-area-hair')}. A dry contact does not dry out, and its impedance can fall
+toward that of a wet electrode within minutes if sweat builds up ${c('dry-vs-wet-time')}. Its impedance is still
+much higher (~1.3 MΩ for a plate on the forearm ${c('chi-table')}), so it suffers greater noise
+${c('electrode-noise-levels')} and larger motion artifacts ${c('fingered')}. Shielded dry electrodes do pick up
+less interference from nearby electric fields than wet ones ${c('searle')}.</p>
+<p>A flat plate that rests on hair never touches the skin. The hair and air between them act as a capacitor, and
+a wider gap gives less capacitance and more impedance ${c('hair-permittivity')}${c('electrode-model-settings')}.
+The amplifier's own input capacitance then reduces the voltage further, so raising the input resistance alone
+does not recover the signal ${c('noncontact-cap')}. This is why research EEG over hairy scalp still uses wet
+electrodes ${c('haired-scalp-wet')}. </p>`);
 
   const { sN, sF } = sourceSliders(ALPHA_N, 0.13); // the same source model as sections 2 to 7, a little more in step so the rhythm stands out
   const sArea = slider({ label: 'Electrode area', unit: 'cm²', min: 0.1, max: 3, value: 0.1, log: true, note: c('area-scaling') + c('contact-area-hair'), marks: [{ value: 0.1, label: 'In hair' }, { value: 1, label: 'Forehead or gel' }] });
@@ -80,8 +83,8 @@ particular electrode products ${c('electrode-model-settings')}.</p>`);
   const BLINK_S = 0.4; // one eye blink in the two-second window (section 7's size and width)
   const C_IN_PF = 20, V_CM_MV = RAW_DEFAULTS.mainsUvcm / 1e3, I_NOISE_FA = 1; // fixed amplifier and mains values (assumptions table)
 
-  const fig = figure(sec.fig, `<p>The top trace is the shared section 7 input: alpha activity, artifacts and baseline recording noise. Each lower trace passes it through a contact circuit and adds the extra noise specified below ${c('electrode-model-settings')}.</p><p>Trace heights use separate scales. Compare the printed amplitudes and table. Impedance and voltage kept are evaluated at 10 Hz. Added noise excludes inherited noise. The signal-to-noise ratio (SNR), in decibels (dB), compares alpha power with everything else in the output ${c('electrode-model-settings')}.</p>`, { panelWidth: '410px' });
-  fig.viz.append(vizTitle('Signal at the amplifier input for four electrode–skin interfaces'));
+  const fig = figure(sec.fig, `Top: the shared input from section 7, which holds the alpha rhythm, artifacts and baseline recording noise. Each lower trace passes that input through one contact circuit and adds that contact's extra noise ${c('electrode-model-settings')}. Each trace has its own vertical scale, so compare the printed amplitudes and the table, which gives impedance and the share of voltage kept at 10 Hz. Added noise leaves out the noise inherited from the input. The signal-to-noise ratio (SNR), in decibels (dB), compares alpha power with everything else in the output ${c('electrode-model-settings')}.`, { panelWidth: '410px' });
+  fig.viz.append(vizTitle('Signal at the amplifier for four electrode–skin interfaces'));
   const plot = stripPlot(fig.viz, { xLabel: 'Time (s)', xDomain: [0, 2], stripHeight: 82 });
   const table = document.createElement('table');
   table.className = 'mini-table';

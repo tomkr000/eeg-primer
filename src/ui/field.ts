@@ -195,7 +195,7 @@ function drawGrid(ctx: CanvasRenderingContext2D, toPx: Glow['toPx'], cfg: GlowCf
  * the cell body (meters): gray matter up to the cortical surface, then CSF, dura and skull.
  */
 /**
- * The tissue above the cortex as horizontal tinted bands: CSF, dura and skull (sections 1 and 2, the skull
+ * The tissue above the cortex as horizontal layers separated by thin lines: CSF, dura and skull (sections 1 and 2, the skull
  * running to the top of the picture), or CSF, dura, skull, scalp and air when `skull` and `scalp` are given
  * (section 3). Bands too thin to label are named together at the left, and labels get a white halo.
  */
@@ -217,8 +217,8 @@ export function drawCortexLayers(ctx: CanvasRenderingContext2D, toPx: Glow['toPx
   const thin: string[] = [];
   for (const [a, b, fill, name] of bands) {
     const [, ya] = toPx(0, a), [, yb] = toPx(0, b);
-    ctx.fillStyle = fill;
-    ctx.fillRect(x0, yb, w, ya - yb);
+    // a thin line at each boundary instead of a tinted band, so the glow underneath stays visible
+    if (b < o.yTop && fill !== 'rgba(0,0,0,0)' || name === 'scalp') { ctx.strokeStyle = 'rgba(26,26,26,0.45)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0, yb); ctx.lineTo(x0 + w, yb); ctx.stroke(); }
     if (ya - yb > 16) text(name, x1 - 8, (ya + yb) / 2 + 5, 'right'); else if (b < o.yTop) thin.push(name.replace('cerebrospinal fluid (CSF)', 'CSF')); // a band cut off by the top of the view is not thin
   }
   const [, ys] = toPx(0, o.surface);

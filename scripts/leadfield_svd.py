@@ -42,7 +42,11 @@ def montage_positions(name, subjects_dir):
         return {f'S{i}': rr_head[i] for i in np.where(keep)[0]}
     # MNE ≥ 1.13 ships 10-20/10-05 templates fitted to fsaverage itself (fsaverage_1020 / fsaverage_1005)
     m = mne.channels.make_standard_montage(name)
-    pos = m.get_positions()['ch_pos']
+    # Standard montages are not necessarily in head coordinates. set_montage transforms a copy
+    # using its fiducials, exactly as the forward solver's Info expects. Never relabel native points.
+    info = mne.create_info(m.ch_names, 1000.0, 'eeg')
+    info.set_montage(m)
+    pos = {ch['ch_name']: ch['loc'][:3].copy() for ch in info['chs']}
     if name == 'fsaverage_1020':
         pos = {k: v for k, v in pos.items() if k in CLASSIC_1020}
     return pos
@@ -122,7 +126,9 @@ def main():
     info_sph.set_montage(mne.channels.make_dig_montage(ch_pos=proj_pos, coord_frame='head'))
     L_sph, used_sph = fixed_leadfield(sphere, info_sph)
     # the sphere model can only hold sources inside its innermost layer; restrict the BEM to the same subset
-    keep = [i for i, u in enumerate(used_bem) if u in set(used_sph)]
+    sphere_sources = set(used_sph)
+    keep = [i for i, u in enumerate(used_bem) if u in sphere_sources]
+    assert [used_bem[i] for i in keep] == used_sph
     assert len(keep) == L_sph.shape[1], (len(keep), L_sph.shape)
     L_bem_sub = L_bem[:, keep]
     print(f'sources inside the fitted sphere: {len(keep)} of {len(used_bem)}')
@@ -130,6 +136,8 @@ def main():
     out = {
         'generated': time.strftime('%Y-%m-%d'),
         'mne_version': mne.__version__,
+        'coordinate_frame': 'head',
+        'coordinate_method': 'each standard montage transformed with info.set_montage before combining layouts',
         'head_model': {
             'template': 'fsaverage (MNE-Python bundle)',
             'bem_file': bem_file.name,

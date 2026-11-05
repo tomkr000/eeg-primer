@@ -1,94 +1,97 @@
 import { describe, it, expect } from 'vitest';
-import { simulateArm, successRate, commandNoise, decoder, seenResponse, powerDof, trigamma, cursorTrial, ARM } from '../src/physics/arm';
+import { simulateArm, successRate, commandNoise, powerDecoder, imageryPower, correctionCommand, powerDof, trigamma, cursorTrial, intended, ARM } from '../src/physics/arm';
 import { P } from '../src/data/params';
 
 const LOG = P.miResponse.map((r) => r.map((v) => Math.log(1 + v / 100)));
 const base = { bandHz: P.decoderBandHz, onsetS: P.erdOnsetS, rampS: P.erdRampS, windowS: 1 };
 
 describe('reading the patches', () => {
-  it('a long window has B·T degrees of freedom, a short one slightly more', () => {
+  it('uses the finite-window power variance rather than treating overlapping updates as independent', () => {
     expect(powerDof(3, 10) / 30).toBeCloseTo(1, 1);
     expect(powerDof(3, 1)).toBeGreaterThan(3);
     expect(powerDof(3, 1)).toBeLessThan(4);
+    expect(trigamma(1)).toBeCloseTo(Math.PI ** 2 / 6, 6);
   });
-  it('the decoder undoes the overlap of the movements exactly', () => {
-    const seen = seenResponse(LOG, 0.4);
-    for (let K = 1; K <= 5; K++) {
-      const D = decoder(seen, K);
-      for (let k = 0; k < K; k++) for (let m = 0; m < K; m++) {
-        const v = D[k].reduce((s, w, p) => s + w * seen[p][m], 0);
-        expect(v).toBeCloseTo(k === m ? 1 : 0, 9);
+  it('recovers isolated, graded and compound intensities from their deterministic mean powers', () => {
+    for (const nF of [0, 0.4, 2]) for (let K = 1; K <= 5; K++) {
+      const fit = powerDecoder(LOG, K, nF);
+      const cases = [new Array(K).fill(0), new Array(K).fill(0.5), new Array(K).fill(1),
+        Array.from({ length: K }, (_, k) => k === 0 ? 0.5 : 0),
+        Array.from({ length: K }, (_, k) => k % 2), Array.from({ length: K }, (_, k) => (k + 1) / (K + 1))];
+      for (const input of cases) {
+        const recovered = fit(imageryPower(LOG, input).map((v) => v + nF));
+        recovered.forEach((v, k) => expect(v).toBeCloseTo(input[k], 5));
       }
     }
   });
-  it('the commands at rest scatter as the gamma model says', () => {
-    const o = { ...base, joints: 2, rho: 1e6, together: false };
-    const expected = commandNoise(LOG, o), values: number[][] = [[], []];
-    for (let s = 1; s <= 300; s++) {
-      const r = simulateArm(LOG, { ...o, seed: s }), i = r.t.findIndex((t) => t >= 0) - 1;
-      values.forEach((v, k) => v.push(r.command[k][i]));
+  it('finds the bounded least-squares optimum when noisy inputs put several coordinates on bounds', () => {
+    // Independent SciPy bounded least-squares reference. With no additive floor the log fit is linear/convex.
+    const observed = [0.1896427106, 0.0311349791, 0.1345834795, 0.6532334292, 3.0782264274, 0.7089212924];
+    const got = powerDecoder(LOG, 5, 0)(observed);
+    const expected = [0.777813, 1, 0.283310, 0, 0.1813332];
+    got.forEach((v, k) => expect(v).toBeCloseTo(expected[k], 5));
+  });
+  it('the rest-noise readout matches numerical derivatives near zero imagery before bounds', () => {
+    const K = 3, rho = 2, nF = 1 / rho, neutral = new Array(K).fill(1e-4);
+    const mean = imageryPower(LOG, neutral).map((v) => v + nF), fit = powerDecoder(LOG, K, nF), eps = 1e-7;
+    const variance = new Array(K).fill(0);
+    for (let p = 0; p < LOG.length; p++) {
+      const plus = mean.slice(), minus = mean.slice(); plus[p] *= Math.exp(eps); minus[p] *= Math.exp(-eps);
+      const hi = fit(plus), lo = fit(minus);
+      for (let k = 0; k < K; k++) variance[k] += ((hi[k] - lo[k]) / eps) ** 2;
     }
-    values.forEach((v, k) => {
-      const m = v.reduce((a, x) => a + x, 0) / v.length, sd = Math.sqrt(v.reduce((a, x) => a + (x - m) ** 2, 0) / v.length);
-      expect(Math.abs(m)).toBeLessThan(0.1);
-      expect(sd / expected[k]).toBeGreaterThan(0.85);
-      expect(sd / expected[k]).toBeLessThan(1.15);
-    });
-    expect(trigamma(1)).toBeCloseTo(Math.PI ** 2 / 6, 6);
+    const predicted = commandNoise(LOG, { joints: K, rho, windowS: 1, bandHz: 3 });
+    predicted.forEach((v, k) => expect(Math.sqrt(variance[k] * trigamma(powerDof(3, 1))) / v).toBeCloseTo(1, 3));
   });
-  it('overlapping movements amplify the noise: two hands are noisier than one', () => {
-    const one = commandNoise(LOG, { joints: 1, rho: 1e6, windowS: 1, bandHz: 3 }), two = commandNoise(LOG, { joints: 2, rho: 1e6, windowS: 1, bandHz: 3 });
-    expect(two[0] / one[0]).toBeGreaterThan(1.8);
+  it('estimates finite local noise at rest and exposes noise amplification from overlap', () => {
+    const one = commandNoise(LOG, { joints: 1, rho: 1, windowS: 1, bandHz: 3 });
+    const two = commandNoise(LOG, { joints: 2, rho: 1, windowS: 1, bandHz: 3 });
+    expect(two[0]).toBeGreaterThan(one[0]);
+    const long = commandNoise(LOG, { joints: 2, rho: 1, windowS: 4, bandHz: 3 });
+    two.forEach((v, k) => { expect(Number.isFinite(v)).toBe(true); expect(long[k]).toBeLessThan(v); });
   });
 });
 
-describe('the arm', () => {
-  it('starts scrunched and the intended arm ends straight', () => {
-    const r = simulateArm(LOG, { ...base, joints: 3, rho: 1e6, together: true, seed: 1 });
-    r.desired.forEach((d, k) => { expect(d[0]).toBe(ARM.startDeg[k]); expect(d[d.length - 1]).toBe(0); });
+describe('the bidirectional arm interface', () => {
+  it('deliberately reverses for overshoot and has a neutral dead band', () => {
+    expect(correctionCommand(-30)).toBeLessThan(-ARM.deadZone);
+    expect(correctionCommand(30)).toBeGreaterThan(ARM.deadZone);
+    expect(correctionCommand(2)).toBe(0);
+    expect(correctionCommand(-30)).toBe(-correctionCommand(30));
   });
-  it('one joint read from a perfect recording ends straight in nearly every attempt', () => {
-    expect(successRate(LOG, { ...base, joints: 1, rho: 1e6, together: false }, 40).rate).toBeGreaterThanOrEqual(0.95);
-  });
-  it('fewer attempts succeed as joints are added (claim arm-success)', async () => {
-    const { snrVersusElectrodes } = await import('../src/physics/control');
-    const { momentNam, ALPHA_N } = await import('../src/sections/s07-noise');
-    const [cap] = snrVersusElectrodes([64], 1, 10, 10), rho = (momentNam(ALPHA_N, P.patchDefaultSync) * cap.withBrain) ** 2;
-    const rate = (K: number, together: boolean, r = rho) => Math.round(100 * successRate(LOG, { ...base, joints: K, rho: r, together }, 100).rate);
-    // the shares quoted in the claim, one joint at a time and all together, within 3 points (an attempt near the line can
-    // flip with the last digit of a math library); five joints do worse than four
-    const near = (got: number[], want: number[]) => got.forEach((g, i) => expect(Math.abs(g - want[i])).toBeLessThanOrEqual(3));
-    const rows = [[rate(1, false), rate(2, false), rate(3, false), rate(4, false), rate(5, false)], [rate(1, true), rate(2, true), rate(3, true), rate(4, true), rate(5, true)],
-      [2, 3, 4, 5].map((K) => rate(K, false, 1e6)), [2, 3, 4, 5].map((K) => rate(K, true, 1e6))];
-    near(rows[0], [100, 27, 9, 1, 0]);
-    near(rows[1], [100, 21, 12, 11, 6]);
-    near(rows[2], [50, 18, 4, 0]);
-    near(rows[3], [68, 33, 25, 20]);
-    rows.forEach((r) => expect(r[r.length - 1]).toBeLessThanOrEqual(r[r.length - 2]));
-    const noise = (K: number) => commandNoise(LOG, { joints: K, rho, windowS: 1, bandHz: 3 });
-    expect(noise(1)[0]).toBeCloseTo(0.44, 2);
-    noise(2).forEach((v) => { expect(v).toBeGreaterThan(1.4); expect(v).toBeLessThan(1.5); });
-  });
+  it('starts with a half-intensity neutral setting and produces bounded finite commands under noise', () => {
+    for (const together of [false, true]) for (const K of [1, 3, 5]) {
+      const r = simulateArm(LOG, { ...base, joints: K, rho: 1, together, seed: 7 });
+      r.imagery.forEach((a) => expect(a[0]).toBe(0.5));
+      r.desired.forEach((a, k) => { expect(a[0]).toBe(ARM.startDeg[k]); expect(intended(k, 30, together)).toBe(0); });
+      for (const a of r.command) for (const v of a) { expect(Number.isFinite(v)).toBe(true); expect(Math.abs(v)).toBeLessThanOrEqual(1); }
+      for (const a of r.actual) for (const v of a) expect(Math.abs(v)).toBeLessThanOrEqual(ARM.limitDeg);
+      if (!together) for (let i = 0; i < r.t.length; i++) expect(r.imagery.filter((a) => Math.abs(a[i] - 0.5) > 1e-9).length).toBeLessThanOrEqual(1);
+    }
+  }, 20000);
+  it('requests a reverse correction during a noisy overshoot, rather than waiting for noise to return it', () => {
+    let reversed = false;
+    for (let seed = 1; seed <= 8 && !reversed; seed++) {
+      const r = simulateArm(LOG, { ...base, joints: 2, rho: 1, together: true, seed });
+      reversed = r.actual.some((a, k) => a.some((angle, i) => angle < -ARM.minErrDeg && r.imagery[k][i] < 0.5));
+    }
+    expect(reversed).toBe(true);
+  }, 20000);
+  it('repeats fixed noise sequences without imposing a human-performance ceiling', () => {
+    const opts = { ...base, joints: 2, rho: 1, together: true };
+    const a = successRate(LOG, opts, 3), b = successRate(LOG, opts, 3);
+    expect(a.rate).toBe(b.rate); expect(a.rate).toBeGreaterThanOrEqual(0); expect(a.rate).toBeLessThanOrEqual(1);
+    if (a.rate > 0) { expect(a.meanTime).toBe(b.meanTime); expect(Number.isFinite(a.meanTime)).toBe(true); }
+  }, 20000);
 });
 
-describe('the same signals on a measured task (claim cursor-check)', () => {
-  it('reach the right corner of the 3D cursor task about as often as trained users did', async () => {
-    const { snrVersusElectrodes } = await import('../src/physics/control');
-    const { momentNam, ALPHA_N } = await import('../src/sections/s07-noise');
-    const [cap] = snrVersusElectrodes([64], 1, 10, 10), rho = (momentNam(ALPHA_N, P.patchDefaultSync) * cap.withBrain) ** 2;
-    const corners = [-1, 1].flatMap((a) => [-1, 1].flatMap((b) => [-1, 1].map((c) => [a, b, c])));
-    const three = (M: number[][]) => M.map((r) => r.slice(0, 3));
-    const clean = LOG.map((_, p) => [0, 1, 2].map((k) => (p === k ? Math.log(0.15) : 0)));
-    const run = (L: number[][], r: number) => {
-      const times: number[] = [];
-      for (let s = 0; s < 200; s++) { const t = cursorTrial(L, corners[s % 8], { ...base, windowS: 0.4, rho: r, limitS: 15, gain: 0.93, edge: 0.7, seed: 1000 + s }); if (!isNaN(t)) times.push(t); }
-      times.sort((a, b) => a - b);
-      return { rate: Math.round((100 * times.length) / 200), median: times[Math.floor(times.length / 2)] };
-    };
-    const model = run(three(LOG), rho);
-    expect(Math.abs(model.rate - 72)).toBeLessThanOrEqual(3); // inside the 56 to 93% of McFarland et al.'s four users
-    expect(model.median).toBeGreaterThan(3); expect(model.median).toBeLessThan(5);
-    expect(run(clean, rho).rate).toBeGreaterThanOrEqual(98); // without the overlap of the movements
+describe('the cursor uses the same matched power decoder', () => {
+  it('supports both target signs and finite-noise trials without claiming measured validation', () => {
+    const independent = [[Math.log(0.15), 0, 0], [0, Math.log(0.15), 0], [0, 0, Math.log(0.15)]];
+    for (const target of [[1, 1, 1], [-1, -1, -1], [1, -1, 1]]) {
+      const t = cursorTrial(independent, target, { ...base, rho: 10, windowS: 1, limitS: 15, gain: 0.93, edge: 0.7, seed: 1000 });
+      expect(Number.isFinite(t)).toBe(true); expect(t).toBeGreaterThan(0); expect(t).toBeLessThanOrEqual(15);
+    }
   });
 });
 

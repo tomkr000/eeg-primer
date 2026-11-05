@@ -7,6 +7,7 @@ import {
   modalTransfer,
   potential,
   solveShells,
+  solveShellsConverged,
   stackShells,
   surfacePotential,
   type Shell,
@@ -172,5 +173,34 @@ describe('exterior (air) potential', () => {
     const sol = solveShells(shells, 0.078, 1e-8, 'radial', 1);
     const v0 = exteriorPotential(sol, Rout, 0.4), v1 = exteriorPotential(sol, 2 * Rout, 0.4);
     expect(v1 / v0).toBeCloseTo(0.25, 10);
+  });
+});
+
+
+describe('near-cortex convergence at the section 3 slider limits', () => {
+  const shells = stackShells(0.08, [
+    { name: 'CSF', thickness: 0.001, sigma: 1.79 },
+    { name: 'dura', thickness: 0.0004, sigma: 0.06 },
+    { name: 'skull', thickness: 0.0063, sigma: 0.015 },
+    { name: 'scalp', thickness: 0.0055, sigma: 0.41 },
+  ], 0.33);
+  it.each([0.0005, 0.002, 0.025])('resolves a source %s m below the cortex on both sides of the interface', (depth) => {
+    const b = 0.08 - depth, p = 1e-8;
+    const sol = solveShellsConverged(shells, b, p, 'radial');
+    // Independent longer sum at the pole, including every coefficient rather than the optimized evaluator.
+    const longer = solveShells(shells, b, p, 'radial', Math.min(7000, sol.L + 1000));
+    const reference = freeSpaceDipole(longer, 0, 0, 0.08) + longer.A[0].reduce((sum, a) => sum + a, 0);
+    expect(Math.abs(potential(sol, 0.08, 0) / reference - 1)).toBeLessThan(1e-9);
+    expect(Math.abs(potential(sol, 0.08 + 1e-12, 0) / reference - 1)).toBeLessThan(1e-7);
+    // The fast radius-dependent cutoff also agrees at every layer and at off-axis map points.
+    for (const r of [0.06, 0.0798, 0.0801, 0.0812, 0.084, 0.09, 0.0932]) {
+      const n = shells.findIndex(s => r <= s.outerRadius);
+      for (const theta of [0, 0.02, 0.4]) {
+        const Y = legendreP(Math.cos(theta), longer.L), rn = shells[n].outerRadius;
+        let exact = n === 0 ? freeSpaceDipole(longer, r * Math.sin(theta), 0, r * Math.cos(theta)) : 0;
+        for (let l = 1; l <= longer.L; l++) exact += (longer.A[n][l] * (r / rn) ** l + (n ? longer.B[n][l] * (rn / r) ** (l + 1) : 0)) * Y[l];
+        expect(Math.abs(potential(sol, r, theta) - exact)).toBeLessThan(Math.max(1e-15, Math.abs(exact) * 1e-8));
+      }
+    }
   });
 });

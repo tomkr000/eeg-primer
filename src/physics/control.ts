@@ -7,6 +7,7 @@ import { solveShells, modalTransfer } from './sphere';
 import { applyTransfer } from './fft';
 import { mulberry32 } from './population';
 import { defaultHead } from '../data/params';
+export { bandPowerModes, finiteWindowPairCorrect } from './bandpower';
 
 const LMAX = 300;
 let modes: { c: Float64Array; b: number; R: number } | null = null;
@@ -261,7 +262,7 @@ function lnGamma(z: number): number {
   return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
 }
 
-export interface PairPoint { N: number; alone: number; separated: number; electrodesOnly: number; rho: number }
+export interface PairPoint { N: number; alone: number; separated: number; separatedB: number; electrodesOnly: number; rho: number }
 /**
  * Two patches of radius r whose centers lie `sepMm` apart on the cortex (patch A under the vertex, B along a meridian):
  * the SNR per nA·m of the best linear estimate of A alone (B silent), of A with B's activity canceled (the unmixed
@@ -279,9 +280,10 @@ export function pairVersusElectrodes(Ns: number[], noiseUv: number, bgUv: number
     v2[l] = (a[l] * a[l] * 4 * Math.PI) / (2 * l + 1); total2 += v2[l]; cross2 += v2[l] * Pl[l];
     C[l] = (beta * c[l] * c[l] * 4 * Math.PI) / ((2 * l + 1) * (2 * l + 1));
   }
-  // A's SNR² once B is canceled: sA² − x²/sB², where x is the whitened cross product of the two patterns
+  // A's SNR² once B is canceled: sA² − x²/sB², and conversely for B. The demixed noise correlation is −rho.
   const pack = (N: number, sA2: number, sB2: number, x: number, eA2: number, eB2: number, ex: number): PairPoint => ({
     N, alone: Math.sqrt(sA2), separated: Math.sqrt(Math.max(0, sA2 - (x * x) / sB2)),
+    separatedB: Math.sqrt(Math.max(0, sB2 - (x * x) / sA2)),
     electrodesOnly: Math.sqrt(Math.max(0, eA2 - (ex * ex) / eB2)), rho: x / Math.sqrt(sA2 * sB2),
   });
   return Ns.map((N) => {

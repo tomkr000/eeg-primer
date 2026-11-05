@@ -16,6 +16,7 @@ from pathlib import Path
 
 import numpy as np
 import mne
+from mne.surface import _project_onto_surface
 
 mne.set_log_level('WARNING')
 subjects_dir = Path(mne.datasets.fetch_fsaverage(subjects_dir=Path('/tmp/subjects'), verbose=False)).parent
@@ -40,18 +41,23 @@ src_nn = fwd['source_nn']  # unit dipole direction of each source (head coordina
 assert src_nn.shape == (L.shape[1], 3)
 hemi = np.concatenate([np.full(len(s['vertno']), i) for i, s in enumerate(fwd['src'])])
 # electrode positions: the template montage is a sphere; MNE projects EEG electrodes onto the BEM scalp for the
-# forward computation, so report the projected positions (nearest scalp-surface vertex, head coordinates, mm)
+# forward computation, so report that same nearest-triangle projection in head coordinates (mm).
 trans_obj = mne.read_trans(trans)
 skin = [s_ for s_ in bem['surfs'] if s_['id'] == mne.io.constants.FIFF.FIFFV_BEM_SURF_ID_HEAD][0]
 skin_head = mne.transforms.apply_trans(mne.transforms.invert_transform(trans_obj), skin['rr']) * 1e3
-el_template = np.array([montage.get_positions()['ch_pos'][c] for c in montage.ch_names]) * 1e3
-el = np.array([skin_head[np.argmin(np.linalg.norm(skin_head - p, axis=1))] for p in el_template])
+# set_montage transforms a COPY to head coordinates; the original montage remains in its native frame.
+el_template = np.array([ch['loc'][:3] for ch in info['chs']])
+el_mri = mne.transforms.apply_trans(trans_obj, el_template)
+el_projected_mri = _project_onto_surface(el_mri, skin, project_rrs=True)[2]
+el = mne.transforms.apply_trans(mne.transforms.invert_transform(trans_obj), el_projected_mri) * 1e3
 centre = skin_head.mean(axis=0)
 
 out = {
     'description': 'fsaverage 3-layer BEM (0.3/0.006/0.3 S/m), ico-4 cortical sources with fixed normal orientation, BioSemi-128 electrodes, average reference; lead field in µV per nA·m as base64 int16 (row-major channels × sources) times one float32 scale per source',
     'mne_version': mne.__version__,
-    'electrodes': {'names': montage.ch_names, 'pos_mm': np.round(el, 1).tolist(), 'note': 'projected onto the fsaverage scalp surface, head coordinates'},
+    'coordinate_frame': 'head',
+    'coordinate_method': 'info.set_montage native-to-head transform, then BEM triangle projection',
+    'electrodes': {'names': montage.ch_names, 'pos_mm': np.round(el, 1).tolist(), 'note': 'head-frame montage projected onto fsaverage scalp triangles exactly as in the BEM forward calculation'},
     'scalp_centre_mm': np.round(centre, 1).tolist(),
     'sources': {'pos_mm': np.round(src_head, 1).tolist(), 'hemi': hemi.tolist(), 'n': int(L.shape[1]), 'normal_float32_base64': base64.b64encode(src_nn.astype(np.float32).tobytes()).decode('ascii'), 'note': 'unit dipole direction per source, head coordinates, row-major n × 3'},
     'leadfield': {'shape': list(L.shape), 'units': 'uV per nA·m', 'int16_base64': base64.b64encode(L_q.tobytes()).decode('ascii'), 'scale_float32_base64': base64.b64encode(scale.tobytes()).decode('ascii')},

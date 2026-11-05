@@ -1,4 +1,4 @@
-import { cabs, contactImpedance, gapCapacitance, gapElectrodeImpedance, inputImpedance, type InterfaceParams, type Complex } from '../physics/electrode';
+import { cabs, contactImpedance, currentNoiseImpedance, gapCapacitance, gapElectrodeImpedance, inputImpedance, type InterfaceParams, type Complex } from '../physics/electrode';
 import { applyTransfer } from '../physics/fft';
 import { synthesize } from '../physics/noise';
 import { mulberry32 } from '../physics/population';
@@ -105,7 +105,7 @@ comparisons ${c('dry-through-hair')}. How well any of them works depends on the 
     { what: 'Shared input trace', value: 'Two seconds of section 7’s model, including baseline skin noise (3 µV rms) and amplifier voltage noise (1 µV rms).', cite: c('electrode-model-settings') },
     { what: 'Added contact noise', value: `Chosen at 1 cm²: prepared gel ${SKIN_NOISE.abraded} µV rms; intact-skin gel ${SKIN_NOISE.wet} µV rms; dry plate ${SKIN_NOISE.dry} µV rms; plate over hair ${SKIN_NOISE.gap} µV rms. Noise grows at low frequencies (1/f) and scales as 1/√area. Dry values are extrapolated.`, cite: c('electrode-noise-levels') },
     { what: 'Amplifier input', value: `The selected resistance is in parallel with a chosen ${C_IN_PF} pF. Resistance marks reference different devices: ADS1299 (1 GΩ) and a research amplifier (50 TΩ).`, cite: c('ads1299') + c('noncontact-cap') + c('electrode-model-settings') },
-    { what: 'Added amplifier current noise', value: `Chosen current noise: ${I_NOISE_FA} fA/√Hz. Flow through contact impedance adds voltage noise, beyond the shared baseline.`, cite: c('amp-current-noise') + c('electrode-model-settings') },
+    { what: 'Added amplifier current noise', value: `Chosen current noise: ${I_NOISE_FA} fA/√Hz. Flow through contact and amplifier input impedances in parallel adds voltage noise, beyond the shared baseline.`, cite: c('amp-current-noise') + c('electrode-model-settings') },
     { what: 'Muscle activity', value: `The shared input includes ${RAW_DEFAULTS.emgUvRms} µV rms of muscle activity.`, cite: c('emg-level') + c('electrode-model-settings') },
     { what: 'Eye blink', value: `One chosen blink at ${BLINK_S} s: ${RAW_DEFAULTS.blinkUv} µV peak, about 190 ms wide at half height. The width convention is a model choice.`, cite: c('electrode-model-settings') + c('blink-amplitude') + c('blink-width') },
     { what: 'Mains pickup', value: `Chosen shared body voltage: ${V_CM_MV} mV peak at 60 Hz. The second contact has 1.5 times the first’s impedance, converting shared voltage into a measured difference. Peak amplitude is a model setting.`, cite: c('electrode-model-settings') + c('common-mode') + c('potential-divider') },
@@ -136,12 +136,12 @@ comparisons ${c('dry-through-hair')}. How well any of them works depends on the 
       };
       const sig = applyTransfer(raw.total, RAW_DEFAULTS.fs, H), alphaOut = applyTransfer(raw.signal, RAW_DEFAULTS.fs, H); // everything, and the alpha alone
       const skin = pink(n, SKIN_NOISE[k] / Math.sqrt(sArea.value), 20 + idx);
-      // amplifier current noise i_n (A/√Hz) flowing through |Ze(f)|: white current, shaped by the impedance
+      // amplifier current noise i_n (A/√Hz) flowing through |Ze(f) ∥ Zin(f)|: white current, shaped by the impedance
       const iWhite = new Float64Array(n);
       const rng = mulberry32(40 + idx);
       for (let i = 0; i < n; i++) { const u = Math.max(rng(), 1e-12), v = rng(); iWhite[i] = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
       const inA = I_NOISE_FA * 1e-15 * Math.sqrt(RAW_DEFAULTS.fs / 2); // per-sample white noise with density i_n
-      const curr = applyTransfer(iWhite, RAW_DEFAULTS.fs, (f) => { const z = Ze(k, f); return { re: z.re * inA * 1e6, im: z.im * inA * 1e6 }; }); // µV
+      const curr = applyTransfer(iWhite, RAW_DEFAULTS.fs, (f) => { const z = currentNoiseImpedance(Ze(k, f), Zin(f)); return { re: z.re * inA * 1e6, im: z.im * inA * 1e6 }; }); // µV
       // mains pickup: the two electrodes of the pair differ by 50% in impedance, so the common-mode voltage
       // reaches the amplifier as Vcm × |Zin/(Zin+Ze) − Zin/(Zin+1.5·Ze)| at 60 Hz (bounded, unlike ΔZ/Zin)
       const ze60 = Ze(k, 60), zin60 = Zin(60);

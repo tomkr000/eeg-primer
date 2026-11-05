@@ -1,5 +1,5 @@
 import { snrVersusElectrodes } from '../physics/control';
-import { simulateArm, successRate, commandNoise, ARM, type ArmTrial } from '../physics/arm';
+import { simulateArm, successRate, commandNoise, imageryPower, ARM, type ArmTrial } from '../physics/arm';
 import { controls, readout, slider, choice, fmt } from '../ui/slider';
 import { P, claimCite as c } from '../data/params';
 import { section, figure, prose, readouts, assumptions, sw } from '../ui/layout';
@@ -74,12 +74,12 @@ We found no report of four EEG signals steered continuously at once, although th
 done ${c('dof-search')}.</p>
 <p><strong>The arm's test is strict.</strong> Every joint must stop within 15° of straight at the same time and stay
 there for half a second, while noise keeps nudging the joints ${c('arm-task')}. With the default settings, nearly every one-joint attempt
-succeeds. About one in five two-joint attempts and about one in eight three-joint attempts succeed. Four and five joints rarely succeed
-${c('arm-success')}. A cursor task is more forgiving. In the
-3D cursor study described below, a trial succeeded when the cursor touched the right corner of a cube within 15 s,
-and the walls of the cube stopped it from overshooting. Run on that task, the same simulated signals reach the right
-corner in 72% of trials with a median time of 3.9 s, within the 56 to 93% and 1.6 to 4.9 s of the study's four
-trained users. Without the overlap between movements they reach it every time ${c('cursor-check')}. We chose this task as 4 dimensional flying is not feasible on a 2D screen. </p>
+succeeds. About three in ten two-joint attempts and two in a hundred three-joint attempts succeed. Four and five joints rarely succeed
+${c('arm-success')}. A cursor task is more forgiving. In a model of the
+3D cursor study described below, a trial succeeds when the cursor touches the right corner of a cube within 15 s,
+and the walls of the cube stop it from overshooting. Run on that task, the same simulated signals reach the right
+corner in 45% of trials with a median time of 5.1 s, compared with the 56 to 93% and 1.6 to 4.9 s of the study's four
+trained users. Without the overlap between movements they reach it in 96% of trials ${c('cursor-check')}. This comparison does not independently validate the model. We chose this task as 4 dimensional flying is not feasible on a 2D screen. </p>
 `);
 
   const sJoints = slider({ label: 'Joints to control', min: 1, max: 5, step: 1, value: 1, format: (v) => String(Math.round(v)), marks: [{ value: 3, label: 'Demonstrated: 3' }], note: c('dof-control') });
@@ -92,7 +92,7 @@ trained users. Without the overlap between movements they reach it every time ${
   const rNoise = readout('Command noise at rest', c('erd-detect') + c('arm-decoder'));
   const rUsed = readout('Imagined movements in use', c('mi-classes'));
 
-  const fig = figure(sec.fig, `Left: the six motor patches from section 4. Patches 1 and 2 are the hand areas of the left and right hemispheres, which serve the opposite hands, patch 3 is the foot area, patches 4 and 5 are the tongue areas, and patch 6 is the right shoulder area. Each disc takes its movement's joint color and is shaded by its mu power relative to rest, and a patch can also respond to imagery assigned to another joint ${c('mi-matrix')}${c('tongue-areas')}${c('arm-response-model')}. Middle: expected mu power at the 128 displayed electrodes relative to rest, over an assumed ${CAP.bgUv} µV root-mean-square background ${c('brain-background')}${c('arm-response-model')}. The decoder does not read this map. It reads each patch through the modeled ${CAP.electrodes}-electrode channel of section 11 ${c('snr-electrodes')}. Right: the intended arm, the decoded arm and each joint's command since Go, with joint 1 at the base. Go plays one simulated attempt in which an ideal person adjusts imagery to straighten each assigned joint ${c('arm-controller')}. The decoder estimates patch power over the selected window and separates the movement responses ${c('mi-matrix')}${c('tongue-areas')}${c('compound-mi')}. A command of 1 is the response to the model's full imagery intensity, a command beyond ±${ARM.deadZone} moves its joint, and an attempt succeeds when all joints stay within ${ARM.tolDeg}° of straight for ${ARM.dwellS} s before the time limit ${c('arm-decoder')}${c('arm-task')}. The readouts give this attempt, the success rate over the same ${TRIALS} simulated noise sequences each time, command noise at rest as a standard deviation relative to the response to full imagery, and the imagery in use ${c('arm-success')}${c('arm-task')}${c('erd-detect')}.`, { wide: true });
+  const fig = figure(sec.fig, `Left: the six motor patches from section 4. Patches 1 and 2 are the hand areas of the left and right hemispheres, which serve the opposite hands, patch 3 is the foot area, patches 4 and 5 are the tongue areas, and patch 6 is the right shoulder area. Each disc takes its movement's joint color and is shaded by its mu power relative to rest, and a patch can also respond to imagery assigned to another joint ${c('mi-matrix')}${c('tongue-areas')}${c('arm-response-model')}. Middle: expected mu power at the 128 displayed electrodes relative to rest, over an assumed ${CAP.bgUv} µV root-mean-square background ${c('brain-background')}${c('arm-response-model')}. The decoder does not read this map. It reads each patch through the modeled ${CAP.electrodes}-electrode channel of section 11 ${c('snr-electrodes')}. Right: the intended arm, the decoded arm and each joint's command since Go, with joint 1 at the base. Go plays one simulated attempt in which an ideal person adjusts imagery to straighten each assigned joint ${c('arm-controller')}. The decoder estimates patch power over the selected window and separates the movement responses ${c('mi-matrix')}${c('tongue-areas')}${c('compound-mi')}. A command of 1 is the response to the model's full imagery intensity; half intensity is neutral and rest gives −1. A command beyond ±${ARM.deadZone} moves its joint, and an attempt succeeds when all joints stay within ${ARM.tolDeg}° of straight for ${ARM.dwellS} s before the time limit ${c('arm-decoder')}${c('arm-task')}. The readouts give this attempt, the success rate over the same ${TRIALS} simulated noise sequences each time, command noise at rest as a local standard-deviation estimate before intensity bounds, and the imagery in use ${c('arm-success')}${c('arm-task')}${c('erd-detect')}.`, { wide: true });
   const lede = document.createElement('p');
   lede.className = 'figure-lede';
   lede.innerHTML = `<strong>Simulation of control from imagined movements.</strong> Each movement changes several patches. Separating those responses magnifies the noise, even when the person chooses the imagery perfectly ${c('mi-matrix')}${c('arm-success')}.`;
@@ -137,8 +137,8 @@ trained users. Without the overlap between movements they reach it every time ${
     { what: 'Decoder channel', value: `Each patch gets the noise level of a ${CAP.radiusMm} mm patch read through a ${CAP.electrodes}-electrode cap in section 11’s sphere model. Background: ${CAP.bgUv} µV root mean square. Electrode noise: ${CAP.noiseUv} µV. If ρ is rhythm power divided by channel-noise power, the added noise floor is 1/ρ.`, cite: c('snr-electrodes') + c('brain-background') },
     { what: 'Spatial separation check', value: 'A separate computation uses the 128-electrode anatomical head to cancel the other patches. It retains 58% to 97% of each patch’s isolated squared signal-to-noise ratio, the least for the neighboring shoulder and hand patches. The arm’s channel noise does not include this loss.', cite: c('cap-separates') },
     { what: 'Power readings', value: `The rhythm is band-limited Gaussian noise with bandwidth B = ${P.decoderBandHz} Hz. T is the selected trailing window in seconds. Its power estimate is approximated by a gamma distribution with shape B·T. Real alpha power varies more.`, cite: c('erd-detect') + c('window-samples') + c('rhythm-fluctuation') },
-    { what: 'Decoder and joints', value: `Calibrated on each movement alone. Least-squares weights turn patch log powers into one command per joint. A command of 1 represents full imagery intensity. A joint moves beyond ±${ARM.deadZone}, at up to ${ARM.speedDegS}°/s, and stops at ±${ARM.limitDeg}°. Each joint has its own imagined movement.`, cite: c('arm-decoder') },
-    { what: 'Ideal person', value: `Sees the arm and forecasts the effect of known delays without noise. Adjusts imagery ${Math.round(1 / (ARM.dt * ARM.planEvery))} times per second. In “One at a time” mode, imagines only one movement at once.`, cite: c('arm-controller') },
+    { what: 'Decoder and joints', value: `Nonlinear least squares fits compound and graded patch powers, including the noise floor, to give one command per joint. A command of 1 represents full imagery intensity; half intensity is neutral and rest gives −1. A joint moves beyond ±${ARM.deadZone}, at up to ${ARM.speedDegS}°/s, and stops at ±${ARM.limitDeg}°. Each joint has its own imagined movement.`, cite: c('arm-decoder') },
+    { what: 'Ideal person', value: `Sees the arm and forecasts the effect of known delays without noise. Adjusts imagery ${Math.round(1 / (ARM.dt * ARM.planEvery))} times per second. In “One at a time” mode, only one imagery intensity differs from half intensity; the others stay neutral.`, cite: c('arm-controller') },
     { what: 'Task and success', value: `Starts with joints folded by ${ARM.startDeg.join('°, ')}°, in alternating directions. The target straightens each joint over ${ARM.stageS} s, or all joints over ${ARM.togetherS} s. Success requires every joint within ${ARM.tolDeg}° of straight for ${ARM.dwellS} s. The deadline is ${ARM.graceS} s after the target finishes.`, cite: c('arm-task') },
     { what: 'Repeated attempts', value: `The success rate uses ${TRIALS} fixed random seeds. Each seed specifies a reproducible simulated noise sequence. These are simulated attempts, not observations of people.`, cite: c('arm-success') + c('arm-task') },
     { what: 'Window range', value: 'The slider runs from 0.5 to 4 s, with a 1 s default. The upper end matches the imagery period in the competition data; these slider limits are model choices.', cite: c('bci-windows') + c('arm-task') },
@@ -267,8 +267,8 @@ trained users. Without the overlap between movements they reach it every time ${
   let trial: ArmTrial | null = null, raf = 0, presses = 0;
   function idle() {
     cancelAnimationFrame(raf); trial = null; go.disabled = false;
-    const K = Math.round(sJoints.value), rest = new Array(PATCHES.length).fill(1), start = ARM.startDeg.slice(0, K);
-    drawPatches(rest, new Array(TASKS.length).fill(0), K); drawScalp(rest, momentNam(sN.value, sF.value)); drawArms(start, start, [], 0, null);
+    const K = Math.round(sJoints.value), neutral = new Array(K).fill(0.5), rest = imageryPower(LOG, neutral), start = ARM.startDeg.slice(0, K);
+    drawPatches(rest, neutral, K); drawScalp(rest, momentNam(sN.value, sF.value)); drawArms(start, start, [], 0, null);
     rAttempt.set('not run yet');
   }
   function frame(i: number, tNow: number) {
@@ -290,7 +290,7 @@ trained users. Without the overlap between movements they reach it every time ${
     raf = requestAnimationFrame(step);
   });
 
-  let pending = 0;
+  let pending = 0, rateVersion = 0;
   function changed() {
     idle();
     const o = opts(), K = o.joints;
@@ -299,7 +299,21 @@ trained users. Without the overlap between movements they reach it every time ${
     rUsed.set(`${K} of ${TASKS.length}`);
     rRate.set('…');
     clearTimeout(pending);
-    pending = window.setTimeout(() => { const s = successRate(LOG, o, TRIALS); rRate.set(`${Math.round(100 * s.rate)}%${s.rate > 0 ? ` <span class="readout-aside">in ${fmt(s.meanTime, 2)} s on average</span>` : ''}`); }, 120);
+    const version = ++rateVersion;
+    let completed = 0, successes = 0, totalTime = 0;
+    const batch = () => {
+      if (version !== rateVersion) return;
+      const started = performance.now();
+      do {
+        const s = successRate(LOG, o, 1, completed + 1);
+        successes += s.rate; if (s.rate) totalTime += s.meanTime;
+        completed++;
+      } while (completed < TRIALS && performance.now() - started < 8);
+      if (completed < TRIALS) { pending = window.setTimeout(batch, 0); return; }
+      const s = { rate: successes / TRIALS, meanTime: totalTime / successes };
+      rRate.set(`${Math.round(100 * s.rate)}%${s.rate > 0 ? ` <span class="readout-aside">in ${fmt(s.meanTime, 2)} s on average</span>` : ''}`);
+    };
+    pending = window.setTimeout(batch, 120);
   }
   [sJoints, sWin, sN, sF].forEach((s) => s.onChange(changed));
   changed();

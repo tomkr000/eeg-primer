@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { snrVersusElectrodes, ceilingPerNam, dPrime, phi, wolpawBits, gammaPdf, gammaP, restVersusImagery, bandNoise, headModes, pairVersusElectrodes, pairCeilingPerNam, twoWayCorrect, mWayCorrect, betaI } from '../src/physics/control';
+import { snrVersusElectrodes, ceilingPerNam, dPrime, phi, wolpawBits, gammaPdf, gammaP, restVersusImagery, bandNoise, headModes, pairVersusElectrodes, pairCeilingPerNam, twoWayCorrect, mWayCorrect, betaI, finiteWindowPairCorrect } from '../src/physics/control';
 
 describe('SNR versus electrode count', () => {
   it('the per-degree formula agrees with the exact electrode-space solution', () => {
@@ -89,11 +89,14 @@ describe('telling two neighboring regions apart (section 11, claim finger-count)
   it('index versus middle finger at a keystroke stays near chance with any cap (the numbers quoted in the claim)', async () => {
     const { P } = await import('../src/data/params');
     const { momentNam, ALPHA_N } = await import('../src/sections/s07-noise');
-    const MU = momentNam(ALPHA_N, P.patchDefaultSync);
-    const acc = (sep: number, T: number, N: number) => 100 * twoWayCorrect(P.erdPowerDrop, P.decoderBandHz, T, (pairVersusElectrodes([N], 1, 10, 10, sep)[0].separated * MU) ** 2);
-    expect(acc(1.5, 0.24, 128)).toBeCloseTo(50.4, 0);
-    expect(acc(1.5, 0.24, 1e5)).toBeCloseTo(52.8, 0);
-    expect(100 * twoWayCorrect(P.erdPowerDrop, P.decoderBandHz, 0.24, Infinity)).toBeCloseTo(63.7, 0);
-    expect(acc(16, 3, 128)).toBeCloseTo(84.9, 0); // thumb against little finger over the sensory spacing and a 3 s trial
+    const MU = momentNam(ALPHA_N, P.patchDefaultSync) / Math.SQRT2; // sine peak to RMS
+    const acc = (sep: number, T: number, N: number) => {
+      const p = pairVersusElectrodes([N], 1, 10, 10, sep)[0];
+      return 100 * finiteWindowPairCorrect(P.erdPowerDrop, P.decoderBandHz, T, 1 / (p.separated * MU) ** 2, 1 / (p.separatedB * MU) ** 2, -p.rho);
+    };
+    expect(acc(1.5, P.typingKeystrokeS, 128)).toBeCloseTo(51.64919, 4);
+    expect(acc(1.5, P.typingKeystrokeS, 1e5)).toBeCloseTo(54.76178, 4);
+    expect(100 * finiteWindowPairCorrect(P.erdPowerDrop, P.decoderBandHz, P.typingKeystrokeS)).toBeCloseTo(70.14332, 4);
+    expect(acc(16, 3, 128)).toBeCloseTo(80.98816, 4); // thumb against little finger over the sensory spacing and a 3 s trial
   });
 });

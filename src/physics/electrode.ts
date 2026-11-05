@@ -76,6 +76,11 @@ export function inputImpedance(Rin: number, Cin: number, f: number): Complex {
   return parallelRC(Rin, Cin, f);
 }
 
+/** Impedance driven by amplifier input current noise, with the scalp voltage source set to zero. */
+export function currentNoiseImpedance(Ze: Complex, Zin: Complex): Complex {
+  return parallel(Ze, Zin);
+}
+
 /** Fraction of the scalp potential that reaches the amplifier: |Z_in / (Z_in + Z_e)|. */
 export function transferFraction(Ze: Complex, Zin: Complex): number {
   return cabs(div(Zin, add(Zin, Ze)));

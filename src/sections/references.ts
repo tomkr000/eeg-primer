@@ -22,9 +22,9 @@ ${c('electrode-model-settings')}. Their settings illustrate mechanisms rather th
 A calibrated decoder separates their overlapping changes, which amplifies noise ${c('arm-decoder')}.
 The fifth movement, the right shoulder, is a model addition placed from a brain-imaging study
 ${c('motor-map')}${c('shoulder-area')}. The simulated person has ideal knowledge of the task ${c('arm-controller')}.
-Tests check separation, noise statistics and the simulated success rates ${c('arm-success')}. The same signals,
-run on a published three-dimensional cursor task, succeed about as often as that study's trained users
-${c('cursor-check')}.</p>
+Tests check separation, noise statistics and the simulated success rates ${c('arm-success')}. The same signals
+are also run on a modeled three-dimensional cursor task; comparison with the published study does not independently
+validate the model ${c('cursor-check')}.</p>
 <p>Section 10 isolates delay using a steady rhythm with a chosen fade and a moving measurement window
 ${c('delay-model')}. Section 11 asks whether many electrodes can tell two neighboring fingers apart within one
 keystroke. It calculates the best linear estimate of one finger's region with the other canceled, and the share of

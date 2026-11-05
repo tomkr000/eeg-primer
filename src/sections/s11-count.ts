@@ -1,4 +1,4 @@
-import { pairVersusElectrodes, pairCeilingPerNam, twoWayCorrect } from '../physics/control';
+import { pairVersusElectrodes, pairCeilingPerNam, finiteWindowPairCorrect, type PairPoint } from '../physics/control';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { linePlot, type Note } from '../ui/plot';
 import { P, claimCite as c, defaultHead } from '../data/params';
@@ -6,7 +6,8 @@ import { section, figure, prose, readouts, assumptions, sw, vizTitle } from '../
 import { momentNam, ALPHA_N } from './s07-noise';
 
 const RADIUS_MM = 10; // each finger's region: as broad as the hand patch of sections 4 and 9 (claim finger-model)
-const MU_NAM = momentNam(ALPHA_N, P.patchDefaultSync); // the mu rhythm at the textbook alpha amplitude (section 7)
+const MU_NAM = momentNam(ALPHA_N, P.patchDefaultSync) / Math.SQRT2; // section 7's sine peak converted to RMS
+const accuracy = (p: PairPoint, T: number) => 100 * finiteWindowPairCorrect(P.erdPowerDrop, P.decoderBandHz, T, 1 / (p.separated * MU_NAM) ** 2, 1 / (p.separatedB * MU_NAM) ** 2, -p.rho);
 const head = defaultHead();
 const SCALP_R = head.shells[head.shells.length - 1].outerRadius;
 const spacingMm = (N: number) => 1e3 * Math.sqrt((4 * Math.PI * SCALP_R * SCALP_R) / N);
@@ -30,7 +31,7 @@ export function mountCount(root: HTMLElement) {
 <p>This section asks whether more electrodes would let someone type by imagining finger movements. A decoder
 would have to tell neighboring fingers, such as the index and middle finger, apart once per keystroke. In this
 model the answer is no. With the two fingers' regions ${G.indexMiddleMotor} mm apart and one keystroke to decide, it
-names the right finger 50% of the time with 128 electrodes and 53% with 100,000, no better than guessing
+names the right finger 52% of the time with 128 electrodes and 55% with 100,000, only slightly better than guessing
 ${c('finger-count')}. These percentages are calculations on this page, not measured results. The model reads only
 the power of one rhythm in each region with a linear decoder, so it does not cover every EEG feature or decoder, and
 it does not show that decoding fingers from EEG is impossible. Studies have decoded imagined fingers under slower
@@ -44,7 +45,7 @@ noise is the electrodes' own ${c('snr-electrodes')}. The brain's own activity re
 ${c('brain-noise')} and, in this model, sets a ceiling even with the whole scalp known exactly ${c('electrode-ceiling')}.</p>
 <p>The second reason is time. Typists average about 52 words per minute, about 240 ms between keystrokes
 ${c('typing-speed')}. Rhythm power measured over so short a window fluctuates so much that even a recording with no
-added noise would name the right finger only 64% of the time ${c('erd-detect')}${c('finger-count')}. The rhythm
+added noise would name the right finger only 70% of the time ${c('erd-detect')}${c('finger-count')}. The rhythm
 also takes most of a second to fade after an intention ${c('erd-timecourse')}. Longer windows help, but they are
 slower than typing (section 10).</p>
 <p>Fingers farther apart can be told apart, slowly. With a 128-channel cap, 21 experienced users told thumb from
@@ -52,7 +53,7 @@ little-finger imagery 81% of the time, and three fingers 61% of the time, decidi
 only the channels over the hand area did worse than one given all 128 ${c('finger-eeg')}. The model gives each
 finger's imagery a region as broad as the hand area, ${RADIUS_MM} mm in radius, at the strength of section 7's alpha
 rhythm, which is generous ${c('finger-model')}${c('mu-vs-alpha')}. With the regions ${G.thumbLittleSensory} mm
-apart and a 3 s window, it gives 85% with 128 electrodes, near the measured result ${c('finger-count')}.</p>
+apart and a 3 s window, it gives 81% with 128 electrodes, near the measured result ${c('finger-count')}.</p>
 <p>More electrodes also cost calibration. A decoder must learn how noise varies together across its channels. In
 the cited adaptive-array result, about 2N samples of noise alone give, on average, half the best possible
 signal-to-noise power ratio ${c('calibration-cost')}. Motor-imagery decoders do best with 10 to 50 well-placed channels, and in one dataset
@@ -92,13 +93,13 @@ about 23 selected channels outperformed all 118 ${c('mi-channels')}.</p>`);
   new ResizeObserver(spread).observe(fig.el);
   assumptions(fig.el, [
     { what: 'Head and electrodes', value: `The layered sphere from section 3, with modeled scalp radius R = ${fmt(SCALP_R * 100, 3)} cm. N electrodes cover the whole sphere approximately evenly, in a Fibonacci arrangement. The displayed spacing is √(4πR²/N), the square root of scalp area per electrode.`, cite: c('count-model') },
-    { what: 'Finger regions', value: `Two discs of radial dipoles, each ${RADIUS_MM} mm in radius, their centers the slider's distance apart. Each carries a mu rhythm at section 7's alpha strength, ${fmt(MU_NAM, 2)} nA·m ${c('alpha-source-chain')}, which is optimistic ${c('mu-vs-alpha')}. Imagining a finger lowers its own region's power by ${Math.round(P.erdPowerDrop * 100)}% ${c('erd-depth')} and leaves the other unchanged. The two rhythms vary independently.`, cite: c('finger-model') },
+    { what: 'Finger regions', value: `Two discs of radial dipoles, each ${RADIUS_MM} mm in radius, their centers the slider's distance apart. Each carries a mu rhythm at section 7's alpha root-mean-square strength, ${fmt(MU_NAM, 2)} nA·m RMS (the sine peak divided by √2) ${c('alpha-source-chain')}, which is optimistic ${c('mu-vs-alpha')}. Imagining a finger lowers its own region's power by ${Math.round(P.erdPowerDrop * 100)}% ${c('erd-depth')} and leaves the other unchanged. The two rhythms vary independently.`, cite: c('finger-model') },
     { what: 'Finger spacing marks', value: `Thumb to little finger: 6 mm in motor cortex and ${G.thumbLittleSensory} mm in sensory cortex ${c('finger-spacing')}. Neighbors at a quarter of that, ${G.indexMiddleMotor} and ${G.indexMiddleSensory} mm, assuming even spacing.`, cite: c('finger-neighbors') },
     { what: 'Brain background', value: 'Independent radial sources cover the cortex sphere. The head spreads each source across electrodes, creating correlated electrode signals. Their root-mean-square voltage at each electrode is set by the background slider. This source distribution and scaling are modeling assumptions.', cite: c('brain-background') },
     { what: 'Electrode noise', value: `Chosen to be independent between electrodes, with equal power per unit bandwidth (white noise). The slider sets its root-mean-square voltage ${c('snr-electrodes')}; measured contact-noise levels provide reference values ${c('skin-noise')}.`, cite: '' },
     { what: 'Best linear estimate', value: 'The decoder is given both regions’ exact scalp patterns and the noise covariance, which describes how noise varies together across electrodes. It estimates one region with the other canceled. Canceling keeps a share 1 − ρ² of the region’s squared SNR, where ρ is how alike the two patterns look against the noise.', cite: c('snr-electrodes') + c('finger-model') },
     { what: 'Numerical approximation', value: 'The calculation uses individual electrode signals up to 128 electrodes, then spatial patterns on a sphere (spherical harmonics). Unresolved patterns with degree l > √N − 1 count as extra noise.', cite: c('snr-electrodes') },
-    { what: 'Which finger', value: `Both fingers are equally likely. Each region's band-power estimate follows a gamma distribution with shape B·T, for a ${P.decoderBandHz} Hz band and the window T. The decoder picks the region whose power fell more; its share of correct calls is computed exactly.`, cite: c('erd-detect') + c('finger-model') },
+    { what: 'Which finger', value: `Both fingers are equally likely. Each region has a proper complex Gaussian envelope with a flat ${P.decoderBandHz} Hz band. The decoder compares mean squared envelope magnitude over T, subtracting each channel's known noise baseline. Finite-window covariance quadrature computes its share of correct calls, retaining correlated demixed noise.`, cite: c('erd-detect') + c('finger-model') },
     { what: 'Calibration benchmark', value: 'For the cited adaptive array, about 2N independent samples containing noise alone give, on average, half the optimal squared SNR (the signal-to-noise power ratio). In a band B hertz wide, collecting these samples takes at least N/B seconds; the readout shows this lower bound.', cite: c('calibration-cost') },
   ]);
 
@@ -109,9 +110,8 @@ about 23 selected channels outperformed all 118 ${c('mi-channels')}.</p>`);
     const ceil = pairCeilingPerNam(bg, RADIUS_MM, sep) * MU_NAM;
     const brain = pts.map((p) => [p.N, p.separated * MU_NAM] as [number, number]);
     const knee = crossing(brain, 0.8 * ceil);
-    const acc = (snr: number) => 100 * twoWayCorrect(P.erdPowerDrop, P.decoderBandHz, T, snr * snr);
-    const cap = 100 * twoWayCorrect(P.erdPowerDrop, P.decoderBandHz, T, Infinity);
-    const accBrain = brain.map(([n, v]) => [n, acc(v)] as [number, number]);
+    const cap = 100 * finiteWindowPairCorrect(P.erdPowerDrop, P.decoderBandHz, T);
+    const accBrain = pts.map((p) => [p.N, accuracy(p, T)] as [number, number]);
 
     // the knee note sits below the curve (above it when the curve runs near the axis), left of its point past mid-plot
     const topNotes: Note[] = [];
@@ -129,7 +129,7 @@ about 23 selected channels outperformed all 118 ${c('mi-channels')}.</p>`);
       { axis: 'y', value: ceil, label: 'model ceiling' },
       { axis: 'x', value: N, label: `${fmtN(N)} electrodes, ${fmt(spacingMm(N) / 10, 2)} cm apart`, callout: true },
     ], undefined, topNotes);
-    const at128 = acc(pairVersusElectrodes([128], noise, bg, RADIUS_MM, sep)[0].separated * MU_NAM), atMax = accBrain[accBrain.length - 1][1];
+    const at128 = accuracy(pairVersusElectrodes([128], noise, bg, RADIUS_MM, sep)[0], T), atMax = accBrain[accBrain.length - 1][1];
     const botNotes: Note[] = [{ x: 128, y: at128, text: `128 → 100,000 electrodes: +${fmt(atMax - at128, 2)} percentage points`, dx: 16, dy: -70 }]; // above the no-noise line, in the empty upper plot
     bottom.update([
       { name: 'Finger signal + electrode noise + brain’s own activity', points: accBrain, color: '#2a78d6', width: 2.5 },
@@ -139,7 +139,7 @@ about 23 selected channels outperformed all 118 ${c('mi-channels')}.</p>`);
     ], undefined, botNotes);
     rSpacing.set(`${fmt(spacingMm(N) / 10, 2)} cm`);
     rSnr.set(`${fmt(here.separated * MU_NAM, 2)} (${Math.round((100 * here.separated * MU_NAM) / ceil)}%)`);
-    rAcc.set(`${fmt(acc(here.separated * MU_NAM), 3)}%`);
+    rAcc.set(`${fmt(accuracy(here, T), 3)}%`);
     rCal.set(fmtTime(N / P.decoderBandHz));
   }
   [sN, sSep, sWin, sNoise, sBg].forEach((s) => s.onChange(update));

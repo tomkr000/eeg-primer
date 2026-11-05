@@ -1,4 +1,4 @@
-import { exteriorPotential, potential, solveShells, surfacePotential, stackShells, type Shell } from '../physics/sphere';
+import { exteriorPotential, potential, solveShellsConverged, surfacePotential, stackShells, type Shell } from '../physics/sphere';
 import { controls, readout, slider, fmt } from '../ui/slider';
 import { verticalProfile } from '../ui/profile';
 import { glow, glowLegend, CANVAS_FONT, drawCortexLayers } from '../ui/field';
@@ -58,7 +58,7 @@ Section 8 examines this gap and the amplifier needed to measure through it ${c('
     { what: 'Conductivities', value: `Values are in siemens per meter (S/m). Gray matter: ${P.sigmaGray} ${c('sigma-gray')}; CSF: ${P.sigmaCsf} ${c('sigma-csf')}; dura: ${P.sigmaDura} ${c('sigma-dura')}; skull: ${P.sigmaSkull} ${c('sigma-skull')}; scalp: ${P.sigmaScalp}.`, cite: c('sigma-scalp') },
     { what: 'Source', value: `The cell group is represented by one outward-pointing current dipole. Each cell contributes ${P.singleCellMomentPAm} pA·m ${c('single-cell-moment')}. The fraction in step adds directly; the squared amplitudes of the remaining contributions add, as in section 2.`, cite: c('variances-add') },
     { what: 'Detection floor', value: `${TH_UV} µV, the low end of measured electrode–skin noise. Muscle activity, blinks, electrical interference and amplifier noise are excluded. This threshold applies to a contact on the scalp, not a plate in air.`, cite: c('skin-noise') },
-    { what: 'Solution', value: `The calculation matches voltage and current across every tissue boundary ${c('sphere-model')}. It uses a 600-term Legendre expansion, a mathematical series for spherical geometry. A separate solution gives voltage in the insulating air.`, cite: c('exterior-potential') },
+    { what: 'Solution', value: `The calculation matches voltage and current across every tissue boundary ${c('sphere-model')}. It uses a depth-dependent Legendre expansion, a mathematical series for spherical geometry. A separate solution gives voltage in the insulating air.`, cite: c('exterior-potential') },
   ]);
 
   function build(): { shells: Shell[]; b: number } {
@@ -75,8 +75,7 @@ Section 8 examines this gap and the amplifier needed to measure through it ${c('
     const { shells, b } = build();
     const p = netDipole(Math.round(sN.value), sF.value, 1, P.singleCellMomentPAm * 1e-12).total; // A·m
     rSource.set(`${fmt(p * 1e9, 3)} nA·m`);
-    const sol = solveShells(shells, b, p, orientation, 600);
-    const solMap = solveShells(shells, b, p, orientation, 120);
+    const sol = solveShellsConverged(shells, b, p, orientation);
     const R = shells[shells.length - 1].outerRadius;
     const rCortexSurf = P.brainRadiusM;
     // profile straight above the source, from below the cortex out into the air (cm above the cortical surface)
@@ -108,7 +107,7 @@ Section 8 examines this gap and the amplifier needed to measure through it ${c('
     hm.draw((x, y) => {
       // unrolled sphere: x is distance along the scalp, y height above the cortical surface
       const r = rCortexSurf + y, th = Math.abs(x) / R, ph = x < 0 ? Math.PI : 0;
-      return r > R ? exteriorPotential(solMap, r, th, ph) : potential(solMap, r, th, ph);
+      return r > R ? exteriorPotential(sol, r, th, ph) : potential(sol, r, th, ph);
     }, (ctx, toPx) => {
       ctx.save();
       const t = (i: number) => shells[i].outerRadius - shells[i - 1].outerRadius;

@@ -17,7 +17,7 @@
  * (Legendre / associated Legendre without the Condon–Shortley phase).
  *
  * Unknowns are scaled to the value of each term at the shell's own outer radius, which keeps the
- * system well conditioned up to l ≈ 300 in double precision.
+ * system usable for the thousands of terms needed close to the first interface.
  */
 
 export interface Shell {
@@ -137,6 +137,19 @@ export function solveShells(
   return { shells, b, moment, orientation, L, A, B };
 }
 
+/** Resolve the near-interface field, whose slowest terms decay as (b / brainRadius)^l.
+ * 1e-15 geometric decay leaves room for the polynomial-in-degree dipole and angular factors.
+ * This is a convergence choice for the site's positive-conductivity shells, not an error bound for
+ * arbitrary layer contrasts. Regression tests compare the shallowest source with a longer expansion.
+ */
+function fieldDegree(ratio: number): number {
+  return ratio > 0 ? Math.max(1, Math.ceil(Math.log(1e-15) / Math.log(ratio))) : 1;
+}
+
+export function solveShellsConverged(shells: Shell[], b: number, moment: number, orientation: DipoleOrientation): ShellSolution {
+  return solveShells(shells, b, moment, orientation, Math.max(120, fieldDegree(b / shells[0].outerRadius)));
+}
+
 /** Legendre P_l(x) for l = 0..L */
 export function legendreP(x: number, L: number): Float64Array {
   const P = new Float64Array(L + 1);
@@ -156,11 +169,11 @@ export function legendreP1(x: number, L: number): Float64Array {
   return P;
 }
 
-function angular(sol: ShellSolution, cosTheta: number, phi: number): Float64Array {
-  if (sol.orientation === 'radial') return legendreP(cosTheta, sol.L);
-  const P1 = legendreP1(cosTheta, sol.L);
+function angular(sol: ShellSolution, cosTheta: number, phi: number, L = sol.L): Float64Array {
+  if (sol.orientation === 'radial') return legendreP(cosTheta, L);
+  const P1 = legendreP1(cosTheta, L);
   const c = Math.cos(phi);
-  for (let l = 0; l <= sol.L; l++) P1[l] *= c;
+  for (let l = 0; l <= L; l++) P1[l] *= c;
   return P1;
 }
 
@@ -185,17 +198,25 @@ export function potential(sol: ShellSolution, r: number, theta: number, phi = 0)
   const n = shellIndex(sol, r);
   if (n < 0) return NaN;
   const ct = Math.cos(theta);
-  const Y = angular(sol, ct, phi);
   const rn = sol.shells[n].outerRadius;
+  // Far from the first boundary the radial factors converge much faster. Avoid evaluating thousands
+  // of negligible terms at every map pixel while using the same converged solution for map/readouts.
+  const r0 = sol.shells[0].outerRadius;
+  const L = Math.min(sol.L, fieldDegree(n === 0 ? sol.b * r / (r0 * r0) : sol.b / r));
+  const Y = angular(sol, ct, phi, L);
   let v = 0;
   const A = sol.A[n], B = sol.B[n];
   if (n === 0) {
     const st = Math.sin(theta);
     v += freeSpaceDipole(sol, r * st * Math.cos(phi), r * st * Math.sin(phi), r * ct);
-    for (let l = 1; l <= sol.L; l++) v += A[l] * Math.pow(r / rn, l) * Y[l];
+    const ratio = r / rn;
+    let power = ratio;
+    for (let l = 1; l <= L; l++, power *= ratio) v += A[l] * power * Y[l];
     return v;
   }
-  for (let l = 1; l <= sol.L; l++) v += (A[l] * Math.pow(r / rn, l) + B[l] * Math.pow(rn / r, l + 1)) * Y[l];
+  const ra = r / rn, rb = rn / r;
+  let pa = ra, pb = rb * rb;
+  for (let l = 1; l <= L; l++, pa *= ra, pb *= rb) v += (A[l] * pa + B[l] * pb) * Y[l];
   return v;
 }
 
@@ -209,9 +230,10 @@ export function exteriorPotential(sol: ShellSolution, r: number, theta: number, 
   const n = sol.shells.length - 1;
   const R = sol.shells[n].outerRadius;
   if (r < R) return NaN;
-  const Y = angular(sol, Math.cos(theta), phi);
-  let v = 0;
-  for (let l = 1; l <= sol.L; l++) v += (sol.A[n][l] + sol.B[n][l]) * Math.pow(R / r, l + 1) * Y[l];
+  const L = Math.min(sol.L, fieldDegree(sol.b / r));
+  const Y = angular(sol, Math.cos(theta), phi, L);
+  let v = 0, power = (R / r) ** 2;
+  for (let l = 1; l <= L; l++, power *= R / r) v += (sol.A[n][l] + sol.B[n][l]) * power * Y[l];
   return v;
 }
 

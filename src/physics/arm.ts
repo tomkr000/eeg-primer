@@ -1,10 +1,10 @@
 /**
  * A robot arm of 1 to 5 joints driven by imagined movements (section 9). Each joint is assigned one imagined
  * movement; imagining it changes the mu power of every cortical patch by the measured response of that movement;
- * a full cap reads each patch's power over a trailing window, and a decoder calibrated on the single movements
- * turns the patch powers back into one command per joint. The person is an ideal controller: they see the arm,
- * know their own delays exactly and imagine just enough to follow the intended movement. Everything that goes wrong
- * comes from the signals: the overlap of the responses, the rhythm's own fluctuation and the channel's noise floor.
+ * a full cap reads each patch's power over a trailing window, and a nonlinear decoder matched to the combined movements
+ * turns the patch powers back into one command per joint. Half imagery intensity is neutral; increasing or decreasing
+ * it moves a joint in opposite directions. The controller knows the delays and can deliberately correct overshoot.
+ * Windowing, bounded estimation and this feedback policy affect performance as well as the simulated signals.
  */
 import { applyTransfer } from './fft';
 import { mulberry32 } from './population';
@@ -38,10 +38,10 @@ export interface ArmOpts {
 export interface ArmTrial {
   t: Float64Array; // time from Go (s)
   desired: Float64Array[]; actual: Float64Array[]; // joint angles (deg, 0 = straight), per joint
-  imagery: Float64Array[]; // intensity of each imagined movement (0 to 1), per task
+  imagery: Float64Array[]; // intensity of each imagined movement (0 to 1); half intensity is neutral
   power: Float64Array[]; // true mu power of each patch (rest = 1)
   estimate: Float64Array[]; // the decoder's windowed estimate of each patch's power, relative to its resting level
-  command: Float64Array[]; // decoded command per joint (1 = the change of a full imagined movement)
+  command: Float64Array[]; // decoded command per joint (2 × imagery intensity − 1)
   doneAt: number; // time from Go at which all joints had been straight for the dwell (NaN: never)
   end: number; // last time of the record
 }
@@ -88,10 +88,95 @@ function invert(A: number[][]): number[][] {
   return M.map((r) => r.slice(n));
 }
 
-/** spread of each joint's command at rest, from the gamma model: √(Σ w² ψ′(k)) */
+/** Minimize the Gauss–Newton quadratic with −u ≤ step ≤ 1−u, using a small active-set solve. */
+function boundedStep(H: number[][], g: number[], u: number[]): number[] {
+  const n = u.length, step = new Array(n).fill(0), active = new Array(n).fill(0);
+  for (let iter = 0; iter < 4 * n * n; iter++) {
+    const residual = g.map((v, j) => v - H[j].reduce((s, h, k) => s + h * step[k], 0));
+    const free = active.flatMap((v, k) => v === 0 ? [k] : []), direction = new Array(n).fill(0);
+    if (free.length) {
+      const inv = invert(free.map((j) => free.map((k) => H[j][k])));
+      free.forEach((j, a) => { direction[j] = inv[a].reduce((s, v, b) => s + v * residual[free[b]], 0); });
+    }
+    let scale = 1;
+    for (const j of free) {
+      if (direction[j] > 1e-14) scale = Math.min(scale, (1 - u[j] - step[j]) / direction[j]);
+      if (direction[j] < -1e-14) scale = Math.min(scale, (-u[j] - step[j]) / direction[j]);
+    }
+    scale = Math.max(0, scale);
+    for (const j of free) step[j] = Math.max(-u[j], Math.min(1 - u[j], step[j] + scale * direction[j]));
+    if (scale < 1 - 1e-10) {
+      for (const j of free) {
+        if (direction[j] < 0 && step[j] <= -u[j] + 1e-10) active[j] = -1;
+        if (direction[j] > 0 && step[j] >= 1 - u[j] - 1e-10) active[j] = 1;
+      }
+      continue;
+    }
+    // A bound is optimal only when its gradient points out of the feasible box. Release the worst violation.
+    let release = -1, worst = 1e-10;
+    for (let j = 0; j < n; j++) if (active[j]) {
+      const r = g[j] - H[j].reduce((s, h, k) => s + h * step[k], 0), violation = -active[j] * r;
+      if (violation > worst) { release = j; worst = violation; }
+    }
+    if (release < 0) return step;
+    active[release] = 0;
+  }
+  return step;
+}
+
+/** Source powers under the assumed multiplicative response rule. */
+export function imageryPower(logResp: number[][], intensity: readonly number[]): number[] {
+  return logResp.map((r) => Math.exp(intensity.reduce((s, u, k) => s + r[k] * u, 0)));
+}
+
+/**
+ * Fit log(noise floor + exp(Lu)), with 0 ≤ u ≤ 1. Unlike a pseudoinverse of isolated full-intensity
+ * responses, this forward model also matches graded and compound mean powers. Windowed power during a
+ * transition averages different states, so its fitted intensity need not equal the instantaneous imagery.
+ */
+export function powerDecoder(logResp: number[][], joints: number, nF: number) {
+  const L = logResp.map((r) => r.slice(0, joints)), unmix = decoder(L, joints);
+  return (observed: ArrayLike<number>, initial?: readonly number[]): number[] => {
+    let u = initial ? Array.from(initial) : new Array(joints).fill(0.5);
+    const target = Array.from(observed, (v) => Math.log(Math.max(1e-15, v)));
+    const cost = (x: number[]) => imageryPower(L, x).reduce((s, p, j) => s + (Math.log(p + nF) - target[j]) ** 2, 0);
+    let old = cost(u);
+    // Mean powers often lie exactly on the source model. Invert those analytically first; only accept an
+    // in-bounds fit with the same objective. This avoids repeatedly optimizing the controller's forecasts.
+    if (Array.from(observed).every((v) => v > nF)) {
+      const sourceLog = Array.from(observed, (v) => Math.log(v - nF));
+      const direct = unmix.map((r) => r.reduce((s, w, p) => s + w * sourceLog[p], 0));
+      const bounded = direct.map((v) => Math.max(0, Math.min(1, v))), value = cost(bounded);
+      if (value < 1e-18) return bounded;
+      if (value < old) { u = bounded; old = value; }
+    }
+    for (let iter = 0; iter < 24 && old > 1e-18; iter++) {
+      const pw = imageryPower(L, u), J = L.map((r, p) => r.map((v) => v * pw[p] / (pw[p] + nF)));
+      const H = Array.from({ length: joints }, (_, a) => Array.from({ length: joints }, (_, b) => J.reduce((s, r) => s + r[a] * r[b], 0) + (a === b ? 1e-8 : 0)));
+      const g = Array.from({ length: joints }, (_, a) => J.reduce((s, r, p) => s + r[a] * (target[p] - Math.log(pw[p] + nF)), 0));
+      const step = boundedStep(H, g, u);
+      let accepted = false;
+      for (let scale = 1; scale >= 1 / 64; scale /= 2) {
+        const next = u.map((v, k) => Math.max(0, Math.min(1, v + scale * step[k]))), value = cost(next);
+        if (value < old - 1e-14) { u = next; old = value; accepted = true; break; }
+      }
+      if (!accepted) break;
+    }
+    return u;
+  };
+}
+
+/** Local command SD at rest (zero imagery), before bounds, from the gamma/log-power approximation. */
 export function commandNoise(logResp: number[][], o: Pick<ArmOpts, 'joints' | 'rho' | 'windowS' | 'bandHz'>): number[] {
-  const D = decoder(seenResponse(logResp, 1 / o.rho), o.joints), v = trigamma(powerDof(o.bandHz, o.windowS));
-  return D.map((r) => Math.sqrt(r.reduce((s, w) => s + w * w * v, 0)));
+  const pw = imageryPower(logResp, new Array(o.joints).fill(0)), nF = 1 / o.rho;
+  const J = logResp.map((r, p) => r.map((v) => v * pw[p] / (pw[p] + nF)));
+  const D = decoder(J, o.joints), v = trigamma(powerDof(o.bandHz, o.windowS));
+  return D.map((r) => 2 * Math.sqrt(r.reduce((s, w) => s + w * w * v, 0)));
+}
+
+/** Signed feedback command; overshoot calls for an intentional reverse command. */
+export function correctionCommand(gapDeg: number): number {
+  return Math.abs(gapDeg) <= ARM.minErrDeg ? 0 : Math.sign(gapDeg) * Math.min(1, ARM.deadZone + (1 - ARM.deadZone) * Math.abs(gapDeg) / (ARM.gainS * ARM.speedDegS));
 }
 
 /** the intended arm: joint k's angle at time t */
@@ -115,8 +200,8 @@ function bandProcess(n: number, B: number, rng: () => number): [Float64Array, Fl
 
 export function simulateArm(logResp: number[][], o: ArmOpts): ArmTrial {
   const { dt } = ARM, P = logResp.length, K = o.joints, nTask = K, nF = 1 / o.rho;
-  const D = decoder(seenResponse(logResp, nF), K), dof = powerDof(o.bandHz, o.windowS);
-  const restLog = Math.log(1 + nF) + digamma(dof) - Math.log(dof); // mean of ln(estimate) at rest
+  const fit = powerDecoder(logResp, K, nF), dof = powerDof(o.bandHz, o.windowS);
+  const logBiasScale = Math.exp(Math.log(dof) - digamma(dof)); // stationary gamma approximation to center log power
   const Nw = Math.max(1, Math.round(o.windowS / dt)), nOn = Math.round(o.onsetS / dt), nRamp = Math.max(1, Math.round(o.rampS / dt));
   const pre = Nw + nOn + nRamp + 10, dur = (o.together ? ARM.togetherS : ARM.stageS * K) + ARM.graceS, n = pre + Math.ceil(dur / dt);
   const lag = o.onsetS + o.rampS / 2 + o.windowS / 2, H = nOn + nRamp + Nw + 1;
@@ -124,47 +209,49 @@ export function simulateArm(logResp: number[][], o: ArmOpts): ArmTrial {
   const arr = (m: number) => Array.from({ length: m }, () => new Float64Array(n));
   const desired = arr(K), actual = arr(K), imagery = arr(nTask), power = arr(P), estimate = arr(P), command = arr(K), t = new Float64Array(n);
   const SU = Array.from({ length: nTask }, () => new Float64Array(n + 1)), SP = Array.from({ length: P }, () => new Float64Array(n + 1));
-  const sq = arr(P), wsum = new Float64Array(P), fut = new Float64Array(H + 1), CF = Array.from({ length: P }, () => new Float64Array(H + 1));
-  const theta = ARM.startDeg.slice(0, K), want = new Array(nTask).fill(0), coast = new Array(K).fill(0), cBuf = new Array(K).fill(0);
+  const sq = arr(P), wsum = new Float64Array(P), meanPower = new Float64Array(P), CF = Array.from({ length: P }, () => new Float64Array(H + 1));
+  const theta = ARM.startDeg.slice(0, K), want = new Array(nTask).fill(0.5), coast = new Array(K).fill(0);
+  let decoded = new Array(K).fill(0.5);
   const dz = (c: number) => { const a = Math.abs(c); return a <= ARM.deadZone ? 0 : Math.sign(c) * Math.min(1, (a - ARM.deadZone) / (1 - ARM.deadZone)); };
   /** mean imagery of task j over the ramp that ends nOn steps before step m, counting steps up to `upto` only */
   const ramped = (j: number, m: number, upto: number) => {
     const hi = Math.min(m - nOn, upto), lo = Math.max(m - nOn - nRamp + 1, 0);
-    return hi < lo ? 0 : (SU[j][hi + 1] - SU[j][lo]) / nRamp;
+    const known = Math.max(0, hi - lo + 1), sum = known ? SU[j][hi + 1] - SU[j][lo] : 0;
+    return (sum + (nRamp - known) * 0.5) / nRamp;
   };
   let current = -1, inside = 0, doneAt = NaN, last = n - 1;
   for (let i = 0; i < n; i++) {
     const ti = (i - pre) * dt; t[i] = ti;
-    // the person revises the imagery: forecast, without noise, how far each joint would still travel if all imagery stopped now
+    // the controller revises imagery: forecast, without noise, how far each joint would still travel if all commands returned to half-intensity neutrality now
     if (ti >= 0 && isNaN(doneAt) && (i - pre) % ARM.planEvery === 0) {
       coast.fill(0);
+      let predicted = new Array(K).fill(0.5);
       for (let h = 0; h <= H; h++) {
         const m = i + h;
         for (let p = 0; p < P; p++) {
           let lp = 0; for (let j = 0; j < nTask; j++) lp += ramped(j, m, i - 1) * logResp[p][j];
-          fut[h] = Math.exp(lp); CF[p][h] = (h ? CF[p][h - 1] : 0) + fut[h];
+          CF[p][h] = (h ? CF[p][h - 1] : 0) + Math.exp(lp);
         }
-        for (let k = 0; k < K; k++) cBuf[k] = 0;
         for (let p = 0; p < P; p++) {
           const lo = m - Nw + 1;
           let s = lo <= i - 1 ? SP[p][i] - SP[p][Math.max(lo, 0)] : 0;
           const f0 = Math.max(0, lo - i); s += CF[p][h] - (f0 ? CF[p][f0 - 1] : 0);
-          const x = Math.log(s / Nw + nF) - Math.log(1 + nF);
-          for (let k = 0; k < K; k++) cBuf[k] += D[k][p] * x;
+          meanPower[p] = s / Nw + nF;
         }
-        for (let k = 0; k < K; k++) coast[k] += ARM.speedDegS * dz(cBuf[k]) * dt;
+        predicted = fit(meanPower, predicted);
+        for (let k = 0; k < K; k++) coast[k] += ARM.speedDegS * dz(2 * predicted[k] - 1) * dt;
       }
       // push each joint that would stop short of where the intended arm will be once new imagery takes effect
       for (let j = 0; j < nTask; j++) {
         const gap = theta[j] - coast[j] - intended(j, ti + lag, o.together);
-        want[j] = gap > ARM.minErrDeg ? Math.min(1, ARM.deadZone + (1 - ARM.deadZone) * (gap / ARM.gainS) / ARM.speedDegS) : 0;
+        want[j] = (1 + correctionCommand(gap)) / 2;
       }
-      if (!o.together) { // one imagined movement at a time: finish the current joint, then take the one that lags most
-        if (current < 0 || want[current] === 0) { current = -1; let best = 0; want.forEach((w, j) => { if (w > best) { best = w; current = j; } }); }
-        want.forEach((_, j) => { if (j !== current) want[j] = 0; });
+      if (!o.together) { // one deviation from half intensity at a time: finish the current joint, then take the one that lags most
+        if (current < 0 || want[current] === 0.5) { current = -1; let best = 0; want.forEach((w, j) => { const size = Math.abs(w - 0.5); if (size > best) { best = size; current = j; } }); }
+        want.forEach((_, j) => { if (j !== current) want[j] = 0.5; });
       }
     }
-    if (ti < 0 || !isNaN(doneAt)) want.fill(0);
+    if (ti < 0 || !isNaN(doneAt)) want.fill(0.5);
     for (let j = 0; j < nTask; j++) { imagery[j][i] = want[j]; SU[j][i + 1] = SU[j][i] + want[j]; }
     // the rhythm of every patch follows the imagery, in the channel's noise; the decoder averages its power over the window
     for (let p = 0; p < P; p++) {
@@ -175,8 +262,10 @@ export function simulateArm(logResp: number[][], o: ArmOpts): ArmTrial {
       sq[p][i] = re * re + im * im; wsum[p] += sq[p][i]; if (i >= Nw) wsum[p] -= sq[p][i - Nw];
       estimate[p][i] = wsum[p] / Math.min(i + 1, Nw) / (1 + nF);
     }
+    for (let p = 0; p < P; p++) meanPower[p] = estimate[p][i] * (1 + nF) * logBiasScale;
+    decoded = fit(meanPower, decoded);
     for (let k = 0; k < K; k++) {
-      let c = 0; for (let p = 0; p < P; p++) c += D[k][p] * (Math.log(estimate[p][i] * (1 + nF)) - restLog);
+      const c = 2 * decoded[k] - 1;
       command[k][i] = c;
       if (ti >= 0 && isNaN(doneAt)) theta[k] = Math.max(-ARM.limitDeg, Math.min(ARM.limitDeg, theta[k] - ARM.speedDegS * dz(c) * dt));
       actual[k][i] = theta[k]; desired[k][i] = intended(k, Math.max(ti, 0), o.together);
@@ -207,8 +296,9 @@ export function successRate(logResp: number[][], o: Omit<ArmOpts, 'seed'>, trial
  */
 export function cursorTrial(logResp: number[][], target: number[], o: { rho: number; windowS: number; bandHz: number; onsetS: number; rampS: number; limitS: number; gain: number; edge: number; seed: number }): number {
   const { dt } = ARM, P = logResp.length, K = target.length, nF = 1 / o.rho;
-  const D = decoder(seenResponse(logResp, nF), K), dof = powerDof(o.bandHz, o.windowS);
-  const restLog = Math.log(1 + nF) + digamma(dof) - Math.log(dof), Nw = Math.max(1, Math.round(o.windowS / dt));
+  const fit = powerDecoder(logResp, K, nF), dof = powerDof(o.bandHz, o.windowS);
+  const logBiasScale = Math.exp(Math.log(dof) - digamma(dof)), Nw = Math.max(1, Math.round(o.windowS / dt));
+  let decoded = new Array(K).fill(0.5);
   const pre = Nw + Math.round(1 / dt) + 5, n = pre + Math.ceil(o.limitS / dt), rng = mulberry32(o.seed);
   const rhythm = Array.from({ length: P }, () => bandProcess(n, o.bandHz, rng)), noise = Array.from({ length: P }, () => bandProcess(n, o.bandHz, rng));
   const sq = Array.from({ length: P }, () => new Float64Array(n)), wsum = new Float64Array(P), est = new Float64Array(P), pos = new Array(K).fill(0);
@@ -218,12 +308,12 @@ export function cursorTrial(logResp: number[][], target: number[], o: { rho: num
       let lp = 0; for (let k = 0; k < K; k++) if (target[k] > 0) lp += ramp * logResp[p][k];
       const a = Math.sqrt(Math.exp(lp)), b = Math.sqrt(nF), re = a * rhythm[p][0][i] + b * noise[p][0][i], im = a * rhythm[p][1][i] + b * noise[p][1][i];
       sq[p][i] = re * re + im * im; wsum[p] += sq[p][i]; if (i >= Nw) wsum[p] -= sq[p][i - Nw];
-      est[p] = wsum[p] / Math.min(i + 1, Nw) / (1 + nF);
+      est[p] = wsum[p] / Math.min(i + 1, Nw) * logBiasScale;
     }
     if (t < 0) continue;
+    decoded = fit(est, decoded);
     for (let k = 0; k < K; k++) {
-      let c = 0; for (let p = 0; p < P; p++) c += D[k][p] * (Math.log(est[p] * (1 + nF)) - restLog);
-      pos[k] = Math.max(-1, Math.min(1, pos[k] + o.gain * (c - 0.5) * dt));
+      pos[k] = Math.max(-1, Math.min(1, pos[k] + o.gain * (decoded[k] - 0.5) * dt));
     }
     if (pos.every((x, k) => x * target[k] >= o.edge)) return t;
   }

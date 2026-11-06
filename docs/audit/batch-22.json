@@ -1,0 +1,55 @@
+[
+ {
+  "id": "eyes-closed-alpha",
+  "status_on_site": "unverified",
+  "statement": "Closing the eyes raises alpha power several-fold. In 50 screened-healthy young adults (2 min per condition, 16 sites) the global mean alpha power was 20.0 units with the eyes closed against 5.08 with them open, about four times, and alpha was higher with the eyes closed at every region, while theta was slightly higher with the eyes open; in 28 students, across-scalp mean absolute delta, theta, alpha and beta were all lower with the eyes open than closed, with frontal beta higher eyes open; in 608 adults (3,229 recordings) occipital alpha relative power was lower with the eyes open than closed (model coefficient −0.22); in 40 healthy older adults (mean age 73) relative occipital alpha power was 49.1 with the eyes closed against 18.9 open, about 2.6 times. The model multiplies the power of its three alpha regions by 4 and its beta region by 0.8 with the eyes closed, and leaves the mu rhythm unchanged (claim rhythm-mu).",
+  "note_on_site": "The 50-adult study prints its powers in “kµV²” without explaining the unit; only the ratio is used, as unit-free. The 28-student study is read from its abstract (directions only). The factor 4 is the young-adult value; older adults show less.",
+  "sources": [
+   "Kan DPX, Croarkin PE, Phang CK, Lee PF (2017). EEG Differences Between Eyes-Closed and Eyes-Open Conditions at the Resting Stage for Euthymic Participants. Neurophysiology 49(6):432–440. doi:10.1007/s11062-018-9706-6",
+   "Barry RJ, Clarke AR, Johnstone SJ, Magee CA, Rushby JA (2007). EEG differences between eyes-closed and eyes-open resting conditions. Clinical Neurophysiology 118(12):2765–2773. doi:10.1016/j.clinph.2007.07.028",
+   "Park YJ, Lee HJ, Kwon BJ, Jeong JH (2026). Normative age-related changes in resting-state EEG alpha power and theta/alpha ratio across eyes-open and eyes-closed conditions. Frontiers in Aging Neuroscience 18:1869339. doi:10.3389/fnagi.2026.1869339",
+   "Schumacher J, Thomas AJ, Peraza LR, Firbank M, Cromarty R, Hamilton CA, Donaghy PC, O’Brien JT, Taylor JP (2020). EEG alpha reactivity and cholinergic system integrity in Lewy body dementia and Alzheimer’s disease. Alzheimer’s Research & Therapy 12:46. doi:10.1186/s13195-020-00613-6"
+  ],
+  "note_for_auditor": "Kan et al. 2017 (Neurophysiology 49:432, a public PDF exists on sunwaymedical.com) prints global mean alpha 20.0 vs 5.08 \"kµV²\"; check those numbers, the \"higher at every region\" statement and the theta direction. Barry 2007 is closed: check its abstract for the directions attributed. Park 2026 (Frontiers in Aging Neuroscience, open): check the n, the recordings count and the coefficient −0.22 (Table 2). Schumacher 2020 (open): Table 2 values 49.1 and 18.9 and the age. The last sentence is the site’s model choice."
+ },
+ {
+  "id": "workload-signature",
+  "status_on_site": "unverified",
+  "statement": "Higher mental workload raises frontal theta and beta and lowers alpha. A 2022 meta-analysis of 24 studies (723 participants) gave Hedges’ g = 0.68 (95% CI 0.41 to 0.95) for theta, 0.50 (0.21 to 0.79) for beta and −0.25 (−0.45 to 0.04) for alpha between lower and higher workload; in 20 adults doing an n-back task, frontal theta synchronization relative to a pre-stimulus reference rose from 8.75% at low to 18.48% at medium load and parietal alpha desynchronization from −5.63% to −24.44%, with no further change at high load; in the classic 8-subject high-density study a frontal midline theta rhythm increased and a parietocentral alpha signal decreased with memory load; spectral power features told the highest from the lowest n-back level at 80 to 90% after 2 min of data, and above chance after 2.5 s for 32 of 35 participants.",
+  "note_on_site": "",
+  "sources": [
+   "Chikhi S, Matton N, Blanchet S (2022). EEG power spectral measures of cognitive workload: A meta-analysis. Psychophysiology 59(6):e14009. doi:10.1111/psyp.14009",
+   "Scharinger C, Soutschek A, Schubert T, Gerjets P (2017). Comparison of the Working Memory Load in N-Back and Working Memory Span Tasks by Means of EEG Frequency Band Power and P300 Amplitude. Frontiers in Human Neuroscience 11:6. doi:10.3389/fnhum.2017.00006",
+   "Gevins A, Smith ME, McEvoy L, Yu D (1997). High-resolution EEG mapping of cortical activation related to working memory: effects of task difficulty, type of processing, and practice. Cerebral Cortex 7(4):374–385. doi:10.1093/cercor/7.4.374",
+   "Brouwer A-M, Hogervorst MA, van Erp JBF, Heffelaar T, Zimmerman PH, Oostenveld R (2012). Estimating workload using EEG spectral power and ERPs in the n-back task. Journal of Neural Engineering 9(4):045008. doi:10.1088/1741-2560/9/4/045008"
+  ],
+  "note_for_auditor": "Chikhi 2022: the abstract on Europe PMC (PMID 35128686) has the g values; check all three with CIs and the study/participant counts. Scharinger 2017 (open): the ERS/ERD percentages in the Results text; check which load levels and the \"no further change at high load\". Gevins 1997: abstract directions. Brouwer 2012: abstract (80–90% after 2 min; 32 of 35 after 2.5 s)."
+ },
+ {
+  "id": "focus-indices",
+  "status_on_site": "unverified",
+  "statement": "“Attention”, “focus” and “engagement” metrics are ratios of fast to slow band power. The engagement index beta/(alpha + theta) was chosen in 1995 because it reflected task engagement best in a closed-loop automation experiment; a 2023 review of 82 documents catalogued 37 such ratio indexes, the most used being beta/alpha, beta/(alpha + theta), beta/theta and theta/alpha. The theta/beta ratio as an attention marker rests on group differences: a meta-analysis of 9 studies (1,253 children and adolescents with ADHD, 517 without) found effect sizes of 0.75 at ages 6 to 13 and 0.62 at 6 to 18 that shrank over the years as the ratio rose in the groups without ADHD, and judged the ratio not a reliable diagnostic measure. During cognitive tasks alpha power falls relative to pre-task eyes-open rest, more over parieto-occipital than fronto-central sites, and about 0.15 of the baseline more during mental arithmetic than during number reading (41 participants).",
+  "note_on_site": "",
+  "sources": [
+   "Pope AT, Bogart EH, Bartolome DS (1995). Biocybernetic system evaluates indices of operator engagement in automated task. Biological Psychology 40(1–2):187–195. doi:10.1016/0301-0511(95)05116-3",
+   "Marcantoni I, Assogna R, Del Borrello G, Di Stefano M, Morano M, Romagnoli S, Leoni C, Bruschi G, Sbrollini A, Morettini M, Burattini L (2023). Ratio Indexes Based on Spectral Electroencephalographic Brainwaves for Assessment of Mental Involvement: A Systematic Review. Sensors 23(13):5968. doi:10.3390/s23135968",
+   "Arns M, Conners CK, Kraemer HC (2013). A decade of EEG Theta/Beta Ratio Research in ADHD: a meta-analysis. Journal of Attention Disorders 17(5):374–383. doi:10.1177/1087054712460087",
+   "Magosso E, De Crescenzio F, Ricci G, Piastra S, Ursino M (2019). EEG Alpha Power Is Modulated by Attentional Changes during Cognitive Tasks and Virtual Reality Immersion. Computational Intelligence and Neuroscience 2019:7051079. doi:10.1155/2019/7051079"
+  ],
+  "note_for_auditor": "Pope 1995 abstract (index formula). Marcantoni 2023 (open, Sensors): 82 documents, 37 indexes, the four most used. Arns 2013 abstract: 9 studies, 1,253 / 517, ES 0.75 and 0.62, the trend and the conclusion. Magosso 2019 (open): the \"about 0.15\" and the region effect, and the n (41, with 30 in the ANOVA)."
+ },
+ {
+  "id": "drowsiness-signature",
+  "status_on_site": "unverified",
+  "statement": "Drowsiness and mental fatigue raise slow activity. A 2020 meta-analysis of 21 studies of mental fatigue found overall EEG power rising with a medium effect (g = 0.68), theta (g = 1.03, 95% CI 0.79 to 1.60) and alpha (g = 0.85, 0.47 to 1.43) with large effects, delta and beta with small to moderate changes, the changes largest over central sites and the theta increase above g = 1 at frontal, central and posterior sites alike; in 35 drivers in a simulator, delta and theta activity increased significantly with fatigue, and in 40 drivers the band magnitudes averaged over 19 channels rose from the alert baseline by up to 21 µV (delta), 3 µV (theta), 1.4 µV (alpha) and 1.2 µV (beta); over a monotonous drive in 52 people, slow-to-fast ratios such as (theta + alpha)/beta rose, mainly through a fall in beta; and before sleep onset the alpha rhythm spreads from the back of the head toward the front.",
+  "note_on_site": "",
+  "sources": [
+   "Tran Y, Craig A, Craig R, Chai R, Nguyen H (2020). The influence of mental fatigue on brain activity: Evidence from a systematic review with meta-analyses. Psychophysiology 57(5):e13554. doi:10.1111/psyp.13554",
+   "Lal SKL, Craig A (2002). Driver fatigue: electroencephalography and psychological assessment. Psychophysiology 39(3):313–321. doi:10.1017/S0048577201393095",
+   "Lal SKL, Craig A (2002). Fatigue neurophysiology in professional and non-professional drivers. Road Safety Research, Policing and Education Conference (RS2002), Australia pp. 502–507. https://archive.acrs.org.au/files/arsrpe/RS020004.PDF",
+   "Jap BT, Lal S, Fischer P, Bekiaris E (2009). Using EEG spectral components to assess algorithms for detecting fatigue. Expert Systems with Applications 36(2):2352–2359. doi:10.1016/j.eswa.2007.12.043",
+   "De Gennaro L, Ferrara M, Curcio G, Cristiani R (2001). Antero-posterior EEG changes during the wakefulness-sleep transition. Clinical Neurophysiology 112(10):1901–1911. doi:10.1016/S1388-2457(01)00649-6"
+  ],
+  "note_for_auditor": "Tran 2020 abstract (PMID 32108954): g values with CIs, 21 studies, central-site statement, \"theta g > 1 at all sites\". Lal & Craig 2002 Psychophysiology abstract: 35 subjects, delta and theta increase. The conference paper (archive.acrs.org.au PDF): Table 1 maxima quoted (21, 3, 1.4, 1.2 µV) and the 40 drivers. Jap 2009 abstract: 52 subjects, the ratio statement, beta decrease. De Gennaro et al. 2001 (Clin Neurophysiol 112:1901) abstract: \"alpha spreads anteriorly\"."
+ }
+]

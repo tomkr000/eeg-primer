@@ -1,0 +1,58 @@
+[
+ {
+  "id": "emg-beta-level",
+  "verdict": "PARTIAL",
+  "checked_sources": [
+   "Whitham 2007 (abstract via Europe PMC, PMID 17574912; not open access)",
+   "Muthukumaraswamy 2013 (full text, PMC3625857)",
+   "Goncharova 2003 (full text PDF, neurotechcenter.org; abstract, sections 3.2.1 and 3.2.2, Fig. 4 on p. 1585 rendered and inspected)",
+   "Maltez 2004 (abstract via Europe PMC, PMID 15639128; not open access)"
+  ],
+  "evidence_location": "Whitham: abstract Results ('10- to 200-fold differences in the power of frequencies above 20 Hz', two subjects, complete blockade sparing the dominant arm). Muthukumaraswamy: section on neuromuscular-blockade studies ('even at electrodes near the center of the head ... at 40 Hz there was ~5 times more power in the non-paralyzed state'). Goncharova: abstract Results and section 3.2.1 (p. 1584-1585), Fig. 4 (25 subjects, CAR, relaxation vs 15% contraction; panel scale 0-20 uV), section 3.2.2 (individual peak frequencies). Maltez: abstract (CV of 4 s epoch power 0.37-0.49 for beta; 57 subjects; cycles of 5 s eyes open, 55 s eyes closed).",
+  "quote": "spectra at temporal and nearby locations are broadly elevated with the maximum at 40-80 Hz",
+  "discrepancy": "(1) Temporalis peak: the statement says frontalis and temporalis EMG spectra peak at 20 to 30 Hz. Goncharova's average scalp spectra (abstract: 'greatest at 20-30 Hz frontally and 40-80 Hz temporally'; section 3.2.1) put the temporalis maximum at 40 to 80 Hz with only 'a smaller elevation at about 20 Hz'; 20 to 30 Hz holds for frontalis at frontal and frontocentral sites, and for the individual sharp peaks at the muscle electrodes (frontalis 16-38 Hz, 65% within 22-27 Hz; temporalis 13-34 Hz, 69% within 19-24 Hz). (2) Arithmetic: the code applies the log-SD 0.5 factor to the source's power (states.ts, variance term exp(sigma^2)-1), so its between-window CV is sqrt(exp(0.25)-1) = 0.53, slightly above the 0.37 to 0.49 range the statement says 'bounds the fluctuation'; a log SD of 0.36 to 0.46 would fall inside it, and the gamma estimation scatter adds on top. (3) The 'about 3- to 4-fold' at Fp1 and Fp2 is a reading of Fig. 4, not a number in the text; visually the 15% frontalis curve sits near 8 uV against about 2 to 2.5 uV at rest around 25 Hz, so the fold is consistent. The Fz, FCz and Cz curves do nearly overlap, though the paper adds that EMG stayed statistically detectable near the vertex above 12 Hz even at 15%. All other numbers (10- to 200-fold above 20 Hz in 2 people; about 5-fold at 40 Hz centrally; 25 adults; CV 0.37 to 0.49 over 4 s epochs) match.",
+  "suggested_fix": "Replace 'frontalis and temporalis EMG spectra peak at 20 to 30 Hz' with 'frontalis EMG at frontal sites peaks at 20 to 30 Hz, temporalis EMG at temporal sites is broadly elevated with its maximum at 40 to 80 Hz and a smaller peak near 20 Hz (individual peaks at the muscle electrodes fall mostly at 22 to 27 Hz and 19 to 24 Hz)'. Either lower logSd to about 0.45 (CV 0.49) or reword 'bounds the fluctuation' to 'is close to the model's between-window spread (log SD 0.5 gives a CV of 0.53)'. Say the 3- to 4-fold is read from Fig. 4.",
+  "bibliographic_issues": "None. All four records resolve with matching authors, journals, volumes, issues, pages and years (Clin Neurophysiol 118(8):1877-1888; Front Hum Neurosci 7:138; Clin Neurophysiol 114(9):1580-1593; Neurophysiol Clin 34(5):195-202)."
+ },
+ {
+  "id": "blink-model",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Bentivoglio 1997 (abstract via Europe PMC, PMID 9399231; not open access)",
+   "Kleifges 2017 (full text, PMC5289990)",
+   "Guttmann-Flury 2025 (full text, PMC11978869)",
+   "Gasser 1992 (abstract via Europe PMC, PMID 1504112; not open access)",
+   "Hagemann & Naumann 2001 (abstract via Europe PMC, PMID 11165523; not open access)"
+  ],
+  "evidence_location": "Bentivoglio: abstract (150 volunteers; 'Mean BR at rest was 17 blinks/min, during conversation it increased to 26, and it was as low as 4.5 while reading'). Kleifges: section 'Analysis of blink rate' (19.6 to 22.6 blinks/min) and the blink-duration table (Base column: 0.32, 0.29, 0.34, 0.32 s per collection); abstract ('more than 2000 datasets acquired at eight different laboratories'). Guttmann-Flury: Table 3, Mean row, 'Peak potential on FP1' 160.1 +/- 56.4 uV (31 subjects), and the text 'blink potentials averaging at 160 +/- 50 uV'. Gasser: abstract ('the influence of ocular artefacts on the measured electrical activity in the frontal region is larger than the cerebral potentials'). Hagemann: abstract Results ('At single sites, blinks and eye movements exerted substantial general effects on the whole EEG spectrum').",
+  "quote": "Average blink rates over the collection ranged from 19.6 to 22.6 blinks/min",
+  "discrepancy": "None in the cited numbers. Notes: Gasser's sentence is about frontal activity in general; the 'low-frequency' qualifier comes from his next sentence on an 'artificial enhancement of slow frequency EEG power', so it is a gloss rather than a misstatement. The model's 15 blinks a minute sits below every cited measured rate (17 at rest; 19.6 to 22.6; Guttmann-Flury's own Table 3 mean of 20.8 +/- 12.8 per minute), which the statement does not point out. Pulse arithmetic checks: a Gaussian of 0.08 s SD spans 0.32 s over +/-2 SD, matching 'about 0.3 s' and the measured 0.29 to 0.34 s base durations; the code's pulse energy A^2 sigma sqrt(pi) is the correct integral.",
+  "suggested_fix": "Optional: 'an ocular contribution to frontal activity larger than the cerebral signal, inflating slow-frequency power' and 'the model's 15 a minute is below the measured 17 to 23'.",
+  "bibliographic_issues": "None. Mov Disord 12(6):1028-1034; Front Neurosci 11:12; Sci Data 12:587; Eur Arch Psychiatry Clin Neurosci 241(6):352-356; Clin Neurophysiol 112(2):215-231 all match the records."
+ },
+ {
+  "id": "rest-amplitudes",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Kane 2017 (full text, PMC6123891; glossary entries Alpha rhythm, Mu rhythm, Beta rhythm or activity, Low voltage EEG, Deep sleep, Fronto-central theta, Amplitude)"
+  ],
+  "evidence_location": "Glossary entries: Alpha rhythm ('Amplitude varies but is mostly below 50 uV in the adult, but often much higher in children'); Mu rhythm ('Amplitude varies but is mostly below 50 uV'); Beta rhythm ('Amplitude of fronto-central beta rhythm varies but is mostly below 30 uV'); Low voltage EEG ('activity of amplitude not greater than 20 uV over all head regions'); Deep sleep (N3, '>75 uV' peak-to-peak over the frontal regions); Fronto-central theta (synonym frontal midline theta; no amplitude given); Amplitude, EEG ('often expressed as the difference between the maximum and minimum deviation (i.e. peak-to-peak)').",
+  "quote": "slow delta waves of frequency 0.5 to 2 Hz and peak-to-peak amplitude >75 uV, measured over the frontal regions",
+  "discrepancy": "None in the quoted bounds. Nuance: 'peak to peak' is explicit only in the N3 entry; the alpha, mu and beta entries say 'amplitude' without a convention, which the glossary's Amplitude entry defines as 'often expressed as ... peak-to-peak, or in rectified EEG from baseline-to-peak', so the reading is defensible but not stated per entry. Arithmetic reproduced: 20/sqrt(2) = 14.1 uV rms, /sqrt(4) = 7.07, half = 3.5; a 3.5 uV rms sinusoid is 9.9 uV peak to peak, one third of 30. (The glossary gives mu as 7 to 11 Hz; the statement does not quote a mu band, so no discrepancy.)",
+  "suggested_fix": "Optional: 'mostly below 30 uV (amplitudes the glossary usually measures peak to peak)'.",
+  "bibliographic_issues": "None. Clin Neurophysiol Pract 2:170-185, 2017, doi resolves. Europe PMC's record misspells one author as 'Benickzy'; the article itself prints 'Beniczky' as the site does."
+ },
+ {
+  "id": "band-background",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Finley 2022 (full text, PMC9532351; Table 3, sections 2.5.1 and 2.5.4)",
+   "Jacob 2021 (full text, PMC12799207; sections 2.1, 2.4, 2.5 and 3.1)"
+  ],
+  "evidence_location": "Finley Table 3 ('Correlations and descriptive statistics ... collapsed across eyes open and eyes closed (n = 268)'): row 6, Fronto-Central Aperiodic Exponent, Mean (SD) 1.23 (0.26); abstract n = 268, age 36-84; section 2.5.4: 'estimated from the PSD ranging from 2 to 40 Hz, without a knee'; section 2.5.1: fronto-central ROI = F3/Fz/F4 composite. Jacob section 3.1: 'the average spectral exponent was 1.49+/-0.17 (range 1.18-1.91)' across all subjects and channels; 2.1: 46 healthy participants (ages 18-69); 2.4: 32 channels; 2.5: FOOOF within 1-50 Hz, fixed (no knee) mode; eyes open fixating a cross for 6 min.",
+  "quote": "the average spectral exponent was 1.49+/-0.17 (range 1.18-1.91)",
+  "discrepancy": "None. Arithmetic reproduced exactly with shares proportional to f1^(1-1.35) - f2^(1-1.35) over 0.5-30 Hz from 15 uV rms: 12.36, 5.54, 4.18 and 4.90 uV rms (sum of squares = 15^2), and the code in src/data/states.ts implements that formula. Nuances the statement omits: Finley's exponent is the F3/Fz/F4 composite collapsed across eyes open and eyes closed; Jacob's 1.49 +/- 0.17 was recorded inside a 3T MRI scanner (simultaneous EEG-fMRI) with the mean taken over subjects and channels. The chosen 1.35 sits near the midpoint (1.36) of the two measured values.",
+  "suggested_fix": "",
+  "bibliographic_issues": "None. Psychophysiology 59(11):e14113 and NeuroImage 245:118705 match the records; both DOIs resolve."
+ }
+]

@@ -1,0 +1,443 @@
+[
+ {
+  "topic": "meditation",
+  "finding": "Within-subject, eyes-closed comparison of 15 min of body-awareness mindfulness meditation against 15 min of listening to a podcast in 34 older novices after a 6-week course: theta and beta power rose over most regions, alpha rose only at occipital and right temporal sites; frontal theta and frontal alpha did not change.",
+  "numbers": "Table 1, power in (microV)^2/Hz, meditation vs control: theta occipital 291.44 vs 170.98 (sig.), right temporal 188.96 vs 105.88 (sig.), central 43.46 vs 28.59 (sig.), frontal 106.99 vs 107.16 (n.s.); alpha occipital 329.13 vs 300.37 (sig.), right temporal 163.18 vs 130.74 (sig.), frontal 81.93 vs 78.37 (n.s.), parietal 96.00 vs 99.45 (n.s.); beta higher in all six regions (sig.). Condition effect across locations: alpha F(1,33)=10.58, p<=0.0011; theta F(1,33)=118.79, p<=0.001.",
+  "baseline": "Eyes-closed listening to a 15-minute radio podcast (an active control, not silent rest); meditation was always recorded before the podcast.",
+  "subjects": "n=34 novice meditators (28 women, 6 men, mean age 61, range 50 to 79), high-stress older adults, after a 6-week mindfulness course",
+  "electrodes_band_window": "32-channel BioSemi; power spectral density averaged within six scalp regions; theta, alpha and beta bands within 4 to 32 Hz (exact band edges not stated in the text); 15-minute recordings",
+  "source": {
+   "authors": "Ahani A, Wahbeh H, Nezamfar H, Miller M, Erdogmus D, Oken B",
+   "year": 2014,
+   "title": "Quantitative change of EEG and respiration signals during mindfulness meditation",
+   "venue": "Journal of NeuroEngineering and Rehabilitation",
+   "volumePages": "11:87",
+   "doi": "10.1186/1743-0003-11-87"
+  },
+  "evidence_location": "Results, 'EEG spectral analysis' paragraph and Table 1 (PMC4060143)",
+  "quote": "an overall increase in power during meditation in beta and theta bands, while this increase is less for alpha",
+  "access": "full text",
+  "confidence": "high",
+  "caveats": "Absolute PSD values, not ratios; the control is podcast listening, so part of the difference may be auditory processing; order not counterbalanced; novices only; the frontal theta/alpha that meditation models usually invoke did not change here."
+ },
+ {
+  "topic": "meditation",
+  "finding": "Within-subject, same-session comparison of 20 min of nondirective (Acem) meditation with 20 min of eyes-closed quiet rest: theta power was higher during meditation (largest frontal and temporal-central), and alpha power was higher (largest posterior). Only the abstract was accessible; the magnitudes and n are in the paywalled full text.",
+  "numbers": "Direction only in the abstract: theta significantly greater during meditation averaged over all regions, greater in frontal and temporal-central than posterior; alpha significantly greater during meditation, greater in posterior than frontal regions. No sizes available.",
+  "baseline": "20 minutes of eyes-closed quiet rest in the same session (15-minute break between conditions)",
+  "subjects": "experienced Acem meditators; n not stated in the abstract",
+  "electrodes_band_window": "scalp EEG grouped into frontal, temporal-central and posterior regions; theta and alpha bands (edges not in abstract); 20-minute conditions",
+  "source": {
+   "authors": "Lagopoulos J, Xu J, Rasmussen I, Vik A, Malhi GS, Eliassen CF, Arntsen IE, Saether E, Hollup S, Holen A, Davanger S, Ellingsen O",
+   "year": 2009,
+   "title": "Increased theta and alpha EEG activity during nondirective meditation",
+   "venue": "Journal of Alternative and Complementary Medicine",
+   "volumePages": "15(11):1187-1192",
+   "doi": "10.1089/acm.2009.0113"
+  },
+  "evidence_location": "Abstract (Results)",
+  "quote": "Significantly increased theta power was found for the meditation condition when averaged across all brain regions.",
+  "access": "abstract",
+  "confidence": "medium",
+  "caveats": "Subscription full text; sizes, n and band edges not retrievable here. Author list taken from Europe PMC (truncated in the index), check against the paper."
+ },
+ {
+  "topic": "meditation",
+  "finding": "Sahaja Yoga meditation (focused internalized attention with 'blissful' affect) in high-density EEG: increased anterior frontal and frontal-midline theta and lower-alpha power/synchronization relative to rest, strongest at AF3; theta correlated with reported emotional experience, theta and lower alpha with internalized attention. Only the abstract was accessible, so the percentages requested are not reported here.",
+  "numbers": "Direction only (abstract): increased anterior frontal and midline theta synchronization; theta and alpha-1 synchronization correlated with internalized-attention scores. Percent changes are in the paywalled full text.",
+  "baseline": "eyes-closed rest versus meditation within subjects (per abstract design; details in full text)",
+  "subjects": "short-term and long-term Sahaja Yoga meditators (n not in abstract)",
+  "electrodes_band_window": "high-resolution EEG; individually defined delta, theta, alpha-1, alpha-2, alpha-3 bands",
+  "source": {
+   "authors": "Aftanas LI, Golocheikine SA",
+   "year": 2001,
+   "title": "Human anterior and frontal midline theta and lower alpha reflect emotionally positive state and internalized attention: high-resolution EEG investigation of meditation",
+   "venue": "Neuroscience Letters",
+   "volumePages": "310(1):57-60",
+   "doi": "10.1016/S0304-3940(01)02094-8"
+  },
+  "evidence_location": "Abstract",
+  "quote": "Blissful state was accompanied by increased anterior frontal and midline theta synchronization",
+  "access": "abstract",
+  "confidence": "low",
+  "caveats": "Full text (Elsevier) not accessible from this environment (no open copy found via Europe PMC, Semantic Scholar or web search); the percentage changes the task asked for were not verified."
+ },
+ {
+  "topic": "meditation",
+  "finding": "Counter-example in experts: 16 long-term Vipassana meditators, meditation versus an instructed mind-wandering control (21 min each, eyes closed, last 6 min analyzed): no state effect on theta or alpha power; effects were a frontal delta decrease and a parieto-occipital gamma increase. Shows the alpha/theta increase is not universal.",
+  "numbers": "Theta: no main effect of state at any electrode (bootstrap, FDR); parametric ANOVA F(1,15)=0.037, P=0.85. Alpha: no meditation-state effect. Gamma (35-45 Hz) increased, delta (1-4 Hz) decreased during meditation.",
+  "baseline": "instructed mind-wandering (control thought) period of the same length, eyes closed, counterbalanced order",
+  "subjects": "n=16 long-term Vipassana practitioners",
+  "electrodes_band_window": "scalp EEG; delta 1-4, theta 4-8, alpha 8-12, beta 12-25, gamma 35-45 Hz; last 6 min of each 21-min period",
+  "source": {
+   "authors": "Cahn BR, Delorme A, Polich J",
+   "year": 2010,
+   "title": "Occipital gamma activation during Vipassana meditation",
+   "venue": "Cognitive Processing",
+   "volumePages": "11(1):39-56",
+   "doi": "10.1007/s10339-009-0352-1"
+  },
+  "evidence_location": "Results, 'Theta (4-8 Hz)' paragraph and Discussion (PMC2812711)",
+  "quote": "Parametric ANOVA assessment of theta power also yielded no significant effect of state",
+  "access": "full text",
+  "confidence": "high",
+  "caveats": "Experts only; the authors argue earlier alpha increases came from novices. Supports treating the alpha/theta meditation signature as practice- and style-dependent."
+ },
+ {
+  "topic": "meditation",
+  "finding": "Second counter-example: in 10 long-term Theravada (Kasina and Vipassana) practitioners alpha power was lower during meditation than at rest, whereas Vajrayana practices showed no alpha change; the authors note that alpha increases vanish when an adequate relaxation control is used.",
+  "numbers": "Theravada: main effect of condition on alpha power F(2,18)=6.84, p<0.01 (alpha reduced during meditation relative to rest). Vajrayana: no significant alpha change.",
+  "baseline": "resting condition recorded in the same session (within subjects)",
+  "subjects": "n=10 long-term Theravada practitioners (mean age 41.4, 2 females, ~8 years' practice) plus Vajrayana practitioners",
+  "electrodes_band_window": "scalp EEG; alpha band; rest versus meditation blocks",
+  "source": {
+   "authors": "Amihai I, Kozhevnikov M",
+   "year": 2014,
+   "title": "Arousal vs. relaxation: a comparison of the neurophysiological and cognitive correlates of Vajrayana and Theravada meditative practices",
+   "venue": "PLoS ONE",
+   "volumePages": "9(7):e102990",
+   "doi": "10.1371/journal.pone.0102990"
+  },
+  "evidence_location": "Results, Study 1, alpha power analysis (PMC4106862)",
+  "quote": "the analysis revealed a significant main effect of Condition, F(2,18) = 6.84, p<0.01, indicating that Alpha power was reduced",
+  "access": "full text",
+  "confidence": "medium",
+  "caveats": "Small expert sample; magnitude of the alpha drop is in figures, not text."
+ },
+ {
+  "topic": "meditation",
+  "finding": "Consumer 'calm' scores: a 2025 meta-analysis of consumer-grade neurofeedback (mostly the Muse headband) states the algorithms are proprietary but most likely reward alpha and theta band activity, classifying the signal into Active, Neutral and Calm states; it also found no evidence in randomized studies that users actually modulate these brain targets. An earlier Muse trial (Bhayee et al. 2016) describes the feedback as a proprietary combination of frequency bands the company links to meditative states.",
+  "numbers": "Meta-analysis: 16 RCTs (763 participants) and 5 within-participant studies (167); Muse used in 11 of 16 RCTs; psychological distress g=-0.16 (k=11, P=.03); mindfulness g=0.02 (P=.83); brain-target modulation not found.",
+  "baseline": "not applicable (description of how the consumer score is built)",
+  "subjects": "not applicable",
+  "electrodes_band_window": "Muse: AF7, AF8 (forehead), TP9, TP10 (ears), reference FPz; alpha and theta bands",
+  "source": {
+   "authors": "Treves I, Bajwa Z, Greene KD, Bloom PA, Kim N, Wool E, Goldberg SB, Whitfield-Gabrieli S, Auerbach RP",
+   "year": 2025,
+   "title": "Consumer-Grade Neurofeedback With Mindfulness Meditation: Meta-Analysis",
+   "venue": "Journal of Medical Internet Research",
+   "volumePages": "27:e68204",
+   "doi": "10.2196/68204"
+  },
+  "evidence_location": "Textbox 1 'Brief description of consumer-grade neurofeedback device protocols' and Abstract (PMC12046271); supporting statement in Bhayee S et al. 2016, BMC Psychology 4:60, doi 10.1186/s40359-016-0168-6, Methods",
+  "quote": "it is likely that Muse uses an alpha and theta training model, rewarding alpha waves",
+  "access": "full text",
+  "confidence": "medium",
+  "caveats": "The alpha/theta basis is the reviewers' inference ('it is likely'); the vendor algorithm is not published. Bhayee et al. 2016 (Muse-affiliated authors) only say 'a proprietary combination of frequency bands'."
+ },
+ {
+  "topic": "relaxation",
+  "finding": "Systematic review of slow-breathing techniques: the EEG studies it tabulates report higher alpha and lower theta power during paced slow breathing than during spontaneous breathing, within subjects; it gives directions and sample sizes but no effect sizes, and the clearest study (Fumoto 2004) was eyes-closed. No eyes-open relaxation-versus-eyes-open-rest sizes were found in this review.",
+  "numbers": "Table: Fumoto et al. 2004, within subjects, n=22, voluntary abdominal breathing 3-4 breaths/min for 20 min vs 20 min spontaneous breathing: increased high-frequency alpha (10-13 Hz, parietal), reduced 10 Hz alpha peak. Park and Park 2012, n=58, paced 10 breaths/min for 15 min vs 15 min spontaneous: increased alpha, decreased theta. Yu et al. 2011, n=15, 3-4 breaths/min 20 min: increased alpha, decreased theta. Tsuji 2010, n=10: no alpha change.",
+  "baseline": "spontaneous breathing in the same session (eyes closed in Fumoto 2004; eye state not reported in the review for the others)",
+  "subjects": "healthy adults, 10 to 58 per study (see numbers)",
+  "electrodes_band_window": "scalp EEG; alpha and theta bands as defined by each study; 15 to 20 minute conditions",
+  "source": {
+   "authors": "Zaccaro A, Piarulli A, Laurino M, Garbella E, Menicucci D, Neri B, Gemignani A",
+   "year": 2018,
+   "title": "How Breath-Control Can Change Your Life: A Systematic Review on Psycho-Physiological Correlates of Slow Breathing",
+   "venue": "Frontiers in Human Neuroscience",
+   "volumePages": "12:353",
+   "doi": "10.3389/fnhum.2018.00353"
+  },
+  "evidence_location": "Abstract (Results); tables of included studies (design, sample, protocol, EEG findings) rows for Fumoto 2004, Park and Park 2012, Yu 2011, Tsuji 2010; Discussion (PMC6137615)",
+  "quote": "EEG studies show an increase in alpha and a decrease in theta power.",
+  "access": "full text",
+  "confidence": "medium",
+  "caveats": "Review reports directions only; primary magnitudes not accessible here (Fumoto 2004 Neurosci Res, Park & Park 2012 Complement Ther Med, Yu 2011 Int J Psychophysiol are paywalled). Breathing at 3-4 breaths/min is an unusual pace."
+ },
+ {
+  "topic": "relaxation",
+  "finding": "Randomized comparison of a recorded relaxation technique (RT) against music after 6 weeks of daily practice: RT produced larger increases in theta power over multiple cortical regions than music; the authors conclude theta, not alpha, is the more reliable EEG marker of relaxation techniques. Sizes are in the paywalled full text.",
+  "numbers": "Direction only (abstract): significantly greater theta increases in multiple cortical regions for RT than music; alpha not a reliable marker.",
+  "baseline": "pre-listening baseline within session, compared between the RT and music groups (eye state not stated in abstract)",
+  "subjects": "n=36 subjects randomized to RT or music",
+  "electrodes_band_window": "all cortical regions; alpha and theta power spectral analysis",
+  "source": {
+   "authors": "Jacobs GD, Friedman R",
+   "year": 2004,
+   "title": "EEG spectral analysis of relaxation techniques",
+   "venue": "Applied Psychophysiology and Biofeedback",
+   "volumePages": "29(4):245-254",
+   "doi": "10.1007/s10484-004-0385-2"
+  },
+  "evidence_location": "Abstract",
+  "quote": "RT produced significantly greater increases in theta activity in multiple cortical regions compared to the music condition.",
+  "access": "abstract",
+  "confidence": "medium",
+  "caveats": "Between-group contrast after training; eye condition and magnitudes not available from the abstract."
+ },
+ {
+  "topic": "relaxation",
+  "finding": "Within-subject study of the relaxation response (audiotape) versus a control tape in novices: the only change was a reduction of frontal beta; no alpha or theta differences were found in any region. A separate pilot with progressive muscle relaxation (PMR) during chemotherapy reported higher posterior theta and lower midfrontal beta-2 at the end of relaxation, with no alpha increase for PMR.",
+  "numbers": "Jacobs 1996: greater reductions of frontal beta for RR than control, p<.0164; no other band or region differed. Lee 2012: PMR (n=20) and monochord (n=20) groups: increase of posterior theta (3.5-7.5 Hz) and decrease of midfrontal beta-2 (20-29.5 Hz) during the end phase; monochord group showed lower alpha (8-12 Hz) than PMR.",
+  "baseline": "Jacobs 1996: control audiotape, counterbalanced, within subjects; Lee 2012: pre versus post within session, first and last of several sessions",
+  "subjects": "Jacobs 1996: n=20 novices; Lee 2012: 40 gynecologic oncology patients (20 per group)",
+  "electrodes_band_window": "Jacobs 1996: 14 scalp locations, topographic mapping; Lee 2012: multichannel EEG, theta 3.5-7.5, alpha 8-12, beta-2 20-29.5 Hz",
+  "source": {
+   "authors": "Jacobs GD, Benson H, Friedman R",
+   "year": 1996,
+   "title": "Topographic EEG mapping of the relaxation response",
+   "venue": "Biofeedback and Self-Regulation",
+   "volumePages": "21(2):121-129",
+   "doi": "10.1007/BF02284691"
+  },
+  "evidence_location": "Abstract; second study: Lee EJ, Bhattacharya J, Sohn C, Verres R (2012) Complementary Therapies in Medicine 20(6):409-416, doi 10.1016/j.ctim.2012.07.002, Abstract",
+  "quote": "No significant differences were observed for any other frequency band or scalp region.",
+  "access": "abstract",
+  "confidence": "medium",
+  "caveats": "Both abstracts only. Taken together with Zaccaro 2018 and Jacobs & Friedman 2004: the relaxation literature is mostly eyes-closed or unstated, reports direction rather than size, and theta/beta changes are more consistent than an alpha rise; an eyes-open alpha increase relative to eyes-open rest was not found."
+ },
+ {
+  "topic": "valence",
+  "finding": "Original state study: during film clips, EEG epochs selected by facial expression showed disgust with relatively more right frontal and anterior temporal activation (less right alpha) than happiness; happiness showed left anterior temporal activation. When all positive films were pooled against all negative films (no facial selection), no reliable asymmetry difference appeared. Only the abstract was accessible; the ln-unit shift is in the paywalled tables.",
+  "numbers": "Direction only (abstract): disgust > happy right-sided activation, frontal and anterior temporal; no central or parietal differences; no reliable differences for aggregated positive vs negative films.",
+  "baseline": "happy versus disgust expression epochs within the same participants (film viewing)",
+  "subjects": "n not in abstract (full text reports a small female sample)",
+  "electrodes_band_window": "frontal, anterior temporal, central, parietal sites; alpha power (log-transformed in this literature); epochs defined by facial action coding",
+  "source": {
+   "authors": "Davidson RJ, Ekman P, Saron CD, Senulis JA, Friesen WV",
+   "year": 1990,
+   "title": "Approach-withdrawal and cerebral asymmetry: emotional expression and brain physiology. I.",
+   "venue": "Journal of Personality and Social Psychology",
+   "volumePages": "58(2):330-341",
+   "doi": "10.1037/0022-3514.58.2.330"
+  },
+  "evidence_location": "Abstract",
+  "quote": "Disgust was found to be associated with right-sided activation in the frontal and anterior temporal regions",
+  "access": "abstract",
+  "confidence": "low",
+  "caveats": "Europe PMC indexes this record under DOI 10.1037//0022-3514.58.2.342; the page range 330-341 matches the task's citation. Magnitude in ln units not verified. Note the null result for unselected positive vs negative films."
+ },
+ {
+  "topic": "valence",
+  "finding": "Largest open-access state dataset check: with 32 participants rating 40 music videos, the mean within-subject correlations between valence ratings and EEG band power were tiny (seldom above ±0.1, individual values between ±0.5); no alpha-band electrode, hence no frontal alpha asymmetry pattern, reached p<.01 for valence (significant valence correlates were right temporal and frontal gamma and a central beta decrease). Single-trial valence classification from EEG was 57.6% accurate (F1 0.563) against a 50% random baseline.",
+  "numbers": "Table 4 (valence, p<.01 electrodes): beta Cz R=-0.04 (range -0.64 to 0.30); gamma C4 0.08, T8 0.08, FC6 0.10, F8 0.06; no theta or alpha electrode listed. Text: 'the mean correlations are seldom bigger than ±0.1'. Table 7 EEG: valence ACC 0.576, F1 0.563 (p<.01 vs 0.5); random ACC 0.500, F1 0.494; majority class ACC 0.586.",
+  "baseline": "power change relative to the 5-s pre-video baseline, correlated with each participant's own ratings (within subject), then combined across participants",
+  "subjects": "n=32 healthy volunteers (DEAP)",
+  "electrodes_band_window": "32 active AgCl electrodes (BioSemi ActiveTwo, 10-20); last 30 s of each 1-min video; Welch 256-sample windows; theta 3-7 (figure: 4-7), alpha 8-13, beta 14-29, gamma 30-47 Hz; classifier features: log band power theta 4-8, slow alpha 8-10, alpha 8-12, beta 12-30, gamma 30+ Hz plus left-right pair differences (216 features), naive Bayes, leave-one-video-out",
+  "source": {
+   "authors": "Koelstra S, Mühl C, Soleymani M, Lee J-S, Yazdani A, Ebrahimi T, Pun T, Nijholt A, Patras I",
+   "year": 2012,
+   "title": "DEAP: A Database for Emotion Analysis using Physiological Signals",
+   "venue": "IEEE Transactions on Affective Computing",
+   "volumePages": "3(1):18-31",
+   "doi": "10.1109/T-AFFC.2011.15"
+  },
+  "evidence_location": "Section 5 'Correlates of EEG and ratings', Table 4 and Fig. 8; Section 6.4 Table 7 (accepted manuscript, Archive ouverte UNIGE unige:47405)",
+  "quote": "the mean correlations are seldom bigger than ±0.1",
+  "access": "full text",
+  "confidence": "high",
+  "caveats": "Music videos, not standard affective pictures; EMG contamination acknowledged for gamma; the asymmetry features entered the classifier but their individual contribution is not reported."
+ },
+ {
+  "topic": "valence",
+  "finding": "Within-subject film study with four discrete emotions (two positive, two negative) reporting F3 and F4 alpha power normalized to the pre-clip baseline: alpha was higher at F4 than F3 for every emotion, positive or negative, and the between-emotion differences (about 0.1) were small against the between-subject SDs (about 0.3). Not ln units and not a positive-versus-negative contrast, but it gives the scale of state effects at F3/F4.",
+  "numbers": "Table 2, alpha, F3 / F4 mean (SD), baseline-normalized: amusement 0.62 (0.32) / 0.77 (0.31); tenderness 0.70 (0.29) / 0.90 (0.32); anger 0.64 (0.32) / 0.74 (0.33); fear 0.64 (0.38) / 0.83 (0.43). F3/F4 emotion x hemisphere interaction on alpha: tenderness vs amusement F(1,32)=9.80, p=0.004; anger vs fear F(1,32)=10.88, p=0.002.",
+  "baseline": "each electrode's band power divided by the mean band power over 30 electrodes in the 40 s eyes-open plus 40 s eyes-closed baseline before each clip",
+  "subjects": "n=33 right-handed students (16 males, 17 females, mean age 23.85)",
+  "electrodes_band_window": "32 Ag/AgCl electrodes (NeuroScan NuAmps, 1-35 Hz, 500 Hz sampling), theta 4-8 and alpha 8-13 Hz, four film clips each preceded by a 40 s eyes-open plus 40 s eyes-closed baseline",
+  "source": {
+   "authors": "Zhao G, Zhang Y, Ge Y",
+   "year": 2018,
+   "title": "Frontal EEG Asymmetry and Middle Line Power Difference in Discrete Emotions",
+   "venue": "Frontiers in Behavioral Neuroscience",
+   "volumePages": "12:225",
+   "doi": "10.3389/fnbeh.2018.00225"
+  },
+  "evidence_location": "Results, Table 2 and 'F3/F4 Site' paragraphs (PMC6221898)",
+  "quote": "EEG asymmetries were computed as power at the right hemisphere minus power at the left hemisphere.",
+  "access": "full text",
+  "confidence": "medium",
+  "caveats": "Compares positive with positive and negative with negative; normalization is a ratio to baseline, not ln power; some result sentences in the paper mislabel theta/alpha, so use the table values."
+ },
+ {
+  "topic": "valence",
+  "finding": "Between-person spread and stability of resting asymmetry: with 59 participants recorded on four occasions, latent state-trait modeling attributed about 60% of the variance of resting asymmetry scores to a stable trait and about 40% to occasion-specific state fluctuations, with negligible measurement error.",
+  "numbers": "About 60% trait variance, 40% occasion-specific variance, measurement error negligible (most scalp regions); 4 occasions; n=59",
+  "baseline": "resting EEG, repeated sessions (trait versus state decomposition)",
+  "subjects": "n=59 participants",
+  "electrodes_band_window": "resting EEG alpha asymmetry at homologous pairs (details in paywalled full text)",
+  "source": {
+   "authors": "Hagemann D, Naumann E, Thayer JF, Bartussek D",
+   "year": 2002,
+   "title": "Does resting electroencephalograph asymmetry reflect a trait? An application of latent state-trait theory",
+   "venue": "Journal of Personality and Social Psychology",
+   "volumePages": "82(4):619-641",
+   "doi": "10.1037/0022-3514.82.4.619"
+  },
+  "evidence_location": "Abstract",
+  "quote": "about 60% of the variance of the asymmetry measure was due to individual differences on a temporally stable latent trait",
+  "access": "abstract",
+  "confidence": "medium",
+  "caveats": "Abstract only; the SD of asymmetry scores in ln units is in the full text."
+ },
+ {
+  "topic": "valence",
+  "finding": "Internal consistency of the asymmetry metric: in 204 undergraduates (64 channels, four sessions, 8-minute rest alternating eyes open and closed) the split-half reliability of ln(right) minus ln(left) alpha asymmetry reached 0.90 for all homologous pairs and references at about 160 2-second epochs, roughly 80 s of clean data; Hagemann et al. 2002's structural estimates were similar at that length.",
+  "numbers": "Reliability >= 0.90 at approximately 160 epochs of 2.048 s (about 80 s, 16% of the 8-minute recording); SDs of the split-half estimates mean 0.028; epochs: 119 overlapping 2.048-s epochs per minute, blink rejection at 75 microV VEOG.",
+  "baseline": "resting EEG, eyes open and closed minutes (COOCOC order), four sessions within two weeks",
+  "subjects": "n=204 undergraduates (149 female); 39 with current and 88 with past major depression",
+  "electrodes_band_window": "64-channel extended 10-20 cap; alpha power from 2.048-s Hamming-windowed FFT epochs; asymmetry = difference of natural-log alpha power, right minus left; 27 homologous pairs including F4-F3",
+  "source": {
+   "authors": "Towers DN, Allen JJB",
+   "year": 2009,
+   "title": "A Better Estimate of the Internal Consistency Reliability of Frontal EEG Asymmetry Scores",
+   "venue": "Psychophysiology",
+   "volumePages": "46(1):132-142",
+   "doi": "10.1111/j.1469-8986.2008.00759.x"
+  },
+  "evidence_location": "Methods ('Participants', 'Estimation of Internal Consistency Reliability'), Results and Discussion, Figure 1 (PMC2743447, author manuscript)",
+  "quote": "good reliability (e.g. >0.90) can be obtained for all homologous pairs and reference derivations at approximately 160 epochs",
+  "access": "full text",
+  "confidence": "high",
+  "caveats": "Reliability of resting scores, not of state shifts; alpha band edges not captured from the text; sample enriched for depression. Coan & Allen 2004 and Allen, Coan & Nazarian 2004 (Biological Psychology 67) were abstract-only here, so typical ln-unit shift sizes were not verified."
+ },
+ {
+  "topic": "arousal",
+  "finding": "DEAP: within each of 32 participants, Spearman correlations between arousal ratings and baseline-corrected band power over 40 videos; the combined result is that higher arousal goes with lower theta, alpha and gamma power at a few central and parietal sites, but the mean correlations are only around ±0.05 to 0.08 with individual participants spanning -0.5 to +0.5.",
+  "numbers": "Table 4 (arousal, electrodes with p<.01; R-bar mean, R- most negative, R+ most positive): theta CP6 -0.06 (-0.47, 0.25), Oz 0.08 (-0.23, 0.39), PO4 0.05 (-0.26, 0.49); alpha Cz -0.07 (-0.45, 0.23), PO4 0.05 (-0.26, 0.49); beta FC2 -0.06 (-0.40, 0.28), CP1 -0.07 (-0.49, 0.24), Oz 0.05 (-0.24, 0.48), FC6 0.06 (-0.52, 0.49); gamma T7 0.07 (-0.33, 0.51), CP6 0.06 (-0.26, 0.43), CP2 0.08 (-0.21, 0.49).",
+  "baseline": "trial power (last 30 s of each 1-min video) minus the 5-s pre-video fixation baseline; correlation with the participant's own 9-point arousal rating",
+  "subjects": "n=32 healthy volunteers",
+  "electrodes_band_window": "32 BioSemi ActiveTwo electrodes, average reference, 256 Hz, 2 Hz high-pass, eye artifacts removed; Welch with 256-sample windows; theta 3-7, alpha 8-13, beta 14-29, gamma 30-47 Hz; per-participant p-values combined with Fisher's method",
+  "source": {
+   "authors": "Koelstra S, Mühl C, Soleymani M, Lee J-S, Yazdani A, Ebrahimi T, Pun T, Nijholt A, Patras I",
+   "year": 2012,
+   "title": "DEAP: A Database for Emotion Analysis using Physiological Signals",
+   "venue": "IEEE Transactions on Affective Computing",
+   "volumePages": "3(1):18-31",
+   "doi": "10.1109/T-AFFC.2011.15"
+  },
+  "evidence_location": "Section 5 'Correlates of EEG and ratings', Table 4, Fig. 8 (accepted manuscript, Archive ouverte UNIGE unige:47405)",
+  "quote": "For arousal we found negative correlations in the theta, alpha, and gamma band.",
+  "access": "full text",
+  "confidence": "high",
+  "caveats": "Correlations are tiny on average and inconsistent in sign across people; the 'central alpha decrease with arousal' is the one effect the authors tie to earlier literature."
+ },
+ {
+  "topic": "arousal",
+  "finding": "DEAP single-trial, within-participant classification (naive Bayes, leave-one-video-out, 216 EEG features): low versus high arousal from EEG was 62.0% accurate (F1 0.583), low versus high valence 57.6% (F1 0.563), liking 55.4% (F1 0.502), against an expected 50% for random voting; EEG was the best modality for arousal, peripheral signals for valence.",
+  "numbers": "Table 7, EEG: arousal ACC 0.620 / F1 0.583 (p<.01 vs 0.5); valence 0.576 / 0.563 (p<.01); liking 0.554 / 0.502 (n.s.). Random: 0.500 / 0.483, 0.500 / 0.494, 0.500 / 0.476. Majority class ACC 0.644 / 0.586 / 0.670 (F1 0.389 / 0.368 / 0.398). Class ratio F1 0.500. High-class share: arousal 59% (SD 15%), valence 57% (9%), liking 67% (12%).",
+  "baseline": "chance level: analytically expected random, majority-class and class-ratio voting; classes split at the midpoint of the 9-point rating scale",
+  "subjects": "n=32, 40 trials each",
+  "electrodes_band_window": "32 electrodes; log power in theta 4-8, slow alpha 8-10, alpha 8-12, beta 12-30, gamma 30+ Hz plus 14 left-right power differences; last 30 s of each video",
+  "source": {
+   "authors": "Koelstra S, Mühl C, Soleymani M, Lee J-S, Yazdani A, Ebrahimi T, Pun T, Nijholt A, Patras I",
+   "year": 2012,
+   "title": "DEAP: A Database for Emotion Analysis using Physiological Signals",
+   "venue": "IEEE Transactions on Affective Computing",
+   "volumePages": "3(1):18-31",
+   "doi": "10.1109/T-AFFC.2011.15"
+  },
+  "evidence_location": "Section 6 (6.1, 6.4), Table 7 (accepted manuscript, Archive ouverte UNIGE unige:47405)",
+  "quote": "EEG scores best for arousal, peripheral for valence and MCA for liking",
+  "access": "full text",
+  "confidence": "high",
+  "caveats": "Per-participant models trained on 39 trials; accuracy is inflated by class imbalance (hence the F1 emphasis); authors call the margin over chance modest ('much room for improvement')."
+ },
+ {
+  "topic": "arousal",
+  "finding": "Cross-subject versus within-subject accuracy: a leave-one-subject-out study of 18 feature types reached at best 59.06% (AUC 0.605) for two-class valence on DEAP and 83.33% (AUC 0.904) for three-class emotion on SEED when the classifier had never seen the test person; the same paper cites Zhu et al. 2015 on SEED-type data at 64.82% cross-subject versus 90.97% within-subject, and Kim 2007 at 55% across versus 92% within. No formal meta-analysis of this gap was found.",
+  "numbers": "DEAP (32 subjects, valence split at rating midpoint): 59.06% accuracy, AUC 0.605, chance 50%. SEED (15 subjects, positive/neutral/negative): 83.33%, AUC 0.904, chance 33%. Cited: Zhu et al. 2015 cross-subject 64.82% vs intra-subject 90.97%; Kim 2007 55% vs 92%.",
+  "baseline": "leave-one-subject-out cross-validation against chance (50% for DEAP two-class, 33% for SEED three-class)",
+  "subjects": "DEAP 32 participants; SEED 15 participants",
+  "electrodes_band_window": "DEAP 32 channels, 1-min trials; SEED 62 channels, film clips of about 4 min; time-frequency and nonlinear features over delta to gamma bands",
+  "source": {
+   "authors": "Li X, Song D, Zhang P, Zhang Y, Hou Y, Hu B",
+   "year": 2018,
+   "title": "Exploring EEG Features in Cross-Subject Emotion Recognition",
+   "venue": "Frontiers in Neuroscience",
+   "volumePages": "12:162",
+   "doi": "10.3389/fnins.2018.00162"
+  },
+  "evidence_location": "Abstract, Introduction (second paragraph, citing Kim 2007 and Zhu, Zheng & Lu 2015) and Conclusion (PMC5867345)",
+  "quote": "The average recognition accuracy was 64.82% for cross-subject recognition tasks, which was also far lower than the results of 90.97%",
+  "access": "full text",
+  "confidence": "medium",
+  "caveats": "Primary methods paper, not a meta-analysis; the within-subject figures are quoted from other papers (Zhu et al. 2015 is a conference paper). Later deep-learning papers report higher cross-subject numbers on SEED; DEAP cross-subject valence/arousal stays near 60% across the literature searched."
+ },
+ {
+  "topic": "mind-wandering",
+  "finding": "Breath-counting with eyes closed, mind wandering defined as the 10 s before a self-caught lapse and breath focus as the 10 s after: theta (4-7 Hz) power was higher during mind wandering at every electrode (largest occipital and parieto-central), delta (2-3.5 Hz) higher (largest fronto-central), occipital alpha (9-11 Hz) and fronto-lateral beta (15-30 Hz) lower. The printed text gives no numbers; the Fig. 1 difference maps scale about +0.5 to +1.2 dB for delta and theta, -0.8 to -2.2 dB for alpha, -0.3 to -0.8 dB for beta.",
+  "numbers": "Fig. 1 topographic difference maps (mind wandering minus breath focus, 10*log10 microV^2): delta color bar 0.5 to 1.2 dB, theta 0.5 to 1.2 dB, alpha -0.8 to -2.2 dB, beta -0.3 to -0.8 dB; all electrodes significant (p<0.05) for delta, theta and beta, alpha significant only in part. 358 mind-wandering events, 13 to 52 clean 20-s epochs per subject (mean 30, SD 14).",
+  "baseline": "breath-focus period (2 to 8 s after the button press; alpha: 2 to 6 s) versus mind-wandering period (-8 to -2 s; alpha -6 to -2 s), within subjects",
+  "subjects": "n=12 analyzed (16 recruited; 4 excluded for too few clean epochs); 6 of 12 reported some drowsiness",
+  "electrodes_band_window": "128-channel ANT system, 124 channels used; eyes closed; 20-s epochs centered on button presses; log power from 1 to 100 Hz; delta 2-3.5, theta 4-7, alpha 9-11, beta 15-30 Hz",
+  "source": {
+   "authors": "Braboszcz C, Delorme A",
+   "year": 2011,
+   "title": "Lost in thoughts: Neural markers of low alertness during mind wandering",
+   "venue": "NeuroImage",
+   "volumePages": "54(4):3040-3047",
+   "doi": "10.1016/j.neuroimage.2010.10.008"
+  },
+  "evidence_location": "Results, 'spectral' paragraph after Fig. 1 reference; Fig. 1 and its caption; Methods (author-manuscript PDF at sccn.ucsd.edu/~arno/mypapers/BraboszczDelorme2010.pdf)",
+  "quote": "absolute spectral power is significantly higher in the mind wandering state compared to the breath focus state",
+  "access": "full text",
+  "confidence": "medium",
+  "caveats": "Effect sizes read from figure color-bar limits of the accepted manuscript, not from printed values; the maps show the range across electrodes, so the typical electrode sits inside each range; drowsiness may contribute (authors' own interpretation is low alertness)."
+ },
+ {
+  "topic": "memory-retention",
+  "finding": "Scalp EEG during the 2.8-s retention interval of a modified Sternberg task: a 9-12 Hz alpha peak increased systematically with the number of items held, most over posterior and bilateral central regions, present through the last 2.5 s of retention and collapsing after the probe; theta had a clear peak in only one subject. The full text (set sizes, n, percent increase) was not accessible.",
+  "numbers": "Direction only (abstract): alpha peak power increased with memory load; retention 2.8 s, effect over the last 2.5 s. Magnitude from smallest to largest load not retrievable here.",
+  "baseline": "lowest memory load versus higher loads, same participants, retention interval",
+  "subjects": "n not in abstract",
+  "electrodes_band_window": "scalp EEG; alpha 9-12 Hz (within 8-13); 2.8-s retention interval, last 2.5 s analyzed",
+  "source": {
+   "authors": "Jensen O, Gelfand J, Kounios J, Lisman JE",
+   "year": 2002,
+   "title": "Oscillations in the alpha band (9-12 Hz) increase with memory load during retention in a short-term memory task",
+   "venue": "Cerebral Cortex",
+   "volumePages": "12(8):877-882",
+   "doi": "10.1093/cercor/12.8.877"
+  },
+  "evidence_location": "Abstract",
+  "quote": "the alpha peak systematically increased with the number of items held in working memory",
+  "access": "abstract",
+  "confidence": "medium",
+  "caveats": "OUP full text and PDF are subscriber-only; no open copy found (Drexel repository page has no file). Tuladhar et al. 2007 Hum Brain Mapp 28:785-792 (MEG replication) is in PMC6871495 but its full text was also not retrievable from this environment."
+ },
+ {
+  "topic": "memory-retention",
+  "finding": "MEG Sternberg task with 1, 3, 5 or 7 digits and a 3-s retention: frontal theta (7-8.5 Hz) during retention increased parametrically with the number of items and fell after the task. Full text not accessible, so the size of the increase from 1 to 7 items is not reported here.",
+  "numbers": "Direction only (abstract): theta 7-8.5 Hz over frontal sensors increased parametrically with load 1, 3, 5, 7; present during retention and scanning; reduced after the task.",
+  "baseline": "load 1 versus loads 3, 5, 7 within subjects, retention period",
+  "subjects": "n=10",
+  "electrodes_band_window": "whole-head MEG, frontal sensors; theta 7-8.5 Hz; 3-s retention period",
+  "source": {
+   "authors": "Jensen O, Tesche CD",
+   "year": 2002,
+   "title": "Frontal theta activity in humans increases with memory load in a working memory task",
+   "venue": "European Journal of Neuroscience",
+   "volumePages": "15(8):1395-1399",
+   "doi": "10.1046/j.1460-9568.2002.01975.x"
+  },
+  "evidence_location": "Abstract",
+  "quote": "The activity in the theta band increased parametrically with the number of items retained in working memory.",
+  "access": "abstract",
+  "confidence": "medium",
+  "caveats": "MEG, not EEG; Wiley full text closed (Semantic Scholar: CLOSED); magnitude unavailable."
+ },
+ {
+  "topic": "memory-retention",
+  "finding": "Open-access EEG replication of the frontal theta load effect: Sternberg digits, loads 2 to 5, 2.5-s maintenance epochs, frontal-midline cluster, theta 4-6 Hz: absolute and relative theta rose linearly with load across 68 analyzed participants, but the rise was confined to the high working-memory-capacity half; theta at loads 2 and 3 did not differ, loads 4 and 5 did not differ, and 2 or 3 versus 4 or 5 did. Means per load are plotted (Fig. 2), not printed.",
+  "numbers": "Main effect of load: absolute theta F(3,201)=3.70, p=0.013, eta^2=0.052; relative theta F(3,201)=3.80, p=0.018, eta^2=0.054. Linear trend: absolute F(1,67)=8.68, p=0.004, eta^2=0.115; relative F(1,67)=7.94, p=0.006, eta^2=0.106. High-WMC group linear trend F(1,34)=10.9, p=0.002, eta^2=0.244; low-WMC group not significant. Behavior: accuracy 95.7% (SD 5.33); median RT rises from about 726-776 ms (load 2) to 838-895 ms (load 5).",
+  "baseline": "load 2 versus loads 3, 4, 5 within subjects, during the 2500-ms maintenance period (relative theta normalized to total power)",
+  "subjects": "81 young adults recruited (47 women, mean age 23); 68 in the load ANOVA after exclusions; split at the median operation-span score into high and low capacity groups",
+  "electrodes_band_window": "64-channel EGI HydroCel net, linked-mastoid reference; frontal cluster E3, E6, E8, E9; theta 4-6 Hz; Welch spectra of 2500-ms maintenance epochs",
+  "source": {
+   "authors": "Zakrzewska MZ, Brzezicka A",
+   "year": 2014,
+   "title": "Working memory capacity as a moderator of load-related frontal midline theta variability in Sternberg task",
+   "venue": "Frontiers in Human Neuroscience",
+   "volumePages": "8:399",
+   "doi": "10.3389/fnhum.2014.00399"
+  },
+  "evidence_location": "Methods ('Sternberg task', 'EEG data analysis'), Results ('Memory load, WMC, and oscillatory activity'), Table 2, Figure 2 (PMC4047791)",
+  "quote": "Absolute and relative theta power both increased linearly with memory load",
+  "access": "full text",
+  "confidence": "high",
+  "caveats": "Effect sizes are eta-squared, not power ratios; the absolute magnitude per load is only in a bar chart; loads 2-5 are a narrower range than Jensen & Tesche's 1-7; the load effect depends on capacity group."
+ }
+]

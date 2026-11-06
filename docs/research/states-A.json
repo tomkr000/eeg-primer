@@ -1,0 +1,443 @@
+[
+  {
+    "topic": "rest-spectrum",
+    "finding": "Barry et al. 2007 is the standard reference for eyes-closed versus eyes-open resting EEG: across-scalp mean absolute power fell in all four bands when the eyes opened, with topographic changes in every band except alpha. Only the abstract could be opened; the per-region power tables were not accessible from any public copy.",
+    "numbers": "Directions only from the abstract: 'Reductions were found in across-scalp mean absolute delta, theta, alpha and beta from the eyes-closed to eyes-open condition', with 'reduced lateral frontal delta and posterior theta, and decreased posterior/increased frontal beta' in eyes-open. No table values retrievable.",
+    "baseline": "Eyes-closed rest (change to eyes-open rest, within subject)",
+    "subjects": "28 university students (healthy adults)",
+    "electrodes_band_window": "19-site 10-20 cap analysed as 9 scalp regions; delta, theta, alpha, beta (band edges not in abstract); absolute power by Fourier transform; epoch length not in abstract",
+    "source": {
+      "authors": "Barry RJ, Clarke AR, Johnstone SJ, Magee CA, Rushby JA",
+      "year": 2007,
+      "title": "EEG differences between eyes-closed and eyes-open resting conditions",
+      "venue": "Clinical Neurophysiology",
+      "volumePages": "118(12):2765-2773",
+      "doi": "10.1016/j.clinph.2007.07.028"
+    },
+    "evidence_location": "Abstract (Methods and Results paragraphs), via Europe PMC record PMID 17911042 and the University of Wollongong repository page ro.uow.edu.au/hbspapers/1640",
+    "quote": "Reductions were found in across-scalp mean absolute delta, theta, alpha and beta from the eyes-closed to eyes-open condition.",
+    "access": "abstract",
+    "confidence": "medium",
+    "caveats": "The DOI given in the task file (10.1016/j.clinph.2007.06.005) resolves to a different paper; the correct DOI is 10.1016/j.clinph.2007.07.028. Full text is closed access (Elsevier; UOW repository lists no PDF; Semantic Scholar lists no open PDF). The numeric tables therefore remain unverified. Barry RJ, De Blasio FM (2017) Biological Psychology 129:293-304 (DOI 10.1016/j.biopsycho.2017.09.010; 20 young, mean age 20.4 y, and 20 older adults, two 3-min conditions) confirms in its abstract that 'Global activity in all bands reduced with opening the eyes' but is also closed access."
+  },
+  {
+    "topic": "rest-spectrum",
+    "finding": "An open-access 2026 study tabulates absolute delta, theta, alpha and beta power for frontal, central, parietal and occipital regions in both eyes-closed (EC) and eyes-open (EO) rest for a healthy non-athlete control group of young women, which is the closest equivalent to the requested normative table that could be opened in full.",
+    "numbers": "Table 2, control group, mean ± SD, EC / EO (stated unit μV²): delta frontal 37.11 ± 1.98 / 36.93 ± 2.87, central 33.17 ± 1.32 / 32.32 ± 1.78, parietal 35.24 ± 1.57 / 35.43 ± 1.99, occipital 36.89 ± 1.53 / 37.13 ± 2.54; theta frontal 31.19 ± 2.17 / 30.92 ± 2.23, central 28.75 ± 2.13 / 27.55 ± 2.11, parietal 30.81 ± 2.50 / 29.44 ± 2.27, occipital 32.86 ± 2.32 / 31.24 ± 1.97; alpha frontal 34.69 ± 3.23 / 30.12 ± 2.99, central 33.01 ± 3.18 / 28.93 ± 3.58, parietal 38.49 ± 4.11 / 32.50 ± 3.81, occipital 41.02 ± 2.80 / 34.21 ± 2.93; beta frontal 24.83 ± 2.37 / 26.93 ± 3.64, central 22.96 ± 2.73 / 22.31 ± 2.95, parietal 26.32 ± 2.98 / 24.37 ± 2.87, occipital 30.43 ± 2.76 / 29.15 ± 2.79. Table 3 difference scores (EC − EO), control group: alpha frontal 4.60 ± 2.35, central 4.08 ± 2.28, parietal 5.99 ± 2.85, occipital 6.81 ± 2.97; theta frontal 0.27 ± 2.19, central 1.19 ± 0.97, parietal 1.37 ± 1.96, occipital 1.62 ± 2.35; beta frontal −2.09 ± 2.61, central 0.65 ± 1.02, parietal 1.95 ± 1.37, occipital 1.29 ± 1.39; delta frontal 0.17 ± 3.12, central 0.86 ± 1.21, parietal −0.20 ± 2.16, occipital −0.24 ± 2.92. Condition main effect for alpha F(1,43) = 185.742, p < 0.001, ηp² = 0.812.",
+    "baseline": "Within-subject EC versus EO rest (3 min each); the paper reports EC and EO values and EC − EO differences, not ratios",
+    "subjects": "Control group: 20 female university students, age 21.6 ± 0.78 y (the paper also has 25 female soccer players; both groups healthy)",
+    "electrodes_band_window": "32-channel 10-20 system, mastoid reference during acquisition, 29 channels re-referenced to average; ROIs frontal F3 F4 F7 F8 Fz, central C3 C4 Cz, parietal P3 P4 Pz, occipital O1 O2; delta 0.5-4, theta 4-8, alpha 8-13, beta 13-30 Hz; FFT on consecutive 2-s epochs from 3-min EO and 3-min EC recordings",
+    "source": {
+      "authors": "Gu Z, Ma H-W, Gong B",
+      "year": 2026,
+      "title": "Frequency-specific resting-state EEG modulation during eyes-closed and eyes-open transitions in female soccer players",
+      "venue": "Frontiers in Psychology",
+      "volumePages": "17:1907876",
+      "doi": "10.3389/fpsyg.2026.1907876"
+    },
+    "evidence_location": "Table 2 (descriptive statistics of EEG power), Table 3 (Δ = EC − EO), Table 4 (ANOVA), section 2.3 (EEG assessments); open access via Europe PMC PMC13619384",
+    "quote": "EEG power is expressed in μV2.",
+    "access": "full text",
+    "confidence": "medium",
+    "caveats": "The unit statement (μV²) is doubtful: the EC − EO alpha differences are only 4.6 to 6.8 units on values of 30 to 41, i.e. a 1.2-fold change, whereas eyes-closed alpha power is usually several-fold higher than eyes-open; the values behave like a logarithmic (dB-like) scale, so the unit should be checked with the authors before any ratio is derived. Female-only, narrow age range, small group; ROI power is an average over electrodes after average re-referencing. Published 2026 (recent, few citations)."
+  },
+  {
+    "topic": "rest-spectrum",
+    "finding": "Kan et al. 2017 report absolute band power at 16 scalp sites for 50 screened-healthy young adults in 2-min eyes-closed and eyes-open rest; alpha was about four times higher with eyes closed, theta was slightly higher with eyes open at prefrontal sites and lower posteriorly, delta rose sharply at the prefrontal sites with eyes open.",
+    "numbers": "Text: global mean theta 12.41 kμV² eyes-closed vs 14.21 kμV² eyes-open; global mean alpha 20.0 kμV² eyes-closed vs 5.08 kμV² eyes-open; highest alpha at P4 eyes-closed 35.62 kμV²; eyes-open alpha below 10 kμV² at all channels; eyes-open delta at Fp1/Fp2 above 200 kμV²; theta eyes-open at Fp1/Fp2 above 38 kμV²; beta 'the lowest readings among all other frequency powers' in both conditions. Alpha higher eyes-closed at all regions (P = 0.00…).",
+    "baseline": "Within-subject eyes-closed versus eyes-open rest (2 min each)",
+    "subjects": "50 university students (30 male, 20 female), age 22.7 ± 1.47 y, screened normal on PHQ-9 and DASS-21",
+    "electrodes_band_window": "32-channel bipolar electroencephalograph, 10-20 placement referenced to Cz; reported sites Fp1 Fp2 F3 F4 F7 F8 C3 C4 P3 P4 T3 T4 T5 T6 O1 O2; delta 1-4, theta 4-7, alpha 8-12, beta 12-40 Hz; 128 samples/s, 0.5-40 Hz filter; FFT over 2-min recordings",
+    "source": {
+      "authors": "Kan DPX, Croarkin PE, Phang CK, Lee PF",
+      "year": 2017,
+      "title": "EEG Differences Between Eyes-Closed and Eyes-Open Conditions at the Resting Stage for Euthymic Participants",
+      "venue": "Neurophysiology",
+      "volumePages": "49(6):432-440",
+      "doi": "10.1007/s11062-018-9706-6"
+    },
+    "evidence_location": "Results section (Powers of the EEG Bands), Figures 2-5 (bar charts of mean absolute power per electrode with SEM); public PDF at sunwaymedical.com (research-publications)",
+    "quote": "The global mean of the alpha-range power during eyes-closed state was 20.0 kµV2 vs. 5.08 kµV2 for eyes-open.",
+    "access": "full text",
+    "confidence": "low",
+    "caveats": "Values appear only in text and bar charts, not a table; the unit 'kμV²' is not explained and is implausibly large if literal (20,000 μV² would be about 140 μV rms alpha), so it probably reflects the device's own scaling; bipolar montage referenced to Cz, which attenuates central sites; small journal. Useful for the eyes-closed/eyes-open alpha ratio (about 4) and the direction of the delta/theta prefrontal effect, not for absolute microvolt values."
+  },
+  {
+    "topic": "rest-spectrum",
+    "finding": "A large 2026 normative study (608 adults, 3,229 recordings) quantifies the eyes-open versus eyes-closed difference in occipital alpha relative power and in the global theta/alpha ratio with mixed-effects models; it gives relative, not absolute, power, so it supports the alpha reactivity but not a microvolt table.",
+    "numbers": "Table 2: occipital alpha relative power, EO vs EC β = −0.2197, SE 0.0038, 95% CI −0.2271 to −0.2124, p < 0.001; global theta/alpha ratio, EO vs EC β = 0.3218, SE 0.0089, 95% CI 0.3044 to 0.3392, p < 0.001; age (z-score) effect on occipital alpha relative power β = −0.0537.",
+    "baseline": "Eyes-closed rest (model contrast EO vs EC, repeated measures within participants)",
+    "subjects": "608 healthy adults aged 20-70 y (376 female), 3,229 recordings (1,625 EC, 1,604 EO)",
+    "electrodes_band_window": "Occipital alpha relative power and global theta/alpha ratio (electrode set and band edges in the methods, not extracted); EC and EO resting recordings pre- and post-task",
+    "source": {
+      "authors": "Park YJ, Lee HJ, Kwon BJ, Jeong JH",
+      "year": 2026,
+      "title": "Normative age-related changes in resting-state EEG alpha power and theta/alpha ratio across eyes-open and eyes-closed conditions",
+      "venue": "Frontiers in Aging Neuroscience",
+      "volumePages": "18:1869339",
+      "doi": "10.3389/fnagi.2026.1869339"
+    },
+    "evidence_location": "Abstract and Table 2 (mixed-effects model results); open access via Europe PMC PMC13457458",
+    "quote": "Results showed a robust age-associated decrease in occipital alpha relative power, with lower alpha expression in EO than EC.",
+    "access": "full text",
+    "confidence": "medium",
+    "caveats": "Relative power (fraction of total), not absolute power; no delta or beta values; model coefficients rather than condition means; very recent paper with no citation record yet."
+  },
+  {
+    "topic": "workload",
+    "finding": "In an n-back task, frontal-central theta power rose and parietal-occipital alpha and beta power fell with memory load, quantified as event-related synchronization/desynchronization percentages relative to a pre-stimulus reference; the load effect was significant between the low and medium level but saturated at the high level.",
+    "numbers": "Late window (1000-2000 ms): frontal theta ERS low 8.75%, medium 18.48% (p = 0.009), high 16.78% (p = 1.00 vs medium). Alpha ERD early window (0-1000 ms): low −5.63%, medium −24.44% (p < 0.001); late window: low 6.05%, medium −19.97% (p < 0.001), high −14.99% (p = 0.551 vs medium). Table 4 (N-back, mean ± SD, n = 20): frontal theta ERS low 28.13 ± 12.94, medium 32.54 ± 17.44, high 26.47 ± 17.79; parietal alpha ERD low 0.21 ± 12.90, medium −22.20 ± 19.53, high −17.64 ± 24.43; parietal beta ERD low 4.40 ± 9.29, medium −6.81 ± 12.81, high −3.50 ± 24.03.",
+    "baseline": "ERD/ERS % relative to a pre-stimulus reference interval within the same task (not rest); levels compared with each other (low vs medium vs high load)",
+    "subjects": "20 healthy adults in the EEG analysis (same participants did N-back, operation span and digit span tasks)",
+    "electrodes_band_window": "Frontal-central ROI Fc1 Fz Fc2 Cz; parietal-occipital ROI P3 Pz P4 O1 O2; theta 4-6, alpha 8-13, beta 14-24 Hz; 2000 ms post-stimulus analysis window split into 0-1000 and 1000-2000 ms; time-frequency representations 2-32 Hz",
+    "source": {
+      "authors": "Scharinger C, Soutschek A, Schubert T, Gerjets P",
+      "year": 2017,
+      "title": "Comparison of the Working Memory Load in N-Back and Working Memory Span Tasks by Means of EEG Frequency Band Power and P300 Amplitude",
+      "venue": "Frontiers in Human Neuroscience",
+      "volumePages": "11:6",
+      "doi": "10.3389/fnhum.2017.00006"
+    },
+    "evidence_location": "Results sections 'Alpha Frequency Band Power Effects' and 'Theta Frequency Band Power Effects' (text percentages), Table 4 (N-back means), Figure 4; open access via Europe PMC PMC5263141",
+    "quote": "N-back, low: -5.63%, medium: -24.44%, p < 0.001",
+    "access": "full text",
+    "confidence": "medium",
+    "caveats": "Event-related (trial-locked) measure, not continuous block power relative to rest; the text percentages and the Table 4 means refer to different analysis windows (Table 4 window not identified in my extract); the ERD/ERS reference interval length was not captured; which n-back levels correspond to low/medium/high (e.g. 1-, 2-, 3-back) was not verified."
+  },
+  {
+    "topic": "workload",
+    "finding": "A 2022 meta-analysis of 24 EEG workload studies finds that higher cognitive workload raises theta (especially frontal theta) with a medium effect, raises beta with a medium effect, and lowers alpha with a small, non-robust effect.",
+    "numbers": "45 effect sizes from 24 studies, 723 participants: theta g = 0.68, CI [0.41, 0.95]; alpha g = −0.25, CI [−0.45, 0.04]; beta g = 0.50, CI [0.21, 0.79].",
+    "baseline": "Lower versus higher workload conditions within each study (standardized mean differences pooled across studies)",
+    "subjects": "723 participants across 24 studies (healthy adults)",
+    "electrodes_band_window": "Pooled across studies; bands theta 4-8, alpha 8-12, beta 12-30 Hz as grouped by the review",
+    "source": {
+      "authors": "Chikhi S, Matton N, Blanchet S",
+      "year": 2022,
+      "title": "EEG power spectral measures of cognitive workload: A meta-analysis",
+      "venue": "Psychophysiology",
+      "volumePages": "59(6):e14009",
+      "doi": "10.1111/psyp.14009"
+    },
+    "evidence_location": "Abstract (Europe PMC record PMID 35128686)",
+    "quote": "CWL was associated with significant effects on theta (g = 0.68, CI [0.41, 0.95]), alpha (g = -0.25",
+    "access": "abstract",
+    "confidence": "high",
+    "caveats": "Effect sizes, not power ratios; the alpha confidence interval includes zero although the abstract calls the effect significant; full text (forest plots, per-study values) not opened, so the strongest primary study cannot be named from it."
+  },
+  {
+    "topic": "workload",
+    "finding": "Gevins et al. 1997, the classic high-density study, found frontal midline theta increasing and a slow parietocentral alpha decreasing with working-memory load, and both rising with practice; the abstract gives directions only and the full text is paywalled.",
+    "numbers": "No magnitudes in the abstract: 'A frontal midline theta rhythm increased in magnitude with increased memory load'; 'A slow (low-frequency), parietocentral, alpha signal decreased with increased working memory load'; 'Theta and alpha signals increased ... after practice'.",
+    "baseline": "Low-load versus high-load versions of the same working-memory task (within subject); no rest baseline in the abstract",
+    "subjects": "8 subjects",
+    "electrodes_band_window": "115 channels with MRI-based finite-element deblurring; theta and alpha band edges and epoch length not in the abstract",
+    "source": {
+      "authors": "Gevins A, Smith ME, McEvoy L, Yu D",
+      "year": 1997,
+      "title": "High-resolution EEG mapping of cortical activation related to working memory: effects of task difficulty, type of processing, and practice",
+      "venue": "Cerebral Cortex",
+      "volumePages": "7(4):374-385",
+      "doi": "10.1093/cercor/7.4.374"
+    },
+    "evidence_location": "Abstract (Europe PMC PMID 9177767; Oxford Academic article page shows abstract only, PDF subscriber-only)",
+    "quote": "A frontal midline theta rhythm increased in magnitude with increased memory load.",
+    "access": "abstract",
+    "confidence": "medium",
+    "caveats": "Small n; magnitudes are in the paper's figures, which could not be opened. Gevins & Smith (2003) Theoretical Issues in Ergonomics Science 4(1-2):113-131 (DOI 10.1080/14639220210159717) and Borghini et al. (2014) Neuroscience & Biobehavioral Reviews 44:58-75 (DOI 10.1016/j.neubiorev.2012.10.003) were confirmed bibliographically via Crossref but are closed access and were not read."
+  },
+  {
+    "topic": "workload",
+    "finding": "Brouwer et al. 2012 compared spectral power (alpha, theta) and P300 features for n-back workload classification; the abstract reports classification accuracies rather than power changes.",
+    "numbers": "ERP, power and fusion models all gave classification accuracies between 80% and 90% for highest versus lowest workload after 2 min; for 32 of 35 participants classification was above chance after 2.5 s (one letter) with the fusion model.",
+    "baseline": "Lowest versus highest n-back level (within subject)",
+    "subjects": "35 participants",
+    "electrodes_band_window": "Alpha and theta spectral power features and P300 (sites and band edges not in abstract); 2 min and 2.5 s data segments",
+    "source": {
+      "authors": "Brouwer A-M, Hogervorst MA, van Erp JBF, Heffelaar T, Zimmerman PH, Oostenveld R",
+      "year": 2012,
+      "title": "Estimating workload using EEG spectral power and ERPs in the n-back task",
+      "venue": "Journal of Neural Engineering",
+      "volumePages": "9(4):045008",
+      "doi": "10.1088/1741-2560/9/4/045008"
+    },
+    "evidence_location": "Abstract (Europe PMC PMID 22832068)",
+    "quote": "classification accuracies between 80% and 90% when distinguishing between the highest and the lowest workload condition after 2 min",
+    "access": "abstract",
+    "confidence": "medium",
+    "caveats": "No band-power magnitudes in the abstract; full text not open (IOP); the same group's open-access follow-up (Hogervorst, Brouwer, van Erp 2014, Frontiers in Neuroscience 8:322, PMC4196537) also reports only classification results."
+  },
+  {
+    "topic": "focus-engagement",
+    "finding": "The engagement index used by consumer 'focus' products originates in Pope et al. 1995, who compared candidate EEG indices in a closed-loop adaptive-automation experiment and found beta/(alpha+theta) reflected task engagement best.",
+    "numbers": "Index definition: beta power/(alpha power + theta power); judged among four candidate and three control index definitions by feedback-loop stability (stable under negative, unstable under positive feedback). No band-power values in the abstract.",
+    "baseline": "Not a change measure; the index was evaluated by the behaviour of a closed feedback loop, not against a rest baseline",
+    "subjects": "Number of subjects not in the abstract",
+    "electrodes_band_window": "Sites Cz, Pz, P3, P4 per the Marcantoni et al. 2023 review (Table 2, ref. 16); band edges and window not in the abstract",
+    "source": {
+      "authors": "Pope AT, Bogart EH, Bartolome DS",
+      "year": 1995,
+      "title": "Biocybernetic system evaluates indices of operator engagement in automated task",
+      "venue": "Biological Psychology",
+      "volumePages": "40(1-2):187-195",
+      "doi": "10.1016/0301-0511(95)05116-3"
+    },
+    "evidence_location": "Abstract (Europe PMC PMID 7647180); electrode sites from Marcantoni et al. 2023, Sensors 23(13):5968, Table 2",
+    "quote": "an index constructed according to the formula, beta power/(alpha power + theta power), reflected task engagement best.",
+    "access": "abstract",
+    "confidence": "high",
+    "caveats": "Full text closed access (ScienceDirect blocked). Freeman FG, Mikulka PJ, Prinzel LJ, Scerbo MW (1999) Biological Psychology 50(1):61-76 (DOI 10.1016/S0301-0511(99)00002-2; abstract via PMID 10378439) replicated with three indices, beta/(alpha+theta), beta/alpha and 1/alpha, in a compensatory tracking task over three 16-min trials, and confirmed that beta/(alpha+theta) was most effective; no index values are given in either abstract."
+  },
+  {
+    "topic": "focus-engagement",
+    "finding": "A 2023 systematic review of 82 documents catalogues 37 band-ratio 'involvement' indexes; the most used are beta/alpha, beta/(alpha+theta), beta/theta and theta/alpha, confirming that 'attention' and 'engagement' in this literature are defined as beta over slow-band power ratios.",
+    "numbers": "37 indexes extracted from 82 included documents; I1 = β/α, I2 = β/(α+θ), I3 = β/θ, I4 = θ/α listed as the most frequent; I2 cited in 38 documents in the 'mental strain' column of Table 3.",
+    "baseline": "Not applicable (definitions)",
+    "subjects": "Review; study populations tabulated in its Table 1 (2 to 105 participants per study)",
+    "electrodes_band_window": "Tabulated per study in its Table 2 (devices, channel counts, sites); no common band edges",
+    "source": {
+      "authors": "Marcantoni I, Assogna R, Del Borrello G, Di Stefano M, Morano M, Romagnoli S, Leoni C, Bruschi G, Sbrollini A, Morettini M, Burattini L",
+      "year": 2023,
+      "title": "Ratio Indexes Based on Spectral Electroencephalographic Brainwaves for Assessment of Mental Involvement: A Systematic Review",
+      "venue": "Sensors",
+      "volumePages": "23(13):5968",
+      "doi": "10.3390/s23135968"
+    },
+    "evidence_location": "Table 3 (Involvement indexes) and Discussion; open access via Europe PMC PMC10346153",
+    "quote": "the most frequently used are I 1 (β/α), I 2 (β/(α + θ)), I 3 (β/θ), and I 4 (θ/α)",
+    "access": "full text",
+    "confidence": "high",
+    "caveats": "A catalogue, not a measurement; gives no typical index values or within-subject changes."
+  },
+  {
+    "topic": "focus-engagement",
+    "finding": "The theta/beta ratio as an 'attention' marker rests on ADHD group differences; the Arns et al. 2013 meta-analysis found a moderate ADHD-versus-control effect that has shrunk over time because control groups' ratios have risen, and concluded it is not a reliable diagnostic measure.",
+    "numbers": "9 studies, 1,253 children/adolescents with ADHD and 517 without; grand-mean effect size 0.75 for 6-13-year-olds and 0.62 for 6-18-year-olds; heterogeneity test remained significant; TBR difference decreased across years, explained by increasing TBR in non-ADHD groups.",
+    "baseline": "Between-group (ADHD vs non-ADHD), not within subject",
+    "subjects": "1,253 with ADHD and 517 without, ages 6-18 y",
+    "electrodes_band_window": "Theta/beta ratio at Cz, eyes open; band edges per study; window not stated",
+    "source": {
+      "authors": "Arns M, Conners CK, Kraemer HC",
+      "year": 2013,
+      "title": "A decade of EEG Theta/Beta Ratio Research in ADHD: a meta-analysis",
+      "venue": "Journal of Attention Disorders",
+      "volumePages": "17(5):374-383",
+      "doi": "10.1177/1087054712460087"
+    },
+    "evidence_location": "Abstract (Europe PMC PMID 23086616)",
+    "quote": "The grand-mean effect size (ES) for the 6-13 year-olds was 0.75 and for the 6-18 year-olds was 0.62.",
+    "access": "abstract",
+    "confidence": "high",
+    "caveats": "Children and adolescents, between-group; the authors call the pooled effect sizes 'misleading and considered an overestimation' because of heterogeneity. In healthy adults, Angelidis A, van der Does W, Schakel L, Putman P (2016) Biological Psychology 121(Pt A):49-52 (DOI 10.1016/j.biopsycho.2016.09.008; abstract via PMID 27697551; 41 young women, two sessions one week apart) report resting frontal TBR test-retest r = .93 and a correlation of −.44 between session-1 TBR and session-2 self-reported attentional control."
+  },
+  {
+    "topic": "focus-engagement",
+    "finding": "Within-subject alpha change from eyes-open rest to an attention-demanding task: Magosso et al. 2019 normalized each region's alpha power to a pre-task eyes-open relaxation period and found alpha fell during arithmetic and number-reading tasks, more posteriorly than anteriorly, and fell about 0.15 (fraction of baseline) more during the harder arithmetic task; the per-condition values are shown only in figures.",
+    "numbers": "Normalized alpha power (task / pre-task rest, value 1 at rest): 'The alpha power exhibited a larger decrease (by about 0.15 points) during the arithmetic task than that during the reading numbers task across all electrodes'; main effect of region F(1,29) = 23.9, p < 0.0001 (alpha decreased more over parieto-occipital than fronto-central-temporal); alpha did not differ from the rest value (1) during a purely mental arithmetic task in VR immersion (24 participants).",
+    "baseline": "Pre-task eyes-open relaxation (r1) in the same session, per channel and per region",
+    "subjects": "41 healthy participants (24 in the mental-arithmetic-in-VR subset); 30 in the Experiment 1 ANOVA",
+    "electrodes_band_window": "Regions fronto-central-temporal and parieto-occipital (electrode list in methods); alpha band individually defined; 1-min resolution analysis shown for the first 10 min; absolute alpha maps in μV²",
+    "source": {
+      "authors": "Magosso E, De Crescenzio F, Ricci G, Piastra S, Ursino M",
+      "year": 2019,
+      "title": "EEG Alpha Power Is Modulated by Attentional Changes during Cognitive Tasks and Virtual Reality Immersion",
+      "venue": "Computational Intelligence and Neuroscience",
+      "volumePages": "2019:7051079",
+      "doi": "10.1155/2019/7051079"
+    },
+    "evidence_location": "Results, Experiment 1 (text and Figures 4-5); Figure 10 for the VR mental-arithmetic subset; open access via Europe PMC PMC6614966",
+    "quote": "The alpha power exhibited a larger decrease (by about 0.15 points) during the arithmetic task",
+    "access": "full text",
+    "confidence": "low",
+    "caveats": "Normalized values per condition are in figures (not extracted); no beta numbers; alpha only. For sustained attention over time, Kamzanova AT, Kustubayeva AM, Matthews G (2014) Human Factors 56(6):1136-1149 (DOI 10.1177/0018720814526617; abstract via PMID 25277022; 92 participants, 40-min vigilance task) found lower-frequency alpha (8-10.9 Hz) and the Task Load Index most sensitive to the task, with frontal theta and the Engagement Index affected only in the final period; no values in the abstract."
+  },
+  {
+    "topic": "drowsiness",
+    "finding": "The 2020 meta-analysis of 21 studies gives the most reliable sizes: mental fatigue raises overall EEG power with a medium effect, theta and alpha with large effects, delta and beta with small to moderate effects, and the change is largest over central sites.",
+    "numbers": "Overall increase g = 0.68 (95% CI 0.24-1.13); theta g = 1.03 (0.79-1.60); alpha g = 0.85 (0.47-1.43); central regions g = 0.80 (0.46-1.21); theta increases in frontal, central and posterior sites all g > 1; 'small to moderate changes found in delta and beta bands'.",
+    "baseline": "Alert/early task versus fatigued/late task within subject, pooled across studies as effect sizes",
+    "subjects": "21 studies of non-diseased adults engaged in mentally fatiguing tasks",
+    "electrodes_band_window": "Pooled; network meta-analysis by band and region (frontal, central, posterior)",
+    "source": {
+      "authors": "Tran Y, Craig A, Craig R, Chai R, Nguyen H",
+      "year": 2020,
+      "title": "The influence of mental fatigue on brain activity: Evidence from a systematic review with meta-analyses",
+      "venue": "Psychophysiology",
+      "volumePages": "57(5):e13554",
+      "doi": "10.1111/psyp.13554"
+    },
+    "evidence_location": "Abstract (Europe PMC PMID 32108954)",
+    "quote": "large increases in theta (g = 1.03; 95%CI: 0.79-1.60) and alpha bands (g = 0.85; 95%CI: 0.47-1.43)",
+    "access": "abstract",
+    "confidence": "high",
+    "caveats": "Effect sizes rather than percentage or ratio changes; per-study values are in the closed-access full text."
+  },
+  {
+    "topic": "drowsiness",
+    "finding": "Lal & Craig 2002 (Psychophysiology), the task's candidate, found delta and theta activity increased significantly during simulator-driving fatigue in 35 drivers; the percentage increases per band are in the paper's results, which could not be opened (closed access at the publisher and at the UTS repository).",
+    "numbers": "Abstract: 'Delta and theta activity were found to increase significantly during fatigue'; heart rate significantly lower after driving; blink rate changed. Percentages not retrievable.",
+    "baseline": "Alert baseline at the start of the driving-simulator task (within subject)",
+    "subjects": "35 randomly selected subjects (drivers)",
+    "electrodes_band_window": "Not in abstract (the companion conference paper used 19 channels, linked ears, delta 0-4, theta 4-8, alpha 8-13, beta 13-20 Hz)",
+    "source": {
+      "authors": "Lal SKL, Craig A",
+      "year": 2002,
+      "title": "Driver fatigue: electroencephalography and psychological assessment",
+      "venue": "Psychophysiology",
+      "volumePages": "39(3):313-321",
+      "doi": "10.1017/S0048577201393095"
+    },
+    "evidence_location": "Abstract (Europe PMC PMID 12212650; UTS OPUS record hdl.handle.net/10453/4609 lists a closed-access PDF)",
+    "quote": "Delta and theta activity were found to increase significantly during fatigue.",
+    "access": "abstract",
+    "confidence": "medium",
+    "caveats": "Secondary sources (e.g. Chuang et al. 2018, Frontiers in Neuroscience, PMC5881157) paraphrase it as 'significant increases in delta and theta EEG power, as well as slight increases in alpha and beta', but none of the open-access papers checked quote the percentages, so the often-cited per-band percentages remain unverified. Craig A, Tran Y, Wijesuriya N, Nguyen H (2012) Psychophysiology 49(4):574-582 (DOI 10.1111/j.1469-8986.2011.01329.x; abstract via PMID 22324302; 48 non-professional drivers) found theta, alpha 1 and alpha 2 increased over the entire cortex, no significant delta change, and beta increases mostly at frontal sites."
+  },
+  {
+    "topic": "drowsiness",
+    "finding": "A companion conference paper by the same authors tabulates the change in band magnitude (μV, averaged over 19 channels) from the alert baseline through three video-defined fatigue phases in professional and non-professional drivers: delta rose most, theta and alpha by about 1-3 μV, beta little or not at all.",
+    "numbers": "Table 1 (change from alert baseline, mean ± SD, μV; transition / transitional-to-post-transitional / post-transitional): non-professional delta 10.1 ± 12.80* / 3.7 ± 10.39* / 21.1 ± 7.17*; professional delta 3.8 ± 4.49** / 6.2 ± 4.94** / 6.3 ± 5.94**; non-professional theta 3.0 ± 4.23* / 0.9 ± 3.57* / 3.1 ± 3.92*; professional theta 0.1 ± 1.89 (ns) / 0.9 ± 1.33** / 1.2 ± 2.16**; non-professional alpha 0.6 ± 1.34* / 0.4 ± 1.22* / 1.4 ± 1.25*; professional alpha 0.2 ± 0.67 (ns) / 1.3 ± 0.79** / 1.3 ± 0.75**; non-professional beta 0.2 ± 0.69 (ns) / 0.9 ± 0.63* / 0.6 ± 0.67*; professional beta −0.1 ± 0.86 (ns) / 1.2 ± 0.84** / 0.3 ± 0.81*. * p < 0.05, ** p < 0.0001 vs alert baseline.",
+    "baseline": "Alert baseline at the start of the driving task (within subject); absolute baseline magnitudes are not given, so ratios cannot be formed",
+    "subjects": "40 male drivers: 20 professional truck drivers (mean age 44 ± 11) and 20 non-professional drivers (mean age 34 ± 9)",
+    "electrodes_band_window": "19-channel 10-20 EEG, monopolar, linked-ears reference, magnitudes averaged across all 19 channels; delta 0-4, theta 4-8, alpha 8-13, beta 13-20 Hz; fatigue phases defined from video of the face synchronized with EEG",
+    "source": {
+      "authors": "Lal SKL, Craig A",
+      "year": 2002,
+      "title": "Fatigue neurophysiology in professional and non-professional drivers",
+      "venue": "Road Safety Research, Policing and Education Conference (RS2002), Australia",
+      "volumePages": "pp. 502-507",
+      "doi": ""
+    },
+    "evidence_location": "Table 1 and Results text of the PDF at archive.acrs.org.au/files/arsrpe/RS020004.PDF (read through a fetch-and-summarize tool, not line by line)",
+    "quote": "delta activity increased significantly during transition to fatigue in professional and in the non-professional drivers.",
+    "access": "full text",
+    "confidence": "medium",
+    "caveats": "Conference paper without DOI; the venue name was inferred from the archive (Australasian College of Road Safety conference archive) and should be checked against the PDF header; the tool noted an inconsistency between the abstract ('theta and alpha increased in professionals only') and Table 1 (significant theta and alpha increases in non-professionals too); values are differences in μV without the baseline level."
+  },
+  {
+    "topic": "drowsiness",
+    "finding": "Jap et al. 2009 tested four slow/fast band-ratio indices over a monotonous drive in 52 subjects; all four increased over time and (theta+alpha)/beta increased most, driven mainly by a significant fall in beta, while delta and theta were stable and alpha fell slightly.",
+    "numbers": "Four algorithms: (θ+α)/β, α/β, (θ+α)/(α+β), θ/β; 'All four algorithms showed an increase in the ratio of slow wave to fast wave EEG activities over time'; (θ+α)/β 'showed a larger increase'; 'a significant decrease of beta activity (p < 0.05)'; no numeric ratio values in the abstract.",
+    "baseline": "Early versus late portions of a monotonous driving session (within subject, over time)",
+    "subjects": "52 subjects (36 males, 16 females)",
+    "electrodes_band_window": "Not in abstract",
+    "source": {
+      "authors": "Jap BT, Lal S, Fischer P, Bekiaris E",
+      "year": 2009,
+      "title": "Using EEG spectral components to assess algorithms for detecting fatigue",
+      "venue": "Expert Systems with Applications",
+      "volumePages": "36(2):2352-2359",
+      "doi": "10.1016/j.eswa.2007.12.043"
+    },
+    "evidence_location": "Abstract on the UTS OPUS record opus.cloud1.lib.uts.edu.au/handle/10453/8938 (full text closed); bibliographic fields from Crossref",
+    "quote": "Algorithm (i) (θ + α)/β showed a larger increase.",
+    "access": "abstract",
+    "confidence": "medium",
+    "caveats": "The paper's abstract contradicts Lal & Craig 2002 on delta/theta (stable here, increased there); the sizes of the ratio changes are in the closed-access full text."
+  },
+  {
+    "topic": "drowsiness",
+    "finding": "Alpha anteriorization with drowsiness is documented qualitatively in sleep-onset topography studies: the dominant alpha area moves from posterior to anterior midline sites during the waking-sleeping transition (Tanaka et al. 1997; De Gennaro et al. 2001), and with prolonged wakefulness alpha power correlates negatively with sleepiness at all sites while theta correlates positively with a frontal focus (Strijkstra et al. 2003). No quantitative anterior/posterior alpha ratio was found in accessible text.",
+    "numbers": "De Gennaro 2001: before sleep onset, <7 Hz frequencies more prominent anteriorly, >8 Hz frequencies prevalent occipitally, >13 Hz without antero-posterior differences; 'the alpha rhythm spreads anteriorly as the transition progresses'. Tanaka 1997: 'the dominant areas of alpha-band activity moved from the posterior areas to anterior areas along the midline'; alpha 2 (9.6-11.4 Hz) distribution changed after EEG stage 3 (alpha intermittent, < 50%); alpha 3 (11.6-13.4 Hz) became anterior after vertex sharp-wave bursts (stage 7). No power values in the abstracts.",
+    "baseline": "Relaxed wakefulness before sleep onset, within subject along the transition",
+    "subjects": "De Gennaro 2001: 7 normal subjects; Tanaka 1997: 10 male subjects; Strijkstra 2003: 40 h of wakefulness, n not in abstract",
+    "electrodes_band_window": "De Gennaro: C3-A2, C4-A1, Fpz-A1, Fz-A1, Cz-A1, Pz-A1, Oz-A1, 1-28 Hz at 1 Hz resolution; Tanaka: 12-channel EEG, six bands; Strijkstra: multi-electrode full-scalp, alpha 8-12, theta 4-8 Hz",
+    "source": {
+      "authors": "De Gennaro L, Ferrara M, Curcio G, Cristiani R",
+      "year": 2001,
+      "title": "Antero-posterior EEG changes during the wakefulness-sleep transition",
+      "venue": "Clinical Neurophysiology",
+      "volumePages": "112(10):1901-1911",
+      "doi": "10.1016/S1388-2457(01)00649-6"
+    },
+    "evidence_location": "Abstracts (Europe PMC PMID 11595150; Tanaka H, Hayashi M, Hori T 1997 Sleep 20(7):523-534, DOI 10.1093/sleep/20.7.523, PMID 9322268; Strijkstra AM, Beersma DGM, Drayer B, Halbesma N, Daan S 2003 Neuroscience Letters 340(1):17-20, DOI 10.1016/S0304-3940(03)00033-8, PMID 12648748)",
+    "quote": "the alpha rhythm spreads anteriorly as the transition progresses",
+    "access": "abstract",
+    "confidence": "low",
+    "caveats": "Small sleep-onset samples, not driving fatigue; the quantitative anterior/posterior alpha values are in closed-access full texts; treat anteriorization as qualitative unless a full text is obtained."
+  },
+  {
+    "topic": "stress",
+    "finding": "The 2022 systematic review and meta-analysis of psychosocial-stress EEG studies is the best source for direction consistency: alpha power (mainly frontal) decreases consistently across stress phases with a moderate-to-large pooled effect, beta tends to increase but the pooled effect is not significant, and frontal alpha asymmetry does not change consistently.",
+    "numbers": "Alpha power: significant decrease, Hedges' g = 0.6 (SMD 0.6), p = 0.001; 10 of 12 articles reporting alpha found significant decreases; beta power: g = −0.31, p = 0.29 (not significant), 6 of 8 articles report an increase and 5 a significant increase; FAA: g = 0.01, p = 0.93 (F3/F4 SMD −0.01, p = 0.93; F7/F8 SMD −0.02, p = 0.84); 13 FAA articles, 12 alpha-power articles, 8 beta-power articles, 6 theta articles (no theta meta-analysis).",
+    "baseline": "Control (non-stressed) condition or pre-stress baseline versus anticipation, reactive or recovery phase of the stress response, pooled across studies",
+    "subjects": "Studies of healthy adults, 4 to 194 participants each (Table 1); stressors TSST, MIST, MAST, SET, Cyberball, speech/judgment paradigms",
+    "electrodes_band_window": "Mostly frontal electrodes for alpha power (bands per study, typically 8-13 Hz); beta 13-30 Hz typical; windows per study",
+    "source": {
+      "authors": "Vanhollebeke G, De Smet S, De Raedt R, Baeken C, van Mierlo P, Vanderhasselt M-A",
+      "year": 2022,
+      "title": "The neural correlates of psychosocial stress: A systematic review and meta-analysis of spectral analysis EEG studies",
+      "venue": "Neurobiology of Stress",
+      "volumePages": "18:100452",
+      "doi": "10.1016/j.ynstr.2022.100452"
+    },
+    "evidence_location": "Abstract; Table 1 (per-study directions); Results 'Alpha power', 'Beta power', 'Frontal alpha asymmetry'; Figures 4-7 (forest plots); open access via Europe PMC PMC9095895",
+    "quote": "alpha power consistently decreases, beta power shows a tendency to increase, and FAA varies inconsistently.",
+    "access": "full text",
+    "confidence": "high",
+    "caveats": "Pooled standardized effects, not power ratios; the alpha meta-analysis used 7 of 12 articles; the sign convention (g = 0.6 for a decrease) is the review's; individual-study magnitudes are in its forest plots (not extracted). Per its Table 1, the largest primary studies are Guo et al. 2019 (150 participants, TSST, alpha ↓ beta ↑ in recovery vs baseline; International Journal of Environmental Research and Public Health 17(1), DOI 10.3390/ijerph17010148) and Hofmann et al. 2005 (27 participants, TSST anticipation, alpha ↓; Emotion 5(4):464-475, DOI 10.1037/1528-3542.5.4.464)."
+  },
+  {
+    "topic": "stress",
+    "finding": "Alonso et al. 2015 (the task's candidate; full postprint read) applied a 10-min Stroop test and 30 h sleep deprivation to 30 adults and found, in 3-min eyes-closed recordings, a decrease of high-alpha (11-12 Hz) and an increase of high-beta (23-36 Hz) relative power, strongest anteriorly, with no significant frontal asymmetry change; the paper reports p-values, not sizes.",
+    "numbers": "Table 2 (relative power, direction and p): high alpha 11-12 Hz anterior ↓ p = 0.013 (sleep deprivation), ↓ p = 0.059 (Stroop); global ↓ p = 0.015 / ↓ p = 0.139; high beta 23-36 Hz anterior ↑ p = 0.013 / ↑ p = 0.004; global ↑ p = 0.004 / ↑ p = 0.072; frontal asymmetry index (right-left) ↑ p = 0.125 / ↑ p = 0.405. Table 1 asymmetry index, baseline / Stroop / sleep deprivation: right-left frontal −0.012 ± 0.112 / 0.002 ± 0.124 / 0.043 ± 0.137; F4-F3 0.016 ± 0.112 / 0.030 ± 0.124 / 0.045 ± 0.103. Theta increased after sleep deprivation but not after Stroop (no values).",
+    "baseline": "3-min eyes-closed baseline recording (Re1) before the stressors; Stroop recording (Re2) and post-sleep-deprivation recording (Re3) compared with Re1 by Wilcoxon signed-rank tests",
+    "subjects": "30 healthy volunteers aged 18-35 y (mean 26.53 y) who completed the study (32 recruited)",
+    "electrodes_band_window": "19 electrodes of the 10/20 system referenced to averaged mastoids, plus VEOG/HEOG; delta 0.5-3.5, theta 3.5-7.5, alpha 7.5-13, beta 13-36 Hz, with alpha1 7.5-10.5, high alpha 11-12, low beta 13-23, high beta 23-36 Hz; Welch periodogram over the 3-min recording",
+    "source": {
+      "authors": "Alonso JF, Romero S, Ballester MR, Antonijoan RM, Mañanas MA",
+      "year": 2015,
+      "title": "Stress assessment based on EEG univariate features and functional connectivity measures",
+      "venue": "Physiological Measurement",
+      "volumePages": "36(7):1351-1365",
+      "doi": "10.1088/0967-3334/36/7/1351"
+    },
+    "evidence_location": "Sections 2.1, 2.4, 2.6, 3.1 and Tables 1-2 of the author postprint at upcommons.upc.edu/bitstream/handle/2117/28561/PostPrint PhysiolMeas.pdf (read through a fetch-and-summarize tool)",
+    "quote": "Results showed a decrease of the high alpha power (11 to 12 Hz), an increase in the high beta band",
+    "access": "full text",
+    "confidence": "medium",
+    "caveats": "No percentage or ratio changes are printed, only p-values and asymmetry means; the Stroop high-alpha effect is p = 0.059 in Table 2 despite the abstract's claim; the Stroop recording was taken after the test (reactive/recovery), eyes closed, so it is not a during-task measure; the postprint was summarized by a tool rather than read verbatim."
+  },
+  {
+    "topic": "stress",
+    "finding": "Al-Shargie et al. 2016 induced stress with mental arithmetic under time pressure and negative feedback (MIST) and used frontal alpha power from prefrontal EEG, finding alpha decreased under stress; the abstract reports classification gains, not power changes.",
+    "numbers": "Fusion of EEG and fNIRS improved stress classification accuracy by +3.4% over EEG alone and +11% over fNIRS alone; stress induction confirmed by salivary alpha amylase. Per the Vanhollebeke 2022 Table 1 entry: 22 participants, all male, age 26 ± 4, alpha 8-12.5 Hz ↓, beta 12.5-30 Hz no change, reactive phase vs control.",
+    "baseline": "Control (non-stress) arithmetic condition versus the time-pressure stress condition, within subject",
+    "subjects": "22 male participants, age 26 ± 4 y (from the review's table; the abstract gives no n)",
+    "electrodes_band_window": "Prefrontal cortex EEG (frontal alpha rhythm) with simultaneous fNIRS; alpha 8-12.5, beta 12.5-30 Hz per the review; window not in abstract",
+    "source": {
+      "authors": "Al-Shargie F, Kiguchi M, Badruddin N, Dass SC, Hani AFM, Tang TB",
+      "year": 2016,
+      "title": "Mental stress assessment using simultaneous measurement of EEG and fNIRS",
+      "venue": "Biomedical Optics Express",
+      "volumePages": "7(10):3882-3898",
+      "doi": "10.1364/BOE.7.003882"
+    },
+    "evidence_location": "Abstract (Europe PMC PMID 27867700, PMC5102531); participant and band details from Vanhollebeke et al. 2022 Table 1",
+    "quote": "combination of EEG (frontal alpha rhythm) and fNIRS (concentration change of oxygenated hemoglobin) could be a potential means",
+    "access": "abstract",
+    "confidence": "medium",
+    "caveats": "Europe PMC returned a server error for the full text and NCBI's BioC API has no OA copy, so the alpha-power magnitudes were not seen; the same group's later papers (Al-Shargie et al. 2017a, 2017b, 2018; 18-25 male participants each, MIST) all report frontal alpha decreases per the review."
+  },
+  {
+    "topic": "stress",
+    "finding": "Minguillon et al. 2016 give within-subject, level-by-level band changes during the Montreal Imaging Stress Task in a small sample, as z-scored group differences: theta, alpha, beta and relative gamma all differed between stress levels, with prefrontal relative gamma proposed as the stress index; the values are normalized, not physical.",
+    "numbers": "Table 1 (differences in mean normalized power between stress levels, SL2 − SL1 / SL2 − SL3, prefrontal): RG 0.41* / 0.55*; theta 0.39* / 0.42*; alpha 0.31* / 0.45*; beta 0.28* / 0.21*; gamma 0.01 / 0.35*; alpha asymmetry −0.06* / 0.37* (* significant). Temporal-parietal alpha 0.35* / 0.66*.",
+    "baseline": "Stress level SL1 (control/relaxation) and SL3 (recovery) versus SL2 (MIST stress) within subject; values are z-scored and averaged across subjects",
+    "subjects": "6 healthy subjects",
+    "electrodes_band_window": "15 electrodes Fp1, Fp2, Fz, F3, F4, F7, F8, Cz, C3, C4, Pz, T5, T6, O1, O2, referenced to the left ear lobe; theta 4-7, alpha 8-13, beta 14-24, gamma 25-45 Hz; sliding-window analysis (HR used 90 s windows every 30 s)",
+    "source": {
+      "authors": "Minguillon J, Lopez-Gordo MA, Pelayo F",
+      "year": 2016,
+      "title": "Stress Assessment by Prefrontal Relative Gamma",
+      "venue": "Frontiers in Computational Neuroscience",
+      "volumePages": "10:101",
+      "doi": "10.3389/fncom.2016.00101"
+    },
+    "evidence_location": "Table 1 and Methods (participants, electrodes); open access via Europe PMC PMC5031688",
+    "quote": "Only six subjects participated in the study.",
+    "access": "full text",
+    "confidence": "low",
+    "caveats": "n = 6; the table values are z-scored, interpolated and smoothed group averages, so they cannot be read as power ratios; the direction of the alpha entry (positive difference SL2 − SL1) conflicts in sign convention with the review's 'alpha ↓' summary and needs the figure to interpret. Katmah R, Al-Shargie F, Tariq U, Babiloni F, Al-Mughairbi F, Al-Nashash H (2021) Sensors 21(15):5043 (DOI 10.3390/s21155043; open access PMC8347831) summarizes the same direction across studies, alpha power decreasing and beta increasing with stress, including a multilevel arithmetic study where mean alpha fell from each stress level to the next, but tabulates classifiers rather than power values."
+  }
+]

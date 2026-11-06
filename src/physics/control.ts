@@ -24,14 +24,14 @@ export function headModes() {
 }
 
 /** Legendre polynomials P_0..P_L at x */
-function legendre(x: number, L: number): Float64Array {
+export function legendre(x: number, L: number): Float64Array {
   const P = new Float64Array(L + 2);
   P[0] = 1; if (L + 1 >= 1) P[1] = x;
   for (let k = 2; k <= L + 1; k++) P[k] = ((2 * k - 1) * x * P[k - 1] - (k - 1) * P[k - 2]) / k;
   return P;
 }
 /** smoothing of a uniform disc (cap) of angular radius α on degree l, normalized to 1 at l = 0 */
-function capFactor(alpha: number): Float64Array {
+export function capFactor(alpha: number): Float64Array {
   const x = Math.cos(alpha), P = legendre(x, LMAX), g = new Float64Array(LMAX + 1);
   g[0] = 1;
   for (let l = 1; l <= LMAX; l++) g[l] = (P[l - 1] - P[l + 1]) / ((2 * l + 1) * (1 - x));
@@ -48,7 +48,7 @@ function fibonacci(N: number): { z: Float64Array; x: Float64Array; y: Float64Arr
   return { z, x, y };
 }
 /** Σ_l a_l P_l(x) by the three-term recurrence */
-function legendreSeries(a: Float64Array, x: number): number {
+export function legendreSeries(a: Float64Array, x: number): number {
   let p0 = 1, p1 = x, s = a[0] + a[1] * x;
   for (let l = 2; l < a.length; l++) { const p2 = ((2 * l - 1) * x * p1 - (l - 1) * p0) / l; s += a[l] * p2; p0 = p1; p1 = p2; }
   return s;
@@ -60,7 +60,7 @@ export interface SnrPoint { N: number; withBrain: number; electrodesOnly: number
 const kernCache = new Map<number, Float64Array>();
 const targetCache = new Map<string, Float64Array>();
 let unitKern: Float64Array | null = null, unitNorm = 0;
-function backgroundShape() {
+export function backgroundShape() {
   // covariance between two electrodes for unit β: Σ c_l²/(2l+1) P_l(cos γ); its value at γ = 0 is unitNorm
   if (unitKern) return { kern: unitKern, norm: unitNorm };
   const { c } = headModes();
@@ -81,7 +81,7 @@ function correlation(N: number): Float64Array {
   return K;
 }
 /** per-degree coefficients of the scalp potential of a 1 nA·m disc of radius r under the vertex */
-function targetModes(radiusMm: number): Float64Array {
+export function targetModes(radiusMm: number): Float64Array {
   const { c, b } = headModes(), g = capFactor((radiusMm * 1e-3) / b), a = new Float64Array(LMAX + 1);
   for (let l = 1; l <= LMAX; l++) a[l] = 1e-9 * c[l] * g[l];
   return a;

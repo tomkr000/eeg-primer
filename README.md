@@ -1,7 +1,7 @@
 # EEG primer: the physics of a non-invasive BCI
 
 An interactive, cited guide to scalp electroencephalography (EEG) and brain–computer interfaces (BCI).
-Eleven sections combine models, diagrams and explanations:
+Twelve sections combine models, diagrams and explanations:
 
 1. A single neuron's voltage falls rapidly with distance.
 2. Coordinated cell currents produce larger signals.
@@ -14,6 +14,7 @@ Eleven sections combine models, diagrams and explanations:
 9. Overlapping rhythm changes complicate independent joint commands.
 10. A brain response and its measurement both take time.
 11. More electrodes give diminishing returns in the modeled task.
+12. Named brain states share a few scalp signals, so one reading confuses most of them.
 
 The model sections keep their longer explanations, figure descriptions and assumptions under toggles.
 Sections 5 and 6 place explanations beside their diagrams.

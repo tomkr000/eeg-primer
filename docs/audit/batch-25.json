@@ -1,0 +1,68 @@
+[
+ {
+  "id": "anesthesia-signature",
+  "status_on_site": "unverified",
+  "statement": "In 10 volunteers given slowly increasing propofol (64 channels, 2 s multitaper windows), loss of consciousness came with a rise of low-frequency (0.1 to 1 Hz) and alpha (8 to 12 Hz) power, the alpha increase concentrated frontally while a spatially coherent occipital alpha mode gave way to a frontal one; low-frequency power was more than 10-fold above baseline while unconscious, and the frontal median frequency fell from 23.1 to 12.0 Hz before loss of consciousness; a clinical review puts the amplitudes of the anesthetized signatures at 5 to 20 times those of the awake EEG. Commercial depth-of-anesthesia indices settle 14 to 155 s after an artificial change of input and 24 ± 7 to 122 ± 23 s after a change between recorded awake, anesthetized and suppressed EEG.",
+  "note_on_site": "",
+  "sources": [
+   "Purdon PL, Pierce ET, Mukamel EA, Prerau MJ, Walsh JL, Wong KF, Salazar-Gomez AF, Harrell PG, Sampson AL, Cimenser A, Ching S, Kopell NJ, Tavares-Stoeckel C, Habeeb K, Merhar R, Brown EN (2013). Electroencephalogram signatures of loss and recovery of consciousness from propofol. Proceedings of the National Academy of Sciences of the United States of America 110(12):E1142-E1151. doi:10.1073/pnas.1221180110",
+   "Purdon PL, Sampson A, Pavone KJ, Brown EN (2015). Clinical Electroencephalography for Anesthesiologists: Part I: Background and Basic Signatures. Anesthesiology 123(4):937–960. doi:10.1097/ALN.0000000000000841",
+   "Pilge S, Zanner R, Schneider G, Blum J, Kreuzer M, Kochs EF (2006). Time delay of index calculation: analysis of cerebral state, bispectral, and narcotrend indices. Anesthesiology 104(3):488–494. doi:10.1097/00000542-200603000-00016",
+   "Zanner R, Pilge S, Kochs EF, Kreuzer M, Schneider G (2009). Time delay of electroencephalogram index calculation: analysis of cerebral state, bispectral, and Narcotrend indices using perioperatively recorded electroencephalographic signals. British Journal of Anaesthesia 103(3):394–399. doi:10.1093/bja/aep198"
+  ],
+  "note_for_auditor": "Purdon 2013 (PNAS 110(12):E1142, open): 10 volunteers, 64 channels, 2 s windows, \"more than 10-fold\", frontal alpha, the occipital-to-frontal mode change, median frequency 23.1 to 12.0 Hz. Purdon 2015 (Anesthesiology review, PMC author manuscript): \"5 to 20 times\". Pilge 2006 abstract: 14 to 155 s. Zanner 2009 abstract: 24 (7) to 122 (23) s."
+ },
+ {
+  "id": "consumer-states",
+  "status_on_site": "unverified",
+  "statement": "Consumer EEG products are marketed as reading mental states. A review of direct-to-consumer EEG wellness devices categorizes the behavioral and wellness claims their makers publish; a scoping review of 916 studies that used consumer headsets describes a single-forehead-electrode headset whose app reports built-in “meditation” and “attention” metrics, which an independent test found poorly accurate; a test of two headsets in 10 people records the maker’s claim that the single-channel device detects “focused” and “relaxed” states, finds both devices’ attention and meditation outputs highly variable, and the single-channel device below 50% on some concentration-relaxation tasks against above 75% for a 14-channel device; a systematic review of low-cost headsets records a headband claimed to help its wearer reach deep relaxation and a headset that outputs attention and meditation parameters, with drowsiness detection as the surveyed research use; and a comparison of medical and consumer wireless systems names meditation and relaxation training and coping with anxiety or pain as the popular consumer applications. Sleep staging by a consumer headband is covered by claim sleep-scoring-agreement.",
+  "note_on_site": "The site names the marketed states generically; vendor names appear only in the sources.",
+  "sources": [
+   "Wexler A, Thibault R (2019). Mind-Reading or Misleading? Assessing Direct-to-Consumer Electroencephalography (EEG) Devices Marketed for Wellness and Their Ethical and Regulatory Implications. Journal of Cognitive Enhancement 3(1):131–137. doi:10.1007/s41465-018-0091-2",
+   "Sabio J, Williams NS, McArthur GM, Badcock NA (2024). A scoping review on the use of consumer-grade EEG devices for research. PLoS One 19(3):e0291186. doi:10.1371/journal.pone.0291186",
+   "Maskeliunas R, Damasevicius R, Martisius I, Vasiljevas M (2016). Consumer-grade EEG devices: are they usable for control tasks?. PeerJ 4:e1746. doi:10.7717/peerj.1746",
+   "LaRocco J, Le MD, Paeng D-G (2020). A systemic review of available low-cost EEG headsets used for drowsiness detection. Frontiers in Neuroinformatics 14:553352. doi:10.3389/fninf.2020.553352",
+   "Ratti E, Waninger S, Berka C, Ruffini G, Verma A (2017). Comparison of Medical and Consumer Wireless EEG Systems for Use in Clinical Trials. Frontiers in Human Neuroscience 11:398. doi:10.3389/fnhum.2017.00398"
+  ],
+  "note_for_auditor": "Wexler & Thibault 2019: abstract only (categorizes claims). Sabio 2024 (open, PLoS One): 916 studies, the single-forehead-electrode headset with meditation/attention metrics, the \"poor accuracy\" statement. Maskeliunas 2016 (open, PeerJ): 10 subjects, the maker’s claim of focused/relaxed states, variability, below 50% vs above 75%. LaRocco 2020 (open): the relaxation claim and the attention/meditation parameters. Ratti 2017 (open): the applications sentence."
+ },
+ {
+  "id": "state-accuracies",
+  "status_on_site": "unverified",
+  "statement": "Measured accuracies of passive EEG state classifiers: two workload levels from 2 s windows, 76.1% on average within person (58.7 to 95.4%; chance 53.1% by a binomial test over 1,080 windows), 96% when 45 windows are pooled, and 3 to 4 points lower in a different affective context (24 people); in a 90 min memory task a band-power chain scored 60% and drifted over the session while a probe-evoked-potential chain scored 91% (20 people); workload networks scored 87.1% on the task they were trained on and 44.8% across tasks; with no data from the test person, two workload levels were classified at 79.1% from 5 s windows to 86.8% from 30 s in 8 people, and the classic 1998 comparison gave 83% for a group classifier against 94% for individually trained ones; with small samples, classifiers applied to pure noise reach two-class “accuracies” of 70% or more, so nominal chance understates what counts as above chance.",
+  "note_on_site": "",
+  "sources": [
+   "Muhl C, Jeunet C, Lotte F (2014). EEG-based workload estimation across affective contexts. Frontiers in Neuroscience 8:114. doi:10.3389/fnins.2014.00114",
+   "Roy RN, Charbonnier S, Campagne A, Bonnet S (2016). Efficient mental workload estimation using task-independent EEG features. Journal of Neural Engineering 13(2):026019. doi:10.1088/1741-2560/13/2/026019",
+   "Baldwin CL, Penaranda BN (2012). Adaptive training using an artificial neural network and EEG metrics for within- and cross-task workload classification. NeuroImage 59(1):48–56. doi:10.1016/j.neuroimage.2011.07.047",
+   "Hefron R, Borghetti B, Schubert Kabban C, Christensen J, Estepp J (2018). Cross-Participant EEG-Based Assessment of Cognitive Workload Using Multi-Path Convolutional Recurrent Neural Networks. Sensors 18(5):1339. doi:10.3390/s18051339",
+   "Gevins A, Smith ME, Leong H, McEvoy L, Whitfield S, Du R, Rush G (1998). Monitoring working memory load during computer-based tasks with EEG pattern recognition methods. Human Factors 40(1):79–91. doi:10.1518/001872098779480578",
+   "Combrisson E, Jerbi K (2015). Exceeding chance level by chance: The caveat of theoretical chance levels in brain signal classification and statistical assessment of decoding accuracy. Journal of Neuroscience Methods 250:126–136. doi:10.1016/j.jneumeth.2015.01.010"
+  ],
+  "note_for_auditor": "Mühl 2014 (open): 76.1% (58.7–95.4), chance 53.1% over 1,080 trials, 96% over 45 trials, 3–4 points cross-context, n = 24. Roy 2016 abstract: 60% vs 91%, 20 participants, 90 min. Baldwin 2012 abstract: 87.1% and 44.8%. Hefron 2018 (open, Sensors): Table 2 0.791 (5 s) to 0.868 (30 s), 8 participants, and its quotation of Gevins 1998 (83% vs 94%). Combrisson 2015 abstract: 70% on noise."
+ },
+ {
+  "id": "between-person",
+  "status_on_site": "unverified",
+  "statement": "Resting band power varies widely between people: in 6,029 adults recorded with a four-channel headband (eyes closed), the standard deviation of log10 band power across people of the same age was about 0.21 to 0.36 for delta, theta, alpha and beta at AF7, AF8, TP9 and TP10, a factor of 1.6 to 2.3 in power per standard deviation and three to four times the spread of the age means; log-transformed absolute power is approximately normal across healthy people, and between-person differences in eyes-closed power are largely heritable traits (760 twins and siblings). The model takes 0.65 natural-log units (0.28 log10) as the spread of each region’s resting log power between people.",
+  "note_on_site": "The standard deviations are read from the paper’s Figure 3, not printed; they include measurement noise and session-to-session change, so they bound the trait spread from above.",
+  "sources": [
+   "Hashemi A, Pino LJ, Moffat G, Mathewson KJ, Aimone C, Bennett PJ, Schmidt LA, Sekuler AB (2016). Characterizing Population EEG Dynamics throughout Adulthood. eNeuro 3(6):ENEURO.0275-16.2016. doi:10.1523/ENEURO.0275-16.2016",
+   "Gasser T, Bächer P, Möcks J (1982). Transformations towards the normal distribution of broad band spectral parameters of the EEG. Electroencephalography and Clinical Neurophysiology 53(1):119–124. doi:10.1016/0013-4694(82)90112-2",
+   "Smit DJA, Posthuma D, Boomsma DI, de Geus EJC (2005). Heritability of background EEG across the power spectrum. Psychophysiology 42(6):691–697. doi:10.1111/j.1469-8986.2005.00352.x"
+  ],
+  "note_for_auditor": "Hashemi 2016 (open, eNeuro): Figure 3 within-age SD of log10 power, 0.21–0.36 (read from the plot; the claim’s note says so); n = 6,029; channels and bands; \"three to four times\" the between-age SD. Gasser 1982 abstract (log transform normalizes). Smit 2005 abstract (heritability, 760). The 0.65 is the site’s choice (0.28 log10 × 2.303)."
+ },
+ {
+  "id": "test-retest",
+  "status_on_site": "unverified",
+  "statement": "The same person’s resting band power is stable but not fixed: over 14 days in 90 adults (64 channels, eyes open), the intraclass correlation of log10 absolute power averaged over electrodes was 0.66 for delta, 0.77 for theta, 0.88 for alpha and 0.81 for beta (relative power 0.75, 0.80, 0.86 and 0.79), with split-half consistency within a session of 0.93 to 0.98; broad-band spectral features correlated 0.92 across 5 min and 0.84 across 12 to 16 weeks in 19 adults; posterior alpha amplitude correlated 0.72 across twelve years in 70 people. The model uses the 14-day intraclass correlations per band: the share 1 − ICC of the between-person variance changes from day to day.",
+  "note_on_site": "",
+  "sources": [
+   "Ziogas A, Ruch S, Skieresz NH, Marca SC, Rothen N, Reber TP (2026). Test-retest reliability analysis of resting-state EEG measures and their association with long-term memory in children and adults. Imaging Neuroscience 4:IMAG.a.1224. doi:10.1162/IMAG.a.1224",
+   "Salinsky MC, Oken BS, Morehead L (1991). Test-retest reliability in EEG frequency analysis. Electroencephalography and Clinical Neurophysiology 79(5):382–392. doi:10.1016/0013-4694(91)90203-g",
+   "Tenke CE, Kayser J, Alvarenga JE, Abraham KS, Warner V, Talati A, Weissman MM, Bruder GE (2018). Temporal stability of posterior EEG alpha over twelve years. Clinical Neurophysiology 129(7):1410–1417. doi:10.1016/j.clinph.2018.03.037"
+  ],
+  "note_for_auditor": "Ziogas 2026 (open, Imaging Neuroscience): Table 5 adult ICCs (0.66, 0.77, 0.88, 0.81; relative 0.75, 0.80, 0.86, 0.79), split-half 0.93–0.98, n = 90, 14 days. Salinsky 1991 abstract: 0.92 and 0.84, 19 adults. Tenke 2018 abstract: r = 0.718 (full sample), 70 participants, twelve years."
+ }
+]

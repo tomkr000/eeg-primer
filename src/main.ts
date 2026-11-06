@@ -10,6 +10,7 @@ import { mountElectrodes } from './sections/s08-electrodes';
 import { mountDimensions } from './sections/s09-dimensions';
 import { mountDelay } from './sections/s10-delay';
 import { mountCount } from './sections/s11-count';
+import { mountStates } from './sections/s12-states';
 import { mountConclusion } from './sections/conclusion';
 import { mountMethod, mountReferences, mountVerification } from './sections/references';
 import { inDepth } from './ui/layout';
@@ -44,6 +45,7 @@ toc.innerHTML = `
     <a href="#dimensions"><b>9</b> Overlapping rhythm changes make joint control harder</a>
     <a href="#delay"><b>10</b> EEG signals have inherent delays</a>
     <a href="#count"><b>11</b> In this model, more electrodes cannot tell two typing fingers apart</a>
+    <a href="#states"><b>12</b> Named brain states share a few scalp signals</a>
     <a href="#conclusion">Conclusion</a>
     <a href="#method">Method and caveats</a>
     <a href="#verification">Verification log</a>
@@ -64,6 +66,7 @@ mountElectrodes(main);
 mountDimensions(main);
 mountDelay(main);
 mountCount(main);
+mountStates(main);
 mountConclusion(main);
 mountMethod(main);
 mountVerification(main);

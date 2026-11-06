@@ -1,0 +1,63 @@
+[
+ {
+  "id": "arousal-signature",
+  "status_on_site": "unverified",
+  "statement": "In the DEAP dataset (32 participants, 40 one-minute music videos), the mean within-participant correlations between arousal ratings and band power were about −0.07 to 0.08, individuals ranging from −0.5 to +0.5, with higher arousal going with lower theta, alpha and gamma power at a few central and parietal sites; single-trial classification from EEG gave 62.0% for arousal and 57.6% for valence against 50% chance. Without any data from the test person, two-class valence reached 59.06% on DEAP and three-class emotion 83.33% on SEED (chance 33%); on SEED with the same features, a classifier trained on 14 people and tested on the 15th scored 56.73% against about 84% within person.",
+  "note_on_site": "",
+  "sources": [
+   "Koelstra S, Mühl C, Soleymani M, Lee J-S, Yazdani A, Ebrahimi T, Pun T, Nijholt A, Patras I (2012). DEAP: A Database for Emotion Analysis using Physiological Signals. IEEE Transactions on Affective Computing 3(1):18–31. doi:10.1109/T-AFFC.2011.15",
+   "Li X, Song D, Zhang P, Zhang Y, Hou Y, Hu B (2018). Exploring EEG Features in Cross-Subject Emotion Recognition. Frontiers in Neuroscience 12:162. doi:10.3389/fnins.2018.00162",
+   "Zheng W-L, Lu B-L (2015). Investigating Critical Frequency Bands and Channels for EEG-Based Emotion Recognition with Deep Neural Networks. IEEE Transactions on Autonomous Mental Development 7(3):162–175. doi:10.1109/TAMD.2015.2431497",
+   "Zheng W-L, Lu B-L (2016). Personalizing EEG-Based Affective Models with Transfer Learning. Proceedings of the Twenty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-16) 2732–2738. https://www.ijcai.org/Abstract/16/388"
+  ],
+  "note_for_auditor": "Koelstra 2012 Table 4 (arousal correlations, the ranges) and Table 7 (arousal 0.620, valence 0.576); Li 2018 (open): 59.06% and 83.33%; Zheng & Lu 2015 (IEEE TAMD, 83.99% SVM within person); Zheng & Lu 2016 (IJCAI, open): 56.73%."
+ },
+ {
+  "id": "mind-wandering-signature",
+  "status_on_site": "unverified",
+  "statement": "During eyes-closed breath counting in 12 people, the 10 s before a self-caught lapse of attention showed higher theta (4 to 7 Hz) and delta (2 to 3.5 Hz) power than the 10 s after it, by about 0.5 to 1.2 dB across electrodes, and lower occipital alpha (9 to 11 Hz, −0.8 to −2.2 dB) and fronto-lateral beta (15 to 30 Hz, −0.3 to −0.8 dB); half the participants reported some drowsiness.",
+  "note_on_site": "The decibel ranges are the limits of the figure’s color bars, not printed values.",
+  "sources": [
+   "Braboszcz C, Delorme A (2011). Lost in thoughts: Neural markers of low alertness during mind wandering. NeuroImage 54(4):3040–3047. doi:10.1016/j.neuroimage.2010.10.008"
+  ],
+  "note_for_auditor": "Braboszcz & Delorme 2011: an author manuscript PDF is at sccn.ucsd.edu; the dB ranges are figure color-bar limits (the claim’s note says so). Check n = 12, the bands, the 10 s windows, \"half reported drowsiness\" (6 of 12)."
+ },
+ {
+  "id": "memory-retention-signature",
+  "status_on_site": "unverified",
+  "statement": "While items are held in working memory, alpha and theta rise with the number of items: a 9 to 12 Hz alpha peak over posterior and central regions increased systematically with load through a 2.8 s retention interval; frontal theta (7 to 8.5 Hz, magnetoencephalography) increased parametrically from 1 to 7 digits in 10 people; and in 68 young adults frontal-midline theta (4 to 6 Hz) rose linearly from load 2 to 5 (η² 0.05 to 0.12), in the high-capacity half of the sample only.",
+  "note_on_site": "",
+  "sources": [
+   "Jensen O, Gelfand J, Kounios J, Lisman JE (2002). Oscillations in the alpha band (9–12 Hz) increase with memory load during retention in a short-term memory task. Cerebral Cortex 12(8):877–882. doi:10.1093/cercor/12.8.877",
+   "Jensen O, Tesche CD (2002). Frontal theta activity in humans increases with memory load in a working memory task. European Journal of Neuroscience 15(8):1395–1399. doi:10.1046/j.1460-9568.2002.01975.x",
+   "Zakrzewska MZ, Brzezicka A (2014). Working memory capacity as a moderator of load-related frontal midline theta variability in Sternberg task. Frontiers in Human Neuroscience 8:399. doi:10.3389/fnhum.2014.00399"
+  ],
+  "note_for_auditor": "Jensen et al. 2002 abstract (alpha 9–12 Hz, 2.8 s retention). Jensen & Tesche 2002 abstract (7–8.5 Hz, 1 to 7 digits, n = 10). Zakrzewska & Brzezicka 2014 (open): 68 in the analysis, loads 2 to 5, η² values, high-capacity group only."
+ },
+ {
+  "id": "sleep-stages",
+  "status_on_site": "unverified",
+  "statement": "Sleep is scored in 30 s epochs by the American Academy of Sleep Medicine rules: wake when occipital alpha (8 to 13 Hz) fills at least half the epoch, N1 when low-voltage mixed-frequency 4 to 7 Hz activity replaces it, N2 from a K complex or sleep spindle, N3 when slow waves of 0.5 to 2 Hz and 75 µV peak-to-peak occupy more than 20% of the epoch on a frontal derivation, and REM when low-voltage mixed-frequency EEG comes with rapid eye movements and minimal chin muscle tone. Across sleep onset, power at 1 to 6 Hz rises linearly while power at 9 to 12 Hz and 16 to 28 Hz falls (26 people); across the night, non-REM sleep has more power than REM sleep from 0.25 to 16 Hz and less at 18 to 22 Hz.",
+  "note_on_site": "",
+  "sources": [
+   "Lambert I, Peter-Derex L (2023). Spotlight on Sleep Stage Classification Based on EEG. Nature and Science of Sleep 15:479–490. doi:10.2147/NSS.S401270",
+   "Silber MH, Ancoli-Israel S, Bonnet MH, Chokroverty S, Grigg-Damberger MM, Hirshkowitz M, Kapen S, Keenan SA, Kryger MH, Penzel T, Pressman MR, Iber C (2007). The visual scoring of sleep in adults. Journal of Clinical Sleep Medicine 3(2):121–131. doi:10.5664/jcsm.26814",
+   "De Gennaro L, Ferrara M, Bertini M (2001). The boundary between wakefulness and sleep: quantitative electroencephalographic changes during the sleep onset period. Neuroscience 107(1):1–11. doi:10.1016/s0306-4522(01)00309-8",
+   "Aeschbach D, Borbely AA (1993). All-night dynamics of the human sleep EEG. Journal of Sleep Research 2(2):70–81. doi:10.1111/j.1365-2869.1993.tb00065.x"
+  ],
+  "note_for_auditor": "Lambert & Peter-Derex 2023 (open, Nature and Science of Sleep): the restated AASM rules (30 s epochs, the 50% rule, N1, N2, the 0.5–2 Hz 75 µV 20% rule, REM). Silber 2007 abstract: 30 s epochs retained. De Gennaro, Ferrara & Bertini 2001 abstract: 26 subjects, 1–6 Hz linear increase, 9–12 and 16–28 Hz decrease. Aeschbach & Borbély 1993 abstract: NREM > REM 0.25–16 Hz, < at 18.25–22 Hz."
+ },
+ {
+  "id": "sleep-scoring-agreement",
+  "status_on_site": "unverified",
+  "statement": "In the American Academy of Sleep Medicine inter-scorer reliability program, more than 2,500 scorers agreed with the majority score on 82.6% of epochs (W 84.1%, N1 63.0%, N2 85.2%, N3 67.4%); expert scorers agreed on 82.0% of epochs (Cohen’s κ 0.76) in 72 polysomnographies; a deep network scoring 30 s epochs of one raw EEG channel reached 86.2% on one public dataset and 82.0% on another; and a dry-electrode headband’s automatic staging agreed with the consensus of five experts on 83.5 ± 6.4% of epochs against 86.4 ± 8.0% for the individual experts (25 people).",
+  "note_on_site": "",
+  "sources": [
+   "Rosenberg RS, Van Hout S (2013). The American Academy of Sleep Medicine inter-scorer reliability program: sleep stage scoring. Journal of Clinical Sleep Medicine 9(1):81–87. doi:10.5664/jcsm.2350",
+   "Danker-Hopfe H, Anderer P, Zeitlhofer J, Boeck M, Dorn H, Gruber G, Heller E, Loretz E, Moser D, Parapatics S, Saletu B, Schmidt A, Dorffner G (2009). Interrater reliability for sleep scoring according to the Rechtschaffen & Kales and the new AASM standard. Journal of Sleep Research 18(1):74–84. doi:10.1111/j.1365-2869.2008.00700.x",
+   "Supratak A, Dong H, Wu C, Guo Y (2017). DeepSleepNet: A Model for Automatic Sleep Stage Scoring Based on Raw Single-Channel EEG. IEEE Transactions on Neural Systems and Rehabilitation Engineering 25(11):1998–2008. doi:10.1109/TNSRE.2017.2721116",
+   "Arnal PJ, Thorey V, Debellemaniere E, Ballard ME, Bou Hernandez A, Guillot A, Jourde H, Harris M, Guillard M, Van Beers P, Chennaoui M, Sauvet F (2020). The Dreem Headband compared to polysomnography for electroencephalographic signal acquisition and sleep staging. Sleep 43(11):zsaa097. doi:10.1093/sleep/zsaa097"
+  ],
+  "note_for_auditor": "Rosenberg & Van Hout 2013 (open, JCSM): 82.6%, W 84.1, N1 63.0, N2 85.2, N3 67.4, more than 2,500 scorers. Danker-Hopfe 2009 abstract: 82.0%, κ 0.76, 72 PSGs. Supratak 2017 abstract: 86.2% and 82.0%. Arnal 2020 (open): 83.5 ± 6.4 vs 86.4 ± 8.0, 25 subjects."
+ }
+]

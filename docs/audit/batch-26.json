@@ -1,0 +1,50 @@
+[
+ {
+  "id": "emg-beta-level",
+  "status_on_site": "assumption",
+  "statement": "Muscle activity in the model: three sources at the forehead and the temples add beta-band (13 to 30 Hz) power of 5 µV rms at the scalp above each in a relaxed sitter, a level that varies between windows by a lognormal factor with log standard deviation 0.5. Measured support: scalp power above 20 Hz fell 10- to 200-fold under complete neuromuscular blockade (2 people), about 5-fold at 40 Hz at central electrodes; frontalis and temporalis EMG spectra peak at 20 to 30 Hz, and a contraction at 15% of maximum raised the 20 to 30 Hz amplitude at Fp1 and Fp2 about 3- to 4-fold while the curves at Fz, FCz and Cz barely moved (25 adults); the coefficient of variation of beta power across 4 s epochs at rest, 0.37 to 0.49, bounds the fluctuation. The 5 µV level is a chosen beta-band share of section 7’s 10 µV rms relaxed muscle noise.",
+  "note_on_site": "",
+  "sources": [
+   "Whitham EM, Pope KJ, Fitzgibbon SP, Lewis T, Clark CR, Loveless S, Broberg M, Wallace A, DeLosAngeles D, Lillie P, Hardy A, Fronsko R, Pulbrook A, Willoughby JO (2007). Scalp electrical recording during paralysis: quantitative evidence that EEG frequencies above 20 Hz are contaminated by EMG. Clinical Neurophysiology 118(8):1877–1888. doi:10.1016/j.clinph.2007.04.027",
+   "Muthukumaraswamy SD (2013). High-frequency brain activity and muscle artifacts in MEG/EEG: a review and recommendations. Frontiers in Human Neuroscience 7:138. doi:10.3389/fnhum.2013.00138",
+   "Goncharova II, McFarland DJ, Vaughan TM, Wolpaw JR (2003). EMG contamination of EEG: spectral and topographical characteristics. Clinical Neurophysiology 114(9):1580–1593. doi:10.1016/S1388-2457(03)00093-2",
+   "Maltez J, Hyllienmark L, Nikulin VV, Brismar T (2004). Time course and variability of power in different frequency bands of EEG during resting conditions. Neurophysiologie Clinique / Clinical Neurophysiology 34(5):195–202. doi:10.1016/j.neucli.2004.09.003"
+  ],
+  "note_for_auditor": "Assumption with measured support: Whitham 2007 abstract (10- to 200-fold above 20 Hz, 2 subjects), Muthukumaraswamy 2013 (open, ~5 times at 40 Hz central), Goncharova 2003 (open PDF at neurotechcenter.org: frontalis/temporalis spectra peak 20–30 Hz; Fp1/Fp2 vs Fz/FCz/Cz at 15% contraction, 25 subjects), Maltez 2004 abstract (beta CV 0.37–0.49). The 5 µV and 0.5 are model choices."
+ },
+ {
+  "id": "blink-model",
+  "status_on_site": "assumption",
+  "statement": "Blinks in the model: a broad source in front of the brain, below the forehead, emits section 7’s blink deflection (150 µV peak at the scalp above it, a Gaussian pulse of 0.08 s standard deviation, so about 0.3 s from base to base) 15 times a minute while the eyes are open; each window’s artifact power is a Poisson sum of the pulses’ energy in each band (the shares of a Gaussian pulse’s energy below 4 Hz, at 4 to 8 Hz and at 8 to 13 Hz), so it fluctuates from window to window. Measured support: 17 blinks a minute at rest in 150 people (26 while talking, 4.5 while reading), 19.6 to 22.6 a minute with base durations of 0.29 to 0.34 s across more than 2,000 laboratory EEG datasets, blink peaks at FP1 averaging about 160 µV, an ocular contribution to frontal low-frequency activity larger than the cerebral signal, and shifts of power across the whole spectrum at single sites when blinks and eye movements are left in.",
+  "note_on_site": "The pulse shape and amplitude are section 7’s (claims blink-amplitude, blink-width, blink-rate); the source’s position and 30 mm radius are modeling choices.",
+  "sources": [
+   "Bentivoglio AR, Bressman SB, Cassetta E, Carretta D, Tonali P, Albanese A (1997). Analysis of blink rate patterns in normal subjects. Movement Disorders 12(6):1028–1034. doi:10.1002/mds.870120629",
+   "Kleifges K, Bigdely-Shamlo N, Kerick SE, Robbins KA (2017). BLINKER: Automated Extraction of Ocular Indices from EEG Enabling Large-Scale Analysis. Frontiers in Neuroscience 11:12. doi:10.3389/fnins.2017.00012",
+   "Guttmann-Flury E, Sheng X, Zhu X (2025). Dataset combining EEG, eye-tracking, and high-speed video for ocular activity analysis across BCI paradigms. Scientific Data 12:587. doi:10.1038/s41597-025-04861-9",
+   "Gasser T, Ziegler P, Gattaz WF (1992). The deleterious effect of ocular artefacts on the quantitative EEG, and a remedy. European Archives of Psychiatry and Clinical Neuroscience 241(6):352–356. doi:10.1007/BF02191960",
+   "Hagemann D, Naumann E (2001). The effects of ocular artifacts on (lateralized) broadband power in the EEG. Clinical Neurophysiology 112(2):215–231. doi:10.1016/s1388-2457(00)00541-1"
+  ],
+  "note_for_auditor": "Assumption with measured support: Bentivoglio 1997 abstract (17/min rest, 26 talking, 4.5 reading, 150 people), Kleifges 2017 (open, Frontiers: 19.6–22.6/min, base durations 0.29–0.34 s, >2,000 datasets), Guttmann-Flury 2025 (about 160 µV at FP1), Gasser 1992 abstract (ocular > cerebral frontally), Hagemann & Naumann 2001 abstract (general effects across the spectrum). The pulse shape is the site’s."
+ },
+ {
+  "id": "rest-amplitudes",
+  "status_on_site": "assumption",
+  "statement": "Modeling choice: the root-mean-square amplitude at the scalp straight above each region at eyes-open rest is 7.1 µV for posterior alpha (section 7’s 20 µV eyes-closed alpha, 14.1 µV rms, divided by the square root of the eyes-closed factor 4), 3.5 µV for each frontal alpha region (half of that), 14.1 µV for the mu rhythm of each hand area (section 7’s alpha strength, optimistic), 4 µV for frontal midline theta, 5 µV for waking slow waves and 3.5 µV for beta. The clinical glossary gives only upper bounds: the adult alpha rhythm and the mu rhythm are mostly below 50 µV and the fronto-central beta rhythm mostly below 30 µV (peak to peak), a low-voltage waking EEG is one not above 20 µV over the whole head, and stage N3 slow waves exceed 75 µV peak to peak; it gives no amplitude for frontal midline theta, and no open normative table with explicit units was found. Beta at 3.5 µV rms is a 10 µV peak-to-peak rhythm, a third of the glossary’s bound; the theta and slow-wave levels are chosen in the same range.",
+  "note_on_site": "The alpha chain is claim alpha-source-chain and the eyes-closed factor claim eyes-closed-alpha.",
+  "sources": [
+   "Kane N, Acharya J, Beniczky S, Caboclo L, Finnigan S, Kaplan PW, Shibasaki H, Pressler R, van Putten MJAM (2017). A revised glossary of terms most commonly used by clinical electroencephalographers and updated proposal for the report format of the EEG findings. Revision 2017. Clinical Neurophysiology Practice 2:170–185. doi:10.1016/j.cnp.2017.07.002"
+  ],
+  "note_for_auditor": "Assumption. Kane 2017 (open glossary): alpha \"mostly below 50 µV\", mu \"mostly below 50 µV\", fronto-central beta \"mostly below 30 µV\", low voltage EEG \"not greater than 20 µV\", N3 slow waves \"> 75 µV peak-to-peak\" over frontal regions, no amplitude for fronto-central theta. Check each quoted bound."
+ },
+ {
+  "id": "band-background",
+  "status_on_site": "derived",
+  "statement": "Modeling choice, derived: the brain’s own activity in each band at one electrode is a 15 µV rms resting EEG over 0.5 to 30 Hz, the low end of the 10 to 100 µV scalp EEG (claim eeg-amplitude), apportioned by a 1/f^1.35 spectrum: 12.4 µV rms below 4 Hz, 5.5 µV at 4 to 8 Hz, 4.2 µV at 8 to 13 Hz and 4.9 µV at 13 to 30 Hz. Measured aperiodic exponents of the resting scalp spectrum are 1.23 (SD 0.26) at frontal sites in 268 adults aged 36 to 84 (2 to 40 Hz) and 1.49 (SD 0.17) averaged over 32 channels in 46 adults with eyes open (1 to 50 Hz). The spatial correlation of the background is section 11’s (claim brain-background).",
+  "note_on_site": "The arithmetic: the share of a 1/f^χ spectrum between f₁ and f₂ is proportional to f₁^(1−χ) − f₂^(1−χ); 15 µV rms is a chosen total.",
+  "sources": [
+   "Finley AJ, Angus DJ, van Reekum CM, Davidson RJ, Schaefer SM (2022). Periodic and aperiodic contributions to theta-beta ratios across adulthood. Psychophysiology 59(11):e14113. doi:10.1111/psyp.14113",
+   "Jacob MS, Roach BJ, Sargent KS, Mathalon DH, Ford JM (2021). Aperiodic measures of neural excitability are associated with anticorrelated hemodynamic networks at rest: A combined EEG-fMRI study. NeuroImage 245:118705. doi:10.1016/j.neuroimage.2021.118705"
+  ],
+  "note_for_auditor": "Derived. Finley 2022 (open via PMC): Table 3 fronto-central exponent 1.23 (SD 0.26), n = 268, ages 36–84, 2–40 Hz. Jacob 2021 (NeuroImage, open): exponent 1.49 (SD 0.17), 46 adults, eyes open, 1–50 Hz. Check the apportioning arithmetic: shares ∝ f₁^(1−χ) − f₂^(1−χ) with χ = 1.35 over 0.5–30 Hz give 12.4, 5.5, 4.2, 4.9 µV rms from 15 µV rms total."
+ }
+]

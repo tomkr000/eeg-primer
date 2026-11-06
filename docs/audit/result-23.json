@@ -1,0 +1,61 @@
+[
+ {
+  "id": "stress-signature",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Vanhollebeke et al. 2022 (Europe PMC full text XML, PMC9095895)",
+   "Alonso et al. 2015 (author postprint PDF, upcommons.upc.edu handle 2117/28561)"
+  ],
+  "evidence_location": "Vanhollebeke: abstract (meta-analysis g, p values); section 3.3.1.3 Alpha power ('(mainly) the frontal electrodes'); section 3.3.1.5 Beta power; section 4 Discussion ('ten of the twelve articles ... significant decrease'; 'five out of the eight articles ... significant increase, whereas one article reports an insignificant increase. Two articles report decreases'); section 3.4.1 states a negative g 'can be understood as an increase'. Alonso: abstract (30 volunteers, Stroop and sleep deprivation, high alpha 11-12 Hz down, high beta 23-36 Hz up); section 2.1 (32 enrolled, 30 analyzed aged 18-35, 30 h awake, 10 min Stroop); section 3.1 and Table 1 (asymmetry p = 0.125 and 0.405, 'no significant changes'); section 3.3 ('located especially at anterior sites'); Table 2 (relative power rows).",
+  "quote": "significant effect size (hedge's g = 0.6; p = 0.001) for alpha power, but an insignificant effect size for beta power",
+  "discrepancy": "None material. Two nuances: (1) the '6 of 8' beta count is 5 significant increases plus 1 nonsignificant increase (the review's own headline is 'five out of the eight'); (2) in Alonso Table 2 the anterior high-alpha relative-power decrease after the Stroop test has p = 0.059 (sleep deprivation p = 0.013), while high beta is significant for both (p = 0.004 and 0.013); the claim does not assert significance for each, so 'fell' is directionally correct.",
+  "suggested_fix": "Site should set status 'verified'. Optional precision: '6 of 8 articles reported increases (5 of them significant)' and, for Alonso, 'high-alpha relative power fell (significantly after sleep deprivation, p = 0.059 after the Stroop test)'.",
+  "bibliographic_issues": "None. Europe PMC: Neurobiol Stress 18:100452 (2022), PMC9095895, authors match; Physiol Meas 36(7):1351-1365 (2015), authors match; both DOIs indexed."
+ },
+ {
+  "id": "meditation-signature",
+  "verdict": "PARTIAL",
+  "checked_sources": [
+   "Ahani et al. 2014 (Europe PMC full text XML, PMC4060143)",
+   "Lagopoulos et al. 2009 (Europe PMC abstract; USC esploro record; ScienceDaily press release for participants' experience)",
+   "Cahn, Delorme & Polich 2010 (Europe PMC full text XML, PMC2812711)",
+   "Amihai & Kozhevnikov 2014 (Europe PMC full text XML, PMC4106862)",
+   "Treves et al. 2025 (Europe PMC full text XML, PMC12046271)"
+  ],
+  "evidence_location": "Ahani: abstract (34 novices, 6-week intervention); Methods/Participants (age 50-75); 'EEG recording and protocol' (15 min NPR podcast vs 15 min guided meditation, 'Both recordings were done with the eyes closed'); Table 1 (occipital theta 291.44 vs 170.98, occipital alpha 329.13 vs 300.37; alpha starred only at occipital and R temporal; frontal theta 106.99 vs 107.16 and frontal alpha 81.93 vs 78.37 unstarred; theta starred in 5 of 6 regions, beta in all 6). Lagopoulos: abstract (theta greater in frontal and temporal-central vs posterior; alpha greater posterior vs frontal; 20 min meditation vs 20 min eyes-closed rest); 'experienced practitioners of Acem Meditation' appears in the press release, not the abstract. Cahn: Methods (N = 16, mean 20 years of practice); Results 'Theta (4-8 Hz)' and 'Alpha (8-12 Hz)'; abstract. Amihai: Study 1 Participants ('Ten long-term Theravada style practitioners'); Results 'Alpha' (F(2,18) = 6.84, p < 0.01, reduced vs Rest). Treves: Methods/Results (16 RCTs, 763 unique participants; Muse in 11/16 RCTs); Discussion ('it is likely that Muse uses an alpha and theta training model'); abstract ('Mechanistic modulation of brain targets was not found').",
+  "quote": "Relative increase in frontal theta (4-8 Hz) power was observed during meditation ... but no other state effects",
+  "discrepancy": "Cahn 2010 part: 'no theta or alpha change' drops a reported effect. The paper found no main effect of state for theta (P = 0.85) or alpha (P = 0.76), but a significant state x electrode interaction (F(2,30) = 7.75, P = 0.002) with a relative theta increase during meditation at Fz (P = 0.006), which the abstract headlines as 'Relative increase in frontal theta'. Lagopoulos part: 'experienced practitioners' is not in the abstract (the abstract only says subjects 'adopt their normal meditation technique'); it is confirmed by the authors' press release. Treves part: the 'likely alpha and theta' statement is made about the Muse device (11 of 16 RCTs), not consumer calm scores in general; the site's 'most likely' hedge covers this. All other numbers (291 vs 171, 329 vs 300, 34, 6 weeks, 15 min, eyes closed, 16, 10, 16 RCTs, 763) match.",
+  "suggested_fix": "Set status 'partially' with the Cahn nuance, or reword to: '16 long-term Vipassana meditators showed no overall theta or alpha change against instructed mind wandering (only a relative frontal theta increase at Fz)', and 'Consumer calm scores (the Muse device, used in 11 of the 16 trials) most likely reward alpha and theta'; then 'verified'.",
+  "bibliographic_issues": "Lagopoulos 2009 author list: the eighth author is 'Saether JG' (Jardar G. Saether) per Europe PMC and the USC record, not 'Saether E'; 'Ellingsen O' is a transliteration of 'Ellingsen Ø' (acceptable). Journal, volume 15(11):1187-1192, year and DOI correct. Other four references match Europe PMC exactly (JNER 11:87; Cogn Process 11(1):39-56; PLoS ONE 9(7):e102990; JMIR 27:e68204)."
+ },
+ {
+  "id": "relaxation-signature",
+  "verdict": "PARTIAL",
+  "checked_sources": [
+   "Zaccaro et al. 2018 (Europe PMC full text XML, PMC6137615)",
+   "Jacobs & Friedman 2004 (Europe PMC abstract)",
+   "Jacobs, Benson & Friedman 1996 (Europe PMC abstract)"
+  ],
+  "evidence_location": "Zaccaro: abstract ('EEG studies show an increase in alpha and a decrease in theta power'); Table 3 row Fumoto et al. 2004 (22 (6 female), Zen Tanden breathing 3-4 b/min, 20 min, spontaneous breathing); Table 4 row Fumoto ('Increased high-frequency alpha power'); section 'Breath and central nervous system' (Fumoto: reduced alpha peak at 10 Hz, higher alpha2 10-13 Hz parietal; Yu 2011: alpha up, theta down; Park and Park 2012: theta down at three sites, alpha up over whole cortex); 'eyes-closed' appears only in Fumoto's title in the reference list. Jacobs 2004: abstract (36 subjects randomized to RT or music, 6 weeks, greater theta increases, 'theta, and not alpha, EEG may be the most reliable marker'). Jacobs 1996: abstract (20 subjects, frontal beta reduction p < .0164, 'No significant differences were observed for any other frequency band or scalp region').",
+  "quote": "Fumoto et al. (2004) found that voluntary abdominal breathing (Zen Tanden Breathing) at 3-4 b/min significantly reduced alpha peak at 10 Hz",
+  "discrepancy": "The parenthetical attaches the review's 'higher alpha and lower theta' summary to Fumoto 2004 (22 people, 3-4 breaths/min), but the review reports for that study only a shift within alpha (reduced 10 Hz peak, higher 10-13 Hz alpha2 in parietal areas) and no theta result at all. The theta decrease comes from Yu et al. 2011 (15 people, 3-4 b/min) and Park and Park 2012 (58 people, 10 b/min). 'Clearest' is the site's judgment, not the review's. The Jacobs 2004 part slightly hardens the abstract's hedge ('may be the most reliable marker' becomes 'called theta ... the more reliable marker') and omits n = 36; the Jacobs 1996 part matches.",
+  "suggested_fix": "Set status 'partially', or reword to: 'A systematic review of slow-breathing studies reports higher alpha and lower theta power than during spontaneous breathing (for example 22 people breathing 3 to 4 times a minute with eyes closed shifted alpha from its 10 Hz peak to 10 to 13 Hz; the theta decrease comes from two other studies of 15 and 58 people)'; and 'suggested theta, not alpha, may be the more reliable marker' (36 subjects). Then 'verified'.",
+  "bibliographic_issues": "None. Europe PMC: Front Hum Neurosci 12:353 (2018); Appl Psychophysiol Biofeedback 29(4):245-254 (2004); Biofeedback Self Regul 21(2):121-129 (1996); authors and DOIs match."
+ },
+ {
+  "id": "valence-asymmetry",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Zhao, Zhang & Ge 2018 (Europe PMC full text XML, PMC6221898)",
+   "Koelstra et al. 2012 DEAP (published-version PDF from Archive ouverte UNIGE unige:47405)",
+   "Davidson et al. 1990 (Europe PMC abstract; Crossref record)",
+   "Hagemann et al. 2002 (Europe PMC abstract)",
+   "Towers & Allen 2009 (PMC author manuscript HTML, PMC2743447)"
+  ],
+  "evidence_location": "Zhao: Participants ('Thirty-three ... students'); Stimulus Material (four movie clips); EEG processing (band power divided by mean baseline band power across 30 electrodes); Table 2 alpha rows: F3 0.62/0.70/0.64/0.64 (SD 0.29-0.38), F4 0.77/0.90/0.74/0.83 (SD 0.31-0.43), F4 above F3 for all four emotions. DEAP: section 1 and 5 (32 participants); Table 4 valence row lists only beta Cz* and gamma C4**, T8**, FC6**, F8*, no theta or alpha electrode; section 5.3 text 'the mean correlations are seldom bigger than ±0.1'; Table 7 EEG valence ACC 0.576 (F1 0.563**), Random 0.500. Davidson: abstract (disgust right-sided frontal and anterior temporal activation vs happy; aggregated positive vs negative films 'no reliable differences'; facial behavior used to verify emotion). Hagemann: abstract (59 participants, 4 occasions, 'about 60% ... stable latent trait, and 40% ... occasion-specific'). Towers: abstract (204 subjects); Methods (119 epochs of 2.048 s per minute overlapping by 1.5 s; asymmetry = difference of natural-log alpha power, right minus left); Results and Discussion ('>= 0.90 at 160 epochs', 'approximately 160 epochs. This translates to approximately 80 seconds').",
+  "quote": "approximately 160 epochs. This translates to approximately 80 seconds, or about 16% of the total recording time",
+  "discrepancy": "None material. Nuances: (1) Zhao's between-emotion alpha differences are 0.02 to 0.08 at F3 and 0.03 to 0.16 at F4, so 'about 0.1' is a fair round figure; the normalization divides by the mean baseline power across all 30 electrodes, not the same electrode's baseline. (2) DEAP Table 7 also lists a majority-class accuracy of 0.586 for valence, above the EEG's 0.576; the paper's significance claim rests on the F1 score (0.563 vs 0.5), so 'against 50%' is the random-voting baseline only. (3) Davidson's 'only in epochs selected by facial expression' is an inference from the abstract's design description (facial behavior used to verify the presence of emotion); the abstract supports the two contrasts cited. (4) Towers' abstract says reliability 'approached .90 with as few as 100 epochs'; the 160-epoch / 80 s figure is the point where all pairs and references reach 0.90, which the site's wording ('reaches 0.90') matches.",
+  "suggested_fix": "Site should set status 'verified'. Optional: 'reached 57.6% against 50% for random voting (a majority-class vote reaches 58.6%)'.",
+  "bibliographic_issues": "None. Crossref: 10.1037/0022-3514.58.2.330 resolves to Davidson, Ekman, Saron, Senulis & Friesen 1990, J Pers Soc Psychol 58(2):330-341 (PubMed's record wrongly carries the companion paper's DOI ...58.2.342); 10.1109/T-AFFC.2011.15 resolves to DEAP, IEEE Trans Affective Computing 3(1):18-31 (2012), nine authors match; Front Behav Neurosci 12:225; J Pers Soc Psychol 82(4):619-641; Psychophysiology 46(1):132-142 all match."
+ }
+]

@@ -1,0 +1,78 @@
+[
+ {
+  "id": "anesthesia-signature",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Purdon et al. 2013 PNAS (full text, PMC3607036)",
+   "Purdon et al. 2015 Anesthesiology (full text, PMC4573341 author manuscript)",
+   "Pilge et al. 2006 Anesthesiology (abstract via Europe PMC)",
+   "Zanner et al. 2009 Br J Anaesth (abstract via Europe PMC)"
+  ],
+  "evidence_location": "Purdon 2013: Results para 1 ('high-density (64-channel) EEGs ... 10 healthy volunteers'); Results on power changes ('At LOC, both alpha (8-12 Hz) and low-frequency (0.1-1 Hz) power increased significantly', 'increases in alpha power were concentrated in frontal channels', Fig. 2D); Results on coherent modes ('low-frequency power increased by more than 10-fold in the unconscious state compared with baseline', Fig. 4A/C: occipital coherent alpha at baseline, frontal when unconscious); Fig. 3 text ('in the transition period before LOC, the median frequency decreased from 23.1 to 12.0 Hz', spectrogram of a single frontal channel approximately Fz); Methods, Spectral Analysis (multitaper, T = 2 s windows with 1.9 s overlap; coherence on nonoverlapping 2-s windows). Purdon 2015: Fig. 2 legend and Introduction ('5 to 20'). Pilge 2006: abstract, Methods and Results. Zanner 2009: abstract, Methods and Results.",
+  "quote": "low-frequency power increased by more than 10-fold in the unconscious state compared with baseline",
+  "discrepancy": "",
+  "suggested_fix": "None. Site should set status verified. (Purdon 2015 words it as 'larger than the amplitudes of the electroencephalogram in the awake state by a factor of 5 to 20', isoelectric state excepted; Zanner's '24 (7) and 122 (23) s' are mean (SD), so the site's plus-minus reading is fine.)",
+  "bibliographic_issues": "None. All four records (journal, volume, issue, pages, year, DOI, authors) match Crossref and PubMed."
+ },
+ {
+  "id": "consumer-states",
+  "verdict": "PARTIAL",
+  "checked_sources": [
+   "Wexler & Thibault 2019 J Cogn Enhanc (abstract only, Springer page; full text paywalled)",
+   "Sabio et al. 2024 PLoS One (full text, Europe PMC XML PMC10917334)",
+   "Maskeliunas et al. 2016 PeerJ (full text, Europe PMC XML PMC4806709, plus Figures 5 and 6 images)",
+   "LaRocco et al. 2020 Front Neuroinform (full text, PMC7593569)",
+   "Ratti et al. 2017 Front Hum Neurosci (full text, PMC5540902)"
+  ],
+  "evidence_location": "Wexler: abstract (the paper categorizes the wellness-related marketing claims of consumer EEG companies and evaluates the evidence; 'behavioral' wording not visible). Sabio: Results ('We identified 916 studies'); Introduction device paragraph ('records at 512 Hz from a single electrode on the forehead (FP1) ... metrics such as meditation and attention using built-in signal processing'); Validation section ('displays poor accuracy at recognising the meditative and attentive states it claims to have built-in metrics for'). Maskeliunas: Introduction device paragraph (manufacturer claim of 'two mind states (focused and are relaxed)'); abstract and Results ('high variability and non-normality of attention and meditation data', 10 subjects); Table 3 and 'Blinking recognition' section (Neurosky 49.6%, Emotiv 75.6%); abstract and Conclusions ('for tasks that require concentration and relaxation ... Emotiv EPOC ... better ... by ~9%'); Figs. 5-6 (attention recognition accuracy Neurosky 16.6-21.4, Emotiv 62.1-68.1; meditation Neurosky 23.3-27.9, Emotiv 48.2-60.6). LaRocco: InteraXon Muse section ('Muse claimed that the headband could assist the user to achieve a state of deep relaxation'); NeuroSky section on Crowley et al. ('attention and meditation parameters measured by the headset'). Ratti: Discussion para 1.",
+  "quote": "blinking recognition failed when using the Neurosky device with mean recognition accuracy of 49.6%, while the Emotiv device",
+  "discrepancy": "The 'below 50% ... against above 75%' comparison is Maskeliunas et al.'s eye-blink recognition result (Table 3: 49.6% vs 75.6%), not a concentration-relaxation result. For the concentration/relaxation (attention/meditation) tasks the paper states only that the 14-channel device did about 9% better, and its Figures 5 and 6 show the single-channel device at 17 to 28 and the 14-channel device at 48 to 68 on those tasks, i.e. neither above 75%. The rest of the sentence (maker's claim of 'focused' and 'relaxed' states, high variability of attention and meditation outputs, 10 subjects) is supported. Wexler & Thibault: the abstract supports 'categorizes ... wellness claims'; the word 'behavioral' could not be checked (abstract only). Sabio, LaRocco and Ratti parts are supported verbatim.",
+  "suggested_fix": "Replace '... and the single-channel device below 50% on some concentration-relaxation tasks against above 75% for a 14-channel device' with '... with the 14-channel device about 9 points better on concentration and relaxation tasks, and, in eye-blink recognition, the single-channel device below 50% against above 75% for the 14-channel device'. Status: partially until reworded, then verified.",
+  "bibliographic_issues": "Wexler & Thibault: published online 18 Sep 2018; volume 3 issue 1 (pp. 131-137) is dated March 2019, so the site's 2019 is the issue date (Crossref lists 2018 as the issued year). LaRocco's published title really reads 'Systemic Review'. All other records match Crossref and PubMed."
+ },
+ {
+  "id": "state-accuracies",
+  "verdict": "PARTIAL",
+  "checked_sources": [
+   "Muhl, Jeunet & Lotte 2014 Front Neurosci (full text, Europe PMC XML PMC4054975)",
+   "Roy et al. 2016 J Neural Eng (abstract via Europe PMC)",
+   "Baldwin & Penaranda 2012 NeuroImage (abstract via Europe PMC)",
+   "Hefron et al. 2018 Sensors (full text, Europe PMC XML PMC5982227)",
+   "Gevins et al. 1998 Hum Factors (abstract via Europe PMC; SAGE full-text page blocked)",
+   "Combrisson & Jerbi 2015 J Neurosci Methods (abstract via Europe PMC)"
+  ],
+  "evidence_location": "Muhl: Results, 'Classification of EEG, General performance estimation' ('average classification accuracy of 76.1% ... between 58.7% and 95.4%'; '1080 trials ... chance-level is at 53.1% for p = 0.05'; majority vote over 45 trials 96%; 2 s trials; 'The data of two participants was excluded due to incompleteness and of another one due to malfunctioning EEG sensors'); Results, across-context ('from 72.4% to 69.4% ... from 73.3% to 69.1% ... from 77.3% to 73.2%'); abstract (24 participants recorded). Roy: abstract (20 participants, 90 min Sternberg task, spectral chain 60% not stable in time, ERP chain 91%). Baldwin: abstract (M = 87.1% within task; cross-task average 44.8%). Hefron: Table 2, cross-validated group model, MPCRNN column (5 s 0.791, 30 s 0.868); Methods 2.1 (eight participants, low and high workload); Introduction ('group classifier was 83% which represented a significant reduction from the 94% accuracy reported for individually-trained models [7]'). Combrisson: abstract ('decoding accuracies of up to 70% or higher in two-class decoding with small sample sets').",
+  "quote": "The data of two participants was excluded due to incompleteness and of another one due to malfunctioning EEG sensors.",
+  "discrepancy": "(1) Muhl et al. recorded 24 participants, but the EEG classification results (76.1%, 58.7-95.4%, 96%, 3-4 point cross-context drop) are from 21 participants (three excluded; the ANOVAs report F(1, 20)). (2) The '83% for a group classifier against 94% for individually trained ones' is Hefron et al.'s summary of Gevins 1998; Gevins's own abstract reports 'better than 95% accuracy' for high versus low load within person and gives no number for networks applied to new participants (only 'statistically significant classification'); the Gevins full text could not be opened to confirm 83% and 94%. (3) Minor: Hefron's 79.1% and 86.8% are the best architecture (MPCRNN) under the cross-validated group training method; other networks scored lower (for example the ANN 74.9% to 86.2%). All other numbers match.",
+  "suggested_fix": "Write '(21 of 24 recorded people)' for the Muhl result, and attribute the 1998 numbers as 'the classic 1998 comparison, as summarized by Hefron et al., gave 83% ... against 94% ...' unless the Gevins full text is checked. Optionally 'the best network classified ... at 79.1% ... to 86.8%'. Status: partially (verified once reworded).",
+  "bibliographic_issues": "None. All six records match Crossref and PubMed (Baldwin coauthor appears as 'Penaranda BN' in PubMed, 'Penaranda B' in Crossref)."
+ },
+ {
+  "id": "between-person",
+  "verdict": "PARTIAL",
+  "checked_sources": [
+   "Hashemi et al. 2016 eNeuro (full text, Europe PMC XML PMC5150228, and Figure 3 image from eneuro.org)",
+   "Gasser, Bacher & Mocks 1982 EEG Clin Neurophysiol (abstract via Europe PMC)",
+   "Smit et al. 2005 Psychophysiology (abstract via Europe PMC)"
+  ],
+  "evidence_location": "Hashemi: Methods, Participants (6029 individuals; Muse four-channel headband TP9, TP10, AF7, AF8; both the calibration task and the neurofeedback session with eyes closed; data averaged over up to five sessions); Methods, EEG processing ('Band power was then log10-transformed'); Figure 3 (within-age SD of log10 band power, y-axis, read as about 0.21 for theta to 0.365 for frontal beta; between-age SD, x-axis, about 0.075 to 0.20). Gasser: abstract. Smit: abstract (142 MZ and 167 DZ twin pairs and siblings, 760 subjects, eyes closed; 'individual differences in adult EEG are largely determined by genetic factors'). Arithmetic: 10^0.21 = 1.62, 10^0.36 = 2.29; 0.28 x ln 10 = 0.645.",
+  "quote": "the best transformation for absolute power--log(x)--was not fully satisfactory for all bands",
+  "discrepancy": "(1) 'three to four times the spread of the age means' is not what Figure 3 shows: the within-age SD divided by the between-age SD is about 1.8 for frontal beta (0.36/0.20 and 0.32/0.18), about 2 to 2.8 for delta, theta, temporoparietal beta and frontal alpha, and only reaches about 3.6 for temporoparietal alpha (0.31/0.087); most bands and channels are two to three times. (2) Gasser 1982 says log(x) was the best transformation for absolute power but 'not fully satisfactory for all bands', so 'approximately normal' is slightly stronger than the source. The 0.21-0.36 range (read from the plot, as the site's note says), the 1.6-2.3 factor, 6,029, four channels, eyes closed, log10 power, 760 subjects and 'largely heritable' are supported; 0.65 natural-log units = 0.28 log10 units checks.",
+  "suggested_fix": "'... and roughly two to three and a half times the spread of the age means (about 1.8 for frontal beta to 3.6 for temporoparietal alpha)'; and 'log-transformed absolute power is close to normal across healthy people, though not fully so in every band'. Status: partially, with the figure-reading note kept.",
+  "bibliographic_issues": "None. eNeuro 3(6) ENEURO.0275-16.2016, EEG Clin Neurophysiol 53(1):119-124 and Psychophysiology 42(6):691-697 all match Crossref and PubMed."
+ },
+ {
+  "id": "test-retest",
+  "verdict": "SUPPORTED",
+  "checked_sources": [
+   "Ziogas et al. 2026 Imaging Neuroscience (full text, Europe PMC XML PMC13130526)",
+   "Salinsky, Oken & Morehead 1991 EEG Clin Neurophysiol (abstract via Europe PMC)",
+   "Tenke et al. 2018 Clin Neurophysiol (abstract via Europe PMC)"
+  ],
+  "evidence_location": "Ziogas: Table 5 (adults, study 2: absolute delta 0.66, theta 0.77, alpha 0.88, beta 0.81; relative 0.75, 0.80, 0.86, 0.79; split-half T1/T2 for absolute power 0.93 to 0.98); Results 3.2 ('14.13 days (SD = 0.77) elapsed between the first and the second EEG resting-state recordings'); Methods 2.3.1 (90 adults); Methods (180 s eyes open, 64-channel RNet, powers 'averaged across all electrodes for each frequency band', absolute power 'log-transformed using the base-10 logarithm'). Salinsky: abstract ('Nineteen subjects ... 5 min and 12-16 week intervals ... 0.92 ... 0.84'). Tenke: abstract (70 participants, 12 +/- 1.1 years, overall posterior alpha Pearson's r = .718).",
+  "quote": "Absolute Delta 0.66 [0.51, 0.76] <.001 0.96 0.93 Theta 0.77 [0.66, 0,85] <.001 0.95 0.97 Alpha 0.88",
+  "discrepancy": "None material. Nuances: the 0.93-0.98 split-half range is for absolute power (relative power runs 0.87-0.97); the adult ICCs rest on 86 of the 90 adults after the paper's 2 SD outlier rule (F(85, 85)); Tenke's 0.718 is the overall (eyes closed plus open) posterior alpha amplitude for the full sample of 70, of whom 46 were adults at both sessions (adults alone r = 0.848). The modeling sentence (1 - ICC as the day-to-day share) is the site's choice and is consistent with ICC(2,1).",
+  "suggested_fix": "None required; site should set status verified (optionally 'split-half consistency of absolute power within a session of 0.93 to 0.98').",
+  "bibliographic_issues": "None. Imaging Neuroscience 4:IMAG.a.1224 (2026), EEG Clin Neurophysiol 79(5):382-392 and Clin Neurophysiol 129(7):1410-1417 match Crossref and PubMed."
+ }
+]

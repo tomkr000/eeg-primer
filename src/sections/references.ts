@@ -63,7 +63,7 @@ export function mountVerification(root: HTMLElement) {
   table.className = 'claims-table';
   table.innerHTML = `<thead><tr><th>#</th><th>Claim</th><th>Sources</th><th>Status</th></tr></thead>`;
   const tb = document.createElement('tbody');
-  const sectionNames = ['', 'Neuron', 'Population', 'Head', 'Scalp maps', 'Patches and sums', 'EEG signals', 'Noise', 'Electrodes', 'Dimensionality', 'Delays', 'Electrode count', 'Conclusion'];
+  const sectionNames = ['', 'Neuron', 'Population', 'Head', 'Scalp maps', 'Patches and sums', 'EEG signals', 'Noise', 'Electrodes', 'Dimensionality', 'Delays', 'Electrode count', 'Brain states', 'Conclusion'];
   for (const c of CLAIMS) {
     const tr = document.createElement('tr');
     tr.id = `claim-${c.id}`;

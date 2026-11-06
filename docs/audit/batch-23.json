@@ -1,0 +1,53 @@
+[
+ {
+  "id": "stress-signature",
+  "status_on_site": "unverified",
+  "statement": "Acute psychosocial stress lowers alpha. A 2022 systematic review and meta-analysis found alpha power, mainly frontal, decreasing consistently (Hedges’ g = 0.6, p = 0.001; 10 of 12 articles reported significant decreases), beta tending to rise without a significant pooled effect (g = −0.31 in the review’s sign convention, p = 0.29; 6 of 8 articles reported increases) and frontal alpha asymmetry not changing consistently (g = 0.01); after a 10 min Stroop stressor and after 30 h of sleep deprivation in 30 adults, high-alpha (11 to 12 Hz) relative power fell and high-beta (23 to 36 Hz) rose, strongest anteriorly, with no significant asymmetry change.",
+  "note_on_site": "",
+  "sources": [
+   "Vanhollebeke G, De Smet S, De Raedt R, Baeken C, van Mierlo P, Vanderhasselt M-A (2022). The neural correlates of psychosocial stress: A systematic review and meta-analysis of spectral analysis EEG studies. Neurobiology of Stress 18:100452. doi:10.1016/j.ynstr.2022.100452",
+   "Alonso JF, Romero S, Ballester MR, Antonijoan RM, Mañanas MA (2015). Stress assessment based on EEG univariate features and functional connectivity measures. Physiological Measurement 36(7):1351–1365. doi:10.1088/0967-3334/36/7/1351"
+  ],
+  "note_for_auditor": "Vanhollebeke 2022 (open, Neurobiology of Stress): g = 0.6, p = 0.001, 10 of 12, beta g = −0.31 p = 0.29, 6 of 8, FAA g = 0.01. Alonso 2015 (author postprint on upcommons.upc.edu): the Stroop and sleep-deprivation design, 30 adults, high alpha 11–12 Hz down, high beta 23–36 Hz up, anterior, asymmetry not significant."
+ },
+ {
+  "id": "meditation-signature",
+  "status_on_site": "unverified",
+  "statement": "Meditation has no universal EEG signature. In 34 older novices after a 6-week course, 15 min of mindfulness meditation against 15 min of listening to a podcast, both with eyes closed, raised theta and beta power over most regions (occipital theta 291 against 171 µV²/Hz) and alpha only at occipital and right temporal sites (329 against 300), with frontal theta and alpha unchanged; experienced practitioners of nondirective meditation showed higher theta (largest frontal and temporal-central) and alpha (largest posterior) than in eyes-closed rest; but 16 long-term Vipassana meditators showed no theta or alpha change against instructed mind wandering, and 10 Theravada practitioners had lower alpha during meditation than at rest. Consumer “calm” scores most likely reward alpha and theta, and a 2025 meta-analysis of 16 randomized trials (763 participants) found no evidence that users modulate those targets.",
+  "note_on_site": "",
+  "sources": [
+   "Ahani A, Wahbeh H, Nezamfar H, Miller M, Erdogmus D, Oken B (2014). Quantitative change of EEG and respiration signals during mindfulness meditation. Journal of NeuroEngineering and Rehabilitation 11:87. doi:10.1186/1743-0003-11-87",
+   "Lagopoulos J, Xu J, Rasmussen I, Vik A, Malhi GS, Eliassen CF, Arntsen IE, Saether E, Hollup S, Holen A, Davanger S, Ellingsen O (2009). Increased theta and alpha EEG activity during nondirective meditation. Journal of Alternative and Complementary Medicine 15(11):1187–1192. doi:10.1089/acm.2009.0113",
+   "Cahn BR, Delorme A, Polich J (2010). Occipital gamma activation during Vipassana meditation. Cognitive Processing 11(1):39–56. doi:10.1007/s10339-009-0352-1",
+   "Amihai I, Kozhevnikov M (2014). Arousal vs. relaxation: a comparison of the neurophysiological and cognitive correlates of Vajrayana and Theravada meditative practices. PLoS ONE 9(7):e102990. doi:10.1371/journal.pone.0102990",
+   "Treves I, Bajwa Z, Greene KD, Bloom PA, Kim N, Wool E, Goldberg SB, Whitfield-Gabrieli S, Auerbach RP (2025). Consumer-Grade Neurofeedback With Mindfulness Meditation: Meta-Analysis. Journal of Medical Internet Research 27:e68204. doi:10.2196/68204"
+  ],
+  "note_for_auditor": "Ahani 2014 (open, JNER): Table 1 values 291.44 vs 170.98 and 329.13 vs 300.37, n = 34, ages, the 6-week course, podcast control, frontal theta/alpha unchanged. Lagopoulos 2009 abstract. Cahn 2010 (open): 16 Vipassana, no theta/alpha effect. Amihai 2014 (open, PLoS ONE): 10 Theravada, alpha lower. Treves 2025 (open, JMIR): 16 RCTs, 763, \"likely alpha and theta\", no evidence of target modulation."
+ },
+ {
+  "id": "relaxation-signature",
+  "status_on_site": "unverified",
+  "statement": "Deliberate relaxation has no single EEG signature. A systematic review of slow-breathing studies reports higher alpha and lower theta power than during spontaneous breathing (clearest in 22 people breathing 3 to 4 times a minute with eyes closed); a randomized comparison of a recorded relaxation technique with music after 6 weeks found larger theta increases with the technique and called theta, not alpha, the more reliable marker; and the relaxation response in 20 novices reduced frontal beta only, with no alpha or theta change in any region.",
+  "note_on_site": "",
+  "sources": [
+   "Zaccaro A, Piarulli A, Laurino M, Garbella E, Menicucci D, Neri B, Gemignani A (2018). How Breath-Control Can Change Your Life: A Systematic Review on Psycho-Physiological Correlates of Slow Breathing. Frontiers in Human Neuroscience 12:353. doi:10.3389/fnhum.2018.00353",
+   "Jacobs GD, Friedman R (2004). EEG spectral analysis of relaxation techniques. Applied Psychophysiology and Biofeedback 29(4):245–254. doi:10.1007/s10484-004-0385-2",
+   "Jacobs GD, Benson H, Friedman R (1996). Topographic EEG mapping of the relaxation response. Biofeedback and Self-Regulation 21(2):121–129. doi:10.1007/BF02284691"
+  ],
+  "note_for_auditor": "Zaccaro 2018 (open): the table rows for Fumoto 2004 (n = 22, 3–4 breaths/min, eyes closed) and the summary sentence. Jacobs & Friedman 2004 abstract: 36 subjects, theta more reliable. Jacobs, Benson & Friedman 1996 abstract: 20 novices, frontal beta only."
+ },
+ {
+  "id": "valence-asymmetry",
+  "status_on_site": "unverified",
+  "statement": "Emotional valence is read from frontal alpha asymmetry, the log alpha power on the right (F4) minus the left (F3), and its state effects are small. In 33 students watching four emotional film clips, baseline-normalized alpha at F3 and F4 differed between emotions by about 0.1 against between-person standard deviations of about 0.3, and alpha was higher at F4 than at F3 for positive and negative clips alike; in the 32-participant DEAP dataset no alpha electrode correlated with valence ratings at p < 0.01 (mean correlations seldom above ±0.1) and single-trial valence classification from EEG reached 57.6% against 50%; in the original film study, disgust showed right-sided frontal and anterior temporal activation relative to happiness only in epochs selected by facial expression, with no reliable difference for pooled positive against negative films. Resting asymmetry is about 60% stable trait and 40% occasion-specific state (59 people, four sessions), and its split-half reliability reaches 0.90 with about 80 s of clean data (204 people).",
+  "note_on_site": "",
+  "sources": [
+   "Zhao G, Zhang Y, Ge Y (2018). Frontal EEG Asymmetry and Middle Line Power Difference in Discrete Emotions. Frontiers in Behavioral Neuroscience 12:225. doi:10.3389/fnbeh.2018.00225",
+   "Koelstra S, Mühl C, Soleymani M, Lee J-S, Yazdani A, Ebrahimi T, Pun T, Nijholt A, Patras I (2012). DEAP: A Database for Emotion Analysis using Physiological Signals. IEEE Transactions on Affective Computing 3(1):18–31. doi:10.1109/T-AFFC.2011.15",
+   "Davidson RJ, Ekman P, Saron CD, Senulis JA, Friesen WV (1990). Approach-withdrawal and cerebral asymmetry: emotional expression and brain physiology. I.. Journal of Personality and Social Psychology 58(2):330–341. doi:10.1037/0022-3514.58.2.330",
+   "Hagemann D, Naumann E, Thayer JF, Bartussek D (2002). Does resting electroencephalograph asymmetry reflect a trait? An application of latent state-trait theory. Journal of Personality and Social Psychology 82(4):619–641. doi:10.1037/0022-3514.82.4.619",
+   "Towers DN, Allen JJB (2009). A Better Estimate of the Internal Consistency Reliability of Frontal EEG Asymmetry Scores. Psychophysiology 46(1):132–142. doi:10.1111/j.1469-8986.2008.00759.x"
+  ],
+  "note_for_auditor": "Zhao 2018 (open, Frontiers): Table 2 values and SDs, n = 33. Koelstra 2012 (accepted manuscript at the Geneva archive unige:47405): Table 4 (no alpha electrode for valence at p < .01, \"seldom bigger than ±0.1\") and Table 7 (valence 0.576). Davidson 1990 abstract. Hagemann 2002 abstract (60% / 40%, 59 people, four occasions). Towers & Allen 2009 (PMC author manuscript): 0.90 at about 160 epochs of 2.048 s, n = 204."
+ }
+]

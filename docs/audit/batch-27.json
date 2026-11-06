@@ -1,0 +1,55 @@
+[
+ {
+  "id": "states-model",
+  "status_on_site": "derived",
+  "statement": "Computed here (src/physics/states.ts). Each named state is a vector of power factors at eight regions of the section 3 sphere (claim state-table). In each band the decoder estimates every region’s rhythm from the N electrodes by the minimum-mean-square (Wiener) estimate given the modeled sources’ typical powers, W = (M + Λ)⁻¹ Tᵀ C⁻¹ with M = Tᵀ C⁻¹ T the sources’ Fisher information against the band’s background and electrode noise (section 11’s model, claim snr-electrodes) and Λ the inverse typical powers; regions the cap resolves are canceled from each other’s estimates and regions it cannot resolve mix, and the artifact sources leak into the estimates with the same weights. The features are the log powers of the estimates over one window; a band-limited Gaussian process gives each power estimate a gamma distribution of shape B·T (claim erd-detect), so the features’ covariance is the trigamma of B·T times the squared normalized cross-power of the estimates, plus the lognormal spread of each source’s power between windows, days or people through its share of each estimate. Two states are separated by d′² = Δᵀ Σ⁻¹ Δ for the difference Δ of their feature means and their mean covariance Σ, and a linear decoder calls a share Φ(d′/2) of equally likely single readings correctly. States are told apart at d′ ≥ 2.56 (nine readings in ten); the named-state count is the largest pairwise told-apart set; the count the features could hold maps the box each region’s log power spans across the named states through the cap at the box’s center, whitens it by the reading covariance, and multiplies 1 + extent/2.56 over its principal directions (exact for independent features).",
+  "note_on_site": "The Gaussian treatment of log power and the linear classifier are approximations; for one region without noise the model’s accuracy is within 3 points of the exact gamma threshold rule (tests/states.test.ts).",
+  "sources": [
+   "Kay SM (1998). Fundamentals of Statistical Signal Processing, Volume II: Detection Theory. Prentice Hall.",
+   "Condon JJ, Ransom SM (2016). Essential Radio Astronomy, chapter 3: Radio telescopes and radiometers. Princeton University Press; online text of the National Radio Astronomy Observatory section 3.6, eqs. 3.153–3.154. https://www.cv.nrao.edu/~sransom/web/Ch3.html"
+  ],
+  "note_for_auditor": "Derived. Check the standard results attributed: the Wiener (MMSE) estimator form (M + Λ)⁻¹TᵀC⁻¹ for sources with prior precision Λ against Gaussian noise of covariance C (Kay 1998, Bayesian linear model), the gamma distribution of band-power estimates with shape B·T (Condon & Ransom 2016 section 3.6 radiometer equation), that the variance of the log of a gamma variate of shape k is the trigamma ψ′(k), that for two jointly Gaussian channels the covariance of their power estimates over 2BT degrees of freedom is |cross-power|²/(BT), and that a linear classifier between two Gaussians of equal covariance and mean separation d′ errs with probability Φ(−d′/2). Report any step that is not standard."
+ },
+ {
+  "id": "g-to-ratio",
+  "status_on_site": "assumption",
+  "statement": "Modeling rule: where a source gives only a standardized effect size (Hedges’ g), the model takes the change of log power as 0.5 g natural-log units, a power factor of exp(0.5 g): 1.40 for g = 0.68, 1.67 for g = 1.03, 0.74 for g = −0.6. The 0.5 is a chosen within-study spread of log band power between people, below the 0.48 to 0.83 natural-log units measured across thousands of users of one headband (claim between-person), since meta-analyses standardize by spreads that include less measurement noise; the rule is approximate.",
+  "note_on_site": "",
+  "sources": [
+   "Hashemi A, Pino LJ, Moffat G, Mathewson KJ, Aimone C, Bennett PJ, Schmidt LA, Sekuler AB (2016). Characterizing Population EEG Dynamics throughout Adulthood. eNeuro 3(6):ENEURO.0275-16.2016. doi:10.1523/ENEURO.0275-16.2016"
+  ],
+  "note_for_auditor": "Assumption. Check the arithmetic exp(0.5 g) for g = 0.68, 1.03, −0.6 and the Hashemi 2016 range quoted (0.21–0.36 log10 = 0.48–0.83 natural log)."
+ },
+ {
+  "id": "cap-lattice",
+  "status_on_site": "assumption",
+  "statement": "Modeling choice: the N electrodes are the first N of a fixed sequence on the upper part of the section 3 head sphere, within 80° of the vertex: the vertex first, then each next electrode at the grid position (2.5° rings) farthest from every electrode already placed, ties going to the position nearest the vertex, then on the midline (face before back), then nearest the face, then on the left. The first five sit at the vertex and at the front, back, left and right of the rim, like Cz, Fpz, Oz, T7 and T8; the next are the rear and front diagonals of the rim, a parietal midline site and the two central sites, like P7, P8, F3, F4, Pz, C3 and C4. The sequence is nested, so a larger array contains the smaller one and never reads worse, and the spacing stays close to the square root of the area per electrode. Where the first few electrodes sit decides what they see; real one-channel and headband devices sit on the forehead and at the ears (claim consumer-electrodes).",
+  "note_on_site": "",
+  "sources": [],
+  "note_for_auditor": "Assumption, the site’s own construction; check only internal consistency with claim states-count and the figure text (first five positions; 80°; nested)."
+ },
+ {
+  "id": "state-table",
+  "status_on_site": "assumption",
+  "statement": "The model’s named states as power factors relative to eyes-open rest, at its eight regions (slow waves, frontal theta, posterior alpha, left and right mu, left and right frontal alpha, beta): eyes closed ×4 alpha, ×0.8 beta (claim eyes-closed-alpha); calm with slow breathing ×1.28 alpha and ×0.78 theta (g = ±0.5 chosen for the review’s directions, claim relaxation-signature); meditating with eyes closed, the eyes-closed factors times ×1.4 theta, ×1.1 alpha, ×1.2 beta (claim meditation-signature); drowsy ×1.67 theta, ×1.53 alpha, ×1.16 slow waves and beta (claim drowsiness-signature through claim g-to-ratio); high workload ×1.40 theta, ×0.88 alpha, ×1.28 beta (claim workload-signature through g-to-ratio); focused on an easy task, half the workload changes in log terms (×1.18, ×0.94, ×1.13; the n-back study’s low load showed about half the medium load’s theta rise); stressed ×0.74 alpha, ×1.17 beta (claim stress-signature through g-to-ratio); excited ×0.94 posterior alpha and ×0.96 theta, and positive or negative mood ×0.96 left or right frontal alpha, each chosen so that the model with 32 electrodes and a 30 s window reproduces the measured single-trial accuracies of 62% for arousal and 58% for valence (claims arousal-signature and valence-asymmetry); holding items in memory ×1.2 posterior alpha and theta (claim memory-retention-signature, size chosen); mind wandering with eyes closed, the eyes-closed factors times ×1.22 theta and slow waves, ×0.71 alpha, ×0.88 beta (claim mind-wandering-signature); imagined right-hand and left-hand movement, the hand-area mu factors of claim mi-matrix (×0.153 and ×0.354 for the right hand, ×0.284 and ×0.133 for the left); light sleep N1 ×0.4 alpha, ×1.3 theta and slow waves, ×0.8 beta; N2 ×0.4 alpha, ×1.5 theta, ×3 slow waves, ×0.7 beta; deep sleep N3 ×28 slow waves (the factor at which the region’s slow waves reach the 75 µV peak-to-peak scoring criterion, 26.5 µV rms for a sine, from the 5 µV waking level), ×1.5 theta, ×0.3 alpha, ×0.5 beta and mu; REM ×0.5 alpha, ×1.2 theta, ×0.9 beta (claim sleep-stages, the other sizes chosen); anesthetized ×10 slow waves, ×8 frontal alpha, ×0.5 posterior alpha and beta, ×2 theta (claim anesthesia-signature, sizes chosen). Factors not listed are 1. Eyes-closed states have no blinks.",
+  "note_on_site": "Each factor’s source is the claim named with it; the sleep, anesthesia and memory sizes are modeling choices bounded by the sources’ directions, and the arousal and valence sizes are fitted to measured accuracies.",
+  "sources": [],
+  "note_for_auditor": "Assumption. Check each factor against the claim it names: exp(0.5 g) for the g values in claims workload-signature, drowsiness-signature, stress-signature (the review’s g = −0.31 for beta is quoted as an increase); the mi-matrix values (−84.7, −64.6, −71.6, −86.7 % for the hand areas); the 75 µV / (2√2) / 5 µV squared = 28 for N3; the Braboszcz dB values converted to factors (0.85 dB → 1.22, −1.5 dB → 0.71, −0.55 dB → 0.88). Report any factor that does not follow from its named claim."
+ },
+ {
+  "id": "artifact-effect",
+  "status_on_site": "derived",
+  "statement": "Computed here: with the blink and muscle sources of claims blink-model and emg-beta-level left in the recording, against a decoder that cancels them, no pair of named states changes its single-reading accuracy by more than two percentage points and the counts change by at most one state, at every setting of the sliders (electrodes 1 to 1,000, windows 1 to 60 s, all three baselines; pinned in tests/states.test.ts). The electrodes of this layout sit away from the eyes and the muscles, the blink’s energy lies below 4 Hz where the brain’s own background is largest, and the beta changes between the named states are small, so the figure has no artifact control and leaves the artifacts in.",
+  "note_on_site": "",
+  "sources": [],
+  "note_for_auditor": "Derived from the site’s own code (tests/states.test.ts); check only that the statement matches the test’s thresholds (two percentage points, at most one state)."
+ },
+ {
+  "id": "states-count",
+  "status_on_site": "derived",
+  "statement": "Computed here (src/physics/states.ts; pinned in tests/states.test.ts): with four electrodes (vertex, front, back and left rim), a 2 s window and a same-session baseline, one reading tells apart 3 of the 20 named states (eyes closed, high workload and deep sleep), and the eight features could hold about 10 states; with 21 electrodes 6 and about 1,300; with 128 electrodes 7 and about 2,500. A 30 s window with 128 electrodes raises the named count to 14 and the box estimate to millions, which only says that the features have room the named states do not use. With no baseline (another person’s levels) the 128-electrode, 30 s count falls to 6. Positive against negative mood and imagined right against left hand stay near chance at 4 electrodes.",
+  "note_on_site": "Numbers follow the model inputs of claims state-table, rest-amplitudes and band-background; they change with any of them.",
+  "sources": [],
+  "note_for_auditor": "Derived from the site’s own code (tests/states.test.ts pins 3 of 20 at 4 electrodes, 6 at 21, 7 at 128, 14 at 128 and 30 s, 6 without baseline, cell counts about 10, 1,300, 2,500); check the statement matches those pins."
+ }
+]

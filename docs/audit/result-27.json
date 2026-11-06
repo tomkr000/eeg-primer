@@ -1,0 +1,94 @@
+[
+  {
+    "id": "states-model",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "src/physics/states.ts (readBand, seen, separation, pairCorrect, cellCount, D_STAR_90)",
+      "tests/states.test.ts (10 of 10 pass; `npx vitest run tests/states.test.ts`)",
+      "independent Monte Carlo and algebra (Python): Var(ln Gamma(k)) = trigamma(k); relative variance of a BT-sample power estimate = 1/(BT); Cov(P1,P2) = |X12|^2/(BT); LDA error = Phi(-d'/2); (T'C^-1T + L)^-1 T'C^-1 = L^-1 T'(T L^-1 T' + C)^-1",
+      "TU Delft ET4386 slides following Kay Vol. II (chapter 5 structure: 5.3 Estimator-Correlator, 5.4 Linear Model); Kay's book itself not opened",
+      "Condon & Ransom Ch3.html: blocked by the proxy in this run (WebFetch and curl); the radiometer equations were confirmed in batch 14 (claim erd-detect note)"
+    ],
+    "evidence_location": "states.ts lines 207-230 (Wiener estimate A = G + diag(1/restPower), gain = A^-1 M, noise = A^-1 M A^-1, artifact leakage A^-1 T'C^-1 t_q), 273-283 (trigamma(B*T) times X_kj^2/(X_kk X_jj), plus lognormal share terms), 301-315 (Mahalanobis d' with mean covariance, phi(d/2)), 52 (D_STAR_90 = 2*1.28155), 339 (maxClique), 379-405 (cellCount: box of log factors, Jacobian at the center, J' Sigma^+ J, product of 1 + sqrt(eig)/dStar). One-region check: model 76.9/85.7/98.5% against the exact gamma rule 77.6/86.1/98.5% at T = 1/2/8 s (differences 0.7, 0.3, 0.0 points).",
+    "quote": "W = (M + Λ)⁻¹ Tᵀ C⁻¹ with Λ the inverse typical powers. Sources the cap resolves are canceled",
+    "discrepancy": "None in the mathematics or the code. Two nuances: (1) the off-diagonal feature covariance uses trigamma(B·T) times the squared normalized cross-power; the standard large-BT result is coherence²/(B·T), which trigamma(B·T) exceeds by about 1/(2(BT)²) (5% at BT = 10, 14% at BT = 3.5, the slow band at 1 s); the diagonal is exact. The statement describes what the code does, so this is a modeling approximation, not a misstatement. (2) The gamma shape B·T is the long-window approximation, as claim erd-detect says.",
+    "suggested_fix": "Optional: 'the trigamma of B·T (close to 1/(B·T)) times the squared normalized cross-power'.",
+    "bibliographic_issues": "Kay 1998 is Volume II (Detection Theory). The Bayesian linear model with Gaussian random amplitudes appears there in Section 5.4 ('Linear Model', after the estimator-correlator of 5.3, per a course outline that follows the book), but the general colored-noise form (M + Λ)⁻¹TᵀC⁻¹ is derived in Volume I (Estimation Theory, 1993; Theorem 10.3 and the Bayesian Gauss-Markov Theorem 12.1). Consider citing Volume I or adding 'Section 5.4' to the Volume II entry. The Condon & Ransom entry (Princeton University Press 2016; NRAO online text, section 3.6, eqs. 3.153-3.154) matches the batch-14 check; the URL could not be reached from this environment."
+  },
+  {
+    "id": "g-to-ratio",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "arithmetic (Python): exp(0.5 g)",
+      "src/data/states.ts (G_SCALE = 0.5, g = exp(0.5 v))",
+      "Hashemi et al. 2016 full text via Europe PMC (PMC5150228): methods and Figure 3 legend"
+    ],
+    "evidence_location": "exp(0.34) = 1.405, exp(0.515) = 1.674, exp(-0.30) = 0.741; 0.21 and 0.36 log10 units times ln 10 = 0.484 and 0.829 natural-log units (a factor 1.6 to 2.3 in power per SD, as claim between-person says). Hashemi 2016 Methods: band power log10-transformed; Figure 3 legend: within-age SD of band power across participants (the 0.21-0.36 values are read from that figure, per claim between-person's note, and could not be read from the text). Code: states.ts line 48-49 and the figure's assumptions table ('the factor is exp(0.5 g)').",
+    "quote": "Band power was then log 10 -transformed for normalization.",
+    "discrepancy": "None in the arithmetic. The rule assumes each meta-analytic g is standardized by the between-person SD of (log) power; where a within-subject study standardizes by the SD of paired differences the implied change is smaller. The reason given for choosing 0.5 (lab spreads include less measurement noise than a dry four-channel headband) is a judgment; the claim already calls the rule approximate.",
+    "suggested_fix": "",
+    "bibliographic_issues": "Hashemi et al. 2016, eNeuro 3(6), ENEURO.0275-16.2016, doi 10.1523/ENEURO.0275-16.2016, eight authors, 6,029 subjects: all confirmed on Europe PMC."
+  },
+  {
+    "id": "cap-lattice",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "src/physics/states.ts capLattice (lines 60-98)",
+      "tests/states.test.ts 'the electrode sequence' (passes)",
+      "scratch run of capLattice(12) outside the repository",
+      "src/sections/s12-states.ts caption, assumptions table and plot label",
+      "claims states-count and consumer-electrodes"
+    ],
+    "evidence_location": "Code: RIM_DEG = 80, GRID_DEG = 2.5; candidates ordered ring by ring (nearest the vertex first), within a ring midline first (face before back), then smallest |azimuth|, then positive azimuth (left); the farthest-point pick takes the earliest candidate with strictly larger minimum distance, which implements the stated tie-breaks. Computed sequence (polar angle, azimuth; 0 = face, + = left): 1 vertex; 2 (80, 0); 3 (80, 180); 4 (80, +83.7); 5 (80, -83.7); 6 (52.5, +132.6); 7 (52.5, -132.6); 8 (47.5, -40.8); 9 (47.5, +40.8); 10 (37.5, 180); 11 (45, +88.2); 12 (45, -88.2). Test confirms nesting (1, 4, 21, 128 within 1,000), all within 80°, first five at the rim front/back/left/right, nearest-neighbor spacing 0.7-1.2 of sqrt(area/N). Figure text (caption, assumptions row 'Head and electrodes', x label 'Electrodes within 80° of the vertex') and claim states-count ('vertex, front, back and left rim') agree.",
+    "quote": "The first five sit at the vertex and at the front, back, left and right of the rim, like Cz, Fpz, Oz, T7 and T8.",
+    "discrepancy": "Electrodes 6 to 9 are not 'diagonals of the rim': they sit 52.5° (rear pair) and 47.5° (front pair) from the vertex, about midway between the vertex and the 80° rim. In 10-20 terms P7/P8 lie on the rim circle 72° from Cz, so the rear pair (52.5°, 47° off the back midline) is like P3/P4, not P7/P8; the front pair is like F3/F4 as stated, the 10th like Pz (37.5°, back midline), the 11th and 12th like C3/C4 (45°, ±88°). Minor: the lateral rim electrodes are at azimuth ±83.7°, 6° forward of the ear plane (a tie-break artifact), still 'like T7 and T8'. Everything else (80°, 2.5° rings, tie order, nesting, spacing, first five) matches the code and tests.",
+    "suggested_fix": "'...the next are rear and front diagonal pairs about 50° from the vertex, a parietal midline site and the two central sites, like P3, P4, F3, F4, Pz, C3 and C4.'",
+    "bibliographic_issues": "None (no references; site construction)."
+  },
+  {
+    "id": "state-table",
+    "verdict": "PARTIAL",
+    "checked_sources": [
+      "src/data/states.ts STATES, EC, WORKLOAD, half, N3_SLOW, hand (printed factors from a scratch run)",
+      "src/data/params.ts P.miResponse",
+      "claims eyes-closed-alpha, relaxation-signature, meditation-signature, drowsiness-signature, workload-signature, stress-signature, arousal-signature, valence-asymmetry, memory-retention-signature, mind-wandering-signature, mi-matrix, sleep-stages, anesthesia-signature (text in src/data/claims.ts)",
+      "Tran et al. 2020 abstract via Europe PMC (PMID 32108954)",
+      "arithmetic (Python)",
+      "tests/states.test.ts fitted-accuracy pins; scratch run values"
+    ],
+    "evidence_location": "Factors in code: eyes closed alpha 4, beta 0.8; calm 1.284/0.779; meditation = EC × (theta 1.4, alpha 1.1, beta 1.2); drowsy theta 1.674, alpha 1.530, slow and beta 1.162 (= exp(0.5·0.3)); workload 1.405/0.8825/1.284; focus = sqrt of workload 1.185/0.939/1.133 (n-back 8.75% vs 18.48% = 0.47 of the medium rise); stress alpha 0.741, beta 1.168 (g = +0.31, the review's −0.31 read as an increase); excited alphaP 0.94, theta 0.96; positive alphaFL 0.96; negative alphaFR 0.96; memory 1.2/1.2; wandering = EC × (theta, slow 1.22; alpha 0.71; beta 0.88), i.e. 10^(0.085), 10^(−0.15), 10^(−0.055) from the midpoints 0.85, −1.5 and −0.55 dB of the claim's ranges; mi-right {muL 0.153, muR 0.284}, mi-left {muL 0.354, muR 0.133} from miResponse rows C3 [−84.7, −64.6] and C4 [−71.6, −86.7]; N1, N2, REM as stated; N3 slow (75/(2√2)/5)² = 28.125 (26.5 µV rms); anesthesia 10/8/0.5/0.5/2; factors not listed default to 1 (`?? 1`); eyesClosed states get zero blink power. 20 states, 8 regions. Fitted accuracies at 32 electrodes, 30 s: excited vs rest 61.5%, positive vs negative 56.2% (test pins 60-64% and 56-60%).",
+    "quote": "{ id: 'mi-right', ... factors: hand(0) }, { id: 'mi-left', ... factors: hand(1) }",
+    "discrepancy": "(1) Hand factors are mislabeled as written: '×0.153 and ×0.354 for the right hand, ×0.284 and ×0.133 for the left' pairs the two left-hemisphere (C3) values and the two right-hemisphere (C4) values; in the model right-hand imagery is ×0.153 at the left-hemisphere hand area and ×0.284 at the right, left-hand imagery ×0.354 and ×0.133. (2) Drowsy ×1.16 for slow waves and beta comes from g = 0.3, a value claim drowsiness-signature does not contain (Tran 2020's abstract gives only 'small to moderate changes found in delta and beta bands'); it is a chosen value, not one 'through claim g-to-ratio' from the source. (3) Meditation ×1.4 theta and ×1.2 beta are not numbers in claim meditation-signature (which gives occipital theta ×1.70 with frontal theta unchanged, alpha ×1.10, beta raised without a number); chosen sizes. (4) The mind-wandering factors are the midpoints of the claim's color-bar dB ranges; not said. (5) 'Reproduces ... 58% for valence': the fit gives 56.2% (arousal 61.5% against 62.0%). All other factors follow exactly from the named claims.",
+    "suggested_fix": "'imagined right-hand movement ×0.153 at the left-hemisphere hand area and ×0.284 at the right, imagined left-hand movement ×0.354 and ×0.133 (claim mi-matrix)'; 'drowsy ... ×1.16 slow waves and beta (g = 0.3 chosen for the review's small-to-moderate changes)'; 'meditating ... ×1.4 theta, ×1.1 alpha, ×1.2 beta (claim meditation-signature; the theta and beta sizes chosen)'; 'mind wandering ... (the midpoints of claim mind-wandering-signature's ranges)'; 'reproduces the measured ... to within 2 points (61.5% and 56.2%)'.",
+    "bibliographic_issues": "None (no references of its own). Tran et al. 2020, Psychophysiology, doi 10.1111/psyp.13554 confirmed on Europe PMC."
+  },
+  {
+    "id": "artifact-effect",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "tests/states.test.ts 'leave the artifacts in' (passes)",
+      "scratch run: maximum accuracy change and count change over the test grid, plus off-grid settings",
+      "src/data/states.ts NUISANCES (blink at polar 100°, EMG at 90°), gaussianBandShare",
+      "src/sections/s12-states.ts slider ranges and assumptions row 'Artifacts'"
+    ],
+    "evidence_location": "Test grid: N in {1, 2, 4, 8, 21, 64, 256, 1000}, T in {1, 2, 5, 30, 60} s, the three baselines (120 settings): every pair's accuracy differs by < 0.02 and the told-apart count by <= 1 between artifacts present and removed. Observed maxima: 1.93 points and 1 state; the (unpinned) box estimate changes by at most 1.7%. Off-grid spot checks (N 3-500, T 1.5-45 s, three baselines): at most 1.5 points. Blink pulse (sigma 0.08 s): 71.8% of its energy in 0.5-4 Hz, 0.45% in 4-8 Hz, ~0 in 8-13 Hz, the rest below 0.5 Hz; slow-band background 12.4 µV is the largest. Sliders: electrodes 1-1,000, window 1-60 s.",
+    "quote": "expect(Math.abs(a.acc[i] - b.acc[i])).toBeLessThan(0.02); expect(Math.abs(a.apart.length - b.apart.length)).toBeLessThanOrEqual(1);",
+    "discrepancy": "The thresholds match the test exactly. 'At every setting of the sliders' overstates slightly: the test pins a grid of 8 electrode counts × 5 windows × 3 baselines, and the largest observed change (1.93 points) sits just under the 2-point bound, so untested settings are not guaranteed; spot checks found nothing above 1.5 points. 'The counts change by at most one state' is pinned only for the named-state count; the box estimate is not tested (it moves by <= 1.7%).",
+    "suggested_fix": "'...at every tested setting (eight electrode counts from 1 to 1,000, five windows from 1 to 60 s, all three baselines; pinned in tests/states.test.ts)' and 'the named-state count changes by at most one'.",
+    "bibliographic_issues": "None (no references)."
+  },
+  {
+    "id": "states-count",
+    "verdict": "SUPPORTED",
+    "checked_sources": [
+      "tests/states.test.ts 'give the figure's numbers' (passes)",
+      "scratch run of evaluate() at the stated settings",
+      "src/physics/states.ts capLattice (first four electrodes)"
+    ],
+    "evidence_location": "4 electrodes, 2 s, session: told apart = [rest-ec, workload, n3] (eyes closed, high workload, deep sleep), cells 9.9; 21 electrodes: 6 told apart, cells 1,268; 128: 7, cells 2,493; 128 and 30 s: 14, cells 8.2 million; 128, 30 s, no baseline: 6; at 4 electrodes positive vs negative 50.0%, right vs left hand 52.5%. First four electrodes: vertex, front rim, back rim, left rim (azimuth +83.7°). Test pins: ['rest-ec','workload','n3'], cells 8-12, 1100-1400, 2300-2700, > 1e6, 6, < 0.52, < 0.55.",
+    "quote": "expect(ids(d4)).toEqual(['rest-ec', 'workload', 'n3']); ... expect(at(128, 30).apart.length).toBe(14);",
+    "discrepancy": "None; every number in the statement is reproduced by the code and pinned by the tests ('about 10' = 9.9, 'about 1,300' = 1,268, 'about 2,500' = 2,493, 'millions' = 8.2 million).",
+    "suggested_fix": "",
+    "bibliographic_issues": "None (no references)."
+  }
+]

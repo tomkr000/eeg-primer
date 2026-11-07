@@ -72,10 +72,6 @@ statistics for band-power readings, not a verdict on every method.</p>`);
 
 
   const fig = figure(sec.fig, `Left: the named states grouped by the separation d′ of their feature means in their reading-to-reading covariance, from which a linear decoder on the eight log band powers calls a share Φ(d′/2) of single readings correctly, both states equally likely ${c('states-model')}. Groups join at the mean d′ over their pairs (average linkage). Joins left of the ${sw(TOLD, 'dash')} line, where d′ is below 2.56 and the decoder calls fewer than nine readings in ten correctly, are not drawn: the states they connect form one bracket, placed at the separation where its last member joined, and its members are listed by rhythm and area so that what the cap lumps together can be read against what defines each state. Joins right of the line are drawn at their separation, and the brackets are the groups one reading tells apart, the figure’s count. Right: that count against the number of electrodes at the current window and baseline; the vertical line follows the electrode slider ${c('states-count')}. The electrodes are the first N of a fixed, evenly spread sequence within 80° of the vertex of the section 3 head sphere ${c('cap-lattice')}. Each state’s factors come from the studies cited in the assumptions table ${c('state-table')}; the measured classifier accuracies stay in the text because their caps, windows and labels differ from this model.`, { wide: true });
-  const lede = document.createElement('p');
-  lede.className = 'figure-lede';
-  lede.innerHTML = `<strong>Model: named states read from one window of EEG.</strong> Changes smaller than one reading’s scatter are confused, up or down, whatever the cap ${c('erd-detect')}${c('states-model')}.`;
-  fig.el.prepend(lede);
 
   const row = document.createElement('div');
   row.className = 'viz-row';

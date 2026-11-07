@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { evaluate, seen, dendrogram, D_STAR_90, BANDS, type Band, type Settings } from '../physics/states';
+import { evaluate, seen, dendrogram, toldApartGroups, D_STAR_90, BANDS, type Band, type Settings } from '../physics/states';
 import { MODEL, STATES, REGIONS, REGION_NAMES, BACKGROUND, EMG, G_SCALE } from '../data/states';
 import { controls, readout, slider, choice, fmt } from '../ui/slider';
 import { linePlot } from '../ui/plot';
@@ -45,11 +45,11 @@ ${c('test-retest')}, and no baseline adds the spread between people ${c('between
 left in and add their own fluctuation ${c('blink-model')}${c('emg-beta-level')}, which turns out to change no pair by
 more than two percentage points ${c('artifact-effect')}. Two states count as told apart when a linear decoder calls
 nine readings in ten correctly ${c('states-model')}.</p>
-<p>With the defaults (a 128-electrode research cap, a 2 s window, a same-session baseline) the model tells apart
-7 of the ${M} named states: eyes open, eyes closed, the two hand movements, light sleep (N2), deep sleep and anesthesia.
-Thirteen waking states, from focus and workload to the moods and the sleep-onset stages, form one group that a reading
-cannot split, and the eyes-closed states another ${c('states-count')}. A four-electrode headband leaves only three
-states pairwise distinct: eyes closed, high workload and deep sleep. Of the eight readings, only posterior alpha moves any state beyond one reading’s scatter at four electrodes; the
+<p>With the defaults (a 128-electrode research cap, a 2 s window, a same-session baseline) the model sorts the ${M}
+named states into six groups that one reading tells apart: thirteen waking states, from focus and workload to the moods
+and the sleep-onset stages, form one group that a reading cannot split; the eyes-closed states another; and the two hand
+movements, deep sleep and anesthesia stand alone ${c('states-count')}. A four-electrode headband leaves two groups,
+the eyes-closed states against everything else. Of the eight readings, only posterior alpha moves any state beyond one reading’s scatter at four electrodes; the
 frontal theta reading, on which five of the labels rest, changes by at most 1.4% across the twenty states there, and
 by 19% for high workload even with 100,000 electrodes, against a scatter of ×2.5 per 2 s reading ${c('states-count')}.
 All eight regions are always active in the model; what more electrodes buy is reading them separately rather than as a
@@ -66,14 +66,14 @@ statistics for band-power readings, not a verdict on every method.</p>`);
 
   const TRACK = 300;
   const sN = slider({ label: 'Number of electrodes', min: 1, max: N_MAX, value: DEFAULTS.N, log: true, format: fmtN, trackPx: TRACK, marks: [{ value: 4, label: 'Headband', align: 'center' }, { value: 21, label: '10–20' }, { value: 128, label: 'Research cap' }], note: c('cap-lattice') + c('consumer-electrodes') + c('eeg-systems') });
-  const sWin = slider({ label: 'Window for one reading', unit: 's', min: 1, max: 60, value: DEFAULTS.T, log: true, format: (v) => fmt(v, 2), trackPx: TRACK, marks: [{ value: 2, label: 'Default' }, { value: 30, label: 'Sleep epoch', align: 'end' }], note: c('erd-detect') + c('sleep-stages') });
+  const sWin = slider({ label: 'Window for one reading', unit: 's', min: 1, max: 60, value: DEFAULTS.T, log: true, format: (v) => fmt(v, 2), trackPx: TRACK, marks: [{ value: 2, label: 'Default' }, { value: 30, label: 'Sleep epoch, 30 s', align: 'end' }], note: c('erd-detect') + c('sleep-stages') });
   let calibration: Settings['calibration'] = 'session';
   const pickCal = choice('Baseline the decoder was calibrated on', [{ value: 'session', label: 'This session' }, { value: 'day', label: 'Another day' }, { value: 'none', label: 'Other people' }], 'session', (v) => { calibration = v; update(); });
 
-  const rApart = readout('Named states one reading tells apart', c('states-count'));
+  const rGroups = readout('Groups one reading tells apart', c('states-count'));
   const rStep = readout('Smallest change of posterior alpha told apart', c('erd-detect'));
 
-  const fig = figure(sec.fig, `Left: the named states grouped by the separation d′ of their feature means in their reading-to-reading covariance, from which a linear decoder on the eight log band powers calls a share Φ(d′/2) of single readings correctly, both states equally likely ${c('states-model')}. Groups join at the mean d′ over their pairs (average linkage). Joins left of the ${sw(TOLD, 'dash')} line, where d′ is below 2.56 and the decoder calls fewer than nine readings in ten correctly, are not drawn: the states they connect form one bracket, placed at the separation where its last member joined, and its members are listed by rhythm and area so that what the cap lumps together can be read against what defines each state. Joins right of the line are drawn at their separation. A dot marks the largest set of states that are pairwise told apart in nine readings of ten, which can include members of one bracket, because a bracket is confused on average. Right: that count against the number of electrodes at the current window and baseline; the vertical line follows the electrode slider ${c('states-count')}. The electrodes are the first N of a fixed, evenly spread sequence within 80° of the vertex of the section 3 head sphere ${c('cap-lattice')}. Each state’s factors come from the studies cited in the assumptions table ${c('state-table')}; the measured classifier accuracies stay in the text because their caps, windows and labels differ from this model.`, { wide: true });
+  const fig = figure(sec.fig, `Left: the named states grouped by the separation d′ of their feature means in their reading-to-reading covariance, from which a linear decoder on the eight log band powers calls a share Φ(d′/2) of single readings correctly, both states equally likely ${c('states-model')}. Groups join at the mean d′ over their pairs (average linkage). Joins left of the ${sw(TOLD, 'dash')} line, where d′ is below 2.56 and the decoder calls fewer than nine readings in ten correctly, are not drawn: the states they connect form one bracket, placed at the separation where its last member joined, and its members are listed by rhythm and area so that what the cap lumps together can be read against what defines each state. Joins right of the line are drawn at their separation, and the brackets are the groups one reading tells apart, the figure’s count. Right: that count against the number of electrodes at the current window and baseline; the vertical line follows the electrode slider ${c('states-count')}. The electrodes are the first N of a fixed, evenly spread sequence within 80° of the vertex of the section 3 head sphere ${c('cap-lattice')}. Each state’s factors come from the studies cited in the assumptions table ${c('state-table')}; the measured classifier accuracies stay in the text because their caps, windows and labels differ from this model.`, { wide: true });
   const lede = document.createElement('p');
   lede.className = 'figure-lede';
   lede.innerHTML = `<strong>Model: named states read from one window of EEG.</strong> Changes smaller than one reading’s scatter are confused, up or down, whatever the cap ${c('erd-detect')}${c('states-model')}.`;
@@ -105,7 +105,7 @@ statistics for band-power readings, not a verdict on every method.</p>`);
   svg.append('text').attr('x', xs.range()[1]).attr('y', H - 4).attr('text-anchor', 'end').attr('class', 'axis-label').text('Separation d′ between the groups in one reading');
   const legend = document.createElement('div');
   legend.className = 'glow-legend';
-  legend.innerHTML = `<span>Bracket: states one reading confuses, on average (joined left of the ${sw(TOLD, 'dash')} line); brackets join at their average separation</span><span class="note">● in the largest set told apart</span>`;
+  legend.innerHTML = `<span>Bracket: states one reading confuses, on average (joined left of the ${sw(TOLD, 'dash')} line); brackets join at their average separation, and the brackets are the groups it tells apart</span>`;
   const tip = document.createElement('div');
   tip.className = 'tooltip';
   tip.style.display = 'none';
@@ -117,12 +117,12 @@ statistics for band-power readings, not a verdict on every method.</p>`);
   const plotBox = document.createElement('div');
   plotBox.className = 'viz-box';
   plotBox.style.flex = '1 1 360px';
-  plotBox.append(vizTitle('Named states told apart in one reading, by number of electrodes'));
-  const plot = linePlot(plotBox, { x: { label: 'Electrodes within 80° of the vertex', tip: 'Electrodes', scale: 'log', domain: [1, N_MAX] }, y: { label: 'Named states told apart', domain: [0, 22] }, height: H - 26, margin: { right: 24 } });
+  plotBox.append(vizTitle('Groups of named states told apart in one reading, by number of electrodes'));
+  const plot = linePlot(plotBox, { x: { label: 'Electrodes within 80° of the vertex', tip: 'Electrodes', scale: 'log', domain: [1, N_MAX] }, y: { label: 'Groups told apart', domain: [0, 22] }, height: H - 26, margin: { right: 24 } });
   row.append(plotBox);
   fig.viz.append(legend);
 
-  fig.viz.append(readouts(rApart.el, rStep.el));
+  fig.viz.append(readouts(rGroups.el, rStep.el));
   const ctl = controls(sN.el, sWin.el, pickCal.el);
   ctl.classList.add('aligned-controls');
   fig.panel.append(ctl);
@@ -135,13 +135,13 @@ statistics for band-power readings, not a verdict on every method.</p>`);
     { what: 'Reading', value: 'In each band the decoder forms the minimum-mean-square estimate of every region’s rhythm from the electrodes, given the regions’ typical powers, so regions the cap resolves are canceled from each other’s estimates and regions it cannot resolve mix. The features are the log powers of those estimates over the window; their reading-to-reading covariance follows the gamma model with shape B·T (the trigamma function gives the exact variance of a log gamma variate), including the correlation of estimates that share a source.', cite: c('states-model') + c('erd-detect') + c('snr-electrodes') },
     { what: 'Baseline', value: `“This session”: the decoder knows the person’s resting levels today. “Another day”: each region’s log power has moved since, by the day-to-day share 1 − ICC of the between-person variance (ICC the intraclass correlation between days), counted for both days. “Other people”: the decoder knows only the population, so each region’s resting log power is uncertain by ${SPREAD.betweenSd} natural-log units. The state’s factors are the same for everyone, an optimistic choice.`, cite: c('between-person') + c('test-retest') },
     { what: 'Artifacts', value: `Left in, as recorded. Blinks: a broad source in front of the brain, 15 a minute while the eyes are open, each section 7’s 150 µV deflection, their number per window Poisson; muscle: three sources at the forehead and the temples with ${EMG.uvRms} µV rms of beta at the scalp above them, their level varying between windows by a factor exp(±${EMG.logSd}). Both leak into the estimates. Canceling them instead changes no pair’s accuracy by more than two percentage points at any setting of the sliders, so there is no control for it: with the electrodes of this layout away from the eyes and the muscles, the blink’s energy sits below 4 Hz where the brain’s own background is largest, and the beta changes between named states are small.`, cite: c('blink-model') + c('emg-beta-level') + c('artifact-effect') },
-    { what: 'Told apart', value: 'Two states are told apart when d′, the separation of their feature means in their mean covariance, reaches 2.56, so that a linear decoder calls nine equally likely readings in ten correctly (Φ(d′/2) = 0.9). The named-state count is the largest set that is pairwise told apart. The tree joins two groups at the mean d′ over their pairs (average linkage), collapses every join below 2.56 into a bracket, and orders the brackets so that the one holding the earliest state of the table comes first; it displays the pairwise separations and adds no model.', cite: c('states-model') },
+    { what: 'Told apart', value: 'Two states are told apart when d′, the separation of their feature means in their mean covariance, reaches 2.56, so that a linear decoder calls nine equally likely readings in ten correctly (Φ(d′/2) = 0.9). The tree joins two groups at the mean d′ over their pairs (average linkage), collapses every join below 2.56 into a bracket, and orders the brackets so that the one holding the earliest state of the table comes first. The figure’s count is the number of brackets: groups confused within and told apart from each other on average. The strictest count, the largest set of states that are pairwise told apart, is within one or two of it at every tested setting and is listed in claim states-count.', cite: c('states-model') },
     { what: 'Window range', value: 'The slider runs from 1 to 60 s, with a 2 s default (a model choice) and a mark at the 30 s sleep-scoring epoch; below 1 s the gamma model’s shape would fall under 3.5 in the slowest band.', cite: c('sleep-stages') + c('erd-detect') },
     { what: 'Electrode marks and range', value: 'Four electrodes, as on a consumer headband with four recording sites; 21, the positions of the 10–20 system; 128, a research cap, the default so that the figure opens where the cap resolves most of the regions. The slider and the plot run to 100,000 electrodes, as in section 11; above 256 the reading depends only on the cap’s density.', cite: c('consumer-electrodes') + c('eeg-systems') + c('cap-lattice') },
   ]);
 
   const settings = (N = sN.value, T = sWin.value): Settings => ({ N: Math.round(N), T, calibration, artifacts: 'present', betweenSd: SPREAD.betweenSd, retest: SPREAD.retest, dStar: D_STAR_90 });
-  let acc: Float64Array = new Float64Array(M * M), dMat: Float64Array = new Float64Array(M * M), apart: number[] = [];
+  let acc: Float64Array = new Float64Array(M * M), dMat: Float64Array = new Float64Array(M * M);
 
   function drawTree(set: Settings) {
     const views = STATES.map((st) => seen(MODEL, st, set));
@@ -194,21 +194,20 @@ statistics for band-power readings, not a verdict on every method.</p>`);
           tip.style.top = `${ev.clientY - rc.top + 16}px`;
         })
         .on('mouseleave', () => { tip.style.display = 'none'; });
-      if (apart.includes(i)) gLeaves.append('circle').attr('cx', xs.range()[0]).attr('cy', cy).attr('r', 2.8).attr('fill', TOLD);
     });
   }
 
   function update() {
     const set = settings(), out = evaluate(MODEL, STATES, set);
-    acc = out.acc; dMat = out.d; apart = out.apart;
+    acc = out.acc; dMat = out.d;
     drawTree(set);
     const told: [number, number][] = [];
-    for (const N of NS) told.push([N, Math.max(1, evaluate(MODEL, STATES, settings(N)).apart.length)]);
-    plot.update([{ name: 'Named states told apart (9 readings in 10)', points: told, color: TOLD, width: 2.5 }], [
+    for (const N of NS) told.push([N, toldApartGroups(M, evaluate(MODEL, STATES, settings(N)).d, set.dStar)]);
+    plot.update([{ name: 'Groups told apart (9 readings in 10)', points: told, color: TOLD, width: 2.5 }], [
       { axis: 'y', value: M, label: `${M} named states` },
       { axis: 'x', value: set.N, label: `${fmtN(set.N)} electrodes`, callout: true },
     ]);
-    rApart.set(`${out.apart.length} of ${M}`);
+    rGroups.set(`${toldApartGroups(M, out.d, set.dStar)} <span class="readout-aside">of ${M} states</span>`);
     const rest = seen(MODEL, STATES[0], set), k = REGIONS.findIndex((r) => r.id === 'alphaP');
     rStep.set(`×${fmt(Math.exp(set.dStar * Math.sqrt(rest.cov[k * REGIONS.length + k])), 2)}`);
   }

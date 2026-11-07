@@ -436,6 +436,11 @@ export function dendrogram(M: number, d: Float64Array, linkage: 'single' | 'aver
   return joins;
 }
 
+/** the groups one reading tells apart: cut the average-linkage tree at dStar and count the pieces (1 + the joins above it) */
+export function toldApartGroups(M: number, d: Float64Array, dStar: number): number {
+  return 1 + dendrogram(M, d, 'average').filter((j) => j.h >= dStar).length;
+}
+
 /** the share of a Gaussian deflection's energy (standard deviation `sigmaS` in time) that falls in a band */
 export function gaussianBandShare(sigmaS: number, band: Band): number {
   // one-sided energy density ∝ exp(−4π²σ²f²); the share is the difference of the error function at the band edges

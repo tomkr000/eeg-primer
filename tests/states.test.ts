@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { capLattice, evaluate, seen, separation, pairCorrect, trigamma, maxClique, dendrogram, gaussianBandShare, D_STAR_90, type ModelCfg, type NamedState, type Settings } from '../src/physics/states';
+import { capLattice, evaluate, seen, separation, pairCorrect, trigamma, maxClique, dendrogram, toldApartGroups, gaussianBandShare, D_STAR_90, type ModelCfg, type NamedState, type Settings } from '../src/physics/states';
 import { restVersusImagery } from '../src/physics/control';
 import { MODEL, STATES, REGIONS } from '../src/data/states';
 
@@ -154,6 +154,16 @@ describe('helpers', () => {
     expect(b128.map((g) => g.length)).toEqual([13, 3, 1, 1, 1, 1]);
     expect(b128[0]).toEqual(['calm', 'drowsy', 'excited', 'focus', 'memory', 'n1', 'n2', 'negative', 'positive', 'rem', 'rest-eo', 'stress', 'workload']);
     expect(b128.slice(2).flat().sort()).toEqual(['anesthesia', 'mi-left', 'mi-right', 'n3']);
+    // the figure's count: the groups the cut leaves, never decreasing with electrodes and within two of the pairwise count
+    const groups = (N: number, T: number, calibration: Settings['calibration'] = 'session') => { const o2 = evaluate(MODEL, STATES, { ...base, N, T, calibration }); return { g: toldApartGroups(M, o2.d, D_STAR_90), c: o2.apart.length }; };
+    expect([4, 21, 128, 1000].map((N) => groups(N, 2).g)).toEqual([2, 5, 6, 7]);
+    expect(groups(128, 30).g).toBe(14); expect(groups(128, 30, 'none').g).toBe(5); expect(groups(4, 30).g).toBe(8);
+    let prev = 0;
+    for (const N of [1, 2, 3, 4, 6, 8, 12, 16, 21, 32, 64, 128, 256, 1000]) for (const T of [2, 30]) {
+      const { g, c } = groups(N, T);
+      expect(Math.abs(g - c)).toBeLessThanOrEqual(2);
+      if (T === 2) { expect(g).toBeGreaterThanOrEqual(prev); prev = g; }
+    }
   });
   it('read each state reading by reading (claim states-count)', () => {
     const F = REGIONS.length, kt = REGIONS.findIndex((r) => r.id === 'theta'), ka = REGIONS.findIndex((r) => r.id === 'alphaP');

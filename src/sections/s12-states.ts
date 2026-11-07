@@ -86,7 +86,7 @@ statistics for band-power readings, not a verdict on every method.</p>`);
   const fig = figure(sec.fig, `Left: the named states grouped by the separation d′ of their feature means in their reading-to-reading covariance, from which a linear decoder on the eight log band powers calls a share Φ(d′/2) of single readings correctly, both states equally likely ${c('states-model')}. Groups join at the mean d′ over their pairs (average linkage). Joins left of the ${sw(TOLD, 'dash')} line, where d′ is below 2.56 and the decoder calls fewer than nine readings in ten correctly, are not drawn: the states they connect form one bracket, placed at the separation where its last member joined, and its members are listed by rhythm and area so that what the cap lumps together can be read against what defines each state. Joins right of the line are drawn at their separation. A dot marks the largest set of states that are pairwise told apart in nine readings of ten, which can include members of one bracket, because a bracket is confused on average. Beside each state, a square names the area of its largest change and a triangle that change’s rhythm and direction, read off the state table ${c('state-table')}. Right: that count (${sw(TOLD, 'line')}) and the number of independent signals the cap resolves (${sw(SIGNALS, 'line')}): directions of the eight-region feature space along which one reading tells the named states’ extremes apart, so at most eight, against the number of electrodes at the current window and baseline; the vertical line follows the electrode slider ${c('states-count')}. The electrodes are the first N of a fixed, evenly spread sequence within 80° of the vertex of the section 3 head sphere ${c('cap-lattice')}. Each state’s factors come from the studies cited in the assumptions table ${c('state-table')}; the measured classifier accuracies stay in the text because their caps, windows and labels differ from this model.`, { wide: true });
   const lede = document.createElement('p');
   lede.className = 'figure-lede';
-  lede.innerHTML = `<strong>Model of reading named states from one window of EEG.</strong> States that differ by less than one reading’s scatter are confused, whatever the cap ${c('erd-detect')}${c('states-model')}.`;
+  lede.innerHTML = `<strong>Model of reading named states from one window of EEG.</strong> Changes smaller than one reading’s scatter are confused, up or down, whatever the cap ${c('erd-detect')}${c('states-model')}.`;
   fig.el.prepend(lede);
 
   const row = document.createElement('div');
@@ -96,7 +96,7 @@ statistics for band-power readings, not a verdict on every method.</p>`);
 
   // the tree of confusions, cut at the told-apart line: states that join left of it form one bracket, the branches
   // right of it show how the brackets separate
-  const CELL = 14, LW = 214, TOP = 22, BOTTOM = 42, TW = 290, PAD = 6;
+  const CELL = 14, LW = 250, TOP = 22, BOTTOM = 42, TW = 254, PAD = 6;
   const W = LW + TW + PAD, H = TOP + M * CELL + BOTTOM;
   const treeBox = document.createElement('div');
   treeBox.className = 'viz-box';
@@ -118,7 +118,7 @@ statistics for band-power readings, not a verdict on every method.</p>`);
   const areas = [...new Set(SIGNATURES.flatMap((g) => (g ? [g.area] : [])))];
   const changes = [...new Map(SIGNATURES.flatMap((g) => (g ? [[`${g.rhythm}${g.up}`, g] as const] : []))).values()].sort((a, b) => RHYTHM_ORDER.indexOf(a.rhythm) - RHYTHM_ORDER.indexOf(b.rhythm) || Number(b.up) - Number(a.up));
   legend.innerHTML = `<span>Area of the state’s largest change: ${areas.map((a) => `${sw(AREA_COLOR[a])}${a}`).join(' ')}</span>` +
-    `<span>Its rhythm, up or down: ${changes.map((g) => `${tri(RHYTHM_COLOR[g.rhythm], g.up)}${g.rhythm}`).join(' ')}</span>` +
+    `<span>Its rhythm, up or down, with the power factor: ${changes.map((g) => `${tri(RHYTHM_COLOR[g.rhythm], g.up)}${g.rhythm}`).join(' ')}</span>` +
     `<span>Bracket: states one reading confuses, on average (joined left of the ${sw(TOLD, 'dash')} line); brackets join at their average separation</span><span class="note">● in the largest set told apart</span>`;
   const tip = document.createElement('div');
   tip.className = 'tooltip';
@@ -152,7 +152,7 @@ statistics for band-power readings, not a verdict on every method.</p>`);
     { what: 'Told apart', value: 'Two states are told apart when d′, the separation of their feature means in their mean covariance, reaches 2.56, so that a linear decoder calls nine equally likely readings in ten correctly (Φ(d′/2) = 0.9). The named-state count is the largest set that is pairwise told apart. The tree joins two groups at the mean d′ over their pairs (average linkage), collapses every join below 2.56 into a bracket, and orders the brackets so that the one holding the earliest state of the table comes first; it displays the pairwise separations and adds no model. The count of independent signals takes the box each region’s log power spans across the named states, maps it through the cap at the box’s center, whitens it by the reading’s covariance and counts the principal directions along which the box is at least 2.56 wide, so that one reading tells the extremes of the named states apart along it. A reading resolves 1 + extent/2.56 levels along each direction; the product of those levels is not shown, because it would count every combination of levels as a state and grows without bound with the window.', cite: c('states-model') },
     { what: 'Window range', value: 'The slider runs from 1 to 60 s, with a 2 s default (a model choice) and a mark at the 30 s sleep-scoring epoch; below 1 s the gamma model’s shape would fall under 3.5 in the slowest band.', cite: c('sleep-stages') + c('erd-detect') },
     { what: 'Electrode marks and range', value: 'Four electrodes, as on a consumer headband with four recording sites; 21, the positions of the 10–20 system; 128, a research cap, the default so that the figure opens where the cap resolves most of the regions. The slider and the plot run to 100,000 electrodes, as in section 11; above 256 the reading depends only on the cap’s density.', cite: c('consumer-electrodes') + c('eeg-systems') + c('cap-lattice') },
-    { what: 'Squares and triangles', value: 'Each state’s square names the area of the largest change in its factors, in log terms, against eyes-open rest, the common reference of the table, and its triangle that change’s rhythm and direction; ties go to the region with the larger resting amplitude. So the eyes-closed states (meditating, mind wandering) are marked alpha up, the ×4 of closed eyes, although their own studies compare them with eyes-closed rest and report theta; a state’s other changes, and what the cap reads of each, are in its hover text. The areas are the posterior alpha region, the frontal regions (slow waves, theta, frontal alpha, beta) and the hand areas (mu). The eyes-open reference state has none. Within a bracket the states are listed by rhythm (slow waves, theta, alpha, mu), up before down, then by area. The marks are read off the state table and add nothing to the model.', cite: c('state-table') + c('rest-amplitudes') },
+    { what: 'Squares and triangles', value: 'Each state’s square names the area of the largest change in its factors, in log terms, against eyes-open rest, the common reference of the table, and its triangle that change’s rhythm and direction, with the change itself as a power factor beside it (so that two states can be compared against the smallest factor one reading tells apart, the third readout); ties go to the region with the larger resting amplitude. So the eyes-closed states (meditating, mind wandering) are marked alpha up, the ×4 of closed eyes, although their own studies compare them with eyes-closed rest and report theta; a state’s other changes, and what the cap reads of each, are in its hover text. The areas are the posterior alpha region, the frontal regions (slow waves, theta, frontal alpha, beta) and the hand areas (mu). The eyes-open reference state has none. Within a bracket the states are listed by rhythm (slow waves, theta, alpha, mu), up before down, then by area. The marks are read off the state table and add nothing to the model.', cite: c('state-table') + c('rest-amplitudes') },
   ]);
 
   const settings = (N = sN.value, T = sWin.value): Settings => ({ N: Math.round(N), T, calibration, artifacts: 'present', betweenSd: SPREAD.betweenSd, retest: SPREAD.retest, dStar: D_STAR_90 });
@@ -199,10 +199,11 @@ statistics for band-power readings, not a verdict on every method.</p>`);
     STATES.forEach((st, i) => {
       const cy = ys(rowOf[i]), g = SIGNATURES[i];
       if (g) {
-        gLeaves.append('rect').attr('x', LW - 28).attr('y', cy - 4.5).attr('width', 9).attr('height', 9).attr('rx', 1).attr('fill', AREA_COLOR[g.area]);
-        gLeaves.append('path').attr('d', g.up ? `M${LW - 11} ${cy - 5} L${LW - 6} ${cy + 4.5} L${LW - 16} ${cy + 4.5} Z` : `M${LW - 16} ${cy - 4.5} L${LW - 6} ${cy - 4.5} L${LW - 11} ${cy + 5} Z`).attr('fill', RHYTHM_COLOR[g.rhythm]);
+        gLeaves.append('rect').attr('x', LW - 64).attr('y', cy - 4.5).attr('width', 9).attr('height', 9).attr('rx', 1).attr('fill', AREA_COLOR[g.area]);
+        gLeaves.append('path').attr('d', g.up ? `M${LW - 47} ${cy - 5} L${LW - 42} ${cy + 4.5} L${LW - 52} ${cy + 4.5} Z` : `M${LW - 52} ${cy - 4.5} L${LW - 42} ${cy - 4.5} L${LW - 47} ${cy + 5} Z`).attr('fill', RHYTHM_COLOR[g.rhythm]);
+        gLeaves.append('text').attr('x', LW - 38).attr('y', cy + 4).attr('class', 'strip-count').text(`×${fmt(g.factor, 2)}`);
       }
-      gLeaves.append('text').attr('x', LW - 34).attr('y', cy + 4).attr('text-anchor', 'end').attr('class', 'leaf').text(st.name)
+      gLeaves.append('text').attr('x', LW - 70).attr('y', cy + 4).attr('text-anchor', 'end').attr('class', 'leaf').text(st.name)
         .on('mousemove', (ev: MouseEvent) => {
           const others = STATES.map((_, j) => j).filter((j) => j !== i).sort((p, q) => acc[i * M + p] - acc[i * M + q]).slice(0, 3);
           tip.style.display = 'block';

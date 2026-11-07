@@ -82,7 +82,7 @@ export const STATES: NamedState[] = [
 /** where a state's largest change sits and what it is: the region's area, its rhythm and the direction */
 export type Area = 'posterior' | 'frontal' | 'hand areas';
 export type Rhythm = 'slow waves' | 'theta' | 'alpha' | 'mu' | 'beta';
-export interface Signature { area: Area; rhythm: Rhythm; up: boolean; region: string }
+export interface Signature { area: Area; rhythm: Rhythm; up: boolean; region: string; /** the power factor of that change */ factor: number }
 const AREA: Record<string, Area> = { slow: 'frontal', theta: 'frontal', alphaP: 'posterior', muL: 'hand areas', muR: 'hand areas', alphaFL: 'frontal', alphaFR: 'frontal', beta: 'frontal' };
 const RHYTHM: Record<string, Rhythm> = { slow: 'slow waves', theta: 'theta', alphaP: 'alpha', muL: 'mu', muR: 'mu', alphaFL: 'alpha', alphaFR: 'alpha', beta: 'beta' };
 /**
@@ -96,7 +96,7 @@ export function signature(state: NamedState): Signature | null {
     const v = Math.log(state.factors[r.id] ?? 1);
     if (Math.abs(v) < 1e-9) continue;
     const bigger = Math.abs(v) > size + 1e-9 || (Math.abs(Math.abs(v) - size) <= 1e-9 && r.restUv > REGIONS.find((q) => q.id === best!.region)!.restUv);
-    if (bigger) { size = Math.abs(v); best = { area: AREA[r.id], rhythm: RHYTHM[r.id], up: v > 0, region: r.id }; }
+    if (bigger) { size = Math.abs(v); best = { area: AREA[r.id], rhythm: RHYTHM[r.id], up: v > 0, region: r.id, factor: Math.exp(v) }; }
   }
   return best;
 }

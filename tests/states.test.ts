@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { capLattice, evaluate, seen, separation, pairCorrect, trigamma, maxClique, dendrogram, gaussianBandShare, D_STAR_90, type ModelCfg, type NamedState, type Settings } from '../src/physics/states';
 import { restVersusImagery } from '../src/physics/control';
-import { MODEL, STATES, REGIONS } from '../src/data/states';
+import { MODEL, STATES, REGIONS, signature } from '../src/data/states';
 
 const base: Settings = { N: 4, T: 2, calibration: 'session', artifacts: 'present', betweenSd: 0.65, retest: { slow: 0.66, theta: 0.77, alpha: 0.88, beta: 0.81 }, dStar: D_STAR_90 };
 const M = STATES.length;
@@ -99,6 +99,9 @@ describe('the named states', () => {
     expect(at(128, 30).apart.length).toBe(14); expect(at(128, 30).axes).toBe(REGIONS.length);
     expect(at(128, 30).levels[0]).toBeGreaterThan(10.5); expect(at(128, 30).levels[0]).toBeLessThan(11.5);
     expect(at(128, 30, 'none').apart.length).toBe(6); expect(at(128, 30, 'none').axes).toBe(6);
+    // the far end of the slider: a cap of 100,000 electrodes reads no better than 1,000
+    expect(at(100000, 2).apart.length).toBe(at(1000, 2).apart.length); expect(at(100000, 2).axes).toBe(at(1000, 2).axes);
+    expect(at(100000, 30).apart.length).toBeLessThanOrEqual(at(1000, 30).apart.length + 1);
     const i = (id: string) => STATES.findIndex((s) => s.id === id);
     expect(d4.acc[i('positive') * M + i('negative')]).toBeLessThan(0.52);
     expect(d4.acc[i('mi-right') * M + i('mi-left')]).toBeLessThan(0.55);
@@ -124,6 +127,18 @@ describe('helpers', () => {
     // a 5-cycle plus one vertex joined to all: the largest clique is a triangle
     const joined = (i: number, j: number) => i === 5 || j === 5 || Math.abs(i - j) === 1 || Math.abs(i - j) === 4;
     expect(maxClique(6, joined).length).toBe(3);
+  });
+  it('mark each state by its largest change (claim state-table)', () => {
+    const tag = (id: string) => { const g = signature(STATES.find((s) => s.id === id)!); return g ? `${g.rhythm} ${g.up ? 'up' : 'down'}, ${g.area}` : 'none'; };
+    expect(tag('rest-eo')).toBe('none');
+    for (const id of ['rest-ec', 'calm', 'memory']) expect(tag(id)).toBe('alpha up, posterior');
+    for (const id of ['meditation', 'drowsy', 'focus', 'workload']) expect(tag(id)).toBe('theta up, frontal');
+    for (const id of ['stress', 'excited', 'wandering', 'n1', 'n2', 'rem']) expect(tag(id)).toBe('alpha down, posterior');
+    for (const id of ['positive', 'negative']) expect(tag(id)).toBe('alpha down, frontal');
+    expect(signature(STATES.find((s) => s.id === 'mi-right')!)!.region).toBe('muL');
+    expect(signature(STATES.find((s) => s.id === 'mi-left')!)!.region).toBe('muR');
+    for (const id of ['mi-right', 'mi-left']) expect(tag(id)).toBe('mu down, hand areas');
+    for (const id of ['n3', 'anesthesia']) expect(tag(id)).toBe('slow waves up, frontal');
   });
   it('cluster by average linkage with nondecreasing join heights', () => {
     // three states: a and b close, c far; a–c and b–c differ, so the mean decides where c joins

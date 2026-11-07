@@ -1,10 +1,10 @@
 import * as d3 from 'd3';
 import { evaluate, seen, dendrogram, toldApartGroups, D_STAR_90, BANDS, type Band, type Settings } from '../physics/states';
 import { MODEL, STATES, REGIONS, REGION_NAMES, BACKGROUND, EMG, G_SCALE } from '../data/states';
-import { controls, readout, slider, choice, fmt } from '../ui/slider';
+import { controls, slider, choice, fmt } from '../ui/slider';
 import { linePlot } from '../ui/plot';
 import { claimCite as c } from '../data/params';
-import { section, figure, prose, readouts, assumptions, sw, vizTitle } from '../ui/layout';
+import { section, figure, prose, assumptions, sw, vizTitle } from '../ui/layout';
 
 const M = STATES.length;
 const DEFAULTS = { N: 128, T: 2 };
@@ -70,8 +70,6 @@ statistics for band-power readings, not a verdict on every method.</p>`);
   let calibration: Settings['calibration'] = 'session';
   const pickCal = choice('Baseline the decoder was calibrated on', [{ value: 'session', label: 'This session' }, { value: 'day', label: 'Another day' }, { value: 'none', label: 'Other people' }], 'session', (v) => { calibration = v; update(); });
 
-  const rGroups = readout('Groups one reading tells apart', c('states-count'));
-  const rStep = readout('Smallest change of posterior alpha told apart', c('erd-detect'));
 
   const fig = figure(sec.fig, `Left: the named states grouped by the separation d′ of their feature means in their reading-to-reading covariance, from which a linear decoder on the eight log band powers calls a share Φ(d′/2) of single readings correctly, both states equally likely ${c('states-model')}. Groups join at the mean d′ over their pairs (average linkage). Joins left of the ${sw(TOLD, 'dash')} line, where d′ is below 2.56 and the decoder calls fewer than nine readings in ten correctly, are not drawn: the states they connect form one bracket, placed at the separation where its last member joined, and its members are listed by rhythm and area so that what the cap lumps together can be read against what defines each state. Joins right of the line are drawn at their separation, and the brackets are the groups one reading tells apart, the figure’s count. Right: that count against the number of electrodes at the current window and baseline; the vertical line follows the electrode slider ${c('states-count')}. The electrodes are the first N of a fixed, evenly spread sequence within 80° of the vertex of the section 3 head sphere ${c('cap-lattice')}. Each state’s factors come from the studies cited in the assumptions table ${c('state-table')}; the measured classifier accuracies stay in the text because their caps, windows and labels differ from this model.`, { wide: true });
   const lede = document.createElement('p');
@@ -122,7 +120,6 @@ statistics for band-power readings, not a verdict on every method.</p>`);
   row.append(plotBox);
   fig.viz.append(legend);
 
-  fig.viz.append(readouts(rGroups.el, rStep.el));
   const ctl = controls(sN.el, sWin.el, pickCal.el);
   ctl.classList.add('aligned-controls');
   fig.panel.append(ctl);
@@ -207,9 +204,6 @@ statistics for band-power readings, not a verdict on every method.</p>`);
       { axis: 'y', value: M, label: `${M} named states` },
       { axis: 'x', value: set.N, label: `${fmtN(set.N)} electrodes`, callout: true },
     ]);
-    rGroups.set(`${toldApartGroups(M, out.d, set.dStar)} <span class="readout-aside">of ${M} states</span>`);
-    const rest = seen(MODEL, STATES[0], set), k = REGIONS.findIndex((r) => r.id === 'alphaP');
-    rStep.set(`×${fmt(Math.exp(set.dStar * Math.sqrt(rest.cov[k * REGIONS.length + k])), 2)}`);
   }
   [sN, sWin].forEach((s) => s.onChange(update));
   // the first evaluation runs after the page has painted

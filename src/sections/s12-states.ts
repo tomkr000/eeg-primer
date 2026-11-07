@@ -152,13 +152,14 @@ statistics for band-power readings, not a verdict on every method.</p>`);
     { what: 'Told apart', value: 'Two states are told apart when d′, the separation of their feature means in their mean covariance, reaches 2.56, so that a linear decoder calls nine equally likely readings in ten correctly (Φ(d′/2) = 0.9). The named-state count is the largest set that is pairwise told apart. The tree joins two groups at the mean d′ over their pairs (average linkage), collapses every join below 2.56 into a bracket, and orders the brackets so that the one holding the earliest state of the table comes first; it displays the pairwise separations and adds no model. The count of independent signals takes the box each region’s log power spans across the named states, maps it through the cap at the box’s center, whitens it by the reading’s covariance and counts the principal directions along which the box is at least 2.56 wide, so that one reading tells the extremes of the named states apart along it. A reading resolves 1 + extent/2.56 levels along each direction; the product of those levels is not shown, because it would count every combination of levels as a state and grows without bound with the window.', cite: c('states-model') },
     { what: 'Window range', value: 'The slider runs from 1 to 60 s, with a 2 s default (a model choice) and a mark at the 30 s sleep-scoring epoch; below 1 s the gamma model’s shape would fall under 3.5 in the slowest band.', cite: c('sleep-stages') + c('erd-detect') },
     { what: 'Electrode marks and range', value: 'Four electrodes, as on a consumer headband with four recording sites; 21, the positions of the 10–20 system; 128, a research cap, the default so that the figure opens where the cap resolves most of the regions. The slider and the plot run to 100,000 electrodes, as in section 11; above 256 the reading depends only on the cap’s density.', cite: c('consumer-electrodes') + c('eeg-systems') + c('cap-lattice') },
-    { what: 'Squares and triangles', value: 'Each state’s square names the area of the largest change in its factors, in log terms, against the rest it is defined from (eyes-open rest, or eyes-closed rest for the states recorded with the eyes closed), and its triangle that change’s rhythm and direction; ties go to the region with the larger resting amplitude. The areas are the posterior alpha region, the frontal regions (slow waves, theta, frontal alpha, beta) and the hand areas (mu). The eyes-open reference state has none. Within a bracket the states are listed by rhythm (slow waves, theta, alpha, mu), up before down, then by area. The marks are read off the state table and add nothing to the model.', cite: c('state-table') + c('rest-amplitudes') },
+    { what: 'Squares and triangles', value: 'Each state’s square names the area of the largest change in its factors, in log terms, against eyes-open rest, the common reference of the table, and its triangle that change’s rhythm and direction; ties go to the region with the larger resting amplitude. So the eyes-closed states (meditating, mind wandering) are marked alpha up, the ×4 of closed eyes, although their own studies compare them with eyes-closed rest and report theta; a state’s other changes, and what the cap reads of each, are in its hover text. The areas are the posterior alpha region, the frontal regions (slow waves, theta, frontal alpha, beta) and the hand areas (mu). The eyes-open reference state has none. Within a bracket the states are listed by rhythm (slow waves, theta, alpha, mu), up before down, then by area. The marks are read off the state table and add nothing to the model.', cite: c('state-table') + c('rest-amplitudes') },
   ]);
 
   const settings = (N = sN.value, T = sWin.value): Settings => ({ N: Math.round(N), T, calibration, artifacts: 'present', betweenSd: SPREAD.betweenSd, retest: SPREAD.retest, dStar: D_STAR_90 });
   let acc: Float64Array = new Float64Array(M * M), dMat: Float64Array = new Float64Array(M * M), apart: number[] = [];
 
-  function drawTree() {
+  function drawTree(set: Settings) {
+    const views = STATES.map((st) => seen(MODEL, st, set));
     const joins = dendrogram(M, dMat, 'average'), N2 = 2 * M - 1, node = (n: number) => (n < M ? null : joins[n - M]);
     const height = (n: number) => (n < M ? 0 : joins[n - M].h), parent = new Int32Array(N2).fill(-1);
     joins.forEach((j, k) => { parent[j.a] = M + k; parent[j.b] = M + k; });
@@ -205,7 +206,8 @@ statistics for band-power readings, not a verdict on every method.</p>`);
         .on('mousemove', (ev: MouseEvent) => {
           const others = STATES.map((_, j) => j).filter((j) => j !== i).sort((p, q) => acc[i * M + p] - acc[i * M + q]).slice(0, 3);
           tip.style.display = 'block';
-          tip.innerHTML = `<b>${st.name}</b>, confused most with ${others.map((j) => `${STATES[j].name} (${fmt(100 * acc[i * M + j], 2)}%)`).join(', ')}`;
+          const reads = REGIONS.map((r, k) => [REGION_NAMES[r.id], Math.exp(views[i].mean[k] - views[0].mean[k])] as const).filter(([, v]) => Math.abs(Math.log(v)) > 0.05);
+          tip.innerHTML = `<b>${st.name}</b>, confused most with ${others.map((j) => `${STATES[j].name} (${fmt(100 * acc[i * M + j], 2)}%)`).join(', ')}.<br>The cap reads it at ${reads.length ? reads.map(([n, v]) => `${n} ×${fmt(v, 2)}`).join(', ') : 'the eyes-open levels'}${reads.length ? ' of eyes-open rest' : ''}.`;
           const rc = treeBox.getBoundingClientRect();
           tip.style.left = `${Math.min(ev.clientX - rc.left + 12, W - 280)}px`;
           tip.style.top = `${ev.clientY - rc.top + 16}px`;
@@ -218,7 +220,7 @@ statistics for band-power readings, not a verdict on every method.</p>`);
   function update() {
     const set = settings(), out = evaluate(MODEL, STATES, set);
     acc = out.acc; dMat = out.d; apart = out.apart;
-    drawTree();
+    drawTree(set);
     const axes: [number, number][] = [], told: [number, number][] = [];
     for (const N of NS) { const o = evaluate(MODEL, STATES, settings(N)); axes.push([N, o.axes]); told.push([N, Math.max(1, o.apart.length)]); }
     plot.update([

@@ -86,15 +86,14 @@ export interface Signature { area: Area; rhythm: Rhythm; up: boolean; region: st
 const AREA: Record<string, Area> = { slow: 'frontal', theta: 'frontal', alphaP: 'posterior', muL: 'hand areas', muR: 'hand areas', alphaFL: 'frontal', alphaFR: 'frontal', beta: 'frontal' };
 const RHYTHM: Record<string, Rhythm> = { slow: 'slow waves', theta: 'theta', alphaP: 'alpha', muL: 'mu', muR: 'mu', alphaFL: 'alpha', alphaFR: 'alpha', beta: 'beta' };
 /**
- * The largest change in a state's factors, in log terms, against the rest it is defined from (eyes-open rest, or
- * eyes-closed rest for the states recorded with the eyes closed); ties go to the region with the larger resting
- * amplitude. The reference states themselves are compared with eyes-open rest; it has no signature.
+ * The largest change in a state's factors, in log terms, against eyes-open rest, the common reference of the table
+ * (so the eyes-closed states are alpha-up states first, whatever else they add); ties go to the region with the larger
+ * resting amplitude. Eyes-open rest itself has no signature.
  */
 export function signature(state: NamedState): Signature | null {
-  const ref = state.eyesClosed && state.id !== 'rest-ec' ? STATES.find((s) => s.id === 'rest-ec')!.factors : {};
   let best: Signature | null = null, size = 0;
   for (const r of REGIONS) {
-    const v = Math.log((state.factors[r.id] ?? 1) / (ref[r.id] ?? 1));
+    const v = Math.log(state.factors[r.id] ?? 1);
     if (Math.abs(v) < 1e-9) continue;
     const bigger = Math.abs(v) > size + 1e-9 || (Math.abs(Math.abs(v) - size) <= 1e-9 && r.restUv > REGIONS.find((q) => q.id === best!.region)!.restUv);
     if (bigger) { size = Math.abs(v); best = { area: AREA[r.id], rhythm: RHYTHM[r.id], up: v > 0, region: r.id }; }

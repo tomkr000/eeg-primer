@@ -175,13 +175,13 @@ describe('helpers', () => {
   it('mark each state by its largest change (claim state-table)', () => {
     const tag = (id: string) => { const g = signature(STATES.find((s) => s.id === id)!); return g ? `${g.rhythm} ${g.up ? 'up' : 'down'}, ${g.area}` : 'none'; };
     expect(tag('rest-eo')).toBe('none');
-    for (const id of ['rest-ec', 'calm', 'memory']) expect(tag(id)).toBe('alpha up, posterior');
-    for (const id of ['meditation', 'drowsy', 'focus', 'workload']) expect(tag(id)).toBe('theta up, frontal');
-    for (const id of ['stress', 'excited', 'wandering', 'n1', 'n2', 'rem']) expect(tag(id)).toBe('alpha down, posterior');
+    for (const id of ['rest-ec', 'meditation', 'wandering', 'calm', 'memory']) expect(tag(id)).toBe('alpha up, posterior');
+    for (const id of ['drowsy', 'focus', 'workload']) expect(tag(id)).toBe('theta up, frontal');
+    for (const id of ['stress', 'excited', 'n1', 'rem']) expect(tag(id)).toBe('alpha down, posterior');
     for (const id of ['positive', 'negative']) expect(tag(id)).toBe('alpha down, frontal');
     expect(signature(STATES.find((s) => s.id === 'mi-right')!)!.region).toBe('muL');
     expect(signature(STATES.find((s) => s.id === 'mi-left')!)!.region).toBe('muR');
     for (const id of ['mi-right', 'mi-left']) expect(tag(id)).toBe('mu down, hand areas');
-    for (const id of ['n3', 'anesthesia']) expect(tag(id)).toBe('slow waves up, frontal');
+    for (const id of ['n2', 'n3', 'anesthesia']) expect(tag(id)).toBe('slow waves up, frontal');
   });
 });

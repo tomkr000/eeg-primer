@@ -149,7 +149,7 @@ main { max-width: 1240px; margin: 0 auto; padding: 0 32px 60px; }
 .plot-svg .callout-text { font-size: 13px; fill: var(--ink); }
 .plot-svg .callout-box { fill: rgba(252, 252, 251, 0.92); stroke: var(--rule); }
 .plot-svg .callout-line { stroke: var(--ink-2); }
-.tree .leaf { font-size: 12px; fill: var(--ink); cursor: default; }
+.plot-svg .leaf { font-size: 12px; fill: var(--ink); cursor: default; }
 .tooltip { position: absolute; pointer-events: none; background: var(--surface-1); border: 1px solid var(--rule); padding: 6px 9px; font-family: var(--sans); font-size: 13px; line-height: 1.5; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); min-width: 150px; }
 .tooltip .tip-x { color: var(--ink-2); }
 .tooltip i, .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }

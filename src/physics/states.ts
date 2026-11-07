@@ -407,34 +407,6 @@ export function boxLevels(cfg: ModelCfg, states: NamedState[], set: Settings): n
   return symmetricEigen(Gm, K).values.map((v) => 1 + Math.sqrt(Math.max(v, 0)) / set.dStar);
 }
 
-/** one join of a hierarchical clustering: nodes a and b (leaves 0..M−1, joins numbered M onward in order) join at separation h */
-export interface Join { a: number; b: number; h: number }
-/**
- * Agglomerative clustering of the states by their pairwise separation d′: groups join at the smallest (single), mean
- * (average) or largest (complete) d′ between a state of one and a state of the other. M − 1 joins, heights nondecreasing.
- */
-export function dendrogram(M: number, d: Float64Array, linkage: 'single' | 'average' | 'complete' = 'average'): Join[] {
-  const groups = new Map<number, number[]>(Array.from({ length: M }, (_, i) => [i, [i]]));
-  const between = (A: number[], B: number[]) => {
-    let s = linkage === 'single' ? Infinity : 0;
-    for (const i of A) for (const j of B) { const v = d[i * M + j]; s = linkage === 'single' ? Math.min(s, v) : linkage === 'complete' ? Math.max(s, v) : s + v; }
-    return linkage === 'average' ? s / (A.length * B.length) : s;
-  };
-  const joins: Join[] = [];
-  for (let next = M; groups.size > 1; next++) {
-    let best: Join = { a: -1, b: -1, h: Infinity };
-    const ids = [...groups.keys()];
-    for (let p = 0; p < ids.length; p++) for (let q = p + 1; q < ids.length; q++) {
-      const h = between(groups.get(ids[p])!, groups.get(ids[q])!);
-      if (h < best.h) best = { a: ids[p], b: ids[q], h };
-    }
-    groups.set(next, [...groups.get(best.a)!, ...groups.get(best.b)!]);
-    groups.delete(best.a); groups.delete(best.b);
-    joins.push(best);
-  }
-  return joins;
-}
-
 /** the share of a Gaussian deflection's energy (standard deviation `sigmaS` in time) that falls in a band */
 export function gaussianBandShare(sigmaS: number, band: Band): number {
   // one-sided energy density ∝ exp(−4π²σ²f²); the share is the difference of the error function at the band edges

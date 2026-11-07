@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { capLattice, evaluate, seen, separation, pairCorrect, trigamma, maxClique, gaussianBandShare, D_STAR_90, type ModelCfg, type NamedState, type Settings } from '../src/physics/states';
 import { restVersusImagery } from '../src/physics/control';
-import { MODEL, STATES } from '../src/data/states';
+import { MODEL, STATES, REGIONS } from '../src/data/states';
 
 const base: Settings = { N: 4, T: 2, calibration: 'session', artifacts: 'present', betweenSd: 0.65, retest: { slow: 0.66, theta: 0.77, alpha: 0.88, beta: 0.81 }, dStar: D_STAR_90 };
 const M = STATES.length;
@@ -66,16 +66,18 @@ describe('the named states', () => {
       if (!STATES[i].eyesClosed && !STATES[j].eyesClosed) expect(art[k]).toBeLessThanOrEqual(ref[k] + 1e-6); // blinks themselves separate eyes-closed states
     }
   });
-  it('fit more states into the features with more electrodes, never fewer, and the per-degree formula continues the exact one', () => {
+  it('resolve more signals and states with more electrodes, never fewer, and the per-degree formula continues the exact one', () => {
     let prev = 0, prevApart = 0;
     for (let N = 1; N <= 64; N++) {
       const o = evaluate(MODEL, STATES, { ...base, N });
-      expect(o.cells).toBeGreaterThanOrEqual(prev * 0.999);
+      expect(o.levels.length).toBe(REGIONS.length);
+      expect(o.axes).toBe(o.levels.filter((l) => l >= 2).length);
+      expect(o.axes).toBeGreaterThanOrEqual(prev);
       expect(o.apart.length).toBeGreaterThanOrEqual(prevApart);
-      prev = o.cells; prevApart = o.apart.length;
+      prev = o.axes; prevApart = o.apart.length;
     }
     const a = evaluate(MODEL, STATES, { ...base, N: 256 }), b = evaluate(MODEL, STATES, { ...base, N: 262 });
-    expect(Math.abs(b.cells / a.cells - 1)).toBeLessThan(0.15);
+    a.levels.forEach((l, k) => expect(Math.abs(b.levels[k] / l - 1)).toBeLessThan(0.05));
     for (let i = 0; i < M; i++) for (let j = i + 1; j < M; j++) expect(Math.abs(b.d[i * M + j] - a.d[i * M + j])).toBeLessThan(0.2 + 0.1 * a.d[i * M + j]);
   });
   it('leave the artifacts in: canceling them changes no pair by more than two points (claim artifact-effect)', () => {
@@ -90,14 +92,13 @@ describe('the named states', () => {
     const ids = (o: { apart: number[] }) => o.apart.map((i) => STATES[i].id);
     const d4 = at(4, 2);
     expect(ids(d4)).toEqual(['rest-ec', 'workload', 'n3']);
-    expect(d4.cells).toBeGreaterThan(8); expect(d4.cells).toBeLessThan(12);
-    expect(at(21, 2).apart.length).toBe(6);
-    expect(at(21, 2).cells).toBeGreaterThan(1100); expect(at(21, 2).cells).toBeLessThan(1400);
-    expect(at(128, 2).apart.length).toBe(7);
-    expect(at(128, 2).cells).toBeGreaterThan(2300); expect(at(128, 2).cells).toBeLessThan(2700);
-    expect(at(128, 30).apart.length).toBe(14);
-    expect(at(128, 30).cells).toBeGreaterThan(1e6);
-    expect(at(128, 30, 'none').apart.length).toBe(6);
+    expect(d4.axes).toBe(1); expect(d4.levels[0]).toBeGreaterThan(2.7); expect(d4.levels[0]).toBeLessThan(2.9);
+    expect(at(16, 2).axes).toBe(5); expect(at(17, 2).axes).toBe(6);
+    expect(at(21, 2).apart.length).toBe(6); expect(at(21, 2).axes).toBe(6);
+    expect(at(128, 2).apart.length).toBe(7); expect(at(128, 2).axes).toBe(6);
+    expect(at(128, 30).apart.length).toBe(14); expect(at(128, 30).axes).toBe(REGIONS.length);
+    expect(at(128, 30).levels[0]).toBeGreaterThan(10.5); expect(at(128, 30).levels[0]).toBeLessThan(11.5);
+    expect(at(128, 30, 'none').apart.length).toBe(6); expect(at(128, 30, 'none').axes).toBe(6);
     const i = (id: string) => STATES.findIndex((s) => s.id === id);
     expect(d4.acc[i('positive') * M + i('negative')]).toBeLessThan(0.52);
     expect(d4.acc[i('mi-right') * M + i('mi-left')]).toBeLessThan(0.55);

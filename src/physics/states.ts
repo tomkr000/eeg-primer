@@ -320,8 +320,10 @@ export interface Outcome {
   acc: Float64Array;
   /** the largest set of named states that are pairwise told apart at d′ ≥ dStar */
   apart: number[];
-  /** estimate of how many states the feature space could hold at this resolution */
-  cells: number;
+  /** how many levels one reading resolves along each independent direction of the feature space, largest first */
+  levels: number[];
+  /** the number of those directions with at least two levels: the independent axes the cap resolves */
+  axes: number;
   /** the pair with the lowest accuracy */
   worst: [number, number];
 }
@@ -336,7 +338,8 @@ export function evaluate(cfg: ModelCfg, states: NamedState[], set: Settings): Ou
     if (v < low) { low = v; worst = [i, j]; }
   }
   for (let i = 0; i < M; i++) acc[i * M + i] = 0.5;
-  return { d, acc, apart: maxClique(M, (i, j) => d[i * M + j] >= set.dStar), cells: cellCount(cfg, states, set), worst };
+  const levels = boxLevels(cfg, states, set);
+  return { d, acc, apart: maxClique(M, (i, j) => d[i * M + j] >= set.dStar), levels, axes: levels.filter((l) => l >= 2).length, worst };
 }
 /** inverse of the standard normal cumulative distribution (Acklam's rational approximation, refined by one Newton step) */
 export function probit(p: number): number {
@@ -371,12 +374,14 @@ export function maxClique(n: number, joined: (i: number, j: number) => boolean):
 }
 
 /**
- * How many states the features could hold: the box each region's log power spans across the named states, measured
- * through the cap at the box's center and whitened by the reading's covariance, counted in cells one d′ = dStar wide along
- * each principal direction (1 + extent/dStar per direction, the product over directions). An estimate, exact for
- * independent features.
+ * How finely the cap reads the feature space: the box each region's log power spans across the named states, measured
+ * through the cap at the box's center and whitened by one reading's covariance, has an extent along each of its
+ * principal directions; a reading resolves 1 + extent/dStar levels along that direction (two levels when the two ends of
+ * the range are just told apart). Directions with at least two levels are the independent axes the cap resolves. The
+ * product of the levels would count every combination of levels as a state, which is not what a state is, so the
+ * figure shows the levels and the axes, not the product.
  */
-export function cellCount(cfg: ModelCfg, states: NamedState[], set: Settings): number {
+export function boxLevels(cfg: ModelCfg, states: NamedState[], set: Settings): number[] {
   const K = cfg.regions.length, lo = new Float64Array(K).fill(Infinity), hi = new Float64Array(K).fill(-Infinity);
   cfg.regions.forEach((r, k) => { for (const s of states) { const v = Math.log(s.factors[r.id] ?? 1); lo[k] = Math.min(lo[k], v); hi[k] = Math.max(hi[k], v); } });
   const center: NamedState = { id: 'center', name: 'center', factors: Object.fromEntries(cfg.regions.map((r, k) => [r.id, Math.exp((lo[k] + hi[k]) / 2)])) };
@@ -399,9 +404,7 @@ export function cellCount(cfg: ModelCfg, states: NamedState[], set: Settings): n
   }
   const Gm = new Float64Array(K * K);
   for (let p = 0; p < K; p++) for (let q = 0; q < K; q++) { let s = 0; for (let k = 0; k < F; k++) s += J[k * K + p] * W[k * K + q]; Gm[p * K + q] = s; }
-  let count = 1;
-  for (const v of symmetricEigen(Gm, K).values) count *= 1 + Math.sqrt(Math.max(v, 0)) / set.dStar;
-  return count;
+  return symmetricEigen(Gm, K).values.map((v) => 1 + Math.sqrt(Math.max(v, 0)) / set.dStar);
 }
 
 /** the share of a Gaussian deflection's energy (standard deviation `sigmaS` in time) that falls in a band */

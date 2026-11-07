@@ -57,26 +57,26 @@ export const N3_SLOW = (75 / (2 * Math.SQRT2) / SLOW_UV) ** 2;
 const hand = (col: number) => ({ muL: 1 + P.miResponse[0][col] / 100, muR: 1 + P.miResponse[1][col] / 100 }); // claim mi-matrix
 /** power factors relative to eyes-open rest (claim state-table); factors not listed are 1 */
 export const STATES: NamedState[] = [
-  { id: 'rest-eo', name: 'Resting, eyes open', short: 'Eyes open', factors: {} },
-  { id: 'rest-ec', name: 'Resting, eyes closed', short: 'Eyes closed', eyesClosed: true, factors: EC },
-  { id: 'calm', name: 'Calm (slow breathing)', short: 'Calm', factors: { ...alphaAll(g(0.5)), theta: g(-0.5) } }, // claim relaxation-signature
-  { id: 'meditation', name: 'Meditating, eyes closed', short: 'Meditating', eyesClosed: true, factors: times(EC, { theta: 1.4, ...alphaAll(1.1), beta: 1.2 }) }, // claim meditation-signature
-  { id: 'drowsy', name: 'Drowsy', short: 'Drowsy', factors: { theta: g(1.03), ...alphaAll(g(0.85)), slow: g(0.3), beta: g(0.3) } }, // claim drowsiness-signature
-  { id: 'focus', name: 'Focused on an easy task', short: 'Focused', factors: half(WORKLOAD) },
-  { id: 'workload', name: 'High mental workload', short: 'Workload', factors: WORKLOAD },
-  { id: 'stress', name: 'Stressed', short: 'Stressed', factors: { ...alphaAll(g(-0.6)), beta: g(0.31) } }, // claim stress-signature
-  { id: 'excited', name: 'Excited (high arousal)', short: 'Excited', factors: { alphaP: 0.94, theta: 0.96 } }, // claim arousal-signature
-  { id: 'positive', name: 'Positive mood', short: 'Positive mood', factors: { alphaFL: 0.96 } }, // claim valence-asymmetry
-  { id: 'negative', name: 'Negative mood', short: 'Negative mood', factors: { alphaFR: 0.96 } },
-  { id: 'memory', name: 'Holding items in memory', short: 'Memory load', factors: { alphaP: 1.2, theta: 1.2 } }, // claim memory-retention-signature
-  { id: 'wandering', name: 'Mind wandering, eyes closed', short: 'Mind wandering', eyesClosed: true, factors: times(EC, { theta: 1.22, slow: 1.22, ...alphaAll(0.71), beta: 0.88 }) }, // claim mind-wandering-signature
-  { id: 'mi-right', name: 'Imagined right-hand move', short: 'Right hand', factors: hand(0) },
-  { id: 'mi-left', name: 'Imagined left-hand move', short: 'Left hand', factors: hand(1) },
-  { id: 'n1', name: 'Light sleep (N1)', short: 'N1', eyesClosed: true, factors: { ...alphaAll(0.4), theta: 1.3, slow: 1.3, beta: 0.8 } }, // claim sleep-stages
-  { id: 'n2', name: 'Light sleep (N2)', short: 'N2', eyesClosed: true, factors: { ...alphaAll(0.4), theta: 1.5, slow: 3, beta: 0.7 } },
-  { id: 'n3', name: 'Deep sleep (N3)', short: 'N3', eyesClosed: true, factors: { slow: N3_SLOW, theta: 1.5, ...alphaAll(0.3), beta: 0.5, muL: 0.5, muR: 0.5 } }, // slow waves at the 75 µV peak-to-peak scoring criterion
-  { id: 'rem', name: 'REM sleep', short: 'REM', eyesClosed: true, factors: { ...alphaAll(0.5), theta: 1.2, beta: 0.9 } },
-  { id: 'anesthesia', name: 'Anesthetized (propofol)', short: 'Anesthesia', eyesClosed: true, factors: { slow: 10, alphaFL: 8, alphaFR: 8, alphaP: 0.5, beta: 0.5, theta: 2 } }, // claim anesthesia-signature
+  { id: 'rest-eo', name: 'Resting, eyes open', factors: {} },
+  { id: 'rest-ec', name: 'Resting, eyes closed', eyesClosed: true, factors: EC },
+  { id: 'calm', name: 'Calm (slow breathing)', factors: { ...alphaAll(g(0.5)), theta: g(-0.5) } }, // claim relaxation-signature
+  { id: 'meditation', name: 'Meditating, eyes closed', eyesClosed: true, factors: times(EC, { theta: 1.4, ...alphaAll(1.1), beta: 1.2 }) }, // claim meditation-signature
+  { id: 'drowsy', name: 'Drowsy', factors: { theta: g(1.03), ...alphaAll(g(0.85)), slow: g(0.3), beta: g(0.3) } }, // claim drowsiness-signature
+  { id: 'focus', name: 'Focused on an easy task', factors: half(WORKLOAD) },
+  { id: 'workload', name: 'High mental workload', factors: WORKLOAD },
+  { id: 'stress', name: 'Stressed', factors: { ...alphaAll(g(-0.6)), beta: g(0.31) } }, // claim stress-signature
+  { id: 'excited', name: 'Excited (high arousal)', factors: { alphaP: 0.94, theta: 0.96 } }, // claim arousal-signature
+  { id: 'positive', name: 'Positive mood', factors: { alphaFL: 0.96 } }, // claim valence-asymmetry
+  { id: 'negative', name: 'Negative mood', factors: { alphaFR: 0.96 } },
+  { id: 'memory', name: 'Holding items in memory', factors: { alphaP: 1.2, theta: 1.2 } }, // claim memory-retention-signature
+  { id: 'wandering', name: 'Mind wandering, eyes closed', eyesClosed: true, factors: times(EC, { theta: 1.22, slow: 1.22, ...alphaAll(0.71), beta: 0.88 }) }, // claim mind-wandering-signature
+  { id: 'mi-right', name: 'Imagined right-hand move', factors: hand(0) },
+  { id: 'mi-left', name: 'Imagined left-hand move', factors: hand(1) },
+  { id: 'n1', name: 'Light sleep (N1)', eyesClosed: true, factors: { ...alphaAll(0.4), theta: 1.3, slow: 1.3, beta: 0.8 } }, // claim sleep-stages
+  { id: 'n2', name: 'Light sleep (N2)', eyesClosed: true, factors: { ...alphaAll(0.4), theta: 1.5, slow: 3, beta: 0.7 } },
+  { id: 'n3', name: 'Deep sleep (N3)', eyesClosed: true, factors: { slow: N3_SLOW, theta: 1.5, ...alphaAll(0.3), beta: 0.5, muL: 0.5, muR: 0.5 } }, // slow waves at the 75 µV peak-to-peak scoring criterion
+  { id: 'rem', name: 'REM sleep', eyesClosed: true, factors: { ...alphaAll(0.5), theta: 1.2, beta: 0.9 } },
+  { id: 'anesthesia', name: 'Anesthetized (propofol)', eyesClosed: true, factors: { slow: 10, alphaFL: 8, alphaFR: 8, alphaP: 0.5, beta: 0.5, theta: 2 } }, // claim anesthesia-signature
 ];
 
 /** where a state's largest change sits and what it is: the region's area, its rhythm and the direction */

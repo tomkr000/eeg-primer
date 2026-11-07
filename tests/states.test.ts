@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { capLattice, evaluate, seen, separation, pairCorrect, trigamma, maxClique, gaussianBandShare, D_STAR_90, type ModelCfg, type NamedState, type Settings } from '../src/physics/states';
+import { capLattice, evaluate, seen, separation, pairCorrect, trigamma, maxClique, dendrogram, gaussianBandShare, D_STAR_90, type ModelCfg, type NamedState, type Settings } from '../src/physics/states';
 import { restVersusImagery } from '../src/physics/control';
 import { MODEL, STATES, REGIONS, signature } from '../src/data/states';
 
@@ -32,7 +32,7 @@ describe('the electrode sequence', () => {
 
 describe('one region read in one band', () => {
   const one: ModelCfg = { regions: [{ id: 'a', band: 'alpha', thetaDeg: 0, phiDeg: 0, radiusMm: 30, restUv: 20 }], nuisances: [], bgUv: { slow: 0.01, theta: 0.01, alpha: 0.01, beta: 0.01 }, noiseUvPer3Hz: 0.001 };
-  const rest: NamedState = { id: 'r', name: 'r', short: 'r', factors: {} }, half: NamedState = { id: 'h', name: 'h', short: 'h', factors: { a: 0.5 } };
+  const rest: NamedState = { id: 'r', name: 'r', factors: {} }, half: NamedState = { id: 'h', name: 'h', factors: { a: 0.5 } };
   it('with no noise, the linear classifier of the log power is close to the exact gamma threshold rule', () => {
     for (const T of [1, 2, 8]) {
       const set = { ...base, N: 1, T }, d = separation(seen(one, rest, set), seen(one, half, set));
@@ -128,7 +128,21 @@ describe('helpers', () => {
     const joined = (i: number, j: number) => i === 5 || j === 5 || Math.abs(i - j) === 1 || Math.abs(i - j) === 4;
     expect(maxClique(6, joined).length).toBe(3);
   });
-  it('read each state strip by strip (claim states-count)', () => {
+  it('cluster by average linkage with nondecreasing join heights', () => {
+    // three states: a and b close, c far; a–c and b–c differ, so the mean decides where c joins
+    const d = new Float64Array([0, 1, 4, 1, 0, 6, 4, 6, 0]);
+    expect(dendrogram(3, d, 'average')).toEqual([{ a: 0, b: 1, h: 1 }, { a: 2, b: 3, h: 5 }]);
+    expect(dendrogram(3, d, 'single')[1].h).toBe(4);
+    expect(dendrogram(3, d, 'complete')[1].h).toBe(6);
+    const o = evaluate(MODEL, STATES, base), joins = dendrogram(STATES.length, o.d);
+    expect(joins.length).toBe(STATES.length - 1);
+    for (let k = 1; k < joins.length; k++) expect(joins[k].h).toBeGreaterThanOrEqual(joins[k - 1].h);
+    // at the defaults the cut at 2.56 leaves two brackets: the eyes-closed trio and the other seventeen, joined at about 3.1
+    const top = joins[joins.length - 1];
+    expect(top.h).toBeGreaterThan(2.56); expect(top.h).toBeLessThan(3.5);
+    expect(joins[joins.length - 2].h).toBeLessThan(2.56);
+  });
+  it('read each state reading by reading (claim states-count)', () => {
     const F = REGIONS.length, kt = REGIONS.findIndex((r) => r.id === 'theta'), ka = REGIONS.findIndex((r) => r.id === 'alphaP');
     const strip = (N: number, T: number, k: number) => {
       const s = { ...base, N, T }, rest = seen(MODEL, STATES[0], s), views = STATES.map((st) => seen(MODEL, st, s));
@@ -144,10 +158,6 @@ describe('helpers', () => {
     const tBig = strip(100000, 2, kt);
     expect(Math.exp(tBig.change[id('workload')])).toBeCloseTo(1.19, 1); expect(tBig.bar).toBeCloseTo(2.55, 1); expect(tBig.outside).toEqual([]);
     expect(strip(128, 30, kt).outside.sort()).toEqual(['anesthesia', 'drowsy']);
-  });
-  it('give every state a distinct short name', () => {
-    expect(new Set(STATES.map((s) => s.short)).size).toBe(STATES.length);
-    for (const s of STATES) expect(s.short.length).toBeLessThanOrEqual(14);
   });
   it('mark each state by its largest change (claim state-table)', () => {
     const tag = (id: string) => { const g = signature(STATES.find((s) => s.id === id)!); return g ? `${g.rhythm} ${g.up ? 'up' : 'down'}, ${g.area}` : 'none'; };

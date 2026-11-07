@@ -28,8 +28,8 @@ export interface Region extends Source { restUv: number }
  * rate per second), `emg` a stationary rhythm (rms at the scalp above it) whose level changes between windows by a
  * lognormal factor of log standard deviation `logSd` */
 export type Nuisance = Source & ({ kind: 'blink'; energyUv2s: number; ratePerS: number; event: string } | { kind: 'emg'; uvRms: number; logSd: number });
-/** a named state: its full name, a short one for crowded labels, and its power factors per region (unlisted regions are 1) */
-export interface NamedState { id: string; name: string; short: string; factors: Record<string, number>; eyesClosed?: boolean }
+/** a named state: its name and its power factors per region (unlisted regions are 1) */
+export interface NamedState { id: string; name: string; factors: Record<string, number>; eyesClosed?: boolean }
 export interface ModelCfg {
   regions: Region[];
   nuisances: Nuisance[];
@@ -385,7 +385,7 @@ export function maxClique(n: number, joined: (i: number, j: number) => boolean):
 export function boxLevels(cfg: ModelCfg, states: NamedState[], set: Settings): number[] {
   const K = cfg.regions.length, lo = new Float64Array(K).fill(Infinity), hi = new Float64Array(K).fill(-Infinity);
   cfg.regions.forEach((r, k) => { for (const s of states) { const v = Math.log(s.factors[r.id] ?? 1); lo[k] = Math.min(lo[k], v); hi[k] = Math.max(hi[k], v); } });
-  const center: NamedState = { id: 'center', name: 'center', short: 'center', factors: Object.fromEntries(cfg.regions.map((r, k) => [r.id, Math.exp((lo[k] + hi[k]) / 2)])) };
+  const center: NamedState = { id: 'center', name: 'center', factors: Object.fromEntries(cfg.regions.map((r, k) => [r.id, Math.exp((lo[k] + hi[k]) / 2)])) };
   const view = seen(cfg, center, set), reads = (Object.keys(BANDS) as Band[]).map((b) => readBand(cfg, b, set.N, set.artifacts === 'removed'));
   const ids = cfg.regions.map((r) => r.id), F = K;
   // Jacobian of the feature means with respect to the regions' log powers, times the box's extent per region
@@ -406,6 +406,34 @@ export function boxLevels(cfg: ModelCfg, states: NamedState[], set: Settings): n
   const Gm = new Float64Array(K * K);
   for (let p = 0; p < K; p++) for (let q = 0; q < K; q++) { let s = 0; for (let k = 0; k < F; k++) s += J[k * K + p] * W[k * K + q]; Gm[p * K + q] = s; }
   return symmetricEigen(Gm, K).values.map((v) => 1 + Math.sqrt(Math.max(v, 0)) / set.dStar);
+}
+
+/** one join of a hierarchical clustering: nodes a and b (leaves 0..M−1, joins numbered M onward in order) join at separation h */
+export interface Join { a: number; b: number; h: number }
+/**
+ * Agglomerative clustering of the states by their pairwise separation d′: groups join at the smallest (single), mean
+ * (average) or largest (complete) d′ between a state of one and a state of the other. M − 1 joins, heights nondecreasing.
+ */
+export function dendrogram(M: number, d: Float64Array, linkage: 'single' | 'average' | 'complete' = 'average'): Join[] {
+  const groups = new Map<number, number[]>(Array.from({ length: M }, (_, i) => [i, [i]]));
+  const between = (A: number[], B: number[]) => {
+    let s = linkage === 'single' ? Infinity : 0;
+    for (const i of A) for (const j of B) { const v = d[i * M + j]; s = linkage === 'single' ? Math.min(s, v) : linkage === 'complete' ? Math.max(s, v) : s + v; }
+    return linkage === 'average' ? s / (A.length * B.length) : s;
+  };
+  const joins: Join[] = [];
+  for (let next = M; groups.size > 1; next++) {
+    let best: Join = { a: -1, b: -1, h: Infinity };
+    const ids = [...groups.keys()];
+    for (let p = 0; p < ids.length; p++) for (let q = p + 1; q < ids.length; q++) {
+      const h = between(groups.get(ids[p])!, groups.get(ids[q])!);
+      if (h < best.h) best = { a: ids[p], b: ids[q], h };
+    }
+    groups.set(next, [...groups.get(best.a)!, ...groups.get(best.b)!]);
+    groups.delete(best.a); groups.delete(best.b);
+    joins.push(best);
+  }
+  return joins;
 }
 
 /** the share of a Gaussian deflection's energy (standard deviation `sigmaS` in time) that falls in a band */

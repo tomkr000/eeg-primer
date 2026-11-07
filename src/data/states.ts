@@ -78,25 +78,3 @@ export const STATES: NamedState[] = [
   { id: 'rem', name: 'REM sleep', eyesClosed: true, factors: { ...alphaAll(0.5), theta: 1.2, beta: 0.9 } },
   { id: 'anesthesia', name: 'Anesthetized (propofol)', eyesClosed: true, factors: { slow: 10, alphaFL: 8, alphaFR: 8, alphaP: 0.5, beta: 0.5, theta: 2 } }, // claim anesthesia-signature
 ];
-
-/** where a state's largest change sits and what it is: the region's area, its rhythm and the direction */
-export type Area = 'posterior' | 'frontal' | 'hand areas';
-export type Rhythm = 'slow waves' | 'theta' | 'alpha' | 'mu' | 'beta';
-export interface Signature { area: Area; rhythm: Rhythm; up: boolean; region: string; /** the power factor of that change */ factor: number }
-const AREA: Record<string, Area> = { slow: 'frontal', theta: 'frontal', alphaP: 'posterior', muL: 'hand areas', muR: 'hand areas', alphaFL: 'frontal', alphaFR: 'frontal', beta: 'frontal' };
-const RHYTHM: Record<string, Rhythm> = { slow: 'slow waves', theta: 'theta', alphaP: 'alpha', muL: 'mu', muR: 'mu', alphaFL: 'alpha', alphaFR: 'alpha', beta: 'beta' };
-/**
- * The largest change in a state's factors, in log terms, against eyes-open rest, the common reference of the table
- * (so the eyes-closed states are alpha-up states first, whatever else they add); ties go to the region with the larger
- * resting amplitude. Eyes-open rest itself has no signature.
- */
-export function signature(state: NamedState): Signature | null {
-  let best: Signature | null = null, size = 0;
-  for (const r of REGIONS) {
-    const v = Math.log(state.factors[r.id] ?? 1);
-    if (Math.abs(v) < 1e-9) continue;
-    const bigger = Math.abs(v) > size + 1e-9 || (Math.abs(Math.abs(v) - size) <= 1e-9 && r.restUv > REGIONS.find((q) => q.id === best!.region)!.restUv);
-    if (bigger) { size = Math.abs(v); best = { area: AREA[r.id], rhythm: RHYTHM[r.id], up: v > 0, region: r.id, factor: Math.exp(v) }; }
-  }
-  return best;
-}

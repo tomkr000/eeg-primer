@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { capLattice, evaluate, seen, separation, pairCorrect, trigamma, maxClique, dendrogram, gaussianBandShare, D_STAR_90, type ModelCfg, type NamedState, type Settings } from '../src/physics/states';
 import { restVersusImagery } from '../src/physics/control';
-import { MODEL, STATES, REGIONS, signature } from '../src/data/states';
+import { MODEL, STATES, REGIONS } from '../src/data/states';
 
 const base: Settings = { N: 4, T: 2, calibration: 'session', artifacts: 'present', betweenSd: 0.65, retest: { slow: 0.66, theta: 0.77, alpha: 0.88, beta: 0.81 }, dStar: D_STAR_90 };
 const M = STATES.length;
@@ -171,17 +171,5 @@ describe('helpers', () => {
     const tBig = strip(100000, 2, kt);
     expect(Math.exp(tBig.change[id('workload')])).toBeCloseTo(1.19, 1); expect(tBig.bar).toBeCloseTo(2.55, 1); expect(tBig.outside).toEqual([]);
     expect(strip(128, 30, kt).outside.sort()).toEqual(['anesthesia', 'drowsy']);
-  });
-  it('mark each state by its largest change (claim state-table)', () => {
-    const tag = (id: string) => { const g = signature(STATES.find((s) => s.id === id)!); return g ? `${g.rhythm} ${g.up ? 'up' : 'down'}, ${g.area}` : 'none'; };
-    expect(tag('rest-eo')).toBe('none');
-    for (const id of ['rest-ec', 'meditation', 'wandering', 'calm', 'memory']) expect(tag(id)).toBe('alpha up, posterior');
-    for (const id of ['drowsy', 'focus', 'workload']) expect(tag(id)).toBe('theta up, frontal');
-    for (const id of ['stress', 'excited', 'n1', 'rem']) expect(tag(id)).toBe('alpha down, posterior');
-    for (const id of ['positive', 'negative']) expect(tag(id)).toBe('alpha down, frontal');
-    expect(signature(STATES.find((s) => s.id === 'mi-right')!)!.region).toBe('muL');
-    expect(signature(STATES.find((s) => s.id === 'mi-left')!)!.region).toBe('muR');
-    for (const id of ['mi-right', 'mi-left']) expect(tag(id)).toBe('mu down, hand areas');
-    for (const id of ['n2', 'n3', 'anesthesia']) expect(tag(id)).toBe('slow waves up, frontal');
   });
 });

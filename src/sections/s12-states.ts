@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { evaluate, seen, D_STAR_90, BANDS, type Band, type Settings } from '../physics/states';
+import { evaluate, seen, dendrogram, D_STAR_90, BANDS, type Band, type Settings } from '../physics/states';
 import { MODEL, STATES, REGIONS, REGION_NAMES, BACKGROUND, EMG, G_SCALE } from '../data/states';
 import { controls, readout, slider, choice, fmt } from '../ui/slider';
 import { linePlot } from '../ui/plot';
@@ -14,9 +14,6 @@ const SPREAD = { betweenSd: 0.65, retest: { slow: 0.66, theta: 0.77, alpha: 0.88
 const NS = Array.from(new Set(Array.from({ length: 31 }, (_, i) => Math.round(Math.pow(1000, i / 30)))));
 const fmtN = (n: number) => Math.round(n).toLocaleString('en-US');
 const BLUE = '#2a78d6', ORANGE = '#eb6834';
-/** cell color: dark for a pair the decoder confuses, white for one it always tells apart */
-const ramp = d3.interpolateLab('#1b4d8e', '#fbfbfa');
-const cellColor = (acc: number) => ramp(Math.pow(Math.max(0, Math.min(1, (acc - 0.5) / 0.5)), 1.4));
 const bandName = (b: Band) => `${BANDS[b][0]} to ${BANDS[b][1]} Hz`;
 
 export function mountStates(root: HTMLElement) {
@@ -67,11 +64,10 @@ statistics for band-power readings, not a verdict on every method.</p>`);
   const pickCal = choice('Baseline the decoder was calibrated on', [{ value: 'session', label: 'This session' }, { value: 'day', label: 'Another day' }, { value: 'none', label: 'Other people' }], 'session', (v) => { calibration = v; update(); });
 
   const rApart = readout('Named states one reading tells apart', c('states-count'));
-  const rWorst = readout('Hardest pair, numbered as in the matrix', c('states-count'));
   const rAxes = readout('Independent signals one reading resolves', c('states-count'));
   const rStep = readout('Smallest change of posterior alpha told apart', c('erd-detect'));
 
-  const fig = figure(sec.fig, `Left: for every pair of named states, the share of single readings that a linear decoder on the eight log band powers calls correctly, both states equally likely, computed from the separation d′ of the two states’ feature means in their reading-to-reading covariance as Φ(d′/2) ${c('states-model')}. Dark cells are pairs the decoder confuses, white cells pairs it always separates; a dot marks the largest set of states that are pairwise told apart in nine readings of ten. Right: that count (${sw(ORANGE, 'line')}) and the number of independent signals the cap resolves (${sw(BLUE, 'line')}): directions of the eight-region feature space along which one reading tells the named states’ extremes apart, so at most eight, against the number of electrodes at the current window and baseline; the vertical line follows the electrode slider ${c('states-count')}. The electrodes are the first N of a fixed, evenly spread sequence within 80° of the vertex of the section 3 head sphere ${c('cap-lattice')}. Each state’s factors come from the studies cited in the assumptions table ${c('state-table')}; the measured classifier accuracies stay in the text because their caps, windows and labels differ from this model.`, { wide: true });
+  const fig = figure(sec.fig, `Left: the named states grouped by the separation d′ of their feature means in their reading-to-reading covariance, from which a linear decoder on the eight log band powers calls a share Φ(d′/2) of single readings correctly, both states equally likely ${c('states-model')}. Two groups join at the mean d′ over their pairs (average linkage), so states joined left of the ${sw(ORANGE, 'dash')} line are ones the decoder confuses, and a dot marks the largest set of states that are pairwise told apart in nine readings of ten. Right: that count (${sw(ORANGE, 'line')}) and the number of independent signals the cap resolves (${sw(BLUE, 'line')}): directions of the eight-region feature space along which one reading tells the named states’ extremes apart, so at most eight, against the number of electrodes at the current window and baseline; the vertical line follows the electrode slider ${c('states-count')}. The electrodes are the first N of a fixed, evenly spread sequence within 80° of the vertex of the section 3 head sphere ${c('cap-lattice')}. Each state’s factors come from the studies cited in the assumptions table ${c('state-table')}; the measured classifier accuracies stay in the text because their caps, windows and labels differ from this model.`, { wide: true });
   const lede = document.createElement('p');
   lede.className = 'figure-lede';
   lede.innerHTML = `<strong>Model of reading named states from one window of EEG.</strong> States that differ by less than one reading’s scatter are confused, whatever the cap ${c('erd-detect')}${c('states-model')}.`;
@@ -82,28 +78,33 @@ statistics for band-power readings, not a verdict on every method.</p>`);
   row.style.flexWrap = 'nowrap';
   fig.viz.append(row);
 
-  // the matrix of pairwise accuracies
-  const CELL = 15, LW = 196, TOP = 18, PAD = 4;
-  const W = LW + M * CELL + PAD, H = TOP + M * CELL + PAD;
-  const matBox = document.createElement('div');
-  matBox.className = 'viz-box';
-  matBox.style.flex = `0 0 ${W}px`;
-  matBox.append(vizTitle('Share of readings that tell each pair of named states apart'));
-  const cv = document.createElement('canvas');
-  const DPR = Math.min(2, window.devicePixelRatio || 1);
-  cv.width = W * DPR; cv.height = H * DPR; cv.style.width = `${W}px`; cv.style.height = `${H}px`;
-  const ctx = cv.getContext('2d')!;
-  ctx.scale(DPR, DPR);
+  // the tree of confusions: leaves are the states, joined at the separation one reading achieves between the groups
+  const CELL = 14, LW = 196, TOP = 20, BOTTOM = 42, TW = 300, PAD = 6;
+  const W = LW + TW + PAD, H = TOP + M * CELL + BOTTOM;
+  const treeBox = document.createElement('div');
+  treeBox.className = 'viz-box';
+  treeBox.style.flex = `0 0 ${W}px`;
+  treeBox.append(vizTitle('Named states grouped by how well one reading tells them apart'));
+  const svg = d3.select(treeBox).append('svg').attr('width', W).attr('height', H).attr('class', 'plot-svg tree').style('width', `${W}px`);
+  const xs = d3.scaleLog().domain([0.1, 60]).range([LW + 6, LW + TW]).clamp(true);
+  const ys = (i: number) => TOP + i * CELL + CELL / 2;
+  // the told-apart line: the separation at which a decoder calls nine readings in ten correctly
+  const xTold = xs(D_STAR_90);
+  svg.append('line').attr('x1', xTold).attr('x2', xTold).attr('y1', TOP - 2).attr('y2', TOP + M * CELL + 2).attr('stroke', ORANGE).attr('stroke-width', 1.5).attr('stroke-dasharray', '5 4');
+  svg.append('text').attr('x', xTold).attr('y', TOP - 7).attr('text-anchor', 'middle').attr('class', 'marker-label').attr('fill', ORANGE).attr('font-weight', 600).text('told apart');
+  const gTree = svg.append('g').attr('fill', 'none').attr('stroke', '#4a4a46').attr('stroke-width', 1.5), gLeaves = svg.append('g');
+  const axis = d3.axisBottom(xs).tickValues([0.1, 0.3, 1, 3, 10, 30]).tickFormat((v) => fmt(+v, 1)).tickSize(4);
+  svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${TOP + M * CELL + 4})`).call(axis);
+  svg.append('text').attr('x', xs.range()[1]).attr('y', H - 4).attr('text-anchor', 'end').attr('class', 'axis-label').text('Separation d′ between the groups in one reading');
   const legend = document.createElement('div');
   legend.className = 'glow-legend';
-  legend.innerHTML = [0.5, 0.7, 0.9, 1].map((a) => `<span><i class="sw-i sw-patch" style="background:${cellColor(a)};border:1px solid #c9c8c2"></i>${Math.round(a * 100)}%${a === 0.5 ? ' (guessing)' : a === 0.9 ? ' (told apart)' : ''}</span>`).join('') + `<span class="note">● in the largest set told apart</span>`;
-  matBox.append(cv);
+  legend.innerHTML = `<span>${sw(ORANGE, 'dash')} told apart: a decoder calls 9 readings in 10 correctly</span><span class="note">● in the largest set told apart</span>`;
   const tip = document.createElement('div');
   tip.className = 'tooltip';
   tip.style.display = 'none';
-  matBox.style.position = 'relative';
-  matBox.append(tip);
-  row.append(matBox);
+  treeBox.style.position = 'relative';
+  treeBox.append(tip);
+  row.append(treeBox);
 
   // the counts against electrode count
   const plotBox = document.createElement('div');
@@ -114,7 +115,7 @@ statistics for band-power readings, not a verdict on every method.</p>`);
   row.append(plotBox);
   fig.viz.append(legend);
 
-  fig.viz.append(readouts(rApart.el, rWorst.el, rAxes.el, rStep.el));
+  fig.viz.append(readouts(rApart.el, rAxes.el, rStep.el));
   const ctl = controls(sN.el, sWin.el, pickCal.el);
   ctl.classList.add('aligned-controls');
   fig.panel.append(ctl);
@@ -127,54 +128,51 @@ statistics for band-power readings, not a verdict on every method.</p>`);
     { what: 'Reading', value: 'In each band the decoder forms the minimum-mean-square estimate of every region’s rhythm from the electrodes, given the regions’ typical powers, so regions the cap resolves are canceled from each other’s estimates and regions it cannot resolve mix. The features are the log powers of those estimates over the window; their reading-to-reading covariance follows the gamma model with shape B·T (the trigamma function gives the exact variance of a log gamma variate), including the correlation of estimates that share a source.', cite: c('states-model') + c('erd-detect') + c('snr-electrodes') },
     { what: 'Baseline', value: `“This session”: the decoder knows the person’s resting levels today. “Another day”: each region’s log power has moved since, by the day-to-day share 1 − ICC of the between-person variance (ICC the intraclass correlation between days), counted for both days. “Other people”: the decoder knows only the population, so each region’s resting log power is uncertain by ${SPREAD.betweenSd} natural-log units. The state’s factors are the same for everyone, an optimistic choice.`, cite: c('between-person') + c('test-retest') },
     { what: 'Artifacts', value: `Left in, as recorded. Blinks: a broad source in front of the brain, 15 a minute while the eyes are open, each section 7’s 150 µV deflection, their number per window Poisson; muscle: three sources at the forehead and the temples with ${EMG.uvRms} µV rms of beta at the scalp above them, their level varying between windows by a factor exp(±${EMG.logSd}). Both leak into the estimates. Canceling them instead changes no pair’s accuracy by more than two percentage points at any setting of the sliders, so there is no control for it: with the electrodes of this layout away from the eyes and the muscles, the blink’s energy sits below 4 Hz where the brain’s own background is largest, and the beta changes between named states are small.`, cite: c('blink-model') + c('emg-beta-level') + c('artifact-effect') },
-    { what: 'Told apart', value: 'Two states are told apart when d′, the separation of their feature means in their mean covariance, reaches 2.56, so that a linear decoder calls nine equally likely readings in ten correctly (Φ(d′/2) = 0.9). The named-state count is the largest set that is pairwise told apart. The count of independent signals takes the box each region’s log power spans across the named states, maps it through the cap at the box’s center, whitens it by the reading’s covariance and counts the principal directions along which the box is at least 2.56 wide, so that one reading tells the extremes of the named states apart along it. A reading resolves 1 + extent/2.56 levels along each direction; the product of those levels is not shown, because it would count every combination of levels as a state and grows without bound with the window.', cite: c('states-model') },
+    { what: 'Told apart', value: 'Two states are told apart when d′, the separation of their feature means in their mean covariance, reaches 2.56, so that a linear decoder calls nine equally likely readings in ten correctly (Φ(d′/2) = 0.9). The named-state count is the largest set that is pairwise told apart. The tree joins two groups at the mean d′ over their pairs (average linkage) and orders the leaves by the table; it displays the pairwise separations and adds no model. The count of independent signals takes the box each region’s log power spans across the named states, maps it through the cap at the box’s center, whitens it by the reading’s covariance and counts the principal directions along which the box is at least 2.56 wide, so that one reading tells the extremes of the named states apart along it. A reading resolves 1 + extent/2.56 levels along each direction; the product of those levels is not shown, because it would count every combination of levels as a state and grows without bound with the window.', cite: c('states-model') },
     { what: 'Window range', value: 'The slider runs from 1 to 60 s, with a 2 s default (a model choice) and a mark at the 30 s sleep-scoring epoch; below 1 s the gamma model’s shape would fall under 3.5 in the slowest band.', cite: c('sleep-stages') + c('erd-detect') },
     { what: 'Electrode marks', value: 'Four electrodes, as on a consumer headband with four recording sites; 21, the positions of the 10–20 system; 128, a research cap.', cite: c('consumer-electrodes') + c('eeg-systems') },
   ]);
 
   const settings = (N = sN.value, T = sWin.value): Settings => ({ N: Math.round(N), T, calibration, artifacts: 'present', betweenSd: SPREAD.betweenSd, retest: SPREAD.retest, dStar: D_STAR_90 });
-  let acc: Float64Array = new Float64Array(M * M), apart: number[] = [];
+  let acc: Float64Array = new Float64Array(M * M), dMat: Float64Array = new Float64Array(M * M), apart: number[] = [];
 
-  function drawMatrix() {
-    ctx.clearRect(0, 0, W, H);
-    ctx.textBaseline = 'middle';
-    for (let i = 0; i < M; i++) {
-      const y = TOP + i * CELL, cy = y + CELL / 2 + 0.5;
-      ctx.font = '12px system-ui, sans-serif';
-      ctx.textAlign = 'right';
-      ctx.fillStyle = '#1a1a1a';
-      ctx.fillText(STATES[i].name, LW - 9, cy);
-      if (apart.includes(i)) { ctx.beginPath(); ctx.arc(LW - 4, cy, 2.4, 0, 2 * Math.PI); ctx.fill(); }
-      ctx.font = '11px system-ui, sans-serif';
-      ctx.fillStyle = '#4a4a46';
-      ctx.fillText(String(i + 1), 17, cy);
-      ctx.textAlign = 'center';
-      ctx.fillText(String(i + 1), LW + i * CELL + CELL / 2, TOP / 2 + 1);
-      for (let j = 0; j < M; j++) {
-        const x = LW + j * CELL;
-        ctx.fillStyle = i === j ? '#e4e3df' : cellColor(acc[i * M + j]);
-        ctx.fillRect(x + 0.5, y + 0.5, CELL - 1, CELL - 1);
-      }
-    }
-    ctx.strokeStyle = '#c9c8c2';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(LW + 0.5, TOP + 0.5, M * CELL - 1, M * CELL - 1);
+  function drawTree() {
+    const joins = dendrogram(M, dMat, 'average'), node = (n: number) => (n < M ? null : joins[n - M]);
+    // leaf order: at every join the group holding the state that comes first in the table goes on top, so the order stays put
+    const rank = (n: number): number => (n < M ? n : Math.min(rank(node(n)!.a), rank(node(n)!.b)));
+    const order: number[] = [];
+    const walk = (n: number) => { const j = node(n); if (!j) { order.push(n); return; } const [top, bottom] = rank(j.a) <= rank(j.b) ? [j.a, j.b] : [j.b, j.a]; walk(top); walk(bottom); };
+    walk(M + joins.length - 1);
+    const y = new Float64Array(2 * M - 1), x = new Float64Array(2 * M - 1);
+    order.forEach((leaf, i) => { y[leaf] = ys(i); x[leaf] = xs.range()[0]; });
+    joins.forEach((j, k) => { const n = M + k; y[n] = (y[j.a] + y[j.b]) / 2; x[n] = xs(Math.max(j.h, xs.domain()[0])); });
+    gTree.selectAll('*').remove();
+    joins.forEach((j, k) => {
+      const n = M + k;
+      for (const ch of [j.a, j.b]) gTree.append('line').attr('x1', x[ch]).attr('x2', x[n]).attr('y1', y[ch]).attr('y2', y[ch]);
+      gTree.append('line').attr('x1', x[n]).attr('x2', x[n]).attr('y1', y[j.a]).attr('y2', y[j.b]);
+    });
+    gLeaves.selectAll('*').remove();
+    order.forEach((leaf, i) => {
+      const cy = ys(i);
+      gLeaves.append('text').attr('x', LW - 9).attr('y', cy + 4).attr('text-anchor', 'end').attr('class', 'leaf').text(STATES[leaf].name)
+        .on('mousemove', (ev: MouseEvent) => {
+          const others = Array.from({ length: M }, (_, j) => j).filter((j) => j !== leaf).sort((p, q) => acc[leaf * M + p] - acc[leaf * M + q]).slice(0, 3);
+          tip.style.display = 'block';
+          tip.innerHTML = `<b>${STATES[leaf].name}</b>, confused most with ${others.map((j) => `${STATES[j].name} (${fmt(100 * acc[leaf * M + j], 2)}%)`).join(', ')}`;
+          const r = treeBox.getBoundingClientRect();
+          tip.style.left = `${Math.min(ev.clientX - r.left + 12, W - 280)}px`;
+          tip.style.top = `${ev.clientY - r.top + 16}px`;
+        })
+        .on('mouseleave', () => { tip.style.display = 'none'; });
+      if (apart.includes(leaf)) gLeaves.append('circle').attr('cx', LW - 4).attr('cy', cy).attr('r', 2.4).attr('fill', '#1a1a1a');
+    });
   }
-  cv.addEventListener('mousemove', (ev) => {
-    const r = cv.getBoundingClientRect(), x = ev.clientX - r.left, y = ev.clientY - r.top;
-    const j = Math.floor((x - LW) / CELL), i = Math.floor((y - TOP) / CELL);
-    if (i < 0 || j < 0 || i >= M || j >= M || i === j) { tip.style.display = 'none'; return; }
-    tip.style.display = 'block';
-    tip.innerHTML = `<b>${STATES[i].name}</b> vs <b>${STATES[j].name}</b>: ${fmt(100 * acc[i * M + j], 3)}% of readings called correctly`;
-    tip.style.left = `${Math.min(x + 12, W - 260)}px`;
-    tip.style.top = `${y + 18}px`;
-  });
-  cv.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
 
   function update() {
     const set = settings(), out = evaluate(MODEL, STATES, set);
-    acc = out.acc; apart = out.apart;
-    drawMatrix();
+    acc = out.acc; dMat = out.d; apart = out.apart;
+    drawTree();
     const axes: [number, number][] = [], told: [number, number][] = [];
     for (const N of NS) { const o = evaluate(MODEL, STATES, settings(N)); axes.push([N, o.axes]); told.push([N, Math.max(1, o.apart.length)]); }
     plot.update([
@@ -186,8 +184,6 @@ statistics for band-power readings, not a verdict on every method.</p>`);
       { axis: 'x', value: set.N, label: `${fmtN(set.N)} electrodes`, callout: true },
     ]);
     rApart.set(`${out.apart.length} of ${M}`);
-    const [a, b] = out.worst;
-    rWorst.set(`${fmt(100 * out.acc[a * M + b], 2)}% <span class="readout-aside">${a + 1} vs ${b + 1}</span>`);
     rAxes.set(`${out.axes} of ${REGIONS.length}`);
     const rest = seen(MODEL, STATES[0], set), k = REGIONS.findIndex((r) => r.id === 'alphaP');
     rStep.set(`×${fmt(Math.exp(set.dStar * Math.sqrt(rest.cov[k * REGIONS.length + k])), 2)}`);

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { capLattice, evaluate, seen, separation, pairCorrect, trigamma, maxClique, gaussianBandShare, D_STAR_90, type ModelCfg, type NamedState, type Settings } from '../src/physics/states';
+import { capLattice, evaluate, seen, separation, pairCorrect, trigamma, maxClique, dendrogram, gaussianBandShare, D_STAR_90, type ModelCfg, type NamedState, type Settings } from '../src/physics/states';
 import { restVersusImagery } from '../src/physics/control';
 import { MODEL, STATES, REGIONS } from '../src/data/states';
 
@@ -124,5 +124,15 @@ describe('helpers', () => {
     // a 5-cycle plus one vertex joined to all: the largest clique is a triangle
     const joined = (i: number, j: number) => i === 5 || j === 5 || Math.abs(i - j) === 1 || Math.abs(i - j) === 4;
     expect(maxClique(6, joined).length).toBe(3);
+  });
+  it('cluster by average linkage with nondecreasing join heights', () => {
+    // three states: a and b close, c far; a–c and b–c differ, so the mean decides where c joins
+    const d = new Float64Array([0, 1, 4, 1, 0, 6, 4, 6, 0]);
+    expect(dendrogram(3, d, 'average')).toEqual([{ a: 0, b: 1, h: 1 }, { a: 2, b: 3, h: 5 }]);
+    expect(dendrogram(3, d, 'single')[1].h).toBe(4);
+    expect(dendrogram(3, d, 'complete')[1].h).toBe(6);
+    const o = evaluate(MODEL, STATES, base), joins = dendrogram(STATES.length, o.d);
+    expect(joins.length).toBe(STATES.length - 1);
+    for (let k = 1; k < joins.length; k++) expect(joins[k].h).toBeGreaterThanOrEqual(joins[k - 1].h);
   });
 });

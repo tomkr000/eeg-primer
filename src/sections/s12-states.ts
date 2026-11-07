@@ -16,6 +16,8 @@ const NS = Array.from(new Set(Array.from({ length: 41 }, (_, i) => Math.round(Ma
 const fmtN = (n: number) => Math.round(n).toLocaleString('en-US');
 /** told apart: the count, the curve and the line */
 const TOLD = '#1a1a1a';
+/** one hue per group of states a reading confuses, in order from the top of the tree */
+const GROUP_COLORS = ['#2a78d6', '#eb6834', '#1baf7a', '#d6336c', '#6250d6', '#8a6d3b', '#0b7285', '#b8860b'];
 const bandName = (b: Band) => `${BANDS[b][0]} to ${BANDS[b][1]} Hz`;
 
 export function mountStates(root: HTMLElement) {
@@ -71,7 +73,7 @@ statistics for band-power readings, not a verdict on every method.</p>`);
   const pickCal = choice('Baseline the decoder was calibrated on', [{ value: 'session', label: 'This session' }, { value: 'day', label: 'Another day' }, { value: 'none', label: 'Other people' }], 'session', (v) => { calibration = v; update(); });
 
 
-  const fig = figure(sec.fig, `Left: the named states grouped by the separation d′ of their feature means in their reading-to-reading covariance, from which a linear decoder on the eight log band powers calls a share Φ(d′/2) of single readings correctly, both states equally likely ${c('states-model')}. Groups join at the mean d′ over their pairs (average linkage). Joins left of the ${sw(TOLD, 'dash')} line, where d′ is below 2.56 and the decoder calls fewer than nine readings in ten correctly, are not drawn: the states they connect form one bracket, placed at the separation where its last member joined, and its members are listed by rhythm and area so that what the cap lumps together can be read against what defines each state. Joins right of the line are drawn at their separation, and the brackets are the groups one reading tells apart, the figure’s count. Right: that count against the number of electrodes at the current window and baseline; the vertical line follows the electrode slider ${c('states-count')}. The electrodes are the first N of a fixed, evenly spread sequence within 80° of the vertex of the section 3 head sphere ${c('cap-lattice')}. Each state’s factors come from the studies cited in the assumptions table ${c('state-table')}; the measured classifier accuracies stay in the text because their caps, windows and labels differ from this model.`, { wide: true });
+  const fig = figure(sec.fig, `Left: the named states grouped by the separation d′ of their feature means in their reading-to-reading covariance, from which a linear decoder on the eight log band powers calls a share Φ(d′/2) of single readings correctly, both states equally likely ${c('states-model')}. Groups join at the mean d′ over their pairs (average linkage). Joins left of the ${sw(TOLD, 'dash')} line, where d′ is below 2.56 and the decoder calls fewer than nine readings in ten correctly, are not drawn: the states they connect form one bracket, placed at the separation where its last member joined, and its members are listed by rhythm and area so that what the cap lumps together can be read against what defines each state. Each bracket of two or more states is tinted in its own hue (assigned top to bottom, so a hue names a group at the current setting, not a fixed set of states). Joins right of the line are drawn at their separation, and the brackets are the groups one reading tells apart, the figure’s count. Right: that count against the number of electrodes at the current window and baseline; the vertical line follows the electrode slider ${c('states-count')}. The electrodes are the first N of a fixed, evenly spread sequence within 80° of the vertex of the section 3 head sphere ${c('cap-lattice')}. Each state’s factors come from the studies cited in the assumptions table ${c('state-table')}; the measured classifier accuracies stay in the text because their caps, windows and labels differ from this model.`, { wide: true });
 
   const row = document.createElement('div');
   row.className = 'viz-row';
@@ -99,7 +101,7 @@ statistics for band-power readings, not a verdict on every method.</p>`);
   svg.append('text').attr('x', xs.range()[1]).attr('y', H - 4).attr('text-anchor', 'end').attr('class', 'axis-label').text('Separation d′ between the groups in one reading');
   const legend = document.createElement('div');
   legend.className = 'glow-legend';
-  legend.innerHTML = `<span>Bracket: states one reading confuses, on average (joined left of the ${sw(TOLD, 'dash')} line); brackets join at their average separation, and the brackets are the groups it tells apart</span>`;
+  legend.innerHTML = `<span>${sw(GROUP_COLORS[0])}${sw(GROUP_COLORS[1])}${sw(GROUP_COLORS[2])} a group of states one reading cannot tell apart, on average (joined left of the ${sw(TOLD, 'dash')} line); different groups, and states drawn alone, are told apart</span>`;
   const tip = document.createElement('div');
   tip.className = 'tooltip';
   tip.style.display = 'none';
@@ -158,13 +160,19 @@ statistics for band-power readings, not a verdict on every method.</p>`);
     const x = new Float64Array(N2), y = new Float64Array(N2);
     gBands.selectAll('*').remove();
     gTree.selectAll('*').remove();
-    brackets.forEach((br, k) => {
+    let hue = 0;
+    brackets.forEach((br) => {
       const rows = br.members.map((i) => rowOf[i]), y0 = ys(Math.min(...rows)) - CELL / 2, y1 = ys(Math.max(...rows)) + CELL / 2;
-      if (k % 2) gBands.append('rect').attr('x', 4).attr('y', y0).attr('width', W - 8).attr('height', y1 - y0).attr('fill', '#f1f0ec');
+      // a group of two or more confused states gets its own hue: a tinted band behind the names and colored branches
+      const col = br.members.length > 1 ? GROUP_COLORS[hue++ % GROUP_COLORS.length] : '#4a4a46';
+      if (br.members.length > 1) {
+        gBands.append('rect').attr('x', 4).attr('y', y0 + 1).attr('width', xs(Math.max(height(br.b), xs.domain()[0])) - 2).attr('height', y1 - y0 - 2).attr('rx', 3).attr('fill', col).attr('fill-opacity', 0.13);
+        gBands.append('rect').attr('x', 4).attr('y', y0 + 1).attr('width', 4).attr('height', y1 - y0 - 2).attr('rx', 1).attr('fill', col);
+      }
       const xb = xs(Math.max(height(br.b), xs.domain()[0]));
       x[br.b] = xb; y[br.b] = (ys(Math.min(...rows)) + ys(Math.max(...rows))) / 2;
-      for (const i of br.members) gTree.append('line').attr('x1', xs.range()[0]).attr('x2', xb).attr('y1', ys(rowOf[i])).attr('y2', ys(rowOf[i]));
-      if (br.members.length > 1) gTree.append('line').attr('x1', xb).attr('x2', xb).attr('y1', ys(Math.min(...rows))).attr('y2', ys(Math.max(...rows)));
+      for (const i of br.members) gTree.append('line').attr('x1', xs.range()[0]).attr('x2', xb).attr('y1', ys(rowOf[i])).attr('y2', ys(rowOf[i])).attr('stroke', col).attr('stroke-width', br.members.length > 1 ? 2 : 1.5);
+      if (br.members.length > 1) gTree.append('line').attr('x1', xb).attr('x2', xb).attr('y1', ys(Math.min(...rows))).attr('y2', ys(Math.max(...rows))).attr('stroke', col).attr('stroke-width', 2);
     });
     joins.forEach((j, k) => {
       if (j.h < D_STAR_90) return;

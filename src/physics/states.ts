@@ -28,7 +28,8 @@ export interface Region extends Source { restUv: number }
  * rate per second), `emg` a stationary rhythm (rms at the scalp above it) whose level changes between windows by a
  * lognormal factor of log standard deviation `logSd` */
 export type Nuisance = Source & ({ kind: 'blink'; energyUv2s: number; ratePerS: number; event: string } | { kind: 'emg'; uvRms: number; logSd: number });
-export interface NamedState { id: string; name: string; factors: Record<string, number>; eyesClosed?: boolean }
+/** a named state: its full name, a short one for crowded labels, and its power factors per region (unlisted regions are 1) */
+export interface NamedState { id: string; name: string; short: string; factors: Record<string, number>; eyesClosed?: boolean }
 export interface ModelCfg {
   regions: Region[];
   nuisances: Nuisance[];
@@ -384,7 +385,7 @@ export function maxClique(n: number, joined: (i: number, j: number) => boolean):
 export function boxLevels(cfg: ModelCfg, states: NamedState[], set: Settings): number[] {
   const K = cfg.regions.length, lo = new Float64Array(K).fill(Infinity), hi = new Float64Array(K).fill(-Infinity);
   cfg.regions.forEach((r, k) => { for (const s of states) { const v = Math.log(s.factors[r.id] ?? 1); lo[k] = Math.min(lo[k], v); hi[k] = Math.max(hi[k], v); } });
-  const center: NamedState = { id: 'center', name: 'center', factors: Object.fromEntries(cfg.regions.map((r, k) => [r.id, Math.exp((lo[k] + hi[k]) / 2)])) };
+  const center: NamedState = { id: 'center', name: 'center', short: 'center', factors: Object.fromEntries(cfg.regions.map((r, k) => [r.id, Math.exp((lo[k] + hi[k]) / 2)])) };
   const view = seen(cfg, center, set), reads = (Object.keys(BANDS) as Band[]).map((b) => readBand(cfg, b, set.N, set.artifacts === 'removed'));
   const ids = cfg.regions.map((r) => r.id), F = K;
   // Jacobian of the feature means with respect to the regions' log powers, times the box's extent per region

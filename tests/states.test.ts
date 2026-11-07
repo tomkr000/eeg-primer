@@ -32,7 +32,7 @@ describe('the electrode sequence', () => {
 
 describe('one region read in one band', () => {
   const one: ModelCfg = { regions: [{ id: 'a', band: 'alpha', thetaDeg: 0, phiDeg: 0, radiusMm: 30, restUv: 20 }], nuisances: [], bgUv: { slow: 0.01, theta: 0.01, alpha: 0.01, beta: 0.01 }, noiseUvPer3Hz: 0.001 };
-  const rest: NamedState = { id: 'r', name: 'r', factors: {} }, half: NamedState = { id: 'h', name: 'h', factors: { a: 0.5 } };
+  const rest: NamedState = { id: 'r', name: 'r', short: 'r', factors: {} }, half: NamedState = { id: 'h', name: 'h', short: 'h', factors: { a: 0.5 } };
   it('with no noise, the linear classifier of the log power is close to the exact gamma threshold rule', () => {
     for (const T of [1, 2, 8]) {
       const set = { ...base, N: 1, T }, d = separation(seen(one, rest, set), seen(one, half, set));
@@ -127,6 +127,27 @@ describe('helpers', () => {
     // a 5-cycle plus one vertex joined to all: the largest clique is a triangle
     const joined = (i: number, j: number) => i === 5 || j === 5 || Math.abs(i - j) === 1 || Math.abs(i - j) === 4;
     expect(maxClique(6, joined).length).toBe(3);
+  });
+  it('read each state strip by strip (claim states-count)', () => {
+    const F = REGIONS.length, kt = REGIONS.findIndex((r) => r.id === 'theta'), ka = REGIONS.findIndex((r) => r.id === 'alphaP');
+    const strip = (N: number, T: number, k: number) => {
+      const s = { ...base, N, T }, rest = seen(MODEL, STATES[0], s), views = STATES.map((st) => seen(MODEL, st, s));
+      const half = D_STAR_90 * Math.sqrt(rest.cov[k * F + k]), change = views.map((v) => v.mean[k] - rest.mean[k]);
+      return { bar: Math.exp(half), change, outside: STATES.filter((_, i) => Math.abs(change[i]) >= half).map((st) => st.id) };
+    };
+    const id = (x: string) => STATES.findIndex((st) => st.id === x);
+    const a4 = strip(4, 2, ka), t4 = strip(4, 2, kt);
+    expect(a4.outside).toEqual(['rest-ec', 'meditation']);
+    expect(Math.exp(a4.change[id('rest-ec')])).toBeCloseTo(2.59, 1); expect(Math.exp(a4.change[id('meditation')])).toBeCloseTo(2.8, 1); expect(a4.bar).toBeCloseTo(2.3, 1);
+    expect(Math.max(...t4.change.map(Math.abs))).toBeLessThan(Math.log(1.015)); expect(t4.outside).toEqual([]);
+    for (const k of REGIONS.keys()) if (k !== ka) expect(strip(4, 2, k).outside).toEqual([]);
+    const tBig = strip(100000, 2, kt);
+    expect(Math.exp(tBig.change[id('workload')])).toBeCloseTo(1.19, 1); expect(tBig.bar).toBeCloseTo(2.55, 1); expect(tBig.outside).toEqual([]);
+    expect(strip(128, 30, kt).outside.sort()).toEqual(['anesthesia', 'drowsy']);
+  });
+  it('give every state a distinct short name', () => {
+    expect(new Set(STATES.map((s) => s.short)).size).toBe(STATES.length);
+    for (const s of STATES) expect(s.short.length).toBeLessThanOrEqual(14);
   });
   it('mark each state by its largest change (claim state-table)', () => {
     const tag = (id: string) => { const g = signature(STATES.find((s) => s.id === id)!); return g ? `${g.rhythm} ${g.up ? 'up' : 'down'}, ${g.area}` : 'none'; };

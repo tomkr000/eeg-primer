@@ -7,7 +7,7 @@ import { claimCite as c } from '../data/params';
 import { section, figure, prose, readouts, assumptions, sw, vizTitle } from '../ui/layout';
 
 const M = STATES.length;
-const DEFAULTS = { N: 4, T: 2 };
+const DEFAULTS = { N: 128, T: 2 };
 /** spread of resting log power between people and its day-to-day reliability per band (claims between-person, test-retest) */
 const SPREAD = { betweenSd: 0.65, retest: { slow: 0.66, theta: 0.77, alpha: 0.88, beta: 0.81 } as Record<Band, number> };
 /** electrode counts for the curves, log-spaced from 1 to 100,000 */
@@ -54,9 +54,11 @@ ${c('test-retest')}, and no baseline adds the spread between people ${c('between
 left in and add their own fluctuation ${c('blink-model')}${c('emg-beta-level')}, which turns out to change no pair by
 more than two percentage points ${c('artifact-effect')}. Two states count as told apart when a linear decoder calls
 nine readings in ten correctly ${c('states-model')}.</p>
-<p>With the defaults (four electrodes, a 2 s window, a same-session baseline) the model tells apart
-only a handful of the ${M} named states, and the ones it confuses are those that share an axis ${c('states-count')}.
-Of the eight readings, only posterior alpha moves any state beyond one reading’s scatter at four electrodes; the
+<p>With the defaults (a 128-electrode research cap, a 2 s window, a same-session baseline) the model tells apart
+7 of the ${M} named states: eyes open, eyes closed, the two hand movements, light sleep (N2), deep sleep and anesthesia.
+Thirteen waking states, from focus and workload to the moods and the sleep-onset stages, form one group that a reading
+cannot split, and the eyes-closed states another ${c('states-count')}. A four-electrode headband leaves only three
+states pairwise distinct: eyes closed, high workload and deep sleep. Of the eight readings, only posterior alpha moves any state beyond one reading’s scatter at four electrodes; the
 frontal theta reading, on which five of the labels rest, changes by at most 1.4% across the twenty states there, and
 by 19% for high workload even with 100,000 electrodes, against a scatter of ×2.5 per 2 s reading ${c('states-count')}.
 More electrodes let the cap resolve more of the eight regions as independent signals, one at four electrodes and six
@@ -149,7 +151,7 @@ statistics for band-power readings, not a verdict on every method.</p>`);
     { what: 'Artifacts', value: `Left in, as recorded. Blinks: a broad source in front of the brain, 15 a minute while the eyes are open, each section 7’s 150 µV deflection, their number per window Poisson; muscle: three sources at the forehead and the temples with ${EMG.uvRms} µV rms of beta at the scalp above them, their level varying between windows by a factor exp(±${EMG.logSd}). Both leak into the estimates. Canceling them instead changes no pair’s accuracy by more than two percentage points at any setting of the sliders, so there is no control for it: with the electrodes of this layout away from the eyes and the muscles, the blink’s energy sits below 4 Hz where the brain’s own background is largest, and the beta changes between named states are small.`, cite: c('blink-model') + c('emg-beta-level') + c('artifact-effect') },
     { what: 'Told apart', value: 'Two states are told apart when d′, the separation of their feature means in their mean covariance, reaches 2.56, so that a linear decoder calls nine equally likely readings in ten correctly (Φ(d′/2) = 0.9). The named-state count is the largest set that is pairwise told apart. The tree joins two groups at the mean d′ over their pairs (average linkage), collapses every join below 2.56 into a bracket, and orders the brackets so that the one holding the earliest state of the table comes first; it displays the pairwise separations and adds no model. The count of independent signals takes the box each region’s log power spans across the named states, maps it through the cap at the box’s center, whitens it by the reading’s covariance and counts the principal directions along which the box is at least 2.56 wide, so that one reading tells the extremes of the named states apart along it. A reading resolves 1 + extent/2.56 levels along each direction; the product of those levels is not shown, because it would count every combination of levels as a state and grows without bound with the window.', cite: c('states-model') },
     { what: 'Window range', value: 'The slider runs from 1 to 60 s, with a 2 s default (a model choice) and a mark at the 30 s sleep-scoring epoch; below 1 s the gamma model’s shape would fall under 3.5 in the slowest band.', cite: c('sleep-stages') + c('erd-detect') },
-    { what: 'Electrode marks and range', value: 'Four electrodes, as on a consumer headband with four recording sites; 21, the positions of the 10–20 system; 128, a research cap. The slider and the plot run to 100,000 electrodes, as in section 11; above 256 the reading depends only on the cap’s density.', cite: c('consumer-electrodes') + c('eeg-systems') + c('cap-lattice') },
+    { what: 'Electrode marks and range', value: 'Four electrodes, as on a consumer headband with four recording sites; 21, the positions of the 10–20 system; 128, a research cap, the default so that the figure opens where the cap resolves most of the regions. The slider and the plot run to 100,000 electrodes, as in section 11; above 256 the reading depends only on the cap’s density.', cite: c('consumer-electrodes') + c('eeg-systems') + c('cap-lattice') },
     { what: 'Squares and triangles', value: 'Each state’s square names the area of the largest change in its factors, in log terms, against the rest it is defined from (eyes-open rest, or eyes-closed rest for the states recorded with the eyes closed), and its triangle that change’s rhythm and direction; ties go to the region with the larger resting amplitude. The areas are the posterior alpha region, the frontal regions (slow waves, theta, frontal alpha, beta) and the hand areas (mu). The eyes-open reference state has none. Within a bracket the states are listed by rhythm (slow waves, theta, alpha, mu), up before down, then by area. The marks are read off the state table and add nothing to the model.', cite: c('state-table') + c('rest-amplitudes') },
   ]);
 

@@ -137,10 +137,23 @@ describe('helpers', () => {
     const o = evaluate(MODEL, STATES, base), joins = dendrogram(STATES.length, o.d);
     expect(joins.length).toBe(STATES.length - 1);
     for (let k = 1; k < joins.length; k++) expect(joins[k].h).toBeGreaterThanOrEqual(joins[k - 1].h);
-    // at the defaults the cut at 2.56 leaves two brackets: the eyes-closed trio and the other seventeen, joined at about 3.1
+    // the cut at 2.56: at four electrodes two brackets, the eyes-closed trio and the other seventeen, joined at about 3.1;
+    // at the 128-electrode default six, thirteen waking states together and the hand movements, N3 and anesthesia alone
+    const brackets = (N: number) => {
+      const o2 = evaluate(MODEL, STATES, { ...base, N }), js = dendrogram(M, o2.d), parent = new Int32Array(2 * M - 1).fill(-1);
+      js.forEach((j, k) => { parent[j.a] = M + k; parent[j.b] = M + k; });
+      const h = (n: number) => (n < M ? 0 : js[n - M].h), root = (n: number) => { while (parent[n] >= 0 && h(parent[n]) < D_STAR_90) n = parent[n]; return n; };
+      const groups = new Map<number, string[]>();
+      STATES.forEach((st, i) => { const r = root(i); groups.set(r, [...(groups.get(r) ?? []), st.id]); });
+      return [...groups.values()].map((g) => g.sort()).sort((a, b) => b.length - a.length);
+    };
     const top = joins[joins.length - 1];
     expect(top.h).toBeGreaterThan(2.56); expect(top.h).toBeLessThan(3.5);
-    expect(joins[joins.length - 2].h).toBeLessThan(2.56);
+    expect(brackets(4).map((g) => g.length)).toEqual([17, 3]);
+    const b128 = brackets(128);
+    expect(b128.map((g) => g.length)).toEqual([13, 3, 1, 1, 1, 1]);
+    expect(b128[0]).toEqual(['calm', 'drowsy', 'excited', 'focus', 'memory', 'n1', 'n2', 'negative', 'positive', 'rem', 'rest-eo', 'stress', 'workload']);
+    expect(b128.slice(2).flat().sort()).toEqual(['anesthesia', 'mi-left', 'mi-right', 'n3']);
   });
   it('read each state reading by reading (claim states-count)', () => {
     const F = REGIONS.length, kt = REGIONS.findIndex((r) => r.id === 'theta'), ka = REGIONS.findIndex((r) => r.id === 'alphaP');
